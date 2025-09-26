@@ -1,3 +1,3 @@
-# wishing_well
+# Wishing Well
 
 A new Flutter project.

@@ -1,1 +1,1 @@
-enum ButtonType { primary, secondary }
+enum ButtonType { primary, secondary, tertiary }

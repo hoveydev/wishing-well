@@ -22,11 +22,16 @@ class MainApp extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text("Logo Placeholder"),
+                  Text("WishingWell"),
+                  Text("Your personal well for thoughtful giving"),
                   Spacer(),
                   Input(placeholder: "Email", type: InputType.text, controller: TextEditingController()),
                   const SizedBox(height: 8),
                   Input(placeholder: "Password", type: InputType.text, controller: TextEditingController()),
                   Spacer(),
+                  Button(label: "Forgot Password?", onPressed: () {}, type: ButtonType.tertiary),
+                  const SizedBox(height: 8),
                   Button(
                     label: 'Sign in',
                     onPressed: () {},

@@ -24,5 +24,13 @@ ButtonStyle style(ButtonType type) {
           padding: padding,
           shape: shape,
         );
+      case ButtonType.tertiary:
+        return TextButton.styleFrom(
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.primary,
+          side: const BorderSide(color: AppColors.primary, width: 2),
+          padding: padding,
+          shape: shape,
+        );
     }
   }

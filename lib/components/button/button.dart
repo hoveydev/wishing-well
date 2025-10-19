@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/types/primary_button.dart';
 import 'package:wishing_well/components/button/types/secondary_button.dart';
+import 'package:wishing_well/components/button/types/tertiary_button.dart';
 import 'button_type.dart';
 
 class Button extends StatelessWidget {
@@ -25,6 +26,8 @@ class Button extends StatelessWidget {
         return PrimaryButton(label: label, onPressed: onPressed);
       case ButtonType.secondary:
         return SecondaryButton(label: label, onPressed: onPressed);
+      case ButtonType.tertiary:
+        return TertiaryButton(label: label, onPressed: onPressed);
     }
   }
 

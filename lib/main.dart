@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/button.dart';
+import 'package:wishing_well/components/input/input.dart';
+import 'package:wishing_well/components/input/input_type.dart';
 import 'components/button/button_type.dart';
 
 void main() {
@@ -21,6 +23,10 @@ class MainApp extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Spacer(),
+                  Input(placeholder: "Email", type: InputType.text, controller: TextEditingController()),
+                  const SizedBox(height: 8),
+                  Input(placeholder: "Password", type: InputType.text, controller: TextEditingController()),
+                  Spacer(),
                   Button(
                     label: 'Sign in',
                     onPressed: () {},
@@ -32,6 +38,7 @@ class MainApp extends StatelessWidget {
                     onPressed: () {},
                     type: ButtonType.secondary,
                   ),
+                  Spacer(),
                 ],
               ),
             ),

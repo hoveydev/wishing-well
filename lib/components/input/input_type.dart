@@ -1,0 +1,1 @@
+enum InputType { text, email, password, phone }

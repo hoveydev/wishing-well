@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme.dart';
+import '../../theme/app_colors.dart';
 import 'button_type.dart';
 
 ButtonStyle style(ButtonType type) {

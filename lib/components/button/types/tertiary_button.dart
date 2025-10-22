@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/button_content.dart';
 import 'package:wishing_well/components/button/button_style.dart';
-import 'package:wishing_well/theme.dart';
+import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/utilities.dart';
 import '../button_type.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/input_type.dart';
-import 'package:wishing_well/theme.dart';
+import 'package:wishing_well/theme/app_colors.dart';
 
 class Input extends StatelessWidget {
   final String placeholder;

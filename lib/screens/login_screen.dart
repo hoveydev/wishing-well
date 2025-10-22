@@ -19,8 +19,8 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Logo Placeholder", style: textTheme.titleLarge),
-                  Text("WishingWell"),
-                  Text("Your personal well for thoughtful giving"),
+                  Text("WishingWell", style: textTheme.headlineLarge),
+                  Text("Your personal well for thoughtful giving", style: textTheme.bodyMedium),
                   Spacer(),
                   Input(placeholder: "Email", type: InputType.text, controller: TextEditingController()),
                   const SizedBox(height: 8),

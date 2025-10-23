@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/input/input_type.dart';
+import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
 
-class Input extends StatelessWidget {
+class AppInput extends StatelessWidget {
   final String placeholder;
-  final InputType type;
+  final AppInputType type;
   final TextEditingController controller;
 
-  const Input({
+  const AppInput({
     super.key,
     required this.placeholder,
     required this.type,
@@ -31,7 +31,7 @@ class Input extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
       ),
-      keyboardType: type == InputType.text ? TextInputType.text : TextInputType.number,
+      keyboardType: type == AppInputType.text ? TextInputType.text : TextInputType.number,
       ),
     );
   }

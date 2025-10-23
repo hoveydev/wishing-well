@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import 'button_type.dart';
+import 'app_button_type.dart';
 
-ButtonStyle style(ButtonType type) {
+ButtonStyle style(AppButtonType type) {
   final EdgeInsets padding = const EdgeInsets.symmetric(vertical: 16);
   final RoundedRectangleBorder shape = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(14),
   );
     switch (type) {
-      case ButtonType.primary:
+      case AppButtonType.primary:
         return ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
@@ -16,7 +16,7 @@ ButtonStyle style(ButtonType type) {
           shape: shape,
           elevation: 2,
         );
-      case ButtonType.secondary:
+      case AppButtonType.secondary:
         return OutlinedButton.styleFrom(
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.primary,
@@ -24,7 +24,7 @@ ButtonStyle style(ButtonType type) {
           padding: padding,
           shape: shape,
         );
-      case ButtonType.tertiary:
+      case AppButtonType.tertiary:
         return TextButton.styleFrom(
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.primary,

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/button/button_content.dart';
-import 'package:wishing_well/components/button/button_style.dart';
+import 'package:wishing_well/components/button/app_button_content.dart';
+import 'package:wishing_well/components/button/app_button_style.dart';
 import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/utilities.dart';
-import '../button_type.dart';
+import '../app_button_type.dart';
 
 class SecondaryButton extends StatelessWidget {
   final String label;
@@ -20,9 +20,9 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final buttonStyle = style(ButtonType.secondary);
+    final buttonStyle = style(AppButtonType.secondary);
     final onPressHandler = isLoading ? null : onPressed;
-    final buttonContent = ButtonContent(
+    final buttonContent = AppButtonContent(
       isLoading: isLoading,
       label: label,
       buttonTextColor: AppColors.primary,

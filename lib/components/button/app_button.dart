@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/types/primary_button.dart';
 import 'package:wishing_well/components/button/types/secondary_button.dart';
 import 'package:wishing_well/components/button/types/tertiary_button.dart';
-import 'button_type.dart';
+import 'app_button_type.dart';
 
-class Button extends StatelessWidget {
+class AppButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final bool isLoading;
-  final ButtonType type;
+  final AppButtonType type;
 
-  const Button({
+  const AppButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -22,11 +22,11 @@ class Button extends StatelessWidget {
     void Function()? onPressHandler,
   ) {
     switch (type) {
-      case ButtonType.primary:
+      case AppButtonType.primary:
         return PrimaryButton(label: label, onPressed: onPressed);
-      case ButtonType.secondary:
+      case AppButtonType.secondary:
         return SecondaryButton(label: label, onPressed: onPressed);
-      case ButtonType.tertiary:
+      case AppButtonType.tertiary:
         return TertiaryButton(label: label, onPressed: onPressed);
     }
   }

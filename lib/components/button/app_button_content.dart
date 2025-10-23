@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ButtonContent extends StatelessWidget {
+class AppButtonContent extends StatelessWidget {
   final bool isLoading;
   final String label;
   final Color buttonTextColor;
 
-  const ButtonContent({
+  const AppButtonContent({
     super.key,
     required this.isLoading,
     required this.label,

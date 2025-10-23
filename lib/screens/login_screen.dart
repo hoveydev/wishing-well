@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/button/button.dart';
-import 'package:wishing_well/components/button/button_type.dart';
-import 'package:wishing_well/components/input/input.dart';
-import 'package:wishing_well/components/input/input_type.dart';
+import 'package:wishing_well/components/button/app_button.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/input/app_input.dart';
+import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -22,22 +23,22 @@ class LoginScreen extends StatelessWidget {
                   Text("WishingWell", style: textTheme.headlineLarge),
                   Text("Your personal well for thoughtful giving", style: textTheme.bodyMedium),
                   Spacer(),
-                  Input(placeholder: "Email", type: InputType.text, controller: TextEditingController()),
-                  const SizedBox(height: 8),
-                  Input(placeholder: "Password", type: InputType.text, controller: TextEditingController()),
+                  AppInput(placeholder: "Email", type: AppInputType.text, controller: TextEditingController()),
+                  AppSpacer.small(),
+                  AppInput(placeholder: "Password", type: AppInputType.text, controller: TextEditingController()),
                   Spacer(),
-                  Button(label: "Forgot Password?", onPressed: () {}, type: ButtonType.tertiary),
-                  const SizedBox(height: 8),
-                  Button(
+                  AppButton(label: "Forgot Password?", onPressed: () {}, type: AppButtonType.tertiary),
+                  AppSpacer.small(),
+                  AppButton(
                     label: 'Sign in',
                     onPressed: () {},
-                    type: ButtonType.primary,
+                    type: AppButtonType.primary,
                   ),
-                  const SizedBox(height: 8),
-                  Button(
+                  AppSpacer.small(),
+                  AppButton(
                     label: 'Create an Account',
                     onPressed: () {},
-                    type: ButtonType.secondary,
+                    type: AppButtonType.secondary,
                   ),
                   Spacer(),
                 ],

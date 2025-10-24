@@ -14,6 +14,7 @@ class AppButtonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     if (isLoading) {
       return SizedBox(
         width: 20,
@@ -28,9 +29,7 @@ class AppButtonContent extends StatelessWidget {
     } else {
       return Text(
         label,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
+        style: textTheme.bodyLarge?.copyWith(
           color: buttonTextColor,
         ),
       );

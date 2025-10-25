@@ -3,6 +3,7 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/logo/app_logo.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -11,7 +12,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    AssetImage logoImage = AssetImage('assets/images/logo.png');
     return Scaffold(
         body: SafeArea(
           child: Center(
@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Spacer(),
-                  Image(image:  logoImage, height: 150),
+                  AppLogo(size: 150),
                   Text("WishingWell", style: textTheme.headlineLarge),
                   AppSpacer.small(),
                   Text("Your personal well for thoughtful giving", style: textTheme.bodyMedium),

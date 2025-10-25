@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
-      home: LoginScreen(),
+      home: LoginScreen(), // change screen for testing until routing is set up
     );
   }
 }

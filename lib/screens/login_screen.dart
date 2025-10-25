@@ -11,6 +11,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    AssetImage logoImage = AssetImage('assets/images/logo.png');
     return Scaffold(
         body: SafeArea(
           child: Center(
@@ -19,14 +20,16 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Logo Placeholder", style: textTheme.titleLarge),
+                  Spacer(),
+                  Image(image:  logoImage, height: 150),
                   Text("WishingWell", style: textTheme.headlineLarge),
+                  AppSpacer.small(),
                   Text("Your personal well for thoughtful giving", style: textTheme.bodyMedium),
                   Spacer(),
                   AppInput(placeholder: "Email", type: AppInputType.text, controller: TextEditingController()),
                   AppSpacer.small(),
                   AppInput(placeholder: "Password", type: AppInputType.text, controller: TextEditingController()),
-                  Spacer(),
+                  AppSpacer.large(),
                   AppButton(label: "Forgot Password?", onPressed: () {}, type: AppButtonType.tertiary),
                   AppSpacer.small(),
                   AppButton(

@@ -8,14 +8,13 @@ class AppTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
-      // fontFamily: 'Nunito',
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         primary: AppColors.primary,
         secondary: AppColors.accent,
         surface: AppColors.background
       ),
-      textTheme: GoogleFonts.nunitoTextTheme().apply(
+      textTheme: GoogleFonts.nunitoSansTextTheme().apply(
         bodyColor: AppColors.primary,
         displayColor: AppColors.primary,
       ),

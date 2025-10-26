@@ -4,6 +4,7 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
+import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -15,7 +16,7 @@ class LoginScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacerSize.medium),
               child: SizedBox(
                 height: constraints.maxHeight,
                 child: Column(
@@ -40,7 +41,7 @@ class LoginScreen extends StatelessWidget {
     final logoSize = height * 0.15; // TODO: this should be held in a constant somewhere
 
     return Column(
-      spacing: 8,
+      spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppLogo(size: logoSize),
@@ -61,7 +62,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildInputSection(BuildContext context) {
     return Column(
-      spacing: 8,
+      spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppInput(
@@ -80,7 +81,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildButtonsSection(BuildContext context) {
     return Column(
-      spacing: 8,
+      spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppButton(

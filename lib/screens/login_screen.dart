@@ -14,39 +14,68 @@ class LoginScreen extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
         body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Spacer(),
-                  AppLogo(size: 150),
-                  Text("WishingWell", style: textTheme.headlineLarge),
-                  AppSpacer.small(),
-                  Text("Your personal well for thoughtful giving", style: textTheme.bodyMedium),
-                  Spacer(),
-                  AppInput(placeholder: "Email", type: AppInputType.text, controller: TextEditingController()),
-                  AppSpacer.small(),
-                  AppInput(placeholder: "Password", type: AppInputType.text, controller: TextEditingController()),
-                  AppSpacer.large(),
-                  AppButton(label: "Forgot Password?", onPressed: () {}, type: AppButtonType.tertiary),
-                  AppSpacer.small(),
-                  AppButton(
-                    label: 'Sign in',
-                    onPressed: () {},
-                    type: AppButtonType.primary,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            AppLogo(size: 150),
+                            AppSpacer.small(),
+                            Text("WishingWell", style: textTheme.headlineLarge),
+                            AppSpacer.xsmall(),
+                            Text(
+                              "Your personal well for thoughtful giving",
+                              style: textTheme.bodyMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            AppInput(
+                              placeholder: "Email",
+                              type: AppInputType.text,
+                              controller: TextEditingController(),
+                            ),
+                            AppSpacer.medium(),
+                            AppInput(
+                              placeholder: "Password",
+                              type: AppInputType.text,
+                              controller: TextEditingController(),
+                            ),
+                            AppSpacer.large(),
+                            AppButton(
+                              label: "Forgot Password?",
+                              onPressed: () {},
+                              type: AppButtonType.tertiary,
+                            ),
+                            AppSpacer.medium(),
+                            AppButton(
+                              label: 'Sign in',
+                              onPressed: () {},
+                              type: AppButtonType.primary,
+                            ),
+                            AppSpacer.medium(),
+                            AppButton(
+                              label: 'Create an Account',
+                              onPressed: () {},
+                              type: AppButtonType.secondary,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  AppSpacer.small(),
-                  AppButton(
-                    label: 'Create an Account',
-                    onPressed: () {},
-                    type: AppButtonType.secondary,
-                  ),
-                  Spacer(),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
       );

@@ -4,6 +4,7 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -25,6 +26,7 @@ class LoginScreen extends StatelessWidget {
                     _buildHeader(context, constraints.maxHeight),
                     _buildInputSection(context),
                     _buildButtonsSection(context),
+                    AppSpacer.medium(),
                   ],
                 ),
               ),
@@ -38,7 +40,7 @@ class LoginScreen extends StatelessWidget {
   Widget _buildHeader(BuildContext context, double height) {
 
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final logoSize = height * 0.15; // TODO: this should be held in a constant somewhere
+    final logoSize = height * 0.15;
 
     return Column(
       spacing: AppSpacerSize.small,

@@ -6,6 +6,7 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -39,6 +40,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, double height) {
 
+    final l10n = AppLocalizations.of(context)!;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final logoSize = height * 0.15;
 
@@ -48,12 +50,12 @@ class LoginScreen extends StatelessWidget {
       children: [
         AppLogo(size: logoSize),
         Text(
-          "WishingWell",
+          l10n.appName,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center
         ),
         Text(
-          "Your personal well for thoughtful giving",
+          l10n.appTagline,
           style: textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),
@@ -63,17 +65,20 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildInputSection(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppInput(
-          placeholder: "Email",
+          placeholder: l10n.email,
           type: AppInputType.text,
           controller: TextEditingController(),
         ),
         AppInput(
-          placeholder: "Password",
+          placeholder: l10n.password,
           type: AppInputType.text,
           controller: TextEditingController(),
         ),
@@ -82,22 +87,25 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildButtonsSection(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppButton(
-          label: "Forgot Password?",
+          label: l10n.forgotPassword,
           onPressed: () {},
           type: AppButtonType.tertiary,
         ),
         AppButton(
-          label: 'Sign in',
+          label: l10n.signIn,
           onPressed: () {},
           type: AppButtonType.primary,
         ),
         AppButton(
-          label: 'Create an Account',
+          label: l10n.createAccount,
           onPressed: () {},
           type: AppButtonType.secondary,
         ),

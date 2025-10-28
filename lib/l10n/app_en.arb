@@ -1,0 +1,38 @@
+{
+    "@@locale": "en",
+    
+    "appName": "WishingWell",
+    "@appName": {
+        "description": "The name of the application"
+    },
+
+    "appTagline": "Your personal well for thoughtful giving",
+    "@appTagline": {
+        "description": "The tagline of the application"
+    },
+
+    "email": "Email",
+    "@email": {
+        "description": "Label for the email input field"
+    },
+
+    "password": "Password",
+    "@password": {
+        "description": "Label for the password input field"
+    },
+
+    "forgotPassword": "Forgot Password?",
+    "@forgotPassword": {
+        "description": "Text for the forgot password link"
+    },
+
+    "signIn": "Sign In",
+    "@signIn": {
+        "description": "Text for the sign in button"
+    },
+
+    "createAccount": "Create an Account",
+    "@createAccount": {
+        "description": "Text for the create account link"
+    }
+}

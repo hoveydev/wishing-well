@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login_screen.dart';
 
 startAppWithLoginScreen(WidgetTester tester) async {
-  await tester.pumpWidget(MaterialApp(home: LoginScreen()));
+  const app = MaterialApp(
+    localizationsDelegates: [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: LoginScreen()
+  );
+  await tester.pumpWidget(app);
   await tester.pumpAndSettle();
 }
 
@@ -16,7 +28,7 @@ void main() {
     expect(find.widgetWithText(TextField, 'Email'), findsOneWidget);
     expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);
     expect(find.text('Forgot Password?'), findsOneWidget);
-    expect(find.text('Sign in'), findsOneWidget);
+    expect(find.text('Sign In'), findsOneWidget);
     expect(find.text('Create an Account'), findsOneWidget);
   });
 }

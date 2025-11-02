@@ -20,4 +20,23 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData get darkTheme {
+    // TODO: update these colors (not working right now)
+    return ThemeData(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.text,
+      primaryColor: AppColors.primary,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        primary: AppColors.primary,
+        secondary: AppColors.accent,
+        surface: AppColors.text
+      ),
+      textTheme: GoogleFonts.nunitoSansTextTheme().apply(
+        bodyColor: AppColors.text,
+        displayColor: AppColors.text,
+      ),
+    );
+  }
 }

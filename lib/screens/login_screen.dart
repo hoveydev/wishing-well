@@ -4,37 +4,24 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
+import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_logo_size.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacerSize.medium),
-              child: SizedBox(
-                height: constraints.maxHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildHeader(context, constraints.maxHeight),
-                    _buildInputSection(context),
-                    _buildButtonsSection(context),
-                    AppSpacer.medium(),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+    return Screen(
+      children: [
+        _buildHeader(context, MediaQuery.of(context).size.height),
+        _buildInputSection(context),
+        _buildButtonsSection(context),
+        AppSpacer.medium(),
+      ],
     );
   }
 
@@ -42,7 +29,7 @@ class LoginScreen extends StatelessWidget {
 
     final l10n = AppLocalizations.of(context)!;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final logoSize = height * 0.15;
+    final logoSize = AppLogoSize(sectionHeight: height).large;
 
     return Column(
       spacing: AppSpacerSize.small,
@@ -74,12 +61,12 @@ class LoginScreen extends StatelessWidget {
       children: [
         AppInput(
           placeholder: l10n.email,
-          type: AppInputType.text,
+          type: AppInputType.email,
           controller: TextEditingController(),
         ),
         AppInput(
           placeholder: l10n.password,
-          type: AppInputType.text,
+          type: AppInputType.password,
           controller: TextEditingController(),
         ),
       ],

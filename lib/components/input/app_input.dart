@@ -29,6 +29,8 @@ class AppInput extends StatelessWidget {
         obscureText: type == AppInputType.password,
         controller: textEditHandler,
         decoration: InputDecoration(
+          prefixIcon: _getIcon(),
+          prefixIconColor: AppColors.primary,
           hint: Text(style: textStyle.bodyMedium, placeholder),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppBorderRadius.medium),
@@ -64,6 +66,19 @@ class AppInput extends StatelessWidget {
         return [AutofillHints.password];
       default:
         return [];
+    }
+  }
+
+  Icon _getIcon() {
+    switch (type) {
+      case AppInputType.text:
+        return Icon(Icons.input);
+      case AppInputType.email:
+        return Icon(Icons.email_outlined);
+      case AppInputType.password:
+        return Icon(Icons.lock_outline);
+      default:
+        return Icon(Icons.input);
     }
   }
 }

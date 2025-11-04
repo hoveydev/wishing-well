@@ -9,6 +9,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
       colorScheme: ColorScheme.fromSeed(
+        brightness: Brightness.light,
         seedColor: AppColors.primary,
         primary: AppColors.primary,
         secondary: AppColors.accent,
@@ -22,12 +23,13 @@ class AppTheme {
   }
 
   static ThemeData get darkTheme {
-    // TODO: update these colors (not working right now)
+    // TODO: update these colors
     return ThemeData(
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.text,
       primaryColor: AppColors.primary,
       colorScheme: ColorScheme.fromSeed(
+        brightness: Brightness.dark,
         seedColor: AppColors.primary,
         primary: AppColors.primary,
         secondary: AppColors.accent,

@@ -3,9 +3,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login_screen.dart';
+import 'package:wishing_well/screens/login_viewmodel.dart';
 
 startAppWithLoginScreen(WidgetTester tester) async {
-  const app = MaterialApp(
+  MaterialApp app = MaterialApp(
     localizationsDelegates: [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
@@ -13,7 +14,7 @@ startAppWithLoginScreen(WidgetTester tester) async {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    home: LoginScreen()
+    home: LoginScreen(viewModel: LoginViewModel())
   );
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();

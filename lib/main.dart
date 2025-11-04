@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login_screen.dart';
+import 'package:wishing_well/screens/login_viewmodel.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -22,7 +24,7 @@ class MainApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: LoginScreen(), // change screen for testing until routing is set up
+      home: LoginScreen(viewModel: LoginViewModel()), // change screen for testing until routing is set up
     );
   }
 }

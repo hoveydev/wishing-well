@@ -7,18 +7,17 @@ import 'package:wishing_well/theme/app_border_weight.dart';
 class AppInput extends StatelessWidget {
   final String placeholder;
   final AppInputType type;
-  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
 
   const AppInput({
     super.key,
     required this.placeholder,
     required this.type,
-    required this.controller,
+    required this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textEditHandler = TextEditingController(text: controller.text);
     final textStyle = Theme.of(context).textTheme;
     return Container(
       decoration: BoxDecoration(
@@ -27,7 +26,6 @@ class AppInput extends StatelessWidget {
       ),
       child: TextField(
         obscureText: type == AppInputType.password,
-        controller: textEditHandler,
         decoration: InputDecoration(
           prefixIcon: _getIcon(),
           prefixIconColor: AppColors.primary,
@@ -39,6 +37,7 @@ class AppInput extends StatelessWidget {
         ),
         keyboardType: _getKeyboardType(),
         autofillHints: _getAutofillHints(),
+        onChanged: onChanged,
       ),
     );
   }

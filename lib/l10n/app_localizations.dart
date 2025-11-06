@@ -135,6 +135,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create an Account'**
   String get createAccount;
+
+  /// Login error message when both email and password are empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email and password cannot be empty'**
+  String get loginErrorNoPasswordNoEmail;
+
+  /// Login error message when email is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email cannot be empty'**
+  String get loginErrorNoEmnail;
+
+  /// Login Error message when password is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get loginErrorNoPassword;
+
+  /// Login error message when email format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get loginErrorBadEmail;
 }
 
 class _AppLocalizationsDelegate

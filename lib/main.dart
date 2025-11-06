@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/login_screen.dart';
-import 'package:wishing_well/screens/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_screen.dart';
+import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 void main() {

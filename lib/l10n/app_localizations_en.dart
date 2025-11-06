@@ -28,4 +28,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAccount => 'Create an Account';
+
+  @override
+  String get loginErrorNoPasswordNoEmail =>
+      'Email and password cannot be empty';
+
+  @override
+  String get loginErrorNoEmnail => 'Email cannot be empty';
+
+  @override
+  String get loginErrorNoPassword => 'Password cannot be empty';
+
+  @override
+  String get loginErrorBadEmail => 'Invalid email format';
 }

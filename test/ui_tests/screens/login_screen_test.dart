@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/login_screen.dart';
-import 'package:wishing_well/screens/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_screen.dart';
+import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 startAppWithLoginScreen(WidgetTester tester) async {
   MaterialApp app = MaterialApp(

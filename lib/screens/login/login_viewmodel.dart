@@ -3,13 +3,19 @@ import 'package:flutter/material.dart';
 abstract class LoginViewModelContract {
   void updateEmailField(String email);
   void updatePasswordField(String password);
-  // late String email;
-  // late String password;
   bool get hasAlert;
-  String get validationMessage;
+  LoginErrorType get validationMessage;
   void tapLoginButton();
   void tapForgotPasswordButton();
   void tapCreateAccountButton();
+}
+
+enum LoginErrorType {
+  none,
+  noPasswordNoEmail,
+  noEmail,
+  noPassword,
+  badEmail
 }
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
@@ -27,10 +33,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   @override
-  String get validationMessage => _validationMessage;
+  LoginErrorType get validationMessage => _validationMessage;
 
-  String _validationMessage = "";
-  set _setValidationMessage(String message) {
+  LoginErrorType _validationMessage = LoginErrorType.none;
+  set _setValidationMessage(LoginErrorType message) {
     _validationMessage = message;
     notifyListeners();
   }
@@ -45,15 +51,30 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   bool _isFormValid(String email, String password) {
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty && password.isEmpty) {
       _setHasAlert = true;
-      _setValidationMessage = "Email and password cannot be empty.";
+      _setValidationMessage = LoginErrorType.noPasswordNoEmail;
+      return false;
+    }
+    if (email.isEmpty) {
+      _setHasAlert = true;
+      _setValidationMessage = LoginErrorType.noEmail;
+      return false;
+    }
+    if (password.isEmpty) {
+      _setHasAlert = true;
+      _setValidationMessage = LoginErrorType.noPassword;
+      return false;
+    }
+    final emailRegex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+    if (!emailRegex.hasMatch(email)) {
+      _setHasAlert = true;
+      _setValidationMessage = LoginErrorType.badEmail;
       return false;
     }
     _setHasAlert = false;
-    _setValidationMessage = "";
+    _setValidationMessage = LoginErrorType.none;
     return true;
-    // include all validation messages here
   }
 
   @override

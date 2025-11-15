@@ -1,38 +1,119 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/button/app_button_style.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
+
+enum _AppButtonContentType { icon, label, labelWithIcon }
 
 class AppButtonContent extends StatelessWidget {
+  final String? label;
+  final Widget? icon;
   final bool isLoading;
-  final String label;
-  final Color buttonTextColor;
+  final MainAxisAlignment alignment;
+  final AppButtonType buttonType;
+  final _AppButtonContentType _appButtonContentType;
 
-  const AppButtonContent({
+  const AppButtonContent._({
     super.key,
+    this.label,
+    this.icon,
     required this.isLoading,
-    required this.label,
-    required this.buttonTextColor,
-  });
+    required this.alignment,
+    required this.buttonType,
+    required _AppButtonContentType appButtonContentType,
+  }) : _appButtonContentType = appButtonContentType;
+
+  const AppButtonContent.icon({
+    Key? key,
+    required Widget icon,
+    required AppButtonType buttonType,
+    bool isLoading = false,
+    MainAxisAlignment alignment = MainAxisAlignment.center
+  }) : this._(
+    key: key,
+    icon: icon,
+    buttonType: buttonType,
+    isLoading: isLoading,
+    alignment: alignment,
+    appButtonContentType: _AppButtonContentType.icon
+  );
+
+  const AppButtonContent.label({
+    Key? key,
+    required String label,
+    required AppButtonType buttonType,
+    bool isLoading = false,
+    MainAxisAlignment alignment = MainAxisAlignment.center
+  }) : this._(
+    key: key,
+    label: label,
+    buttonType: buttonType,
+    isLoading: isLoading,
+    alignment: alignment,
+    appButtonContentType: _AppButtonContentType.label
+  );
+
+  const AppButtonContent.labelWithIcon({
+    Key? key,
+    required String label,
+    required Widget icon,
+    required AppButtonType buttonType,
+    bool isLoading = false,
+    MainAxisAlignment alignment = MainAxisAlignment.center
+  }) : this._(
+    key: key,
+    label: label,
+    icon: icon,
+    buttonType: buttonType,
+    isLoading: isLoading,
+    alignment: alignment,
+    appButtonContentType: _AppButtonContentType.labelWithIcon
+  );
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+
+    final ButtonStyle buttonStyle = style(buttonType);
+    final Color resolvedForegroundColor = buttonStyle
+            .foregroundColor
+            ?.resolve(<WidgetState>{}) ??
+        Theme.of(context).colorScheme.onPrimary;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     if (isLoading) {
       return SizedBox(
         width: 20,
         height: 20,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(
-            buttonTextColor
-          ),
         ),
       );
     } else {
-      return Text(
-        label,
-        style: textTheme.bodyLarge?.copyWith(
-          color: buttonTextColor,
-        ),
+      return Row(
+        mainAxisAlignment: alignment,
+        children: _buildContent(context, textTheme, resolvedForegroundColor),
       );
+    }
+  }
+
+  List<Widget> _buildContent(BuildContext context, TextTheme textTheme, Color textColor) {
+    switch (_appButtonContentType) {
+      case _AppButtonContentType.icon:
+        return [icon!];
+      case _AppButtonContentType.label:
+        return [
+          Text(
+            label!,
+            style: textTheme.bodyLarge?.copyWith(color: textColor),
+          )
+        ];
+      case _AppButtonContentType.labelWithIcon:
+        return [
+          icon!,
+          Text(
+            label!,
+            style: textTheme.bodyLarge?.copyWith(color: textColor),
+          )
+        ];
     }
   }
 }

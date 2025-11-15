@@ -4,7 +4,7 @@ import 'app_button_type.dart';
 
 ButtonStyle style(AppButtonType type) {
   final EdgeInsets padding = const EdgeInsets.symmetric(vertical: 16);
-  final RoundedRectangleBorder shape = RoundedRectangleBorder(
+  final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(14),
   );
     switch (type) {
@@ -13,7 +13,7 @@ ButtonStyle style(AppButtonType type) {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           padding: padding,
-          shape: shape,
+          shape: roundedRectangle,
           elevation: 2,
         );
       case AppButtonType.secondary:
@@ -22,7 +22,7 @@ ButtonStyle style(AppButtonType type) {
           foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.primary, width: 2),
           padding: padding,
-          shape: shape,
+          shape: roundedRectangle,
         );
       case AppButtonType.tertiary:
         return TextButton.styleFrom(
@@ -30,7 +30,7 @@ ButtonStyle style(AppButtonType type) {
           foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.primary, width: 2),
           padding: padding,
-          shape: shape,
+          shape: roundedRectangle,
         );
     }
   }

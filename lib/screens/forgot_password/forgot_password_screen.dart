@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wishing_well/components/button/app_button.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_header.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key, required this.viewModel});
@@ -25,8 +27,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Screen(
       appBar: AppBar(
-        actions: [],
-        foregroundColor: AppColors.primary,
+        automaticallyImplyLeading: false, // removes back button
+        actions: [
+          AppButton.icon(
+            icon: Icons.close,
+            onPressed: () => context.pop(),
+            type: AppButtonType.tertiary
+          )
+        ],
       ),
       children: [
         const ForgotPasswordHeader(),

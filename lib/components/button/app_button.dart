@@ -8,7 +8,7 @@ enum _AppButtonContentType { icon, label, labelWithIcon }
 
 class AppButton extends StatelessWidget {
   final String? label;
-  final Widget? icon;
+  final IconData? icon;
   final VoidCallback onPressed;
   final bool isLoading;
   final MainAxisAlignment alignment;
@@ -28,7 +28,7 @@ class AppButton extends StatelessWidget {
 
   const AppButton.icon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required VoidCallback onPressed,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
@@ -62,7 +62,7 @@ class AppButton extends StatelessWidget {
 
   const AppButton.labelWithIcon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required String label,
     required VoidCallback onPressed,
     bool isLoading = false,

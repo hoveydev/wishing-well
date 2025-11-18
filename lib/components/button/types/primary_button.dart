@@ -9,7 +9,7 @@ import '../app_button_type.dart';
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
 class PrimaryButton extends StatelessWidget {
-  final Widget? icon;
+  final IconData? icon;
   final String? label;
   final VoidCallback onPressed;
   final bool isLoading;
@@ -28,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton.icon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required VoidCallback onPressed,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
@@ -58,7 +58,7 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton.labelWithIcon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required String label,
     required VoidCallback onPressed,
     bool isLoading = false,

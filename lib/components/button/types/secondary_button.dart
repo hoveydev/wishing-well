@@ -9,7 +9,7 @@ import '../app_button_type.dart';
 enum _SecondaryButtonContentType { icon, label, labelWithIcon }
 
 class SecondaryButton extends StatelessWidget {
-  final Widget? icon;
+  final IconData? icon;
   final String? label;
   final VoidCallback onPressed;
   final bool isLoading;
@@ -26,7 +26,7 @@ class SecondaryButton extends StatelessWidget {
 
   const SecondaryButton.icon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required VoidCallback onPressed,
     bool isLoading = false
   }) : this._(
@@ -52,7 +52,7 @@ class SecondaryButton extends StatelessWidget {
 
   const SecondaryButton.labelWithIcon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required String label,
     required VoidCallback onPressed,
     bool isLoading = false

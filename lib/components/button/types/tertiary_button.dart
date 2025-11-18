@@ -9,7 +9,7 @@ import '../app_button_type.dart';
 enum _TertiaryButtonContentType { icon, label, labelWithIcon }
 
 class TertiaryButton extends StatelessWidget {
-  final Widget? icon;
+  final IconData? icon;
   final String? label;
   final VoidCallback onPressed;
   final bool isLoading;
@@ -26,7 +26,7 @@ class TertiaryButton extends StatelessWidget {
 
   const TertiaryButton.icon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required VoidCallback onPressed,
     bool isLoading = false
   }) : this._(
@@ -53,7 +53,7 @@ class TertiaryButton extends StatelessWidget {
   const TertiaryButton.labelWithIcon({
     Key? key,
     required String label,
-    required Widget icon,
+    required IconData icon,
     required VoidCallback onPressed,
     bool isLoading = false,
   }) : this._(

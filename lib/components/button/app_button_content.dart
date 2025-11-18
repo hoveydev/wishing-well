@@ -6,7 +6,7 @@ enum _AppButtonContentType { icon, label, labelWithIcon }
 
 class AppButtonContent extends StatelessWidget {
   final String? label;
-  final Widget? icon;
+  final IconData? icon;
   final bool isLoading;
   final MainAxisAlignment alignment;
   final AppButtonType buttonType;
@@ -24,7 +24,7 @@ class AppButtonContent extends StatelessWidget {
 
   const AppButtonContent.icon({
     Key? key,
-    required Widget icon,
+    required IconData icon,
     required AppButtonType buttonType,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center
@@ -55,7 +55,7 @@ class AppButtonContent extends StatelessWidget {
   const AppButtonContent.labelWithIcon({
     Key? key,
     required String label,
-    required Widget icon,
+    required IconData icon,
     required AppButtonType buttonType,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center
@@ -98,7 +98,13 @@ class AppButtonContent extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context, TextTheme textTheme, Color textColor) {
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
-        return [icon!];
+        return [
+          Icon(
+            icon!,
+            size: textTheme.headlineLarge!.fontSize,
+            color: textColor
+          )
+        ];
       case _AppButtonContentType.label:
         return [
           Text(
@@ -108,7 +114,11 @@ class AppButtonContent extends StatelessWidget {
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
-          icon!,
+          Icon(
+            icon!,
+            size: textTheme.headlineLarge!.fontSize,
+            color: textColor
+          ),
           Text(
             label!,
             style: textTheme.bodyLarge?.copyWith(color: textColor),

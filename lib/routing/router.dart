@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
@@ -10,17 +11,47 @@ GoRouter router() => GoRouter(
   routes: [
     GoRoute(
       path: Routes.login,
-      builder: (context, state) {
-        final viewModel = LoginViewModel();
-        return LoginScreen(viewModel: viewModel);
-      },
+      pageBuilder: (context, state) =>
+        CustomTransitionPage(
+          child: LoginScreen(
+            viewModel: LoginViewModel()
+          ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset.zero;
+          const end = Offset(0.0, -0.15);
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end)
+            .chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: secondaryAnimation.drive(tween),
+            child: child
+          );
+        }
+      ),
     ),
     GoRoute(
       path: Routes.forgotPassword,
-      builder: (context, state) {
-        final viewModel = ForgotPasswordViewmodel();
-        return ForgotPasswordScreen(viewModel: viewModel);
-      },
+      pageBuilder: (context, state) =>
+        CustomTransitionPage(
+          child: ForgotPasswordScreen(
+            viewModel: ForgotPasswordViewModel()
+          ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end)
+            .chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child
+          );
+        }
+      ),
     )
   ]
 );

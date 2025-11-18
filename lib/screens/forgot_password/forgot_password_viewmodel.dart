@@ -13,7 +13,7 @@ enum ForgotErrorType {
   badEmail
 }
 
-class ForgotPasswordViewmodel extends ChangeNotifier implements ForgotViewModelContract {
+class ForgotPasswordViewModel extends ChangeNotifier implements ForgotViewModelContract {
   String _email = "";
 
   @override

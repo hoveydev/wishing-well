@@ -27,14 +27,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Screen(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // removes back button
-        actions: [
-          AppButton.icon(
-            icon: Icons.close,
-            onPressed: () => context.pop(),
-            type: AppButtonType.tertiary
-          )
-        ],
+        leading: FittedBox( // required to take advantage of all real estate in AppBar
+          fit: BoxFit.contain,
+          child: AppButton.icon(
+              icon: Icons.keyboard_arrow_down,
+              onPressed: () => context.pop(),
+              type: AppButtonType.tertiary
+            ),
+        ),
       ),
       children: [
         const ForgotPasswordHeader(),

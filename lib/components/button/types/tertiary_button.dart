@@ -73,6 +73,7 @@ class TertiaryButton extends StatelessWidget {
 
     if (isIOS) {
       return CupertinoButton.filled(
+        padding: _tertiaryButtonContentType == _TertiaryButtonContentType.icon ? EdgeInsets.zero : null, // remove padding if button is icon only
         onPressed: onPressHandler,
         color: AppColors.transparent,
         child: _buildContent(context)

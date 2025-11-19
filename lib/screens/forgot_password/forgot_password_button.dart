@@ -23,9 +23,8 @@ class ForgotPasswordButton extends StatelessWidget {
       spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // TODO: Localize
         AppButton.label(
-          label: "Submit",
+          label: l10n.submit,
           onPressed: viewModel.tapSendResetLinkButton,
           type: AppButtonType.primary
         )

@@ -54,5 +54,20 @@
     "loginErrorBadEmail": "Invalid email format",
     "@loginErrorBadEmail": {
         "description": "Login error message when email format is invalid"
+    },
+
+    "forgotPasswordHeader": "Forgot Password",
+    "@forgotPasswordHeader": {
+        "description": "Header for Forgot Password screen"
+    },
+
+    "forgotPasswordSubtext": "Enter your email address below to receive a password reset link.",
+    "@forgotPasswordSubtext": {
+        "description": "Subtext for Forgot Password screen"
+    },
+
+    "submit": "Submit",
+    "@submit": {
+        "description": "Label for submit button on Forgot Password screen"
     }
 }

@@ -41,4 +41,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginErrorBadEmail => 'Invalid email format';
+
+  @override
+  String get forgotPasswordHeader => 'Forgot Password';
+
+  @override
+  String get forgotPasswordSubtext =>
+      'Enter your email address below to receive a password reset link.';
+
+  @override
+  String get submit => 'Submit';
 }

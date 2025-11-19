@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 
 class ForgotPasswordHeader extends StatelessWidget {
 
@@ -9,18 +10,19 @@ class ForgotPasswordHeader extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Forgot Password', // TODO: localize
+          l10n.forgotPasswordHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
         ),
         Text(
-          'Enter your email address below to receive a password reset link.',
+          l10n.forgotPasswordSubtext,
           style: textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),

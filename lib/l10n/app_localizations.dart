@@ -159,6 +159,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid email format'**
   String get loginErrorBadEmail;
+
+  /// Header for Forgot Password screen
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPasswordHeader;
+
+  /// Subtext for Forgot Password screen
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address below to receive a password reset link.'**
+  String get forgotPasswordSubtext;
+
+  /// Label for submit button on Forgot Password screen
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
 }
 
 class _AppLocalizationsDelegate

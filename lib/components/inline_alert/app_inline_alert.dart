@@ -5,29 +5,22 @@ class AppInlineAlert extends StatelessWidget {
   final String message;
   final AppInlineAlertType type;
 
-  const AppInlineAlert({
-    super.key,
-    required this.message,
-    required this.type,
-  });
+  const AppInlineAlert({required this.message, required this.type, super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     final textStyle = Theme.of(context).textTheme;
 
     return Row(
       children: [
         // Icon based on type
         Icon(_getIcon(), color: _getColor()),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         // Message text
         Expanded(
           child: Text(
             message,
-            style: textStyle.bodyMedium?.copyWith(
-              color: _getColor(),
-            ),
+            style: textStyle.bodyMedium?.copyWith(color: _getColor()),
           ),
         ),
       ],

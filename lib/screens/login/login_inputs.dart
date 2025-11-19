@@ -9,17 +9,12 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginInputs extends StatelessWidget {
-
   final LoginViewModel viewModel;
 
-  const LoginInputs({
-    super.key,
-    required this.viewModel
-  });
+  const LoginInputs({required this.viewModel, super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -48,10 +43,10 @@ class LoginInputs extends StatelessWidget {
               child: AppInlineAlert(
                 message: _validationMessage(context),
                 type: AppInlineAlertType.error,
-              )
-            )
-          )
-        )
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -69,7 +64,7 @@ class LoginInputs extends StatelessWidget {
       case LoginErrorType.badEmail:
         return l10n.loginErrorBadEmail;
       case LoginErrorType.none:
-        return "";
+        return '';
     }
   }
 }

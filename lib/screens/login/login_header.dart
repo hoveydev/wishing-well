@@ -5,12 +5,10 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_logo_size.dart';
 
 class LoginHeader extends StatelessWidget {
-
   const LoginHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -24,7 +22,7 @@ class LoginHeader extends StatelessWidget {
         Text(
           l10n.appName,
           style: textTheme.headlineLarge,
-          textAlign: TextAlign.center
+          textAlign: TextAlign.center,
         ),
         Text(
           l10n.appTagline,
@@ -33,6 +31,5 @@ class LoginHeader extends StatelessWidget {
         ),
       ],
     );
-
   }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_style.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/utilities.dart';
-import '../app_button_type.dart';
 
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
@@ -17,65 +17,64 @@ class PrimaryButton extends StatelessWidget {
   final _PrimaryButtonContentType _primaryButtonContentType;
 
   const PrimaryButton._({
-    super.key,
-    this.icon,
-    this.label,
     required this.onPressed,
     required this.isLoading,
     required this.alignment,
     required _PrimaryButtonContentType primaryButtonContentType,
+    super.key,
+    this.icon,
+    this.label,
   }) : _primaryButtonContentType = primaryButtonContentType;
 
   const PrimaryButton.icon({
-    Key? key,
     required IconData icon,
     required VoidCallback onPressed,
+    Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
   }) : this._(
-    key: key,
-    icon: icon,
-    onPressed: onPressed,
-    isLoading: isLoading,
-    alignment: alignment,
-    primaryButtonContentType: _PrimaryButtonContentType.icon
-  );
+         key: key,
+         icon: icon,
+         onPressed: onPressed,
+         isLoading: isLoading,
+         alignment: alignment,
+         primaryButtonContentType: _PrimaryButtonContentType.icon,
+       );
 
   const PrimaryButton.label({
-    Key? key,
     required String label,
     required VoidCallback onPressed,
+    Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
   }) : this._(
-    key: key,
-    label: label,
-    onPressed: onPressed,
-    isLoading: isLoading,
-    alignment: alignment,
-    primaryButtonContentType: _PrimaryButtonContentType.label
-  );
+         key: key,
+         label: label,
+         onPressed: onPressed,
+         isLoading: isLoading,
+         alignment: alignment,
+         primaryButtonContentType: _PrimaryButtonContentType.label,
+       );
 
   const PrimaryButton.labelWithIcon({
-    Key? key,
     required IconData icon,
     required String label,
     required VoidCallback onPressed,
+    Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
   }) : this._(
-    key: key,
-    icon: icon,
-    label: label,
-    onPressed: onPressed,
-    isLoading: isLoading,
-    alignment: alignment,
-    primaryButtonContentType: _PrimaryButtonContentType.labelWithIcon
-  );
+         key: key,
+         icon: icon,
+         label: label,
+         onPressed: onPressed,
+         isLoading: isLoading,
+         alignment: alignment,
+         primaryButtonContentType: _PrimaryButtonContentType.labelWithIcon,
+       );
 
   @override
   Widget build(BuildContext context) {
-
     final buttonStyle = style(AppButtonType.primary);
     final onPressHandler = isLoading ? null : onPressed;
 
@@ -84,7 +83,7 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressHandler,
         color: AppColors.primary,
         foregroundColor: AppColors.white,
-        child: _buildContent(context)
+        child: _buildContent(context),
       );
     } else {
       return ElevatedButton(

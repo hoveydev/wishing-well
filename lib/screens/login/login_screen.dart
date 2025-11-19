@@ -7,7 +7,7 @@ import 'package:wishing_well/screens/login/login_inputs.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.viewModel});
+  const LoginScreen({required this.viewModel, super.key});
 
   final LoginViewModel viewModel;
 
@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   // init
   @override
   void initState() {
@@ -24,14 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Screen(
-      children: [
-        const LoginHeader(),
-        LoginInputs(viewModel: widget.viewModel),
-        LoginButtons(viewModel: widget.viewModel),
-        AppSpacer.medium(),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Screen(
+    children: [
+      const LoginHeader(),
+      LoginInputs(viewModel: widget.viewModel),
+      LoginButtons(viewModel: widget.viewModel),
+      const AppSpacer.medium(),
+    ],
+  );
 }

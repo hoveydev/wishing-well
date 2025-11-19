@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/theme/app_border_weight.dart';
 
 class AppInput extends StatelessWidget {
   final String placeholder;
@@ -10,18 +9,18 @@ class AppInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   const AppInput({
-    super.key,
     required this.placeholder,
     required this.type,
     required this.onChanged,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.primary, width: AppBorderWeight.regular),
+        border: Border.all(color: AppColors.primary),
         borderRadius: BorderRadius.circular(AppBorderRadius.medium),
       ),
       child: TextField(
@@ -71,13 +70,13 @@ class AppInput extends StatelessWidget {
   Icon _getIcon() {
     switch (type) {
       case AppInputType.text:
-        return Icon(Icons.input);
+        return const Icon(Icons.input);
       case AppInputType.email:
-        return Icon(Icons.email_outlined);
+        return const Icon(Icons.email_outlined);
       case AppInputType.password:
-        return Icon(Icons.lock_outline);
+        return const Icon(Icons.lock_outline);
       default:
-        return Icon(Icons.input);
+        return const Icon(Icons.input);
     }
   }
 }

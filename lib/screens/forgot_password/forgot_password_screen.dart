@@ -10,7 +10,7 @@ import 'package:wishing_well/screens/forgot_password/forgot_password_input.dart'
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key, required this.viewModel});
+  const ForgotPasswordScreen({required this.viewModel, super.key});
 
   final ForgotPasswordViewModel viewModel;
 
@@ -19,7 +19,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-
   // init
   @override
   void initState() {
@@ -27,27 +26,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Screen(
-      appBar: AppBar(
-        leading: FittedBox( // required to take advantage of all real estate in AppBar
-          fit: BoxFit.contain,
-          child: AppButton.icon(
-              icon: Icons.keyboard_arrow_down,
-              onPressed: () => context.pop(),
-              type: AppButtonType.tertiary
-            ),
+  Widget build(BuildContext context) => Screen(
+    appBar: AppBar(
+      leading: FittedBox(
+        child: AppButton.icon(
+          icon: Icons.keyboard_arrow_down,
+          onPressed: () => context.pop(),
+          type: AppButtonType.tertiary,
         ),
       ),
-      children: [
-        AppSpacer.xlarge(),
-        const ForgotPasswordHeader(),
-        AppSpacer.xlarge(),
-        ForgotPasswordInput(viewModel: widget.viewModel),
-        Spacer(),
-        ForgotPasswordButton(viewModel: widget.viewModel),
-        AppSpacer.large()
-      ],
-    );
-  }
+    ),
+    children: [
+      const AppSpacer.xlarge(),
+      const ForgotPasswordHeader(),
+      const AppSpacer.xlarge(),
+      ForgotPasswordInput(viewModel: widget.viewModel),
+      const Spacer(),
+      ForgotPasswordButton(viewModel: widget.viewModel),
+      const AppSpacer.large(),
+    ],
+  );
 }

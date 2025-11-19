@@ -5,16 +5,16 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
-startAppWithLoginScreen(WidgetTester tester) async {
-  MaterialApp app = MaterialApp(
-    localizationsDelegates: [
+dynamic startAppWithLoginScreen(WidgetTester tester) async {
+  final MaterialApp app = MaterialApp(
+    localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    home: LoginScreen(viewModel: LoginViewModel())
+    home: LoginScreen(viewModel: LoginViewModel()),
   );
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
@@ -23,9 +23,15 @@ startAppWithLoginScreen(WidgetTester tester) async {
 void main() {
   testWidgets('renders screen with all elements', (WidgetTester tester) async {
     await startAppWithLoginScreen(tester);
-    expect(find.image(AssetImage('assets/images/logo.png')), findsOneWidget);
+    expect(
+      find.image(const AssetImage('assets/images/logo.png')),
+      findsOneWidget,
+    );
     expect(find.text('WishingWell'), findsOneWidget);
-    expect(find.text('Your personal well for thoughtful giving'), findsOneWidget);
+    expect(
+      find.text('Your personal well for thoughtful giving'),
+      findsOneWidget,
+    );
     expect(find.widgetWithText(TextField, 'Email'), findsOneWidget);
     expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);
     expect(find.text('Forgot Password?'), findsOneWidget);

@@ -6,17 +6,12 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
-
   final ForgotPasswordViewModel viewModel;
 
-  const ForgotPasswordButton({
-    super.key,
-    required this.viewModel
-  });
+  const ForgotPasswordButton({required this.viewModel, super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -26,8 +21,8 @@ class ForgotPasswordButton extends StatelessWidget {
         AppButton.label(
           label: l10n.submit,
           onPressed: viewModel.tapSendResetLinkButton,
-          type: AppButtonType.primary
-        )
+          type: AppButtonType.primary,
+        ),
       ],
     );
   }

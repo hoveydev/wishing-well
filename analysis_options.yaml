@@ -1,1 +1,29 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Style
+    - always_put_required_named_parameters_first
+    - avoid_print
+    - avoid_redundant_argument_values
+    - prefer_final_locals
+    - parameter_assignments
+    - prefer_single_quotes
+    - sort_pub_dependencies
+    - unawaited_futures
+    - prefer_expression_function_bodies
+
+    # Performance
+    - avoid_unnecessary_containers
+    - sized_box_for_whitespace
+    - use_decorated_box
+
+    # Error prevention
+    - always_use_package_imports
+    - literal_only_boolean_expressions
+
+    # Strictness
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables

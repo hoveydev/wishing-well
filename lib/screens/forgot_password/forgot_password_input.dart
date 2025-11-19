@@ -9,17 +9,12 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
 class ForgotPasswordInput extends StatelessWidget {
-
   final ForgotPasswordViewModel viewModel;
 
-  const ForgotPasswordInput({
-    super.key,
-    required this.viewModel
-  });
+  const ForgotPasswordInput({required this.viewModel, super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -29,7 +24,7 @@ class ForgotPasswordInput extends StatelessWidget {
         AppInput(
           placeholder: l10n.email,
           type: AppInputType.email,
-          onChanged: (String val) => viewModel.updateEmailField(val)
+          onChanged: (String val) => viewModel.updateEmailField(val),
         ),
         ListenableBuilder(
           listenable: viewModel,
@@ -43,10 +38,10 @@ class ForgotPasswordInput extends StatelessWidget {
               child: AppInlineAlert(
                 message: _validationMessage(context),
                 type: AppInlineAlertType.error,
-              )
-            )
-          )
-        )
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -60,8 +55,7 @@ class ForgotPasswordInput extends StatelessWidget {
       case ForgotErrorType.badEmail:
         return l10n.loginErrorBadEmail;
       case ForgotErrorType.none:
-        return "";
+        return '';
     }
   }
-
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 abstract class LoginViewModelContract {
@@ -10,25 +12,19 @@ abstract class LoginViewModelContract {
   void tapCreateAccountButton();
 }
 
-enum LoginErrorType {
-  none,
-  noPasswordNoEmail,
-  noEmail,
-  noPassword,
-  badEmail
-}
+enum LoginErrorType { none, noPasswordNoEmail, noEmail, noPassword, badEmail }
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
-  String _email = "";
-  String _password = "";
+  String _email = '';
+  String _password = '';
 
   @override
-  void updateEmailField(String email) { 
+  void updateEmailField(String email) {
     _email = email;
   }
 
   @override
-  void updatePasswordField(String password) { 
+  void updatePasswordField(String password) {
     _password = password;
   }
 
@@ -66,7 +62,9 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       _setValidationMessage = LoginErrorType.noPassword;
       return false;
     }
-    final emailRegex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+    final emailRegex = RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
+    );
     if (!emailRegex.hasMatch(email)) {
       _setHasAlert = true;
       _setValidationMessage = LoginErrorType.badEmail;
@@ -80,21 +78,21 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   @override
   void tapLoginButton() {
     if (_isFormValid(_email, _password)) {
-      print("Login successful with email: $_email");
-      // Proceed with login logic
+      log('Login successful with email: $_email');
+      // TODO: Proceed with login logic
     } else {
-      print("Login failed: $_validationMessage");
+      log('Login failed: $_validationMessage');
     }
-    // Implement login button tap logic here
+    // TODO: Implement login button tap logic here
   }
 
   @override
   void tapForgotPasswordButton() {
-    // Implement forgot password button tap logic here
+    // TODO: Implement forgot password button tap logic here
   }
 
   @override
   void tapCreateAccountButton() {
-    // Implement create account button tap logic here
+    // TODO: Implement create account button tap logic here
   }
 }

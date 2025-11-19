@@ -10,7 +10,5 @@ class AppSpacer extends StatelessWidget {
   const AppSpacer.xlarge({super.key}) : height = AppSpacerSize.xlarge;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(height: height);
-  }
+  Widget build(BuildContext context) => SizedBox(height: height);
 }

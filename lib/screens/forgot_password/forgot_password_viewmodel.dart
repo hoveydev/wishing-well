@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 abstract class ForgotViewModelContract {
@@ -7,17 +9,14 @@ abstract class ForgotViewModelContract {
   void tapSendResetLinkButton();
 }
 
-enum ForgotErrorType {
-  none,
-  noEmail,
-  badEmail
-}
+enum ForgotErrorType { none, noEmail, badEmail }
 
-class ForgotPasswordViewModel extends ChangeNotifier implements ForgotViewModelContract {
-  String _email = "";
+class ForgotPasswordViewModel extends ChangeNotifier
+    implements ForgotViewModelContract {
+  String _email = '';
 
   @override
-  void updateEmailField(String email) { 
+  void updateEmailField(String email) {
     _email = email;
   }
 
@@ -45,7 +44,9 @@ class ForgotPasswordViewModel extends ChangeNotifier implements ForgotViewModelC
       _setValidationMessage = ForgotErrorType.noEmail;
       return false;
     }
-    final emailRegex = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+    final emailRegex = RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
+    );
     if (!emailRegex.hasMatch(email)) {
       _setHasAlert = true;
       _setValidationMessage = ForgotErrorType.badEmail;
@@ -59,9 +60,9 @@ class ForgotPasswordViewModel extends ChangeNotifier implements ForgotViewModelC
   @override
   void tapSendResetLinkButton() {
     if (_isEmailValid(_email)) {
-      print("Sent reset link to $_email");
+      log('Sent reset link to $_email');
     } else {
-      print("Email validation failed: $_validationMessage");
+      log('Email validation failed: $_validationMessage');
     }
   }
 }

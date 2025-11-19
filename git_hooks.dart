@@ -68,6 +68,19 @@ Future<bool> _preCommit() async {
   }
   print('✅ No analysis issues found\n');
 
+  // Run tests
+  print('🧪 Running tests...');
+  final testResult = await Process.run('flutter', [
+    'test',
+    '--reporter',
+    'expanded',
+  ]);
+  if (testResult.exitCode != 0) {
+    print('❌ Tests failed');
+    return false;
+  }
+  print('✅ All tests passed\n');
+
   print('✨ All checks passed! Proceeding with commit.\n');
   return true;
 }

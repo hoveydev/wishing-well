@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 
 class ForgotPasswordHeader extends StatelessWidget {
 
@@ -10,6 +11,7 @@ class ForgotPasswordHeader extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return Column(
+      spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(

@@ -14,7 +14,6 @@ ButtonStyle style(AppButtonType type) {
         foregroundColor: AppColors.white,
         padding: padding,
         shape: roundedRectangle,
-        elevation: 2,
       );
     case AppButtonType.secondary:
       return OutlinedButton.styleFrom(
@@ -28,7 +27,6 @@ ButtonStyle style(AppButtonType type) {
       return TextButton.styleFrom(
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.primary,
-        side: const BorderSide(color: AppColors.primary, width: 2),
         padding: padding,
         shape: roundedRectangle,
       );

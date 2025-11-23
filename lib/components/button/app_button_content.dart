@@ -73,8 +73,7 @@ class AppButtonContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final ButtonStyle buttonStyle = style(buttonType);
     final Color resolvedForegroundColor =
-        buttonStyle.foregroundColor?.resolve(<WidgetState>{}) ??
-        Theme.of(context).colorScheme.onPrimary;
+        buttonStyle.foregroundColor!.resolve(<WidgetState>{}) as Color;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     if (isLoading) {

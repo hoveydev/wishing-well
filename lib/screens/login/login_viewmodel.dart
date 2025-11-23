@@ -8,8 +8,6 @@ abstract class LoginViewModelContract {
   bool get hasAlert;
   LoginErrorType get validationMessage;
   void tapLoginButton();
-  void tapForgotPasswordButton();
-  void tapCreateAccountButton();
 }
 
 enum LoginErrorType { none, noPasswordNoEmail, noEmail, noPassword, badEmail }
@@ -84,15 +82,5 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       log('Login failed: $_validationMessage');
     }
     // TODO: Implement login button tap logic here
-  }
-
-  @override
-  void tapForgotPasswordButton() {
-    // TODO: Implement forgot password button tap logic here
-  }
-
-  @override
-  void tapCreateAccountButton() {
-    // TODO: Implement create account button tap logic here
   }
 }

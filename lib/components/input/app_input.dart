@@ -56,8 +56,6 @@ class AppInput extends StatelessWidget {
 
   List<String> _getAutofillHints() {
     switch (type) {
-      case AppInputType.text:
-        return [AutofillHints.username];
       case AppInputType.email:
         return [AutofillHints.email];
       case AppInputType.password:

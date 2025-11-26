@@ -1,71 +1,109 @@
 {
     "@@locale": "en",
-    
     "appName": "WishingWell",
     "@appName": {
         "description": "The name of the application"
     },
-
     "appTagline": "Your personal well for thoughtful giving",
     "@appTagline": {
         "description": "The tagline of the application"
     },
-
     "email": "Email",
     "@email": {
         "description": "Label for the email input field"
     },
-
     "password": "Password",
     "@password": {
         "description": "Label for the password input field"
     },
-
+    "confirmPassword": "Confirm Password",
+    "@confirmPassword": {
+        "description": "Label for the confirm password field"
+    },
     "forgotPassword": "Forgot Password?",
     "@forgotPassword": {
         "description": "Text for the forgot password link"
     },
-
     "signIn": "Sign In",
     "@signIn": {
         "description": "Text for the sign in button"
     },
-
     "createAccount": "Create an Account",
     "@createAccount": {
         "description": "Text for the create account link"
     },
-
     "loginErrorNoPasswordNoEmail": "Email and password cannot be empty",
     "@loginErrorNoPasswordNoEmail": {
         "description": "Login error message when both email and password are empty"
     },
-
-    "loginErrorNoEmnail": "Email cannot be empty",
-    "@loginErrorNoEmnail": {
+    "loginErrorNoEmail": "Email cannot be empty",
+    "@loginErrorNoEmail": {
         "description": "Login error message when email is empty"
     },
-
     "loginErrorNoPassword": "Password cannot be empty",
     "@loginErrorNoPassword": {
         "description": "Login Error message when password is empty"
     },
-
     "loginErrorBadEmail": "Invalid email format",
     "@loginErrorBadEmail": {
         "description": "Login error message when email format is invalid"
     },
-
     "forgotPasswordHeader": "Forgot Password",
     "@forgotPasswordHeader": {
         "description": "Header for Forgot Password screen"
     },
-
     "forgotPasswordSubtext": "Enter your email address below to receive a password reset link.",
     "@forgotPasswordSubtext": {
         "description": "Subtext for Forgot Password screen"
     },
-
+    "createAccountButtonLabel": "Create Account",
+    "@createAccountButtonLabel": {
+        "description": "Create account button label"
+    },
+    "createAccountSubtext": "Please enter your credentials below",
+    "@createAccountSubtext": {
+        "description": "Create account error message when email format is invalid"
+    },
+    "createAccountErrorBadEmail": "Invalid email format",
+    "@createAccountErrorBadEmail": {
+        "description": "Create account error message when email format is invalid"
+    },
+    "createAccountErrorNoPasswordNoEmail": "Email and password cannot be empty",
+    "@createAccountErrorNoPasswordNoEmail": {
+        "description": "Create account error message when both email and password are empty"
+    },
+    "createAccountErrorNoEmail": "Email cannot be empty",
+    "@createAccountErrorNoEmail": {
+        "description": "Create account error message when email is empty"
+    },
+    "createAccountErrorNoPassword": "Password cannot be empty",
+    "@createAccountErrorNoPassword": {
+        "description": "Create account error message when password is empty"
+    },
+    "createAccountErrorPasswordTooShort": "Password must be at least 12 characters long",
+    "@createAccountErrorPasswordTooShort": {
+        "description": "Create account error message when password is less than 12 characters"
+    },
+    "createAccountErrorPasswordNoUppercase": "Password must contain at least 1 uppercase letter",
+    "@createAccountErrorPasswordNoUppercase": {
+        "description": "Create account error message when password does not contain an uppercase letter"
+    },
+    "createAccountErrorPasswordNoLowercase": "Password must contain at least 1 lowercase letter",
+    "@createAccountErrorPasswordNoLowercase": {
+        "description": "Create account error message when password does not contain an lowercase letter"
+    },
+    "createAccountErrorPasswordNoDigit": "Password must contain at least 1 digit",
+    "@createAccountErrorPasswordNoDigit": {
+        "description": "Create account error message when password does not contain a digit"
+    },
+    "createAccountErrorPasswordNoSpecial": "Password must contain at least 1 special character",
+    "@createAccountErrorPasswordNoSpecial": {
+        "description": "Create account error message when password does not contain a special character"
+    },
+    "createAccountErrorPasswordsDontMatch": "Passwords must match",
+    "@createAccountErrorPasswordsDontMatch": {
+        "description": "Create account error message when passwords do not match"
+    },
     "submit": "Submit",
     "@submit": {
         "description": "Label for submit button on Forgot Password screen"

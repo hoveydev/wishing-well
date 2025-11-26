@@ -51,7 +51,7 @@ class ForgotPasswordInput extends StatelessWidget {
 
     switch (viewModel.validationMessage) {
       case ForgotErrorType.noEmail:
-        return l10n.loginErrorNoEmnail;
+        return l10n.loginErrorNoEmail;
       case ForgotErrorType.badEmail:
         return l10n.loginErrorBadEmail;
       case ForgotErrorType.none:

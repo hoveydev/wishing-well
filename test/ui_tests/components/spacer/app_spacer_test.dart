@@ -158,11 +158,11 @@ void main() {
       WidgetTester tester,
     ) async {
       final spacers = [
-        const AppSpacer.xsmall(),
-        const AppSpacer.small(),
-        const AppSpacer.medium(),
-        const AppSpacer.large(),
-        const AppSpacer.xlarge(),
+        AppSpacer.xsmall(key: UniqueKey()),
+        AppSpacer.small(key: UniqueKey()),
+        AppSpacer.medium(key: UniqueKey()),
+        AppSpacer.large(key: UniqueKey()),
+        AppSpacer.xlarge(key: UniqueKey()),
       ];
 
       for (final spacer in spacers) {

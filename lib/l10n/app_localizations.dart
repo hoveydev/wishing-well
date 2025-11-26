@@ -118,6 +118,12 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
+  /// Label for the confirm password field
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
   /// Text for the forgot password link
   ///
   /// In en, this message translates to:
@@ -146,7 +152,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Email cannot be empty'**
-  String get loginErrorNoEmnail;
+  String get loginErrorNoEmail;
 
   /// Login Error message when password is empty
   ///
@@ -171,6 +177,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your email address below to receive a password reset link.'**
   String get forgotPasswordSubtext;
+
+  /// Create account button label
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccountButtonLabel;
+
+  /// Create account error message when email format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your credentials below'**
+  String get createAccountSubtext;
+
+  /// Create account error message when email format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get createAccountErrorBadEmail;
+
+  /// Create account error message when both email and password are empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email and password cannot be empty'**
+  String get createAccountErrorNoPasswordNoEmail;
+
+  /// Create account error message when email is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email cannot be empty'**
+  String get createAccountErrorNoEmail;
+
+  /// Create account error message when password is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get createAccountErrorNoPassword;
+
+  /// Create account error message when password is less than 12 characters
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 12 characters long'**
+  String get createAccountErrorPasswordTooShort;
+
+  /// Create account error message when password does not contain an uppercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 uppercase letter'**
+  String get createAccountErrorPasswordNoUppercase;
+
+  /// Create account error message when password does not contain an lowercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 lowercase letter'**
+  String get createAccountErrorPasswordNoLowercase;
+
+  /// Create account error message when password does not contain a digit
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 digit'**
+  String get createAccountErrorPasswordNoDigit;
+
+  /// Create account error message when password does not contain a special character
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 special character'**
+  String get createAccountErrorPasswordNoSpecial;
+
+  /// Create account error message when passwords do not match
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords must match'**
+  String get createAccountErrorPasswordsDontMatch;
 
   /// Label for submit button on Forgot Password screen
   ///

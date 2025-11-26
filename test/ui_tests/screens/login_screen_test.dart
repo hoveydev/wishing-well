@@ -91,13 +91,6 @@ void main() {
       expect(find.text('Password cannot be empty'), findsNothing);
       expect(find.text('Invalid email format'), findsNothing);
     });
-
-    testWidgets('Create Account Button Does Nothing LMAO (need to update)', (
-      WidgetTester tester,
-    ) async {
-      await startAppWithLoginScreen(tester);
-      await tester.tap(find.text('Create an Account'));
-    });
   });
 
   group('Login Error Scenarios', () {

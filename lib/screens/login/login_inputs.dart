@@ -58,7 +58,7 @@ class LoginInputs extends StatelessWidget {
       case LoginErrorType.noPasswordNoEmail:
         return l10n.loginErrorNoPasswordNoEmail;
       case LoginErrorType.noEmail:
-        return l10n.loginErrorNoEmnail;
+        return l10n.loginErrorNoEmail;
       case LoginErrorType.noPassword:
         return l10n.loginErrorNoPassword;
       case LoginErrorType.badEmail:

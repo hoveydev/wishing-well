@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/screens/create_account/create_account_screen.dart';
+import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
@@ -34,6 +36,27 @@ GoRouter router() => GoRouter(
       path: Routes.forgotPassword,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: ForgotPasswordScreen(viewModel: ForgotPasswordViewModel()),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    ),
+    GoRoute(
+      path: Routes.signUp,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: CreateAccountScreen(viewModel: CreateAccountViewmodel()),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;

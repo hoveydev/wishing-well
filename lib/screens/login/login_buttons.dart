@@ -32,7 +32,7 @@ class LoginButtons extends StatelessWidget {
         ),
         AppButton.label(
           label: l10n.createAccount,
-          onPressed: () {},
+          onPressed: () => context.push(Routes.signUp),
           type: AppButtonType.secondary,
         ),
       ],

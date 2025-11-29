@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData get lightTheme => ThemeData(
+    splashFactory: NoSplash.splashFactory,
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
@@ -21,19 +22,24 @@ class AppTheme {
 
   // TODO: update colors
   static ThemeData get darkTheme => ThemeData(
+    splashFactory: NoSplash.splashFactory,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.text,
-    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.darkBackground,
+    primaryColor: AppColors.darkPrimary,
     colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.darkPrimary,
+      primary: AppColors.darkPrimary,
+      secondary: AppColors.darkAccent,
+      surface: AppColors.darkSurface,
       brightness: Brightness.dark,
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      secondary: AppColors.accent,
-      surface: AppColors.text,
+      onPrimary: AppColors.darkBackground,
+      onSecondary: AppColors.darkBackground,
+      onSurface: AppColors.darkText,
     ),
-    textTheme: GoogleFonts.nunitoSansTextTheme().apply(
-      bodyColor: AppColors.text,
-      displayColor: AppColors.text,
-    ),
+    textTheme: GoogleFonts.nunitoSansTextTheme(ThemeData.dark().textTheme)
+        .apply(
+          bodyColor: AppColors.darkPrimary,
+          displayColor: AppColors.darkPrimary,
+        ),
   );
 }

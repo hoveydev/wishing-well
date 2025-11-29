@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
 
+// TODO: remove after app_button_content is updated to use theme instead of this
 ButtonStyle style(AppButtonType type) {
   const EdgeInsets padding = EdgeInsets.symmetric(vertical: 16);
   final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(

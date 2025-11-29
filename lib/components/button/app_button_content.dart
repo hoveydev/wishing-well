@@ -71,6 +71,7 @@ class AppButtonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: remove to use app_theme
     final ButtonStyle buttonStyle = style(buttonType);
     final Color resolvedForegroundColor =
         buttonStyle.foregroundColor!.resolve(<WidgetState>{}) as Color;

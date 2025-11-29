@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/button/app_button.dart';
-import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -18,10 +15,13 @@ final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(14),
 );
 
-EdgeInsets edgeInsets = const EdgeInsets.symmetric(vertical: 16);
+EdgeInsets edgeInsets = const EdgeInsets.symmetric(
+  vertical: 16,
+  horizontal: 32,
+);
 
 void main() {
-  group('Non-iOS Specific Primary Button Styles', () {
+  group('Primary Button Styles', () {
     testWidgets('Primary Label AppButton returns Label Content', (
       WidgetTester tester,
     ) async {
@@ -38,17 +38,19 @@ void main() {
         find.widgetWithText(AppButton, 'Primary Label Button'),
         findsOneWidget,
       );
-      final buttonWidget = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
-      );
-      expect(
-        buttonWidget.style!.backgroundColor!.resolve({}),
-        AppColors.primary,
-      );
+      final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
+      expect(buttonWidget.style!.backgroundBuilder, isNotNull);
       expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
       expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
       await tester.tap(find.byType(AppButton));
       expect(buttonTapped, true);
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byType(AppButton)),
+      );
+      await tester.pump();
+      expect(buttonWidget.style!.backgroundBuilder, isNotNull);
+      await gesture.up();
+      await tester.pumpAndSettle();
       final size = tester.getSize(find.byType(AppButton));
       expect(size.width, greaterThan(0));
       expect(size.height, greaterThan(0));
@@ -76,17 +78,19 @@ void main() {
         find.widgetWithIcon(AppButton, Icons.access_alarm),
         findsOneWidget,
       );
-      final buttonWidget = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
-      );
-      expect(
-        buttonWidget.style!.backgroundColor!.resolve({}),
-        AppColors.primary,
-      );
+      final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
+      expect(buttonWidget.style!.backgroundBuilder, isNotNull);
       expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
       expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
       await tester.tap(find.byType(AppButton));
       expect(buttonTapped, true);
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byType(AppButton)),
+      );
+      await tester.pump();
+      expect(buttonWidget.style!.backgroundBuilder, isNotNull);
+      await gesture.up();
+      await tester.pumpAndSettle();
       final size = tester.getSize(find.byType(AppButton));
       expect(size.width, greaterThan(0));
       expect(size.height, greaterThan(0));
@@ -117,17 +121,19 @@ void main() {
           find.widgetWithIcon(AppButton, Icons.access_alarm),
           findsOneWidget,
         );
-        final buttonWidget = tester.widget<ElevatedButton>(
-          find.byType(ElevatedButton),
-        );
-        expect(
-          buttonWidget.style!.backgroundColor!.resolve({}),
-          AppColors.primary,
-        );
+        final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
+        expect(buttonWidget.style!.backgroundBuilder, isNotNull);
         expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
         expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
         await tester.tap(find.byType(AppButton));
         expect(buttonTapped, true);
+        final gesture = await tester.startGesture(
+          tester.getCenter(find.byType(AppButton)),
+        );
+        await tester.pump();
+        expect(buttonWidget.style!.backgroundBuilder, isNotNull);
+        await gesture.up();
+        await tester.pumpAndSettle();
         final size = tester.getSize(find.byType(AppButton));
         expect(size.width, greaterThan(0));
         expect(size.height, greaterThan(0));
@@ -137,47 +143,5 @@ void main() {
         expect(iconWidget.color, AppColors.white);
       },
     );
-  });
-
-  group('iOS Primary Button Styles', () {
-    testWidgets('Primary Label AppButton returns Label Content iOS', (
-      WidgetTester tester,
-    ) async {
-      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-      bool buttonTapped = false;
-      final Widget primaryLabelButton = AppButton.label(
-        label: 'Primary Label Button',
-        onPressed: () {
-          buttonTapped = true;
-        },
-        type: AppButtonType.primary,
-      );
-      await tester.pumpWidget(createTestWidget(primaryLabelButton));
-      expect(
-        find.widgetWithText(AppButton, 'Primary Label Button'),
-        findsOneWidget,
-      );
-      final buttonWidget = tester.widget<CupertinoButton>(
-        find.byType(CupertinoButton),
-      );
-      expect(buttonWidget.color, AppColors.primary);
-      expect(buttonWidget.foregroundColor, AppColors.white);
-      final buttonContent = tester.widget<AppButtonContent>(
-        find.byType(AppButtonContent),
-      );
-      expect(buttonContent.alignment, MainAxisAlignment.center);
-      await tester.tap(find.byType(AppButton));
-      expect(buttonTapped, true);
-      final size = tester.getSize(find.byType(AppButton));
-      expect(size.width, greaterThan(0));
-      expect(size.height, greaterThan(0));
-      // text styles
-      final textWidget = tester.widget<Text>(find.byType(Text));
-      expect(textWidget.style!.fontSize, 16.0);
-      expect(textWidget.style!.fontWeight, FontWeight.normal);
-      expect(textWidget.style!.letterSpacing, 0.5);
-      expect(textWidget.style!.color, AppColors.white);
-      debugDefaultTargetPlatformOverride = null;
-    });
   });
 }

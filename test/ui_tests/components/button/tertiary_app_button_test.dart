@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/button/app_button.dart';
@@ -17,10 +15,13 @@ final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(14),
 );
 
-EdgeInsets edgeInsets = const EdgeInsets.symmetric(vertical: 16);
+EdgeInsets edgeInsets = const EdgeInsets.symmetric(
+  vertical: 16,
+  horizontal: 32,
+);
 
 void main() {
-  group('Non-iOS Specific Tertiary Button Styles', () {
+  group('Tertiary Button Styles', () {
     testWidgets('Tertiary Label AppButton returns Label Content', (
       WidgetTester tester,
     ) async {
@@ -37,10 +38,8 @@ void main() {
         find.widgetWithText(AppButton, 'Tertiary Label Button'),
         findsOneWidget,
       );
-      expect(find.byType(ElevatedButton), findsOneWidget);
-      final buttonWidget = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
-      );
+      expect(find.byType(TextButton), findsOneWidget);
+      final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
       expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
       expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
       await tester.tap(find.byType(AppButton));
@@ -72,11 +71,9 @@ void main() {
         find.widgetWithIcon(AppButton, Icons.access_alarm),
         findsOneWidget,
       );
-      final buttonWidget = tester.widget<ElevatedButton>(
-        find.byType(ElevatedButton),
-      );
+      final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
       expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
-      expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
+      expect(buttonWidget.style!.padding!.resolve({}), EdgeInsets.zero);
       await tester.tap(find.byType(AppButton));
       expect(buttonTapped, true);
       final size = tester.getSize(find.byType(AppButton));
@@ -109,9 +106,7 @@ void main() {
           find.widgetWithIcon(AppButton, Icons.access_alarm),
           findsOneWidget,
         );
-        final buttonWidget = tester.widget<ElevatedButton>(
-          find.byType(ElevatedButton),
-        );
+        final buttonWidget = tester.widget<TextButton>(find.byType(TextButton));
         expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
         expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
         await tester.tap(find.byType(AppButton));
@@ -125,43 +120,5 @@ void main() {
         expect(iconWidget.color, AppColors.primary);
       },
     );
-  });
-
-  group('iOS Tertiary Button Styles', () {
-    testWidgets('Tertiary Label AppButton returns Label Content', (
-      WidgetTester tester,
-    ) async {
-      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-      bool buttonTapped = false;
-      final Widget tertiaryLabelButton = AppButton.label(
-        label: 'Tertiary Label Button',
-        onPressed: () {
-          buttonTapped = true;
-        },
-        type: AppButtonType.tertiary,
-      );
-      await tester.pumpWidget(createTestWidget(tertiaryLabelButton));
-      expect(
-        find.widgetWithText(AppButton, 'Tertiary Label Button'),
-        findsOneWidget,
-      );
-      expect(find.byType(CupertinoButton), findsOneWidget);
-      final buttonWidget = tester.widget<CupertinoButton>(
-        find.byType(CupertinoButton),
-      );
-      expect(buttonWidget.color, AppColors.transparent);
-      await tester.tap(find.byType(AppButton));
-      expect(buttonTapped, true);
-      final size = tester.getSize(find.byType(AppButton));
-      expect(size.width, greaterThan(0));
-      expect(size.height, greaterThan(0));
-      // text styles
-      final textWidget = tester.widget<Text>(find.byType(Text));
-      expect(textWidget.style!.fontSize, 16.0);
-      expect(textWidget.style!.fontWeight, FontWeight.normal);
-      expect(textWidget.style!.letterSpacing, 0.5);
-      expect(textWidget.style!.color, AppColors.primary);
-      debugDefaultTargetPlatformOverride = null;
-    });
   });
 }

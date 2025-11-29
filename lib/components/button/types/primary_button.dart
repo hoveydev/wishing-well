@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
-import 'package:wishing_well/components/button/app_button_style.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/utilities.dart';
 
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
@@ -75,23 +72,43 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = style(AppButtonType.primary);
     final onPressHandler = isLoading ? null : onPressed;
 
-    if (isIOS) {
-      return CupertinoButton.filled(
-        onPressed: onPressHandler,
-        color: AppColors.primary,
-        foregroundColor: AppColors.white,
-        child: _buildContent(context),
-      );
-    } else {
-      return ElevatedButton(
-        style: buttonStyle,
-        onPressed: onPressHandler,
-        child: _buildContent(context),
-      );
-    }
+    return TextButton(
+      style: ButtonStyle(
+        backgroundBuilder: (context, states, child) {
+          if (states.contains(WidgetState.pressed)) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 25),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.5),
+              ),
+              child: child,
+            );
+          } else {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 1),
+              ),
+              child: child,
+            );
+          }
+        },
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        foregroundColor: WidgetStateProperty.all(Colors.white),
+        padding: WidgetStateProperty.all(
+          const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+        elevation: WidgetStateProperty.all(0),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+      ),
+      onPressed: onPressHandler,
+      child: _buildContent(context),
+    );
   }
 
   Widget _buildContent(BuildContext context) {

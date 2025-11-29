@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
-import 'package:wishing_well/components/button/app_button_style.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/utilities.dart';
 
 enum _SecondaryButtonContentType { icon, label, labelWithIcon }
 
@@ -67,27 +64,44 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = style(AppButtonType.secondary);
+    // final buttonStyle = style(AppButtonType.secondary);
     final onPressHandler = isLoading ? null : onPressed;
 
-    if (isIOS) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primary),
-          borderRadius: BorderRadius.circular(14),
+    return TextButton(
+      style: ButtonStyle(
+        backgroundBuilder: (context, states, child) {
+          if (states.contains(WidgetState.pressed)) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 25),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.15),
+              ),
+              child: child,
+            );
+          } else {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              decoration: const BoxDecoration(color: AppColors.transparent),
+              child: child,
+            );
+          }
+        },
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        padding: WidgetStateProperty.all(
+          const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         ),
-        child: CupertinoButton(
-          onPressed: onPressHandler,
-          child: _buildContent(context),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
-      );
-    } else {
-      return OutlinedButton(
-        style: buttonStyle,
-        onPressed: onPressHandler,
-        child: _buildContent(context),
-      );
-    }
+        elevation: WidgetStateProperty.all(0),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+        side: const WidgetStatePropertyAll(
+          BorderSide(color: AppColors.primary),
+        ),
+      ),
+      onPressed: onPressHandler,
+      child: _buildContent(context),
+    );
   }
 
   Widget _buildContent(BuildContext context) {

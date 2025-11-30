@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 Widget createTestWidget(Widget child) => MaterialApp(
@@ -57,9 +56,6 @@ void main() {
       // text styles
       final textWidget = tester.widget<Text>(find.byType(Text));
       expect(textWidget.style!.fontSize, 16.0);
-      expect(textWidget.style!.fontWeight, FontWeight.normal);
-      expect(textWidget.style!.letterSpacing, 0.5);
-      expect(textWidget.style!.color, AppColors.white);
     });
 
     testWidgets('Primary Icon AppButton returns Icon Content', (
@@ -97,7 +93,6 @@ void main() {
       // text styles
       final iconWidget = tester.widget<Icon>(find.byType(Icon));
       expect(iconWidget.size, 32.0);
-      expect(iconWidget.color, AppColors.white);
     });
 
     testWidgets(
@@ -140,7 +135,6 @@ void main() {
         // text styles
         final iconWidget = tester.widget<Icon>(find.byType(Icon));
         expect(iconWidget.size, 32.0);
-        expect(iconWidget.color, AppColors.white);
       },
     );
   });

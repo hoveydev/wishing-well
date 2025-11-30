@@ -11,13 +11,13 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primary,
       primary: AppColors.primary,
+      onPrimary: AppColors.darkText,
       secondary: AppColors.accent,
       surface: AppColors.background,
     ),
-    textTheme: GoogleFonts.nunitoSansTextTheme().apply(
-      bodyColor: AppColors.primary,
-      displayColor: AppColors.primary,
-    ),
+    textTheme: GoogleFonts.nunitoSansTextTheme(
+      ThemeData.light().textTheme,
+    ).apply(bodyColor: AppColors.primary, displayColor: AppColors.primary),
   );
 
   // TODO: update colors
@@ -32,7 +32,7 @@ class AppTheme {
       secondary: AppColors.darkAccent,
       surface: AppColors.darkSurface,
       brightness: Brightness.dark,
-      onPrimary: AppColors.darkBackground,
+      onPrimary: AppColors.darkTextSecondary,
       onSecondary: AppColors.darkBackground,
       onSurface: AppColors.darkText,
     ),

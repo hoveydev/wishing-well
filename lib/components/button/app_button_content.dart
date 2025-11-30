@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/button/app_button_style.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 
 enum _AppButtonContentType { icon, label, labelWithIcon }
@@ -71,10 +70,6 @@ class AppButtonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: remove to use app_theme
-    final ButtonStyle buttonStyle = style(buttonType);
-    final Color resolvedForegroundColor =
-        buttonStyle.foregroundColor!.resolve(<WidgetState>{}) as Color;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     if (isLoading) {
@@ -86,37 +81,29 @@ class AppButtonContent extends StatelessWidget {
     } else {
       return Row(
         mainAxisAlignment: alignment,
-        children: _buildContent(context, textTheme, resolvedForegroundColor),
+        children: _buildContent(context, textTheme),
       );
     }
   }
 
-  List<Widget> _buildContent(
-    BuildContext context,
-    TextTheme textTheme,
-    Color textColor,
-  ) {
+  List<Widget> _buildContent(BuildContext context, TextTheme textTheme) {
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
-        return [
-          Icon(
-            icon!,
-            size: textTheme.headlineLarge!.fontSize,
-            color: textColor,
-          ),
-        ];
+        return [Icon(icon!, size: textTheme.headlineLarge!.fontSize)];
       case _AppButtonContentType.label:
         return [
-          Text(label!, style: textTheme.bodyLarge?.copyWith(color: textColor)),
+          Text(
+            label!,
+            style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
+          ),
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
-          Icon(
-            icon!,
-            size: textTheme.headlineLarge!.fontSize,
-            color: textColor,
+          Icon(icon!, size: textTheme.headlineLarge!.fontSize),
+          Text(
+            label!,
+            style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
           ),
-          Text(label!, style: textTheme.bodyLarge?.copyWith(color: textColor)),
         ];
     }
   }

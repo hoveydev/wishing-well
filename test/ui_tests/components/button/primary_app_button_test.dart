@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 Widget createTestWidget(Widget child) => MaterialApp(
@@ -41,6 +42,10 @@ void main() {
       expect(buttonWidget.style!.backgroundBuilder, isNotNull);
       expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
       expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
+      expect(
+        buttonWidget.style!.foregroundColor?.resolve({}),
+        AppColors.darkText,
+      );
       await tester.tap(find.byType(AppButton));
       expect(buttonTapped, true);
       final gesture = await tester.startGesture(
@@ -120,6 +125,10 @@ void main() {
         expect(buttonWidget.style!.backgroundBuilder, isNotNull);
         expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
         expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
+        expect(
+          buttonWidget.style!.foregroundColor?.resolve({}),
+          AppColors.darkText,
+        );
         await tester.tap(find.byType(AppButton));
         expect(buttonTapped, true);
         final gesture = await tester.startGesture(

@@ -27,7 +27,7 @@ class LoginButtons extends StatelessWidget {
         ),
         AppButton.label(
           label: l10n.signIn,
-          onPressed: () => viewModel.tapLoginButton(),
+          onPressed: () => viewModel.tapLoginButton(context),
           type: AppButtonType.primary,
         ),
         AppButton.label(

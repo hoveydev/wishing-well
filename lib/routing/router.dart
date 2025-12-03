@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
@@ -14,7 +15,9 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.login,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: LoginScreen(viewModel: LoginViewModel()),
+        child: LoginScreen(
+          viewModel: LoginViewModel(authRepository: context.read()),
+        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset.zero;
           const end = Offset(0.0, -0.15);

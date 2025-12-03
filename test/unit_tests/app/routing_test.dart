@@ -10,12 +10,16 @@ import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.d
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
+import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+
 GoRouter createMockRouter() => GoRouter(
   initialLocation: '/login',
   routes: [
     GoRoute(
       path: '/login',
-      builder: (context, state) => LoginScreen(viewModel: LoginViewModel()),
+      builder: (context, state) => LoginScreen(
+        viewModel: LoginViewModel(authRepository: MockAuthRepository()),
+      ),
     ),
     GoRoute(
       path: '/forgot-password',
@@ -27,6 +31,7 @@ GoRouter createMockRouter() => GoRouter(
       builder: (context, state) =>
           CreateAccountScreen(viewModel: CreateAccountViewmodel()),
     ),
+    GoRoute(path: '/home', builder: (context, state) => const Placeholder()),
   ],
 );
 

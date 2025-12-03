@@ -1,18 +1,26 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/routing/routes.dart';
 
 abstract class LoginViewModelContract {
   void updateEmailField(String email);
   void updatePasswordField(String password);
   bool get hasAlert;
   LoginErrorType get validationMessage;
-  void tapLoginButton();
+  Future<void> tapLoginButton(BuildContext context);
 }
 
 enum LoginErrorType { none, noPasswordNoEmail, noEmail, noPassword, badEmail }
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
+  LoginViewModel({required AuthRepository authRepository})
+    : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
   String _email = '';
   String _password = '';
 
@@ -74,13 +82,20 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   @override
-  void tapLoginButton() {
+  Future<void> tapLoginButton(BuildContext context) async {
     if (_isFormValid(_email, _password)) {
-      log('Login successful with email: $_email');
-      // TODO: Proceed with login logic
+      // TODO: push loading screen instead
+      try {
+        await _authRepository.login(email: _email, password: _password);
+        if (context.mounted) {
+          // TODO: pop loading screen
+          await context.push(Routes.home);
+        }
+      } catch (err) {
+        log(err.toString());
+      }
     } else {
       log('Login failed: $_validationMessage');
     }
-    // TODO: Implement login button tap logic here
   }
 }

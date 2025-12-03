@@ -7,6 +7,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
+import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+
 dynamic startAppWithLoginScreen(WidgetTester tester) async {
   final MaterialApp app = MaterialApp(
     localizationsDelegates: const [
@@ -16,7 +18,9 @@ dynamic startAppWithLoginScreen(WidgetTester tester) async {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    home: LoginScreen(viewModel: LoginViewModel()),
+    home: LoginScreen(
+      viewModel: LoginViewModel(authRepository: MockAuthRepository()),
+    ),
   );
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
@@ -74,7 +78,7 @@ void main() {
       expect(textField.controller.text, 'password');
     });
 
-    testWidgets('Login Success', (WidgetTester tester) async {
+    testWidgets('Login Validation Success', (WidgetTester tester) async {
       await startAppWithLoginScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,

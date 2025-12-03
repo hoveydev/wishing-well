@@ -1,0 +1,52 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/result.dart';
+
+class AuthRepositoryRemote extends AuthRepository {
+  AuthRepositoryRemote({required SupabaseClient supabase})
+    : _supabase = supabase;
+
+  final SupabaseClient _supabase;
+  bool _isAuthenticated = false;
+
+  @override
+  bool get isAuthenticated {
+    final session = _supabase.auth.currentSession;
+    _isAuthenticated = session != null;
+    return _isAuthenticated;
+  }
+
+  @override
+  Future<Result<void>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final loginResult = await _supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      _isAuthenticated = loginResult.user?.aud == 'authenticated';
+      return const Result.ok(
+        null,
+      ); // could return the entire AuthResponse if makes sense
+    } on Exception catch (err) {
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  @override
+  Future<Result<void>> logout() async {
+    try {
+      await _supabase.auth.signOut();
+      _isAuthenticated = false;
+      return const Result.ok(null);
+    } on Exception catch (err) {
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
+}

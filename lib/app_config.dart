@@ -26,9 +26,8 @@ class AppConfig {
     validate();
   }
 
-  static String get testToken => _getOrThrow('TEST_TOKEN');
-  static String get unavailableToken =>
-      _getOrDefault('UNAVAILABLE', 'unavailable token');
+  static String get supabaseUrl => _getOrThrow('SUPABASE_URL');
+  static String get supabaseSecret => _getOrThrow('SUPABASE_SECRET');
 
   static Environment get environment => _environment;
   static bool get isDevelopment => _environment == Environment.development;
@@ -45,14 +44,15 @@ class AppConfig {
     return value;
   }
 
+  // ignore: unused_element
   static String _getOrDefault(String key, String defaultValue) =>
       dotenv.env[key] ?? defaultValue;
 
   static void validate() {
     // This will throw if any required key is missing
     // if a default is provided, it will never throw
-    testToken;
-    unavailableToken;
+    supabaseUrl;
+    supabaseSecret;
 
     log(
       '✅ All required environment variables are present for ${_environment.name}',

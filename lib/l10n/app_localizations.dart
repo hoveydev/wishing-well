@@ -166,6 +166,12 @@ abstract class AppLocalizations {
   /// **'Invalid email format'**
   String get loginErrorBadEmail;
 
+  /// Login error message when supabase call has an error
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occured. Please try again'**
+  String get loginErrorUnknown;
+
   /// Header for Forgot Password screen
   ///
   /// In en, this message translates to:

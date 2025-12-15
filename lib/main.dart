@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/app_config.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
+import 'package:wishing_well/screens/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 void main() async {
@@ -22,16 +24,20 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-    theme: AppTheme.lightTheme,
-    darkTheme: AppTheme.darkTheme,
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    routerConfig: router(),
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (_) => LoadingController(),
+    child: MaterialApp.router(
+      builder: (_, child) => LoadingOverlay(child: child!),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router(),
+    ),
   );
 }

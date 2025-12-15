@@ -43,3 +43,9 @@ class AppTheme {
         ),
   );
 }
+
+// class ColorSchemeExtension extends ColorScheme {
+//   final Color? transparent;
+
+//   ColorSchemeExtension.fromSeed(this.transparent, {required super.seedColor}) : super.fromSeed();
+// }

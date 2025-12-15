@@ -27,7 +27,7 @@ void main() {
 
       test('Has Login Method', () {
         expect(
-          mockRepository.login(email: 'EMAIL', password: 'PASSWORD'),
+          mockRepository.login(email: 'email@email.com', password: 'password'),
           isA<Future<Result<void>>>(),
         );
       });
@@ -43,14 +43,20 @@ void main() {
       });
 
       test('Returns true After Successful Login', () async {
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         expect(mockRepository.isAuthenticated, true);
       });
 
       test('Returns false After Logout', () async {
         // Login first
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
         expect(mockRepository.isAuthenticated, true);
 
         // Then logout
@@ -62,8 +68,8 @@ void main() {
     group('Login', () {
       test('Returns Ok on Successful Login', () async {
         final result = await mockRepository.login(
-          email: 'EMAIL',
-          password: 'PASSWORD',
+          email: 'email@email.com',
+          password: 'password',
         );
 
         expect(result, isA<Ok<void>>());
@@ -84,7 +90,10 @@ void main() {
           notified = true;
         });
 
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         expect(notified, true);
       });
@@ -106,7 +115,10 @@ void main() {
       test('Updates isAuthenticated to true on Success', () async {
         expect(mockRepository.isAuthenticated, false);
 
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         expect(mockRepository.isAuthenticated, true);
       });
@@ -124,16 +136,16 @@ void main() {
 
       test('Can be Called Multiple Times', () async {
         final result1 = await mockRepository.login(
-          email: 'EMAIL',
-          password: 'PASSWORD',
+          email: 'email@email.com',
+          password: 'password',
         );
         expect(result1, isA<Ok<void>>());
 
         await mockRepository.logout();
 
         final result2 = await mockRepository.login(
-          email: 'EMAIL',
-          password: 'PASSWORD',
+          email: 'email@email.com',
+          password: 'password',
         );
         expect(result2, isA<Ok<void>>());
       });
@@ -142,7 +154,10 @@ void main() {
     group('logout', () {
       test('Returns Ok on Successful Logout', () async {
         // Login first
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         final result = await mockRepository.logout();
 
@@ -151,7 +166,10 @@ void main() {
 
       test('Notifies Listeners on Logout', () async {
         // Login first
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         var notified = false;
         mockRepository.addListener(() {
@@ -165,7 +183,10 @@ void main() {
 
       test('Updates isAuthenticated to false', () async {
         // Login first
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
         expect(mockRepository.isAuthenticated, true);
 
         await mockRepository.logout();
@@ -181,13 +202,19 @@ void main() {
           notifyCount++;
         });
 
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         expect(notifyCount, 1);
       });
 
       test('Notifies Listeners Exactly Once on Logout', () async {
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         var notifyCount = 0;
         mockRepository.addListener(() {
@@ -206,7 +233,10 @@ void main() {
         }
 
         mockRepository.addListener(listener);
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
         expect(notifyCount, 1);
 
         mockRepository.removeListener(listener);
@@ -225,7 +255,10 @@ void main() {
           listener2Count++;
         });
 
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
 
         expect(listener1Count, 1);
         expect(listener2Count, 1);
@@ -236,14 +269,17 @@ void main() {
       test('Handles Empty Email', () async {
         final result = await mockRepository.login(
           email: '',
-          password: 'PASSWORD',
+          password: 'password',
         );
 
         expect(result, isA<Error<void>>());
       });
 
       test('Handles Empty Password', () async {
-        final result = await mockRepository.login(email: 'EMAIL', password: '');
+        final result = await mockRepository.login(
+          email: 'email@email.com',
+          password: '',
+        );
 
         expect(result, isA<Error<void>>());
       });
@@ -261,7 +297,10 @@ void main() {
         expect(mockRepository.isAuthenticated, false);
 
         // Login
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
         expect(mockRepository.isAuthenticated, true);
 
         // Logout
@@ -269,7 +308,10 @@ void main() {
         expect(mockRepository.isAuthenticated, false);
 
         // Login again
-        await mockRepository.login(email: 'EMAIL', password: 'PASSWORD');
+        await mockRepository.login(
+          email: 'email@email.com',
+          password: 'password',
+        );
         expect(mockRepository.isAuthenticated, true);
       });
 

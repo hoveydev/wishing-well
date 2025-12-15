@@ -46,6 +46,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginErrorBadEmail => 'Invalid email format';
 
   @override
+  String get loginErrorUnknown => 'An unknown error occured. Please try again';
+
+  @override
   String get forgotPasswordHeader => 'Forgot Password';
 
   @override

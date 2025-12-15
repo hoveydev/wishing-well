@@ -21,9 +21,36 @@ class MockGoTrueClient implements GoTrueClient {
       ),
     );
 
+    final Session mockSessionWrongAuth = Session(
+      accessToken: 'fake-token',
+      tokenType: 'bearer',
+      user: User(
+        id: '123',
+        aud: 'wrong',
+        appMetadata: {},
+        userMetadata: {},
+        createdAt: DateTime.now().toIso8601String(),
+        updatedAt: DateTime.now().toIso8601String(),
+      ),
+    );
+
     /// simulate a correct email and password
     if (email == 'EMAIL' && password == 'PASSWORD') {
       _currentSession = mockSession;
+    } else if (email == 'EMAIL_WRONG_AUTH' &&
+        password == 'PASSWORD_WRONG_AUTH') {
+      _currentSession = mockSessionWrongAuth;
+      return AuthResponse(
+        user: User(
+          id: '123',
+          aud: 'wrong',
+          appMetadata: {},
+          userMetadata: {},
+          createdAt: DateTime.now().toIso8601String(),
+          updatedAt: DateTime.now().toIso8601String(),
+        ),
+        session: mockSessionWrongAuth,
+      );
     } else {
       throw Exception('Incorrect email and password');
     }

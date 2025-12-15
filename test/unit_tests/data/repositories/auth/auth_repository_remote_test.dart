@@ -34,6 +34,15 @@ void main() {
       expect(repository.isAuthenticated, isFalse);
     });
 
+    test('perform login with innacurate authentication', () async {
+      final result = await repository.login(
+        email: 'EMAIL_WRONG_AUTH',
+        password: 'PASSWORD_WRONG_AUTH',
+      );
+      expect(result, isA<Error>());
+      expect(repository.isAuthenticated, isFalse);
+    });
+
     test('Perform Successful Logout', () async {
       await repository.login(email: 'EMAIL', password: 'PASSWORD');
       final result = await repository.logout();

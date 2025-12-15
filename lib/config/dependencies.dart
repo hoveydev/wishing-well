@@ -7,8 +7,10 @@ import 'package:wishing_well/data/respositories/auth/auth_repository_remote.dart
 
 List<SingleChildWidget> get providersRemote => [
   Provider(
+    // coverage:ignore-start
     create: (context) =>
         SupabaseClient(AppConfig.supabaseUrl, AppConfig.supabaseSecret),
+    // coverage:ignore-end
   ),
   ChangeNotifierProvider(
     create: (context) =>

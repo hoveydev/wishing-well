@@ -48,6 +48,10 @@
     "@loginErrorBadEmail": {
         "description": "Login error message when email format is invalid"
     },
+    "loginErrorUnknown": "An unknown error occured. Please try again",
+    "@loginErrorUnknown": {
+        "description": "Login error message when supabase call has an error"
+    },
     "forgotPasswordHeader": "Forgot Password",
     "@forgotPasswordHeader": {
         "description": "Header for Forgot Password screen"

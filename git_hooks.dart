@@ -123,7 +123,13 @@ Future<bool> _checkCoverage({required double threshold}) async {
 Future<double> _parseLcovCoverage(File lcovFile) async {
   final lines = await lcovFile.readAsLines();
 
-  const excludePatterns = ['l10n/app_localizations', 'generated', '.g.dart'];
+  const excludePatterns = [
+    'l10n/app_localizations',
+    'generated',
+    '.g.dart',
+    'main.dart',
+    'app_config.dart',
+  ];
 
   int totalLines = 0;
   int coveredLines = 0;

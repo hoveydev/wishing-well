@@ -12,7 +12,7 @@ class AuthRepositoryRemote extends AuthRepository {
   @override
   bool get isAuthenticated {
     final session = _supabase.auth.currentSession;
-    _isAuthenticated = session != null;
+    _isAuthenticated = session?.user.aud == 'authenticated';
     return _isAuthenticated;
   }
 
@@ -27,9 +27,13 @@ class AuthRepositoryRemote extends AuthRepository {
         password: password,
       );
       _isAuthenticated = loginResult.user?.aud == 'authenticated';
-      return const Result.ok(
-        null,
-      ); // could return the entire AuthResponse if makes sense
+      if (_isAuthenticated) {
+        return const Result.ok(
+          null,
+        ); // could return the entire AuthResponse if makes sense
+      } else {
+        return Result.error(Exception('unknown issue'));
+      }
     } on Exception catch (err) {
       return Result.error(err);
     } finally {

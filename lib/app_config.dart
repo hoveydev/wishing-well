@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-enum Environment { development, production }
+enum Environment { test, development, production }
 
 class AppConfig {
   AppConfig._();
@@ -15,6 +15,9 @@ class AppConfig {
     _environment = environment;
 
     switch (environment) {
+      case Environment.test:
+        await dotenv.load(fileName: '.env.test');
+        break;
       case Environment.development:
         await dotenv.load(fileName: '.env.development');
         break;
@@ -30,6 +33,7 @@ class AppConfig {
   static String get supabaseSecret => _getOrThrow('SUPABASE_SECRET');
 
   static Environment get environment => _environment;
+  static bool get isTest => _environment == Environment.test;
   static bool get isDevelopment => _environment == Environment.development;
   static bool get isProduction => _environment == Environment.production;
 

@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/result.dart';
 import 'package:wishing_well/routing/routes.dart';
 
 abstract class LoginViewModelContract {
@@ -13,7 +17,14 @@ abstract class LoginViewModelContract {
   Future<void> tapLoginButton(BuildContext context);
 }
 
-enum LoginErrorType { none, noPasswordNoEmail, noEmail, noPassword, badEmail }
+enum LoginErrorType {
+  none,
+  noPasswordNoEmail,
+  noEmail,
+  noPassword,
+  badEmail,
+  unknownError,
+}
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   LoginViewModel({required AuthRepository authRepository})
@@ -83,19 +94,29 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   Future<void> tapLoginButton(BuildContext context) async {
-    if (_isFormValid(_email, _password)) {
-      // TODO: push loading screen instead
-      try {
-        await _authRepository.login(email: _email, password: _password);
-        if (context.mounted) {
-          // TODO: pop loading screen
-          await context.push(Routes.home);
-        }
-      } catch (err) {
-        log(err.toString());
-      }
-    } else {
+    final loading = context.read<LoadingController>();
+
+    if (!_isFormValid(_email, _password)) {
       log('Login failed: $_validationMessage');
+      return;
+    }
+
+    loading.show();
+
+    final response = await _authRepository.login(
+      email: _email,
+      password: _password,
+    );
+    switch (response) {
+      case Ok():
+        if (context.mounted) {
+          unawaited(context.push(Routes.home));
+        }
+        loading.hide();
+      case Error():
+        _setValidationMessage = LoginErrorType.unknownError;
+        _setHasAlert = true;
+        loading.hide();
     }
   }
 }

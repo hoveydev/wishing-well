@@ -42,6 +42,10 @@ $ genhtml coverage/lcov.info -o coverage/html
 ```console
 $ open coverage/html/index.html
 ```
+Alternatively, there is a handy script that can handle all of this for you:
+```console
+$ ./scripts/test_coverage.sh
+```
 
 #### Pre-Commit
 **all code found in `git_hooks.dart`*

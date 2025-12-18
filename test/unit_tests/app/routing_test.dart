@@ -9,10 +9,12 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
@@ -21,21 +23,36 @@ GoRouter createMockRouter() => GoRouter(
   routes: [
     GoRoute(
       path: '/login',
+      name: 'login',
       builder: (context, state) => LoginScreen(
         viewModel: LoginViewModel(authRepository: MockAuthRepository()),
       ),
     ),
     GoRoute(
       path: '/forgot-password',
+      name: 'forgot-password',
       builder: (context, state) =>
           ForgotPasswordScreen(viewModel: ForgotPasswordViewModel()),
     ),
     GoRoute(
-      path: '/sign-up',
-      builder: (context, state) =>
-          CreateAccountScreen(viewModel: CreateAccountViewmodel()),
+      path: '/create-account',
+      name: 'create-account',
+      builder: (context, state) => CreateAccountScreen(
+        viewModel: CreateAccountViewmodel(authRepository: MockAuthRepository()),
+      ),
+      routes: [
+        GoRoute(
+          path: 'confirm',
+          name: 'create-account-confirm',
+          builder: (context, state) => const CreateAccountConfirmationScreen(),
+        ),
+      ],
     ),
-    GoRoute(path: '/home', builder: (context, state) => const Placeholder()),
+    GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (context, state) => const Placeholder(),
+    ),
   ],
 );
 
@@ -43,6 +60,8 @@ dynamic startAppWithLoginScreen(WidgetTester tester, GoRouter router) async {
   final Widget app = MultiProvider(
     providers: [ChangeNotifierProvider(create: (_) => LoadingController())],
     child: MaterialApp.router(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -75,7 +94,7 @@ void main() {
       await startAppWithLoginScreen(tester, mockRouter);
       await tester.tap(find.text('Create an Account'));
       await tester.pumpAndSettle();
-      expect(mockRouter.state.uri.path, '/sign-up');
+      expect(mockRouter.state.uri.path, '/create-account');
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/login');
@@ -95,6 +114,40 @@ void main() {
       await tester.tap(find.text('Sign In'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/home');
+    });
+
+    testWidgets('Login > Create Account > Confirm > Login', (
+      WidgetTester tester,
+    ) async {
+      final mockRouter = createMockRouter();
+      await startAppWithLoginScreen(tester, mockRouter);
+      await tester.tap(find.text('Create an Account'));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/create-account');
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'new.account@email.com');
+      final passwordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Password',
+      );
+      await tester.enterText(passwordWidgetFinder, 'Password123!');
+      final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Confirm Password',
+      );
+      await tester.enterText(confirmPasswordWidgetFinder, 'Password123!');
+      await tester.tap(find.text('Create Account'));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/create-account/confirm');
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/login');
     });
   });
 }

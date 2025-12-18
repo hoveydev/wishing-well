@@ -108,6 +108,18 @@
     "@createAccountErrorPasswordsDontMatch": {
         "description": "Create account error message when passwords do not match"
     },
+    "createAccountErrorUnknown": "An unknown error occured. Please try again",
+    "@createAccountErrorUnknown": {
+        "description": "Create account error message when supabase call has an error"
+    },
+    "createAccountConfirmationHeader": "Account Successfully Created!",
+    "@createAccountConfirmationHeader": {
+        "description": "Create account confirmation screen header"
+    },
+    "createAccountConfirmationInfoMessage": "Please check your email to confirm your account. Your account must be confirmed before you are able to log in.",
+    "@createAccountConfirmationInfoMessage": {
+        "description": "Create account confirmation screen instructions on account confirmation"
+    },
     "submit": "Submit",
     "@submit": {
         "description": "Label for submit button on Forgot Password screen"

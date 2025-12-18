@@ -22,7 +22,7 @@ class LoginButtons extends StatelessWidget {
       children: [
         AppButton.label(
           label: l10n.forgotPassword,
-          onPressed: () => context.push(Routes.forgotPassword),
+          onPressed: () => context.pushNamed(Routes.forgotPassword),
           type: AppButtonType.tertiary,
         ),
         AppButton.label(
@@ -32,7 +32,7 @@ class LoginButtons extends StatelessWidget {
         ),
         AppButton.label(
           label: l10n.createAccount,
-          onPressed: () => context.push(Routes.signUp),
+          onPressed: () => context.pushNamed(Routes.createAccount),
           type: AppButtonType.secondary,
         ),
       ],

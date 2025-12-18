@@ -15,6 +15,9 @@ class AppTheme {
       secondary: AppColors.accent,
       surface: AppColors.background,
     ),
+    extensions: const <ThemeExtension<dynamic>>[
+      ColorSchemeExtension(success: AppColors.alertSuccess),
+    ],
     textTheme: GoogleFonts.nunitoSansTextTheme(
       ThemeData.light().textTheme,
     ).apply(bodyColor: AppColors.primary, displayColor: AppColors.primary),
@@ -36,6 +39,9 @@ class AppTheme {
       onSecondary: AppColors.darkBackground,
       onSurface: AppColors.darkText,
     ),
+    extensions: const <ThemeExtension<dynamic>>[
+      ColorSchemeExtension(success: AppColors.darkAlertSuccess),
+    ],
     textTheme: GoogleFonts.nunitoSansTextTheme(ThemeData.dark().textTheme)
         .apply(
           bodyColor: AppColors.darkPrimary,
@@ -44,8 +50,34 @@ class AppTheme {
   );
 }
 
-// class ColorSchemeExtension extends ColorScheme {
-//   final Color? transparent;
+extension AppThemeExtension on BuildContext {
+  ColorSchemeExtension get colorScheme =>
+      Theme.of(this).extension<ColorSchemeExtension>()!;
+}
 
-//   ColorSchemeExtension.fromSeed(this.transparent, {required super.seedColor}) : super.fromSeed();
-// }
+/// additional color scheme variables
+@immutable
+class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
+  final Color? success;
+  final Color? onSuccess;
+  const ColorSchemeExtension({this.success, this.onSuccess});
+
+  @override
+  ColorSchemeExtension copyWith({Color? success, Color? onSuccess}) =>
+      ColorSchemeExtension(
+        success: success ?? this.success,
+        onSuccess: onSuccess ?? this.onSuccess,
+      );
+
+  @override
+  ColorSchemeExtension lerp(
+    ThemeExtension<ColorSchemeExtension>? other,
+    double t,
+  ) {
+    if (other is! ColorSchemeExtension) return this;
+    return ColorSchemeExtension(
+      success: Color.lerp(success, other.success, t)!,
+      onSuccess: Color.lerp(onSuccess, other.onSuccess, t)!,
+    );
+  }
+}

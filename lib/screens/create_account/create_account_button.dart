@@ -20,7 +20,7 @@ class CreateAccountButton extends StatelessWidget {
       children: [
         AppButton.label(
           label: l10n.createAccountButtonLabel,
-          onPressed: () => viewModel.tapCreateAccountButton(),
+          onPressed: () => viewModel.tapCreateAccountButton(context),
           type: AppButtonType.primary,
         ),
       ],

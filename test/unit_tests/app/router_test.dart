@@ -8,9 +8,11 @@ import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
@@ -19,6 +21,8 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
     ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
   ],
   child: MaterialApp.router(
+    theme: AppTheme.lightTheme,
+    darkTheme: AppTheme.darkTheme,
     routerConfig: router,
     localizationsDelegates: const [
       AppLocalizations.delegate,
@@ -47,7 +51,7 @@ void main() {
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
 
-      goRouter.go(Routes.forgotPassword);
+      goRouter.goNamed(Routes.forgotPassword);
       await tester.pumpAndSettle();
 
       expect(find.byType(ForgotPasswordScreen), findsOneWidget);
@@ -59,10 +63,27 @@ void main() {
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
 
-      goRouter.go(Routes.signUp);
+      goRouter.goNamed(Routes.createAccount);
       await tester.pumpAndSettle();
 
       expect(find.byType(CreateAccountScreen), findsOneWidget);
+    });
+
+    testWidgets('navigates to sign up confirm', (tester) async {
+      final goRouter = router();
+
+      await tester.pumpWidget(startAppWithRouter(goRouter));
+      await tester.pumpAndSettle();
+
+      goRouter.goNamed(Routes.createAccount);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CreateAccountScreen), findsOneWidget);
+
+      goRouter.goNamed(Routes.createAccountConfirm);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CreateAccountConfirmationScreen), findsOneWidget);
     });
 
     testWidgets('navigates to home', (tester) async {
@@ -71,7 +92,7 @@ void main() {
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
 
-      goRouter.go(Routes.home);
+      goRouter.goNamed(Routes.home);
       await tester.pumpAndSettle();
 
       expect(find.text('Home'), findsOneWidget);

@@ -84,6 +84,8 @@ class CreateAccountInputs extends StatelessWidget {
         return l10n.createAccountErrorPasswordNoSpecial;
       case CreateAccountErrorType.passwordsDontMatch:
         return l10n.createAccountErrorPasswordsDontMatch;
+      case CreateAccountErrorType.unknownError:
+        return l10n.createAccountErrorUnknown;
       case CreateAccountErrorType.none:
         return '';
     }

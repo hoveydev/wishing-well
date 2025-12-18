@@ -55,5 +55,23 @@ void main() {
       expect(result, isA<Error>());
       expect(repository.isAuthenticated, isFalse);
     });
+
+    test('perform successful create account', () async {
+      final result = await repository.createAccount(
+        email: 'EMAIL',
+        password: 'PASSWORD',
+      );
+      expect(result, isA<Ok>());
+      expect(repository.isAuthenticated, isFalse);
+    });
+
+    test('perform create account error', () async {
+      final result = await repository.createAccount(
+        email: 'EMAIL_WRONG',
+        password: 'PASSWORD_WRONG',
+      );
+      expect(result, isA<Error>());
+      expect(repository.isAuthenticated, isFalse);
+    });
   });
 }

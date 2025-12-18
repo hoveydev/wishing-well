@@ -35,6 +35,16 @@ void main() {
       test('Has Logout Method', () {
         expect(mockRepository.logout(), isA<Future<Result<void>>>());
       });
+
+      test('has create account method', () {
+        expect(
+          mockRepository.createAccount(
+            email: 'new.account@email.com',
+            password: 'Password123!',
+          ),
+          isA<Future<Result<void>>>(),
+        );
+      });
     });
 
     group('isAuthenticated', () {
@@ -192,6 +202,70 @@ void main() {
         await mockRepository.logout();
 
         expect(mockRepository.isAuthenticated, false);
+      });
+    });
+
+    group('create account', () {
+      test('returns \'Ok\' on successful account creation', () async {
+        final result = await mockRepository.createAccount(
+          email: 'new.account@email.com',
+          password: 'Password123!',
+        );
+
+        expect(result, isA<Ok<void>>());
+      });
+
+      test('returns \'Error\' on failed account creation', () async {
+        final result = await mockRepository.createAccount(
+          email: 'wrong@email.com',
+          password: 'wrongpassword',
+        );
+
+        expect(result, isA<Error<void>>());
+      });
+
+      test('notifies listeners on successful account creation', () async {
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        await mockRepository.createAccount(
+          email: 'new.account@email.com',
+          password: 'Password123!',
+        );
+
+        expect(notified, true);
+      });
+
+      test('notifies listeners on failed account creation', () async {
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        await mockRepository.createAccount(
+          email: 'wrong@email.com',
+          password: 'wrongpassword',
+        );
+
+        expect(notified, true);
+      });
+
+      test('Can be Called Multiple Times', () async {
+        final result1 = await mockRepository.createAccount(
+          email: 'new.account@email.com',
+          password: 'Password123!',
+        );
+        expect(result1, isA<Ok<void>>());
+
+        await mockRepository.logout();
+
+        final result2 = await mockRepository.createAccount(
+          email: 'new.account@email.com',
+          password: 'Password123!',
+        );
+        expect(result2, isA<Ok<void>>());
       });
     });
 

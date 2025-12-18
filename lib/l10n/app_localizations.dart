@@ -256,6 +256,24 @@ abstract class AppLocalizations {
   /// **'Passwords must match'**
   String get createAccountErrorPasswordsDontMatch;
 
+  /// Create account error message when supabase call has an error
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occured. Please try again'**
+  String get createAccountErrorUnknown;
+
+  /// Create account confirmation screen header
+  ///
+  /// In en, this message translates to:
+  /// **'Account Successfully Created!'**
+  String get createAccountConfirmationHeader;
+
+  /// Create account confirmation screen instructions on account confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.'**
+  String get createAccountConfirmationInfoMessage;
+
   /// Label for submit button on Forgot Password screen
   ///
   /// In en, this message translates to:

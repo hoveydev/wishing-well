@@ -98,5 +98,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccountErrorPasswordsDontMatch => 'Passwords must match';
 
   @override
+  String get createAccountErrorUnknown =>
+      'An unknown error occured. Please try again';
+
+  @override
+  String get createAccountConfirmationHeader => 'Account Successfully Created!';
+
+  @override
+  String get createAccountConfirmationInfoMessage =>
+      'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.';
+
+  @override
   String get submit => 'Submit';
 }

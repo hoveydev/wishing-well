@@ -79,6 +79,23 @@ class MockGoTrueClient implements GoTrueClient {
   };
 
   @override
+  Future<AuthResponse> signUp({
+    required String password,
+    String? email,
+    String? phone,
+    String? emailRedirectTo,
+    Map<String, dynamic>? data,
+    String? captchaToken,
+    OtpChannel channel = OtpChannel.sms,
+  }) async {
+    if (email == 'EMAIL' && password == 'PASSWORD') {
+      return AuthResponse();
+    } else {
+      throw Exception('create account error');
+    }
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 

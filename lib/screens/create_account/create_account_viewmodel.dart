@@ -1,6 +1,13 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/result.dart';
+import 'package:wishing_well/routing/routes.dart';
 
 abstract class CreateAccountViewmodelContract {
   void updateEmailField(String email);
@@ -8,7 +15,7 @@ abstract class CreateAccountViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   CreateAccountErrorType get validationMessage;
-  void tapCreateAccountButton();
+  Future<void> tapCreateAccountButton(BuildContext context);
 }
 
 enum CreateAccountErrorType {
@@ -23,10 +30,16 @@ enum CreateAccountErrorType {
   passwordNoDigit,
   passwordNoSpecial,
   passwordsDontMatch,
+  unknownError,
 }
 
 class CreateAccountViewmodel extends ChangeNotifier
     implements CreateAccountViewmodelContract {
+  CreateAccountViewmodel({required AuthRepository authRepository})
+    : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
   String _email = '';
   String _passwordOne = '';
   String _passwordTwo = '';
@@ -132,11 +145,30 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   @override
-  void tapCreateAccountButton() {
-    if (_isFormValid(_email, _passwordOne, _passwordTwo)) {
-      log('Account created for $_email');
-    } else {
-      log('Email validation failed: $_validationMessage');
+  Future<void> tapCreateAccountButton(BuildContext context) async {
+    final loading = context.read<LoadingController>();
+    if (!_isFormValid(_email, _passwordOne, _passwordTwo)) {
+      log('Sign up failed: $_validationMessage');
+      return;
+    }
+
+    loading.show();
+
+    final response = await _authRepository.createAccount(
+      email: _email,
+      password: _passwordOne,
+    );
+
+    switch (response) {
+      case Ok():
+        if (context.mounted) {
+          unawaited(context.pushNamed(Routes.createAccountConfirm));
+        }
+        loading.hide();
+      case Error():
+        _setValidationMessage = CreateAccountErrorType.unknownError;
+        _setHasAlert = true;
+        loading.hide();
     }
   }
 }

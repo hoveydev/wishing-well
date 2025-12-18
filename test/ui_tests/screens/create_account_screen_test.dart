@@ -1,29 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
+import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+
 dynamic startAppWithForgotPasswordScreen(WidgetTester tester) async {
-  final MaterialApp app = MaterialApp(
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: CreateAccountScreen(viewModel: CreateAccountViewmodel()),
-  );
+  final controller = LoadingController();
+  final ChangeNotifierProvider app =
+      ChangeNotifierProvider<LoadingController>.value(
+        value: controller,
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: CreateAccountScreen(
+            viewModel: CreateAccountViewmodel(
+              authRepository: MockAuthRepository(),
+            ),
+          ),
+        ),
+      );
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
 }
 
 void main() {
-  group('Create Account Screen Tests', () {
+  group('create account screen tests', () {
     testWidgets('Renders Screen With All Elements', (
       WidgetTester tester,
     ) async {
@@ -39,7 +52,7 @@ void main() {
       expect(find.text('Create Account'), findsOneWidget);
     });
 
-    testWidgets('Email Text Field Updates', (WidgetTester tester) async {
+    testWidgets('email text field updates', (WidgetTester tester) async {
       await startAppWithForgotPasswordScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
@@ -54,7 +67,7 @@ void main() {
       expect(textField.controller.text, 'test.email@email.com');
     });
 
-    testWidgets('Password Text Field Updates', (WidgetTester tester) async {
+    testWidgets('password text field updates', (WidgetTester tester) async {
       await startAppWithForgotPasswordScreen(tester);
       final passwordWidgetFinder = find.byWidgetPredicate(
         (widget) =>
@@ -72,7 +85,7 @@ void main() {
       expect(textField.controller.text, 'password');
     });
 
-    testWidgets('Confirm Password Text Field Updates', (
+    testWidgets('confirm password text field updates', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -92,7 +105,9 @@ void main() {
       expect(textField.controller.text, 'password');
     });
 
-    testWidgets('Create Account Success', (WidgetTester tester) async {
+    testWidgets('create account validation success', (
+      WidgetTester tester,
+    ) async {
       await startAppWithForgotPasswordScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
@@ -142,8 +157,8 @@ void main() {
     });
   });
 
-  group('Create Account Error Scenarios', () {
-    testWidgets('No Email No Password Create Account Error', (
+  group('create account error scenarios', () {
+    testWidgets('no email no password create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -152,7 +167,7 @@ void main() {
       expect(find.text('Email and password cannot be empty'), findsOneWidget);
     });
 
-    testWidgets('No Email Only Create Account Error', (
+    testWidgets('no email only create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -168,7 +183,7 @@ void main() {
       expect(find.text('Email cannot be empty'), findsOneWidget);
     });
 
-    testWidgets('No Password Only Create Account Error', (
+    testWidgets('no password only create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -181,7 +196,7 @@ void main() {
       expect(find.text('Password cannot be empty'), findsOneWidget);
     });
 
-    testWidgets('Invalid Email Create Account Error', (
+    testWidgets('invalid email create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -201,7 +216,7 @@ void main() {
       expect(find.text('Invalid email format'), findsOneWidget);
     });
 
-    testWidgets('Invalid Password Length Create Account Error', (
+    testWidgets('invalid password length create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -224,7 +239,7 @@ void main() {
       );
     });
 
-    testWidgets('No Uppercase in Password Create Account Error', (
+    testWidgets('no uppercase in password create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -247,7 +262,7 @@ void main() {
       );
     });
 
-    testWidgets('No Lowercase in Password Create Account Error', (
+    testWidgets('no lowercase in password create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -270,7 +285,7 @@ void main() {
       );
     });
 
-    testWidgets('No Digits in Password Create Account Error', (
+    testWidgets('no digits in password create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -293,7 +308,7 @@ void main() {
       );
     });
 
-    testWidgets('No Special Character in Password Create Account Error', (
+    testWidgets('no special character in password create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);
@@ -316,7 +331,7 @@ void main() {
       );
     });
 
-    testWidgets('Passwords Don\'t Match Create Account Error', (
+    testWidgets('passwords don\'t match create account error', (
       WidgetTester tester,
     ) async {
       await startAppWithForgotPasswordScreen(tester);

@@ -5,21 +5,21 @@ void main() {
   group('Result', () {
     group('Ok', () {
       test('creates Ok result with value', () {
-        const result = Result<int>.ok(42);
+        const Result result = Result<int>.ok(42);
 
         expect(result, isA<Ok<int>>());
         expect((result as Ok<int>).value, 42);
       });
 
       test('creates Ok result with String value', () {
-        const result = Result<String>.ok('success');
+        const Result result = Result<String>.ok('success');
 
         expect(result, isA<Ok<String>>());
         expect((result as Ok<String>).value, 'success');
       });
 
       test('creates Ok result with null value', () {
-        const result = Result<String?>.ok(null);
+        const Result result = Result<String?>.ok(null);
 
         expect(result, isA<Ok<String?>>());
         expect((result as Ok<String?>).value, null);
@@ -36,20 +36,20 @@ void main() {
       });
 
       test('creates Ok result with List', () {
-        const result = Result<List<int>>.ok([1, 2, 3]);
+        const Result result = Result<List<int>>.ok([1, 2, 3]);
 
         expect(result, isA<Ok<List<int>>>());
         expect((result as Ok<List<int>>).value, [1, 2, 3]);
       });
 
       test('toString returns correct format', () {
-        const result = Result<int>.ok(42);
+        const Result result = Result<int>.ok(42);
 
         expect(result.toString(), 'Result<int>.ok(42)');
       });
 
       test('Ok preserves type information', () {
-        const result = Result<int>.ok(42);
+        const Result result = Result<int>.ok(42);
 
         expect(result, isA<Result<int>>());
         expect(result, isA<Ok<int>>());
@@ -105,7 +105,7 @@ void main() {
 
     group('Pattern Matching / Type Checking', () {
       test('can switch on Result type', () {
-        const okResult = Result<int>.ok(42);
+        const Result<int> okResult = Result<int>.ok(42);
         final errorResult = Result<int>.error(Exception('Error'));
 
         String handleResult(Result<int> result) => switch (result) {
@@ -118,7 +118,7 @@ void main() {
       });
 
       test('can use is checks', () {
-        const okResult = Result<int>.ok(42);
+        const Result okResult = Result<int>.ok(42);
         final errorResult = Result<int>.error(Exception('Error'));
 
         expect(okResult is Ok<int>, true);
@@ -128,7 +128,7 @@ void main() {
       });
 
       test('can use as casting', () {
-        const Result<int> result = Result<int>.ok(42);
+        const Result result = Result<int>.ok(42);
 
         if (result is Ok<int>) {
           expect(result.value, 42);
@@ -212,36 +212,36 @@ void main() {
 
     group('Edge Cases', () {
       test('Ok with empty string', () {
-        const result = Result<String>.ok('');
+        const Result result = Result<String>.ok('');
 
         expect(result, isA<Ok<String>>());
         expect((result as Ok<String>).value, '');
       });
 
       test('Ok with zero', () {
-        const result = Result<int>.ok(0);
+        const Result result = Result<int>.ok(0);
 
         expect(result, isA<Ok<int>>());
         expect((result as Ok<int>).value, 0);
       });
 
       test('Ok with empty list', () {
-        const result = Result<List<int>>.ok([]);
+        const Result result = Result<List<int>>.ok([]);
 
         expect(result, isA<Ok<List<int>>>());
         expect((result as Ok<List<int>>).value, isEmpty);
       });
 
       test('Ok with negative number', () {
-        const result = Result<int>.ok(-42);
+        const Result result = Result<int>.ok(-42);
 
         expect(result, isA<Ok<int>>());
         expect((result as Ok<int>).value, -42);
       });
 
       test('different generic types are incompatible', () {
-        const intResult = Result<int>.ok(42);
-        const stringResult = Result<String>.ok('42');
+        const Result intResult = Result<int>.ok(42);
+        const Result stringResult = Result<String>.ok('42');
 
         expect(intResult, isNot(isA<Ok<String>>()));
         expect(stringResult, isNot(isA<Ok<int>>()));

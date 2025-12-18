@@ -53,4 +53,19 @@ class AuthRepositoryRemote extends AuthRepository {
       notifyListeners();
     }
   }
+
+  @override
+  Future<Result<void>> createAccount({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _supabase.auth.signUp(email: email, password: password);
+      return const Result.ok(null);
+    } on Exception catch (err) {
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
 }

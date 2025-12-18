@@ -20,7 +20,7 @@ class ForgotPasswordButton extends StatelessWidget {
       children: [
         AppButton.label(
           label: l10n.submit,
-          onPressed: viewModel.tapSendResetLinkButton,
+          onPressed: () => viewModel.tapSendResetLinkButton(context),
           type: AppButtonType.primary,
         ),
       ],

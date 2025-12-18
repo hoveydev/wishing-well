@@ -96,6 +96,19 @@ class MockGoTrueClient implements GoTrueClient {
   }
 
   @override
+  Future<AuthResponse> resetPasswordForEmail(
+    String email, {
+    String? redirectTo,
+    String? captchaToken,
+  }) async {
+    if (email == 'EMAIL') {
+      return AuthResponse();
+    } else {
+      throw Exception('forgot password error');
+    }
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 

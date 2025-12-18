@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/loading_controller.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
+import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+
 dynamic startAppWithForgotPasswordScreen(WidgetTester tester) async {
-  final MaterialApp app = MaterialApp(
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: ForgotPasswordScreen(viewModel: ForgotPasswordViewModel()),
-  );
+  final controller = LoadingController();
+  final ChangeNotifierProvider app =
+      ChangeNotifierProvider<LoadingController>.value(
+        value: controller,
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ForgotPasswordScreen(
+            viewModel: ForgotPasswordViewModel(
+              authRepository: MockAuthRepository(),
+            ),
+          ),
+        ),
+      );
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
 }

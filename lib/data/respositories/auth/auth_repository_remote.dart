@@ -68,4 +68,16 @@ class AuthRepositoryRemote extends AuthRepository {
       notifyListeners();
     }
   }
+
+  @override
+  Future<Result<void>> sendPasswordResetRequest({required String email}) async {
+    try {
+      await _supabase.auth.resetPasswordForEmail(email);
+      return const Result.ok(null);
+    } on Exception catch (err) {
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
 }

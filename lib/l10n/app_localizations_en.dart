@@ -109,5 +109,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.';
 
   @override
+  String get forgotPasswordConfirmationHeader => 'Reset Password Request Sent!';
+
+  @override
+  String get forgotPasswordConfirmationInfoMessage =>
+      'Please check your email for password reset instructions.';
+
+  @override
+  String get forgotPasswordErrorUnknown =>
+      'An unknown error occured. Please try again';
+
+  @override
   String get submit => 'Submit';
 }

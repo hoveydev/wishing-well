@@ -48,4 +48,15 @@ class MockAuthRepository extends AuthRepository {
       return Result.error(Exception('unknown service error'));
     }
   }
+
+  @override
+  Future<Result<void>> sendPasswordResetRequest({required String email}) async {
+    if (email == 'forgot.password@email.com') {
+      notifyListeners();
+      return const Result.ok(null);
+    } else {
+      notifyListeners();
+      return Result.error(Exception('unknown service error'));
+    }
+  }
 }

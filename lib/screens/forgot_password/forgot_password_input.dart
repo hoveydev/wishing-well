@@ -56,6 +56,8 @@ class ForgotPasswordInput extends StatelessWidget {
         return l10n.loginErrorBadEmail;
       case ForgotErrorType.none:
         return '';
+      case ForgotErrorType.unknownError:
+        return l10n.forgotPasswordErrorUnknown;
     }
   }
 }

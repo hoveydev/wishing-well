@@ -153,7 +153,7 @@ void main() {
         find.text('Password must contain at least 1 special character'),
         findsNothing,
       );
-      expect(find.text('Passwords must matc'), findsNothing);
+      expect(find.text('Passwords must match'), findsNothing);
     });
   });
 

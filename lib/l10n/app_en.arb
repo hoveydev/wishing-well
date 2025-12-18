@@ -120,6 +120,18 @@
     "@createAccountConfirmationInfoMessage": {
         "description": "Create account confirmation screen instructions on account confirmation"
     },
+    "forgotPasswordConfirmationHeader": "Reset Password Request Sent!",
+    "@forgotPasswordConfirmationHeader": {
+        "description": "Forgot password confirmation screen header"
+    },
+    "forgotPasswordConfirmationInfoMessage": "Please check your email for password reset instructions.",
+    "@forgotPasswordConfirmationInfoMessage": {
+        "description": "Forgot password screen instructions on password reset"
+    },
+    "forgotPasswordErrorUnknown": "An unknown error occured. Please try again",
+    "@forgotPasswordErrorUnknown": {
+        "description": "Forgot password error message when supabase call has an error"
+    },
     "submit": "Submit",
     "@submit": {
         "description": "Label for submit button on Forgot Password screen"

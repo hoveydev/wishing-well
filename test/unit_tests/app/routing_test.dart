@@ -12,6 +12,7 @@ import 'package:wishing_well/screens/create_account/create_account_viewmodel.dar
 import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -31,8 +32,18 @@ GoRouter createMockRouter() => GoRouter(
     GoRoute(
       path: '/forgot-password',
       name: 'forgot-password',
-      builder: (context, state) =>
-          ForgotPasswordScreen(viewModel: ForgotPasswordViewModel()),
+      builder: (context, state) => ForgotPasswordScreen(
+        viewModel: ForgotPasswordViewModel(
+          authRepository: MockAuthRepository(),
+        ),
+      ),
+      routes: [
+        GoRoute(
+          path: 'confirm',
+          name: 'forgot-password-confirm',
+          builder: (context, state) => const ForgotPasswordConfirmationScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/create-account',
@@ -85,6 +96,26 @@ void main() {
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/forgot-password');
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/login');
+    });
+
+    testWidgets('Login > Forgot Password > Confirm > Login', (
+      WidgetTester tester,
+    ) async {
+      final mockRouter = createMockRouter();
+      await startAppWithLoginScreen(tester, mockRouter);
+      await tester.tap(find.text('Forgot Password?'));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/forgot-password');
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'forgot.password@email.com');
+      await tester.tap(find.text('Submit'));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/forgot-password/confirm');
+      await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/login');
     });

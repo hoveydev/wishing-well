@@ -9,6 +9,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
+import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
@@ -55,6 +56,23 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ForgotPasswordScreen), findsOneWidget);
+    });
+
+    testWidgets('navigates to forgot password confirm', (tester) async {
+      final goRouter = router();
+
+      await tester.pumpWidget(startAppWithRouter(goRouter));
+      await tester.pumpAndSettle();
+
+      goRouter.goNamed(Routes.forgotPassword);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ForgotPasswordScreen), findsOneWidget);
+
+      goRouter.goNamed(Routes.forgotPasswordConfirm);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ForgotPasswordConfirmationScreen), findsOneWidget);
     });
 
     testWidgets('navigates to sign up', (tester) async {

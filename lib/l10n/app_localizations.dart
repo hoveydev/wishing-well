@@ -274,6 +274,24 @@ abstract class AppLocalizations {
   /// **'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.'**
   String get createAccountConfirmationInfoMessage;
 
+  /// Forgot password confirmation screen header
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password Request Sent!'**
+  String get forgotPasswordConfirmationHeader;
+
+  /// Forgot password screen instructions on password reset
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your email for password reset instructions.'**
+  String get forgotPasswordConfirmationInfoMessage;
+
+  /// Forgot password error message when supabase call has an error
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occured. Please try again'**
+  String get forgotPasswordErrorUnknown;
+
   /// Label for submit button on Forgot Password screen
   ///
   /// In en, this message translates to:

@@ -1,18 +1,30 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/result.dart';
+import 'package:wishing_well/routing/routes.dart';
 
 abstract class ForgotViewModelContract {
   void updateEmailField(String email);
   bool get hasAlert;
   ForgotErrorType get validationMessage;
-  void tapSendResetLinkButton();
+  Future<void> tapSendResetLinkButton(BuildContext context);
 }
 
-enum ForgotErrorType { none, noEmail, badEmail }
+enum ForgotErrorType { none, noEmail, badEmail, unknownError }
 
 class ForgotPasswordViewModel extends ChangeNotifier
     implements ForgotViewModelContract {
+  ForgotPasswordViewModel({required AuthRepository authRepository})
+    : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
   String _email = '';
 
   @override
@@ -58,11 +70,29 @@ class ForgotPasswordViewModel extends ChangeNotifier
   }
 
   @override
-  void tapSendResetLinkButton() {
-    if (_isEmailValid(_email)) {
-      log('Sent reset link to $_email');
-    } else {
+  Future<void> tapSendResetLinkButton(BuildContext context) async {
+    final loading = context.read<LoadingController>();
+    if (!_isEmailValid(_email)) {
       log('Email validation failed: $_validationMessage');
+      return;
+    }
+
+    loading.show();
+
+    final response = await _authRepository.sendPasswordResetRequest(
+      email: _email,
+    );
+
+    switch (response) {
+      case Ok():
+        if (context.mounted) {
+          unawaited(context.pushNamed(Routes.forgotPasswordConfirm));
+        }
+        loading.hide();
+      case Error():
+        _setValidationMessage = ForgotErrorType.unknownError;
+        _setHasAlert = true;
+        loading.hide();
     }
   }
 }

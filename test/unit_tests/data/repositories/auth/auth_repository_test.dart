@@ -45,6 +45,15 @@ void main() {
           isA<Future<Result<void>>>(),
         );
       });
+
+      test('has forgot password method', () {
+        expect(
+          mockRepository.sendPasswordResetRequest(
+            email: 'forgot.password@email.com',
+          ),
+          isA<Future<Result<void>>>(),
+        );
+      });
     });
 
     group('isAuthenticated', () {
@@ -202,6 +211,62 @@ void main() {
         await mockRepository.logout();
 
         expect(mockRepository.isAuthenticated, false);
+      });
+    });
+
+    group('forgot passowrd', () {
+      test('returns \'Ok\' on successful email submission', () async {
+        final result = await mockRepository.sendPasswordResetRequest(
+          email: 'forgot.password@email.com',
+        );
+
+        expect(result, isA<Ok<void>>());
+      });
+
+      test('returns \'Error\' on failed email submission', () async {
+        final result = await mockRepository.sendPasswordResetRequest(
+          email: 'wrong@email.com',
+        );
+
+        expect(result, isA<Error<void>>());
+      });
+
+      test('notifies listeners on successful email submission', () async {
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        await mockRepository.sendPasswordResetRequest(
+          email: 'forgot.password@email.com',
+        );
+
+        expect(notified, true);
+      });
+
+      test('notifies listeners on failed email submission', () async {
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        await mockRepository.sendPasswordResetRequest(email: 'wrong@email.com');
+
+        expect(notified, true);
+      });
+
+      test('Can be Called Multiple Times', () async {
+        final result1 = await mockRepository.sendPasswordResetRequest(
+          email: 'forgot.password@email.com',
+        );
+        expect(result1, isA<Ok<void>>());
+
+        await mockRepository.logout();
+
+        final result2 = await mockRepository.sendPasswordResetRequest(
+          email: 'forgot.password@email.com',
+        );
+        expect(result2, isA<Ok<void>>());
       });
     });
 

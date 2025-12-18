@@ -8,6 +8,7 @@ import 'package:wishing_well/screens/create_account/create_account_viewmodel.dar
 import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
@@ -42,7 +43,9 @@ GoRouter router() => GoRouter(
       path: '/forgot-password',
       name: Routes.forgotPassword,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: ForgotPasswordScreen(viewModel: ForgotPasswordViewModel()),
+        child: ForgotPasswordScreen(
+          viewModel: ForgotPasswordViewModel(authRepository: context.read()),
+        ),
         transitionsBuilder: (_, animation, _, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -59,6 +62,31 @@ GoRouter router() => GoRouter(
           );
         },
       ),
+      routes: [
+        GoRoute(
+          path: 'confirm',
+          name: Routes.forgotPasswordConfirm,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const ForgotPasswordConfirmationScreen(),
+            transitionDuration: Duration.zero,
+            transitionsBuilder: (_, animation, _, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              final tween = Tween(
+                begin: begin,
+                end: end,
+              ).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        ),
+      ],
     ),
     GoRoute(
       path: '/create-account',

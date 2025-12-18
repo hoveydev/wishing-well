@@ -73,5 +73,19 @@ void main() {
       expect(result, isA<Error>());
       expect(repository.isAuthenticated, isFalse);
     });
+
+    test('perform successful forgot password', () async {
+      final result = await repository.sendPasswordResetRequest(email: 'EMAIL');
+      expect(result, isA<Ok>());
+      expect(repository.isAuthenticated, isFalse);
+    });
+
+    test('perform forgot password error', () async {
+      final result = await repository.sendPasswordResetRequest(
+        email: 'EMAIL_WRONG',
+      );
+      expect(result, isA<Error>());
+      expect(repository.isAuthenticated, isFalse);
+    });
   });
 }

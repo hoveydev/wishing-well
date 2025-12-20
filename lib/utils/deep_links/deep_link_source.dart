@@ -10,7 +10,9 @@ class DeepLinkSource {
   const DeepLinkSource({required this.initial, required this.stream});
 
   // coverage:ignore-start
-  factory DeepLinkSource.platform() =>
-      DeepLinkSource(initial: getInitialUri, stream: () => uriLinkStream);
+  factory DeepLinkSource.platform() => DeepLinkSource(
+    initial: () async => await getInitialUri(),
+    stream: () => uriLinkStream,
+  );
   // coverage:ignore-end
 }

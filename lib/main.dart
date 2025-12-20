@@ -7,6 +7,7 @@ import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/screens/loading/loading_overlay.dart';
@@ -14,7 +15,11 @@ import 'package:wishing_well/theme/app_theme.dart';
 
 Future<void> main() async {
   final goRouter = router();
-  final deepLinkHandler = DeepLinkHandler(router().goNamed);
+  final deepLinkSource = DeepLinkSource.platform();
+  final deepLinkHandler = DeepLinkHandler(
+    (name) => goRouter.goNamed(name),
+    source: deepLinkSource,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.initialize();
   await Supabase.initialize(

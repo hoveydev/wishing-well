@@ -9,10 +9,7 @@ class DeepLinkHandler {
   final DeepLinkSource source;
   StreamSubscription? _sub;
 
-  // coverage:ignore-start
-  DeepLinkHandler(this.navigate, {DeepLinkSource? source})
-    : source = source ?? DeepLinkSource.platform();
-  // coverage:ignore-end
+  DeepLinkHandler(this.navigate, {required this.source});
 
   void init() {
     _handleInitialUri();

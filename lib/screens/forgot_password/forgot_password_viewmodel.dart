@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
-import 'package:wishing_well/loading_controller.dart';
-import 'package:wishing_well/result.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
 
 abstract class ForgotViewModelContract {

@@ -20,6 +20,7 @@ dependencies:
   intl: any
   provider: ^6.1.5+1
   supabase_flutter: ^2.10.3
+  uni_links: ^0.5.1
 dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:

@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 

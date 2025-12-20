@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/app_config.dart';
+import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/config/dependencies.dart';
+import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/screens/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 Future<void> main() async {
+  final goRouter = router();
+  final deepLinkHandler = DeepLinkHandler(router().goNamed);
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.initialize();
   await Supabase.initialize(
@@ -20,13 +24,38 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: providersRemote,
-      builder: (context, child) => const MainApp(),
+      builder: (context, child) =>
+          MainApp(router: goRouter, deepLinkHandler: deepLinkHandler),
     ),
   );
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MainApp extends StatefulWidget {
+  final GoRouter router;
+  final DeepLinkHandler deepLinkHandler;
+
+  const MainApp({
+    required this.router,
+    required this.deepLinkHandler,
+    super.key,
+  });
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    widget.deepLinkHandler.init();
+  }
+
+  @override
+  void dispose() {
+    widget.deepLinkHandler.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -42,7 +71,7 @@ class MainApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: router(),
+      routerConfig: widget.router,
     ),
   );
 }

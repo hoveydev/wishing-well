@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
-import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoadingOverlay extends StatelessWidget {
   final Widget child;

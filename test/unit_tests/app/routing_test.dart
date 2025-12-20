@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/loading_controller.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';

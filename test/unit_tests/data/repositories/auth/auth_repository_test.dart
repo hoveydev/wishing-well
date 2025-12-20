@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/result.dart';
+import 'package:wishing_well/utils/result.dart';
 
 import '../../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 

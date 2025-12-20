@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/utilities.dart';
+import 'package:wishing_well/utils/utilities.dart';
 
 void main() {
   group('App Utilities', () {

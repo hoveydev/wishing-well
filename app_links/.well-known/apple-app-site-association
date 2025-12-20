@@ -1,0 +1,20 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appIDs": [
+                    "65PP5AV236.com.hoveydev.wishingwell"
+                ],
+                "paths": [
+                    "*"
+                ]
+            }
+        ]
+    },
+    "webcredentials": {
+        "apps": [
+            "65PP5AV236.com.hoveydev.wishingwell"
+        ]
+    }
+}

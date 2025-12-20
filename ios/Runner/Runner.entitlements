@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:173b3be4.wishing-well-ayb.pages.dev</string>
+		<string>webcredentials:173b3be4.wishing-well-ayb.pages.dev</string>
+	</array>
+</dict>
+</plist>

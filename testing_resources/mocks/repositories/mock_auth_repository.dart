@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
-import 'package:wishing_well/result.dart';
+import 'package:wishing_well/utils/result.dart';
 
 class MockAuthRepository extends AuthRepository {
   @override

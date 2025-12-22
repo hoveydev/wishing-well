@@ -64,7 +64,7 @@ class AuthRepositoryRemote extends AuthRepository {
         email: email,
         password: password,
         emailRedirectTo:
-            'https://173b3be4.wishing-well-ayb.pages.dev/auth/confirm',
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
       );
       return const Result.ok(null);
     } on Exception catch (err) {
@@ -77,7 +77,10 @@ class AuthRepositoryRemote extends AuthRepository {
   @override
   Future<Result<void>> sendPasswordResetRequest({required String email}) async {
     try {
-      await _supabase.auth.resetPasswordForEmail(email);
+      await _supabase.auth.resetPasswordForEmail(
+        email,
+        redirectTo: 'https://wishing-well-ayb.pages.dev/auth/password-reset',
+      );
       return const Result.ok(null);
     } on Exception catch (err) {
       return Result.error(err);

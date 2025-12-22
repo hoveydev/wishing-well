@@ -32,7 +32,7 @@ void main() {
     test('navigates to create-account/confirm for signup', () async {
       final handler = createHandler(
         initialUri: Uri.parse(
-          'https://12345.wishing-well-ayb.pages.dev/auth/confirm?type=signup',
+          'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
         ),
       );
 
@@ -45,7 +45,7 @@ void main() {
     test('navigates to forgot-password/confirm for non-signup', () async {
       final handler = createHandler(
         initialUri: Uri.parse(
-          'https://12345.wishing-well-ayb.pages.dev/auth/confirm',
+          'https://wishing-well-ayb.pages.dev/auth/account-confirm',
         ),
       );
 
@@ -60,7 +60,7 @@ void main() {
       handler.init();
 
       stream.add(
-        Uri.parse('https://12345.wishing-well-ayb.pages.dev/auth/reset'),
+        Uri.parse('https://wishing-well-ayb.pages.dev/auth/password-reset'),
       );
       await Future<void>.delayed(Duration.zero);
 

@@ -32,14 +32,14 @@ class DeepLinkHandler {
     final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
 
     switch (subPath) {
-      case 'confirm':
+      case 'account-confirm':
         navigate(
           uri.queryParameters['type'] == 'signup'
               ? Routes.createAccountConfirm
               : Routes.forgotPasswordConfirm,
         );
         break;
-      case 'reset':
+      case 'password-reset':
         navigate(Routes.forgotPassword);
         break;
     }

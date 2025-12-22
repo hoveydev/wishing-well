@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:173b3be4.wishing-well-ayb.pages.dev</string>
-		<string>webcredentials:173b3be4.wishing-well-ayb.pages.dev</string>
+		<string>applinks:wishing-well-ayb.pages.dev</string>
+		<string>webcredentials:wishing-well-ayb.pages.dev</string>
 	</array>
 </dict>
 </plist>

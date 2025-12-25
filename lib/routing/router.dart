@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
@@ -11,6 +12,8 @@ import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.d
 import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login', // should change to home once auth is set up
@@ -86,6 +89,56 @@ GoRouter router() => GoRouter(
             },
           ),
         ),
+        GoRoute(
+          path: 'reset',
+          name: Routes.resetPassword,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: ResetPasswordScreen(
+              viewmodel: ResetPasswordViewmodel(authRepository: context.read()),
+            ),
+            transitionDuration: Duration.zero,
+            transitionsBuilder: (_, animation, _, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              final tween = Tween(
+                begin: begin,
+                end: end,
+              ).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+          routes: [
+            GoRoute(
+              path: 'confirm',
+              name: Routes.resetPasswordConfirmation,
+              pageBuilder: (context, state) => CustomTransitionPage(
+                child: const Screen(),
+                transitionDuration: Duration.zero,
+                transitionsBuilder: (_, animation, _, child) {
+                  const begin = Offset(0.0, 1.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
+
+                  final tween = Tween(
+                    begin: begin,
+                    end: end,
+                  ).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ],
     ),
     GoRoute(
@@ -117,6 +170,29 @@ GoRouter router() => GoRouter(
           name: Routes.createAccountConfirm,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const CreateAccountConfirmationScreen(),
+            transitionDuration: Duration.zero,
+            transitionsBuilder: (_, animation, _, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              final tween = Tween(
+                begin: begin,
+                end: end,
+              ).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        ),
+        GoRoute(
+          path: 'account-confirm',
+          name: Routes.accountConfirm,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const AccountConfirmationScreen(),
             transitionDuration: Duration.zero,
             transitionsBuilder: (_, animation, _, child) {
               const begin = Offset(0.0, 1.0);

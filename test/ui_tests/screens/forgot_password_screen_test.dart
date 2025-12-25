@@ -45,7 +45,7 @@ void main() {
       expect(find.text('Forgot Password'), findsOneWidget);
       expect(
         find.text(
-          'Enter your email address below to receive a password reset link.',
+          'Enter your email address below to receive a password reset link',
         ),
         findsOneWidget,
       );

@@ -56,7 +56,7 @@
     "@forgotPasswordHeader": {
         "description": "Header for Forgot Password screen"
     },
-    "forgotPasswordSubtext": "Enter your email address below to receive a password reset link.",
+    "forgotPasswordSubtext": "Enter your email address below to receive a password reset link",
     "@forgotPasswordSubtext": {
         "description": "Subtext for Forgot Password screen"
     },
@@ -131,6 +131,58 @@
     "forgotPasswordErrorUnknown": "An unknown error occured. Please try again",
     "@forgotPasswordErrorUnknown": {
         "description": "Forgot password error message when supabase call has an error"
+    },
+    "accountConfirmationHeader": "Account Confirmed!",
+    "@accountConfirmationHeader": {
+        "description": "Account confirmation screen header"
+    },
+    "accountConfirmationInfoMessage": "You may now securely log in to WishingWell",
+    "@accountConfirmationInfoMessage": {
+        "description": "Account confirmation screen info message"
+    },
+    "resetPasswordButtonLabel": "Reset Password",
+    "@resetPasswordButtonLabel": {
+        "description": "Reset password button label"
+    },
+    "resetPasswordHeader": "Reset Password",
+    "@resetPasswordHeader": {
+        "description": "Header for Reset Password screen"
+    },
+    "resetPasswordSubtext": "Enter and confirm your new password below",
+    "@resetPasswordSubtext": {
+        "description": "Subtext for Reset Password screen"
+    },
+    "resetPasswordErrorNoPassword": "Password cannot be empty",
+    "@resetPasswordErrorNoPassword": {
+        "description": "Reset password error message when password is empty"
+    },
+    "resetPasswordErrorPasswordTooShort": "Password must be at least 12 characters long",
+    "@resetPasswordErrorPasswordTooShort": {
+        "description": "Reset password error message when password is less than 12 characters"
+    },
+    "resetPasswordErrorPasswordNoUppercase": "Password must contain at least 1 uppercase letter",
+    "@resetPasswordErrorPasswordNoUppercase": {
+        "description": "Reset password error message when password does not contain an uppercase letter"
+    },
+    "resetPasswordErrorPasswordNoLowercase": "Password must contain at least 1 lowercase letter",
+    "@resetPasswordErrorPasswordNoLowercase": {
+        "description": "Reset password error message when password does not contain an lowercase letter"
+    },
+    "resetPasswordErrorPasswordNoDigit": "Password must contain at least 1 digit",
+    "@resetPasswordErrorPasswordNoDigit": {
+        "description": "Reset password error message when password does not contain a digit"
+    },
+    "resetPasswordErrorPasswordNoSpecial": "Password must contain at least 1 special character",
+    "@resetPasswordErrorPasswordNoSpecial": {
+        "description": "Reset password error message when password does not contain a special character"
+    },
+    "resetPasswordErrorPasswordsDontMatch": "Passwords must match",
+    "@resetPasswordErrorPasswordsDontMatch": {
+        "description": "Reset password error message when passwords do not match"
+    },
+    "resetPasswordErrorUnknown": "An unknown error occured. Please try again",
+    "@resetPasswordErrorUnknown": {
+        "description": "Reset password error message when supabase call has an error"
     },
     "submit": "Submit",
     "@submit": {

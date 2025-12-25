@@ -39,7 +39,7 @@ void main() {
       handler.init();
       await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'create-account-confirm');
+      expect(navigatedTo, 'account-confirm');
     });
 
     test('navigates to forgot-password/confirm for non-signup', () async {
@@ -64,7 +64,7 @@ void main() {
       );
       await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'forgot-password');
+      expect(navigatedTo, 'reset-password');
     });
 
     test('ignores unrelated links', () async {

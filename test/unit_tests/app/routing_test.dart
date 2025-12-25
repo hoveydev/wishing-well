@@ -5,7 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
@@ -17,6 +22,7 @@ import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
+import '../../../testing_resources/mocks/deep_link/mock_deep_link_source.dart';
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 GoRouter createMockRouter() => GoRouter(
@@ -43,6 +49,22 @@ GoRouter createMockRouter() => GoRouter(
           name: 'forgot-password-confirm',
           builder: (context, state) => const ForgotPasswordConfirmationScreen(),
         ),
+        GoRoute(
+          path: 'reset',
+          name: 'reset-password',
+          builder: (context, state) => ResetPasswordScreen(
+            viewmodel: ResetPasswordViewmodel(
+              authRepository: MockAuthRepository(),
+            ),
+          ),
+          routes: [
+            GoRoute(
+              path: 'confirm',
+              name: 'reset-password-confirmation',
+              builder: (context, state) => const Screen(),
+            ),
+          ],
+        ),
       ],
     ),
     GoRoute(
@@ -57,6 +79,11 @@ GoRouter createMockRouter() => GoRouter(
           name: 'create-account-confirm',
           builder: (context, state) => const CreateAccountConfirmationScreen(),
         ),
+        GoRoute(
+          path: 'account-confirm',
+          name: 'account-confirm',
+          builder: (context, state) => const AccountConfirmationScreen(),
+        ),
       ],
     ),
     GoRoute(
@@ -67,7 +94,15 @@ GoRouter createMockRouter() => GoRouter(
   ],
 );
 
-dynamic startAppWithLoginScreen(WidgetTester tester, GoRouter router) async {
+dynamic startAppWithLoginScreen(
+  WidgetTester tester,
+  GoRouter router,
+  MockDeepLinkSource source,
+) async {
+  final deepLinkHandler = DeepLinkHandler(
+    (name) => router.goNamed(name),
+    source: source,
+  );
   final Widget app = MultiProvider(
     providers: [ChangeNotifierProvider(create: (_) => LoadingController())],
     child: MaterialApp.router(
@@ -84,6 +119,7 @@ dynamic startAppWithLoginScreen(WidgetTester tester, GoRouter router) async {
     ),
   );
   await tester.pumpWidget(app);
+  deepLinkHandler.init();
   await tester.pumpAndSettle();
 }
 
@@ -91,7 +127,10 @@ void main() {
   group('Login Flow Routing', () {
     testWidgets('Login > Forgot Password > Login', (WidgetTester tester) async {
       final mockRouter = createMockRouter();
-      await startAppWithLoginScreen(tester, mockRouter);
+      final mockSource = MockDeepLinkSource(
+        initialUri: Uri.parse('not_needed'),
+      );
+      await startAppWithLoginScreen(tester, mockRouter, mockSource);
       await tester.tap(find.text('Forgot Password?'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/forgot-password');
@@ -104,7 +143,10 @@ void main() {
       WidgetTester tester,
     ) async {
       final mockRouter = createMockRouter();
-      await startAppWithLoginScreen(tester, mockRouter);
+      final mockSource = MockDeepLinkSource(
+        initialUri: Uri.parse('not_needed'),
+      );
+      await startAppWithLoginScreen(tester, mockRouter, mockSource);
       await tester.tap(find.text('Forgot Password?'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/forgot-password');
@@ -122,7 +164,10 @@ void main() {
 
     testWidgets('Login > Create Account > Login', (WidgetTester tester) async {
       final mockRouter = createMockRouter();
-      await startAppWithLoginScreen(tester, mockRouter);
+      final mockSource = MockDeepLinkSource(
+        initialUri: Uri.parse('not_needed'),
+      );
+      await startAppWithLoginScreen(tester, mockRouter, mockSource);
       await tester.tap(find.text('Create an Account'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/create-account');
@@ -133,7 +178,10 @@ void main() {
 
     testWidgets('Login > Home', (WidgetTester tester) async {
       final mockRouter = createMockRouter();
-      await startAppWithLoginScreen(tester, mockRouter);
+      final mockSource = MockDeepLinkSource(
+        initialUri: Uri.parse('not_needed'),
+      );
+      await startAppWithLoginScreen(tester, mockRouter, mockSource);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -151,7 +199,10 @@ void main() {
       WidgetTester tester,
     ) async {
       final mockRouter = createMockRouter();
-      await startAppWithLoginScreen(tester, mockRouter);
+      final mockSource = MockDeepLinkSource(
+        initialUri: Uri.parse('not_needed'),
+      );
+      await startAppWithLoginScreen(tester, mockRouter, mockSource);
       await tester.tap(find.text('Create an Account'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/create-account');
@@ -180,5 +231,35 @@ void main() {
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/login');
     });
+  });
+
+  testWidgets('Login > Reset Password (deep link) > Login', (tester) async {
+    final mockRouter = createMockRouter();
+    final source = MockDeepLinkSource(
+      initialUri: Uri.parse('https://wishingwell.app/auth/password-reset'),
+    );
+    await startAppWithLoginScreen(tester, mockRouter, source);
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/forgot-password/reset');
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/login');
+  });
+
+  testWidgets('Login > Account Confirmation (deep link) > Login', (
+    tester,
+  ) async {
+    final mockRouter = createMockRouter();
+    final source = MockDeepLinkSource(
+      initialUri: Uri.parse(
+        'https://wishingwell.app/auth/account-confirm?type=signup',
+      ),
+    );
+    await startAppWithLoginScreen(tester, mockRouter, source);
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/create-account/account-confirm');
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/login');
   });
 }

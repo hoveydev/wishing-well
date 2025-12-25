@@ -181,7 +181,7 @@ abstract class AppLocalizations {
   /// Subtext for Forgot Password screen
   ///
   /// In en, this message translates to:
-  /// **'Enter your email address below to receive a password reset link.'**
+  /// **'Enter your email address below to receive a password reset link'**
   String get forgotPasswordSubtext;
 
   /// Create account button label
@@ -291,6 +291,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unknown error occured. Please try again'**
   String get forgotPasswordErrorUnknown;
+
+  /// Account confirmation screen header
+  ///
+  /// In en, this message translates to:
+  /// **'Account Confirmed!'**
+  String get accountConfirmationHeader;
+
+  /// Account confirmation screen info message
+  ///
+  /// In en, this message translates to:
+  /// **'You may now securely log in to WishingWell'**
+  String get accountConfirmationInfoMessage;
+
+  /// Reset password button label
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPasswordButtonLabel;
+
+  /// Header for Reset Password screen
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPasswordHeader;
+
+  /// Subtext for Reset Password screen
+  ///
+  /// In en, this message translates to:
+  /// **'Enter and confirm your new password below'**
+  String get resetPasswordSubtext;
+
+  /// Reset password error message when password is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get resetPasswordErrorNoPassword;
+
+  /// Reset password error message when password is less than 12 characters
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 12 characters long'**
+  String get resetPasswordErrorPasswordTooShort;
+
+  /// Reset password error message when password does not contain an uppercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 uppercase letter'**
+  String get resetPasswordErrorPasswordNoUppercase;
+
+  /// Reset password error message when password does not contain an lowercase letter
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 lowercase letter'**
+  String get resetPasswordErrorPasswordNoLowercase;
+
+  /// Reset password error message when password does not contain a digit
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 digit'**
+  String get resetPasswordErrorPasswordNoDigit;
+
+  /// Reset password error message when password does not contain a special character
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least 1 special character'**
+  String get resetPasswordErrorPasswordNoSpecial;
+
+  /// Reset password error message when passwords do not match
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords must match'**
+  String get resetPasswordErrorPasswordsDontMatch;
+
+  /// Reset password error message when supabase call has an error
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occured. Please try again'**
+  String get resetPasswordErrorUnknown;
 
   /// Label for submit button on Forgot Password screen
   ///

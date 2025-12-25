@@ -80,27 +80,27 @@ class CreateAccountViewmodel extends ChangeNotifier
   // TODO: Update so more than one error can be dislpayed - might want to create a list on the screen itself
   bool _passwordIsNotValid(String password) {
     if (password.length < 12) {
-      _hasAlert = true;
+      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordTooShort;
       return true;
     }
     if (!password.contains(RegExp(r'[A-Z]'))) {
-      _hasAlert = true;
+      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoUppercase;
       return true;
     }
     if (!password.contains(RegExp(r'[a-z]'))) {
-      _hasAlert = true;
+      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoLowercase;
       return true;
     }
     if (!password.contains(RegExp(r'[0-9]'))) {
-      _hasAlert = true;
+      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoDigit;
       return true;
     }
     if (!password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-      _hasAlert = true;
+      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoSpecial;
       return true;
     }

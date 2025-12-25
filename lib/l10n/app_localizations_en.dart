@@ -53,7 +53,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordSubtext =>
-      'Enter your email address below to receive a password reset link.';
+      'Enter your email address below to receive a password reset link';
 
   @override
   String get createAccountButtonLabel => 'Create Account';
@@ -117,6 +117,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordErrorUnknown =>
+      'An unknown error occured. Please try again';
+
+  @override
+  String get accountConfirmationHeader => 'Account Confirmed!';
+
+  @override
+  String get accountConfirmationInfoMessage =>
+      'You may now securely log in to WishingWell';
+
+  @override
+  String get resetPasswordButtonLabel => 'Reset Password';
+
+  @override
+  String get resetPasswordHeader => 'Reset Password';
+
+  @override
+  String get resetPasswordSubtext =>
+      'Enter and confirm your new password below';
+
+  @override
+  String get resetPasswordErrorNoPassword => 'Password cannot be empty';
+
+  @override
+  String get resetPasswordErrorPasswordTooShort =>
+      'Password must be at least 12 characters long';
+
+  @override
+  String get resetPasswordErrorPasswordNoUppercase =>
+      'Password must contain at least 1 uppercase letter';
+
+  @override
+  String get resetPasswordErrorPasswordNoLowercase =>
+      'Password must contain at least 1 lowercase letter';
+
+  @override
+  String get resetPasswordErrorPasswordNoDigit =>
+      'Password must contain at least 1 digit';
+
+  @override
+  String get resetPasswordErrorPasswordNoSpecial =>
+      'Password must contain at least 1 special character';
+
+  @override
+  String get resetPasswordErrorPasswordsDontMatch => 'Passwords must match';
+
+  @override
+  String get resetPasswordErrorUnknown =>
       'An unknown error occured. Please try again';
 
   @override

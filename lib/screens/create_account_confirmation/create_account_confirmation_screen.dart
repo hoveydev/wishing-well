@@ -22,7 +22,7 @@ class CreateAccountConfirmationScreen extends StatelessWidget {
         FittedBox(
           child: AppButton.icon(
             icon: Icons.close,
-            onPressed: () => context.goNamed(Routes.login),
+            onPressed: () => context.goNamed(Routes.login.name),
             type: AppButtonType.tertiary,
           ),
         ),

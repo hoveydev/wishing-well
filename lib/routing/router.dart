@@ -19,8 +19,8 @@ GoRouter router() => GoRouter(
   initialLocation: '/login', // should change to home once auth is set up
   routes: [
     GoRoute(
-      path: '/login',
-      name: Routes.login,
+      path: Routes.login.path,
+      name: Routes.login.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: LoginScreen(
           viewModel: LoginViewModel(authRepository: context.read()),
@@ -43,8 +43,8 @@ GoRouter router() => GoRouter(
       ),
     ),
     GoRoute(
-      path: '/forgot-password',
-      name: Routes.forgotPassword,
+      path: Routes.forgotPassword.path,
+      name: Routes.forgotPassword.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: ForgotPasswordScreen(
           viewModel: ForgotPasswordViewModel(authRepository: context.read()),
@@ -67,8 +67,8 @@ GoRouter router() => GoRouter(
       ),
       routes: [
         GoRoute(
-          path: 'confirm',
-          name: Routes.forgotPasswordConfirm,
+          path: Routes.forgotPasswordConfirm.path,
+          name: Routes.forgotPasswordConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const ForgotPasswordConfirmationScreen(),
             transitionDuration: Duration.zero,
@@ -90,8 +90,8 @@ GoRouter router() => GoRouter(
           ),
         ),
         GoRoute(
-          path: 'reset',
-          name: Routes.resetPassword,
+          path: Routes.resetPassword.path,
+          name: Routes.resetPassword.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: ResetPasswordScreen(
               viewmodel: ResetPasswordViewmodel(authRepository: context.read()),
@@ -115,8 +115,8 @@ GoRouter router() => GoRouter(
           ),
           routes: [
             GoRoute(
-              path: 'confirm',
-              name: Routes.resetPasswordConfirmation,
+              path: Routes.resetPasswordConfirmation.path,
+              name: Routes.resetPasswordConfirmation.name,
               pageBuilder: (context, state) => CustomTransitionPage(
                 child: const Screen(),
                 transitionDuration: Duration.zero,
@@ -142,8 +142,8 @@ GoRouter router() => GoRouter(
       ],
     ),
     GoRoute(
-      path: '/create-account',
-      name: Routes.createAccount,
+      path: Routes.createAccount.path,
+      name: Routes.createAccount.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: CreateAccountScreen(
           viewModel: CreateAccountViewmodel(authRepository: context.read()),
@@ -166,8 +166,8 @@ GoRouter router() => GoRouter(
       ),
       routes: [
         GoRoute(
-          path: 'confirm',
-          name: Routes.createAccountConfirm,
+          path: Routes.createAccountConfirm.path,
+          name: Routes.createAccountConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const CreateAccountConfirmationScreen(),
             transitionDuration: Duration.zero,
@@ -189,8 +189,8 @@ GoRouter router() => GoRouter(
           ),
         ),
         GoRoute(
-          path: 'account-confirm',
-          name: Routes.accountConfirm,
+          path: Routes.accountConfirm.path,
+          name: Routes.accountConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const AccountConfirmationScreen(),
             transitionDuration: Duration.zero,
@@ -214,8 +214,8 @@ GoRouter router() => GoRouter(
       ],
     ),
     GoRoute(
-      path: '/home',
-      name: Routes.home,
+      path: Routes.home.path,
+      name: Routes.home.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: const Screen(children: [Text('Home')]),
         transitionsBuilder: (_, _, _, child) => child,

@@ -110,7 +110,7 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     switch (response) {
       case Ok():
         if (context.mounted) {
-          unawaited(context.pushNamed(Routes.home));
+          unawaited(context.pushNamed(Routes.home.name));
         }
         loading.hide();
       case Error():

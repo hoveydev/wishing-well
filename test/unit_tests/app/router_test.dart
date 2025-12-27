@@ -51,7 +51,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.forgotPassword);
+      goRouter.goNamed(Routes.forgotPassword.name);
       await tester.pumpAndSettle();
       expect(find.byType(ForgotPasswordScreen), findsOneWidget);
     });
@@ -60,10 +60,10 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.forgotPassword);
+      goRouter.goNamed(Routes.forgotPassword.name);
       await tester.pumpAndSettle();
       expect(find.byType(ForgotPasswordScreen), findsOneWidget);
-      goRouter.goNamed(Routes.forgotPasswordConfirm);
+      goRouter.goNamed(Routes.forgotPasswordConfirm.name);
       await tester.pumpAndSettle();
       expect(find.byType(ForgotPasswordConfirmationScreen), findsOneWidget);
     });
@@ -72,7 +72,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.createAccount);
+      goRouter.goNamed(Routes.createAccount.name);
       await tester.pumpAndSettle();
       expect(find.byType(CreateAccountScreen), findsOneWidget);
     });
@@ -81,10 +81,10 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.createAccount);
+      goRouter.goNamed(Routes.createAccount.name);
       await tester.pumpAndSettle();
       expect(find.byType(CreateAccountScreen), findsOneWidget);
-      goRouter.goNamed(Routes.createAccountConfirm);
+      goRouter.goNamed(Routes.createAccountConfirm.name);
       await tester.pumpAndSettle();
       expect(find.byType(CreateAccountConfirmationScreen), findsOneWidget);
     });
@@ -93,7 +93,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.home);
+      goRouter.goNamed(Routes.home.name);
       await tester.pumpAndSettle();
       expect(find.text('Home'), findsOneWidget);
     });
@@ -102,7 +102,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.accountConfirm);
+      goRouter.goNamed(Routes.accountConfirm.name);
       await tester.pumpAndSettle();
       expect(find.byType(AccountConfirmationScreen), findsOneWidget);
     });
@@ -111,7 +111,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.resetPassword);
+      goRouter.goNamed(Routes.resetPassword.name);
       await tester.pumpAndSettle();
       expect(find.byType(ResetPasswordScreen), findsOneWidget);
     });
@@ -120,7 +120,7 @@ void main() {
       final goRouter = router();
       await tester.pumpWidget(startAppWithRouter(goRouter));
       await tester.pumpAndSettle();
-      goRouter.goNamed(Routes.resetPasswordConfirmation);
+      goRouter.goNamed(Routes.resetPasswordConfirmation.name);
       await tester.pumpAndSettle();
       expect(find.byType(Screen), findsOneWidget);
     });

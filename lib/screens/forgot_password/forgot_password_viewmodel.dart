@@ -86,7 +86,7 @@ class ForgotPasswordViewModel extends ChangeNotifier
     switch (response) {
       case Ok():
         if (context.mounted) {
-          unawaited(context.pushNamed(Routes.forgotPasswordConfirm));
+          unawaited(context.pushNamed(Routes.forgotPasswordConfirm.name));
         }
         loading.hide();
       case Error():

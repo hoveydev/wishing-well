@@ -162,7 +162,7 @@ class CreateAccountViewmodel extends ChangeNotifier
     switch (response) {
       case Ok():
         if (context.mounted) {
-          unawaited(context.pushNamed(Routes.createAccountConfirm));
+          unawaited(context.pushNamed(Routes.createAccountConfirm.name));
         }
         loading.hide();
       case Error():

@@ -35,12 +35,12 @@ class DeepLinkHandler {
       case 'account-confirm':
         navigate(
           uri.queryParameters['type'] == 'signup'
-              ? Routes.accountConfirm
-              : Routes.forgotPasswordConfirm,
+              ? Routes.accountConfirm.name
+              : Routes.forgotPasswordConfirm.name,
         );
         break;
       case 'password-reset':
-        navigate(Routes.resetPassword);
+        navigate(Routes.resetPassword.name);
         break;
     }
   }

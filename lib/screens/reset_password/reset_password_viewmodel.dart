@@ -113,7 +113,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   void tapCloseButton(BuildContext context) {
     // TODO: open modal
     // might not be on context
-    context.goNamed(Routes.login);
+    context.goNamed(Routes.login.name);
   }
 
   @override

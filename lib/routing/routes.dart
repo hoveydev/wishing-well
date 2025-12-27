@@ -1,11 +1,24 @@
-abstract final class Routes {
-  static const String home = 'home';
-  static const String login = 'login';
-  static const String forgotPassword = 'forgot-password';
-  static const String forgotPasswordConfirm = 'forgot-password-confirm';
-  static const String resetPassword = 'reset-password';
-  static const String resetPasswordConfirmation = 'reset-password-confirmation';
-  static const String createAccount = 'create-account';
-  static const String createAccountConfirm = 'create-account-confirm';
-  static const String accountConfirm = 'account-confirm';
+enum Routes {
+  home('/home'),
+  login('/login'),
+  forgotPassword('/forgot-password'),
+  forgotPasswordConfirm('confirm'), // forgot-password/confirm
+  resetPassword('/reset-password'),
+  resetPasswordConfirmation('confirm'), // reset-password/confirm
+  createAccount('/create-account'),
+  createAccountConfirm('confirm'), // create-account/confirm
+  accountConfirm('account-confirm'); // create-account/account-confirm
+
+  final String path;
+
+  const Routes(this.path);
+
+  String get name => _toKebabCase(toString().split('.').last);
+
+  String _toKebabCase(String input) => input
+      .replaceAllMapped(
+        RegExp(r'[A-Z]'),
+        (m) => '-${m.group(0)!.toLowerCase()}',
+      )
+      .toLowerCase();
 }

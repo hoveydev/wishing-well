@@ -79,8 +79,30 @@ class AuthRepositoryRemote extends AuthRepository {
     try {
       await _supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo: 'https://wishing-well-ayb.pages.dev/auth/password-reset',
+        redirectTo:
+            'https://wishing-well-ayb.pages.dev/auth/password-reset?email=$email',
       );
+      return const Result.ok(null);
+    } on Exception catch (err) {
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  @override
+  Future<Result<void>> resetUserPassword({
+    required String email,
+    required String newPassword,
+    required String token,
+  }) async {
+    try {
+      final UserAttributes attributes = UserAttributes(
+        email: email,
+        password: newPassword,
+        nonce: token,
+      );
+      await _supabase.auth.updateUser(attributes);
       return const Result.ok(null);
     } on Exception catch (err) {
       return Result.error(err);

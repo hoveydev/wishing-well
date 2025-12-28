@@ -59,4 +59,19 @@ class MockAuthRepository extends AuthRepository {
       return Result.error(Exception('unknown service error'));
     }
   }
+
+  @override
+  Future<Result<void>> resetUserPassword({
+    required String email,
+    required String newPassword,
+    required String token,
+  }) async {
+    if (token == 'valid-token') {
+      notifyListeners();
+      return const Result.ok(null);
+    } else {
+      notifyListeners();
+      return Result.error(Exception('unknown service error'));
+    }
+  }
 }

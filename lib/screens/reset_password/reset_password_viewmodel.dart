@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 
 abstract class ResetPasswordViewmodelContract {
   void updatePasswordOneField(String password);
@@ -26,15 +27,20 @@ enum ResetPasswordErrorType {
   passwordNoDigit,
   passwordNoSpecial,
   passwordsDontMatch,
-  // unknownError, TODO: add back in when service is complete
+  unknownError,
 }
 
 class ResetPasswordViewmodel extends ChangeNotifier
     implements ResetPasswordViewmodelContract {
   final AuthRepository _authRepository;
+  final String email;
+  final String token;
 
-  ResetPasswordViewmodel({required AuthRepository authRepository})
-    : _authRepository = authRepository;
+  ResetPasswordViewmodel({
+    required AuthRepository authRepository,
+    required this.email,
+    required this.token,
+  }) : _authRepository = authRepository;
 
   String _passwordOne = '';
   String _passwordTwo = '';
@@ -126,28 +132,22 @@ class ResetPasswordViewmodel extends ChangeNotifier
 
     loading.show();
 
-    log(_authRepository.toString());
+    final response = await _authRepository.resetUserPassword(
+      email: email,
+      newPassword: _passwordOne,
+      token: token,
+    );
 
-    // if (context.mounted) {
-    //   unawaited(context.pushNamed(Routes.resetPasswordConfirmation));
-    //   loading.hide();
-    // }
-
-    // final response = await _authRepository.createAccount(
-    //   email: _email,
-    //   password: _passwordOne,
-    // );
-
-    // switch (response) {
-    //   case Ok():
-    //     if (context.mounted) {
-    //       unawaited(context.pushNamed(Routes.createAccountConfirm));
-    //     }
-    //     loading.hide();
-    //   case Error():
-    //     _setValidationMessage = CreateAccountErrorType.unknownError;
-    //     _setHasAlert = true;
-    //     loading.hide();
-    // }
+    switch (response) {
+      case Ok():
+        if (context.mounted) {
+          unawaited(context.pushNamed(Routes.resetPasswordConfirmation.name));
+        }
+        loading.hide();
+      case Error():
+        _setValidationMessage = ResetPasswordErrorType.unknownError;
+        _setHasAlert = true;
+        loading.hide();
+    }
   }
 }

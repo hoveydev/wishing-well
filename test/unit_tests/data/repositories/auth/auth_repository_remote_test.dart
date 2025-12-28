@@ -87,5 +87,25 @@ void main() {
       expect(result, isA<Error>());
       expect(repository.isAuthenticated, isFalse);
     });
+
+    test('perform successful reset password', () async {
+      final result = await repository.resetUserPassword(
+        email: 'EMAIL',
+        newPassword: 'NEWPASS',
+        token: 'FAKE-TOKEN',
+      );
+      expect(result, isA<Ok>());
+      expect(repository.isAuthenticated, isFalse);
+    });
+
+    test('perform reset password error', () async {
+      final result = await repository.resetUserPassword(
+        email: 'EMAIL',
+        newPassword: 'NEWPASS',
+        token: 'WRONG-FAKE-TOKEN',
+      );
+      expect(result, isA<Error>());
+      expect(repository.isAuthenticated, isFalse);
+    });
   });
 }

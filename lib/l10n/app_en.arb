@@ -184,6 +184,14 @@
     "@resetPasswordErrorUnknown": {
         "description": "Reset password error message when supabase call has an error"
     },
+    "resetPasswordConfirmationHeader": "Password Successfully Reset!",
+    "@resetPasswordConfirmationHeader": {
+        "description": "Reset password confirmation screen header"
+    },
+    "resetPasswordConfirmationInfoMessage": "You may now log in with your new password",
+    "@resetPasswordConfirmationInfoMessage": {
+        "description": "Reset password confirmation screen info on reset confirmation"
+    },
     "submit": "Submit",
     "@submit": {
         "description": "Label for submit button on Forgot Password screen"

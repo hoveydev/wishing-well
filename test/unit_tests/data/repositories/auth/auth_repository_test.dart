@@ -214,7 +214,7 @@ void main() {
       });
     });
 
-    group('forgot passowrd', () {
+    group('forgot password', () {
       test('returns \'Ok\' on successful email submission', () async {
         final result = await mockRepository.sendPasswordResetRequest(
           email: 'forgot.password@email.com',
@@ -265,6 +265,79 @@ void main() {
 
         final result2 = await mockRepository.sendPasswordResetRequest(
           email: 'forgot.password@email.com',
+        );
+        expect(result2, isA<Ok<void>>());
+      });
+    });
+
+    group('reset password', () {
+      test('returns \'Ok\' on successful reset password submission', () async {
+        final result = await mockRepository.resetUserPassword(
+          email: 'reset.password@email.com',
+          newPassword: 'newPassword',
+          token: 'valid-token',
+        );
+
+        expect(result, isA<Ok<void>>());
+      });
+
+      test('returns \'Error\' on failed reset password submission', () async {
+        final result = await mockRepository.resetUserPassword(
+          email: 'reset.password@email.com',
+          newPassword: 'newPassword',
+          token: 'invalid-token',
+        );
+
+        expect(result, isA<Error<void>>());
+      });
+
+      test(
+        'notifies listeners on successful reset password submission',
+        () async {
+          var notified = false;
+          mockRepository.addListener(() {
+            notified = true;
+          });
+
+          await mockRepository.resetUserPassword(
+            email: 'reset.password@email.com',
+            newPassword: 'newPassword',
+            token: 'valid-token',
+          );
+
+          expect(notified, true);
+        },
+      );
+
+      test('notifies listeners on failed email submission', () async {
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        await mockRepository.resetUserPassword(
+          email: 'reset.password@email.com',
+          newPassword: 'newPassword',
+          token: 'invalid-token',
+        );
+
+        expect(notified, true);
+      });
+
+      test('Can be Called Multiple Times', () async {
+        final result1 = await mockRepository.resetUserPassword(
+          email: 'reset.password@email.com',
+          newPassword: 'newPassword',
+          token: 'valid-token',
+        );
+        expect(result1, isA<Ok<void>>());
+
+        await mockRepository.logout();
+
+        final result2 = await mockRepository.resetUserPassword(
+          email: 'reset.password@email.com',
+          newPassword: 'newPassword',
+          token: 'valid-token',
         );
         expect(result2, isA<Ok<void>>());
       });

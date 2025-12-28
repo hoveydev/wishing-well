@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 
-typedef NavigateFn = void Function(String routeName);
+typedef NavigateFn =
+    void Function(String routeName, Map<String, dynamic>? queryParameters);
 
 class DeepLinkHandler {
   final NavigateFn navigate;
@@ -36,11 +37,15 @@ class DeepLinkHandler {
         navigate(
           uri.queryParameters['type'] == 'signup'
               ? Routes.accountConfirm.name
-              : Routes.forgotPasswordConfirm.name,
+              : 'unknown',
+          null,
         );
         break;
       case 'password-reset':
-        navigate(Routes.resetPassword.name);
+        navigate(Routes.resetPassword.name, {
+          'email': uri.queryParameters['email'],
+          'token': uri.queryParameters['code'],
+        });
         break;
     }
   }

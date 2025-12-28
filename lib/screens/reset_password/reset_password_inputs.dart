@@ -72,8 +72,8 @@ class ResetPasswordInputs extends StatelessWidget {
         return localizations.resetPasswordErrorPasswordTooShort;
       case ResetPasswordErrorType.passwordsDontMatch:
         return localizations.resetPasswordErrorPasswordsDontMatch;
-      // case ResetPasswordErrorType.unknownError:
-      //   return localizations.resetPasswordErrorUnknown;
+      case ResetPasswordErrorType.unknownError:
+        return localizations.resetPasswordErrorUnknown;
       case ResetPasswordErrorType.none:
         return '';
     }

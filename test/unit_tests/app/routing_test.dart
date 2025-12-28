@@ -3,13 +3,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/components/button/app_button.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
-import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password_confirmation/reset_password_confirmation_screen.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
@@ -55,13 +57,16 @@ GoRouter createMockRouter() => GoRouter(
           builder: (context, state) => ResetPasswordScreen(
             viewmodel: ResetPasswordViewmodel(
               authRepository: MockAuthRepository(),
+              email: 'reset.password@email.com',
+              token: 'valid-token',
             ),
           ),
           routes: [
             GoRoute(
               path: 'confirm',
               name: 'reset-password-confirmation',
-              builder: (context, state) => const Screen(),
+              builder: (context, state) =>
+                  const ResetPasswordConfirmationScreen(),
             ),
           ],
         ),
@@ -100,7 +105,8 @@ dynamic startAppWithLoginScreen(
   MockDeepLinkSource source,
 ) async {
   final deepLinkHandler = DeepLinkHandler(
-    (name) => router.goNamed(name),
+    (name, queryParameters) =>
+        router.goNamed(name, queryParameters: queryParameters ?? const {}),
     source: source,
   );
   final Widget app = MultiProvider(
@@ -241,6 +247,44 @@ void main() {
     await startAppWithLoginScreen(tester, mockRouter, source);
     await tester.pumpAndSettle();
     expect(mockRouter.state.uri.path, '/forgot-password/reset');
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/login');
+  });
+
+  testWidgets('Login > Reset Password (deep link) > Confirm > Login', (
+    tester,
+  ) async {
+    final mockRouter = createMockRouter();
+    final source = MockDeepLinkSource(
+      initialUri: Uri.parse('https://wishingwell.app/auth/password-reset'),
+    );
+    await startAppWithLoginScreen(tester, mockRouter, source);
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/forgot-password/reset');
+    final passwordWidgetFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is AppInput &&
+          widget.type == AppInputType.password &&
+          widget.placeholder == 'Password',
+    );
+    await tester.enterText(passwordWidgetFinder, 'Password123!*()');
+    final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is AppInput &&
+          widget.type == AppInputType.password &&
+          widget.placeholder == 'Confirm Password',
+    );
+    await tester.enterText(confirmPasswordWidgetFinder, 'Password123!*()');
+    final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is AppButton &&
+          widget.type == AppButtonType.primary &&
+          widget.label == 'Reset Password',
+    );
+    await tester.tap(resetPasswordButtonWidgetFinder);
+    await tester.pumpAndSettle();
+    expect(mockRouter.state.uri.path, '/forgot-password/reset/confirm');
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
     expect(mockRouter.state.uri.path, '/login');

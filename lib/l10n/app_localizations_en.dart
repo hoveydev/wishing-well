@@ -167,5 +167,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'An unknown error occured. Please try again';
 
   @override
+  String get resetPasswordConfirmationHeader => 'Password Successfully Reset!';
+
+  @override
+  String get resetPasswordConfirmationInfoMessage =>
+      'You may now log in with your new password';
+
+  @override
   String get submit => 'Submit';
 }

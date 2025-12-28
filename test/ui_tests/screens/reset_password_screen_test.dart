@@ -28,6 +28,8 @@ dynamic startAppWithResetPasswordScreen(WidgetTester tester) async {
           home: ResetPasswordScreen(
             viewmodel: ResetPasswordViewmodel(
               authRepository: MockAuthRepository(),
+              email: '',
+              token: '',
             ),
           ),
         ),

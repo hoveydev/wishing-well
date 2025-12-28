@@ -14,6 +14,7 @@ import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password_confirmation/reset_password_confirmation_screen.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login', // should change to home once auth is set up
@@ -94,7 +95,11 @@ GoRouter router() => GoRouter(
           name: Routes.resetPassword.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: ResetPasswordScreen(
-              viewmodel: ResetPasswordViewmodel(authRepository: context.read()),
+              viewmodel: ResetPasswordViewmodel(
+                authRepository: context.read(),
+                email: state.uri.queryParameters['email'] ?? '',
+                token: state.uri.queryParameters['token'] ?? '',
+              ),
             ),
             transitionDuration: Duration.zero,
             transitionsBuilder: (_, animation, _, child) {
@@ -118,7 +123,7 @@ GoRouter router() => GoRouter(
               path: Routes.resetPasswordConfirmation.path,
               name: Routes.resetPasswordConfirmation.name,
               pageBuilder: (context, state) => CustomTransitionPage(
-                child: const Screen(),
+                child: const ResetPasswordConfirmationScreen(),
                 transitionDuration: Duration.zero,
                 transitionsBuilder: (_, animation, _, child) {
                   const begin = Offset(0.0, 1.0);

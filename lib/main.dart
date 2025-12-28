@@ -17,7 +17,10 @@ Future<void> main() async {
   final goRouter = router();
   final deepLinkSource = DeepLinkSource.platform();
   final deepLinkHandler = DeepLinkHandler(
-    (name) => goRouter.goNamed(name),
+    (name, queryParameters) => goRouter.goNamed(
+      name,
+      queryParameters: queryParameters ?? const <String, dynamic>{},
+    ),
     source: deepLinkSource,
   );
   WidgetsFlutterBinding.ensureInitialized();

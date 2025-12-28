@@ -23,7 +23,7 @@ void main() {
     );
 
     return DeepLinkHandler(
-      (routeName) => navigatedTo = routeName,
+      (routeName, queryParams) => navigatedTo = routeName,
       source: source,
     );
   }
@@ -42,7 +42,7 @@ void main() {
       expect(navigatedTo, 'account-confirm');
     });
 
-    test('navigates to forgot-password/confirm for non-signup', () async {
+    test('navigates to unknown for non-signup', () async {
       final handler = createHandler(
         initialUri: Uri.parse(
           'https://wishing-well-ayb.pages.dev/auth/account-confirm',
@@ -52,7 +52,7 @@ void main() {
       handler.init();
       await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'forgot-password-confirm');
+      expect(navigatedTo, 'unknown');
     });
 
     test('navigates to forgot-password on reset link', () async {

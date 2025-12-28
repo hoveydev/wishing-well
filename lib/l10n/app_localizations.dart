@@ -370,6 +370,18 @@ abstract class AppLocalizations {
   /// **'An unknown error occured. Please try again'**
   String get resetPasswordErrorUnknown;
 
+  /// Reset password confirmation screen header
+  ///
+  /// In en, this message translates to:
+  /// **'Password Successfully Reset!'**
+  String get resetPasswordConfirmationHeader;
+
+  /// Reset password confirmation screen info on reset confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'You may now log in with your new password'**
+  String get resetPasswordConfirmationInfoMessage;
+
   /// Label for submit button on Forgot Password screen
   ///
   /// In en, this message translates to:

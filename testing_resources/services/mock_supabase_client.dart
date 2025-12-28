@@ -109,6 +109,18 @@ class MockGoTrueClient implements GoTrueClient {
   }
 
   @override
+  Future<UserResponse> updateUser(
+    UserAttributes attributes, {
+    String? emailRedirectTo,
+  }) async {
+    if (attributes.nonce == 'FAKE-TOKEN') {
+      return UserResponse.fromJson({});
+    } else {
+      throw Exception('update user error');
+    }
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 

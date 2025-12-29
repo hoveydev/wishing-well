@@ -55,27 +55,18 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   @override
-  bool get hasAlert => _hasAlert;
-
-  bool _hasAlert = false;
-  set _setHasAlert(bool value) {
-    _hasAlert = value;
-    notifyListeners();
-  }
+  bool get hasAlert => _validationMessage != LoginErrorType.none;
 
   bool _isFormValid(String email, String password) {
     if (email.isEmpty && password.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = LoginErrorType.noPasswordNoEmail;
       return false;
     }
     if (email.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = LoginErrorType.noEmail;
       return false;
     }
     if (password.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = LoginErrorType.noPassword;
       return false;
     }
@@ -83,11 +74,9 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setHasAlert = true;
       _setValidationMessage = LoginErrorType.badEmail;
       return false;
     }
-    _setHasAlert = false;
     _setValidationMessage = LoginErrorType.none;
     return true;
   }
@@ -115,7 +104,6 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
         loading.hide();
       case Error():
         _setValidationMessage = LoginErrorType.unknownError;
-        _setHasAlert = true;
         loading.hide();
     }
   }

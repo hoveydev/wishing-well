@@ -65,52 +65,38 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   @override
-  bool get hasAlert => _hasAlert;
-
-  bool _hasAlert = false;
-  set _setHasAlert(bool value) {
-    _hasAlert = value;
-    notifyListeners();
-  }
+  bool get hasAlert => _validationMessage != ResetPasswordErrorType.none;
 
   // TODO: Update so more than one error can be dislpayed - might want to create a list on the screen itself
   bool _passwordIsNotValid(String passwordOne, String passwordTwo) {
     if (passwordOne.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.noPassword;
       return true;
     }
     if (passwordOne.length < 12) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordTooShort;
       return true;
     }
     if (!passwordOne.contains(RegExp(r'[A-Z]'))) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordNoUppercase;
       return true;
     }
     if (!passwordOne.contains(RegExp(r'[a-z]'))) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordNoLowercase;
       return true;
     }
     if (!passwordOne.contains(RegExp(r'[0-9]'))) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordNoDigit;
       return true;
     }
     if (!passwordOne.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordNoSpecial;
       return true;
     }
     if (passwordOne != passwordTwo) {
-      _setHasAlert = true;
       _setValidationMessage = ResetPasswordErrorType.passwordsDontMatch;
       return true;
     }
-    _setHasAlert = false;
     _setValidationMessage = ResetPasswordErrorType.none;
     return false;
   }
@@ -146,7 +132,6 @@ class ResetPasswordViewmodel extends ChangeNotifier
         loading.hide();
       case Error():
         _setValidationMessage = ResetPasswordErrorType.unknownError;
-        _setHasAlert = true;
         loading.hide();
     }
   }

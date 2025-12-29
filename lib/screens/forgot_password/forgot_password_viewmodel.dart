@@ -42,17 +42,10 @@ class ForgotPasswordViewModel extends ChangeNotifier
   }
 
   @override
-  bool get hasAlert => _hasAlert;
-
-  bool _hasAlert = false;
-  set _setHasAlert(bool value) {
-    _hasAlert = value;
-    notifyListeners();
-  }
+  bool get hasAlert => _validationMessage != ForgotErrorType.none;
 
   bool _isEmailValid(String email) {
     if (email.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = ForgotErrorType.noEmail;
       return false;
     }
@@ -60,11 +53,9 @@ class ForgotPasswordViewModel extends ChangeNotifier
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setHasAlert = true;
       _setValidationMessage = ForgotErrorType.badEmail;
       return false;
     }
-    _setHasAlert = false;
     _setValidationMessage = ForgotErrorType.none;
     return true;
   }
@@ -91,7 +82,6 @@ class ForgotPasswordViewModel extends ChangeNotifier
         loading.hide();
       case Error():
         _setValidationMessage = ForgotErrorType.unknownError;
-        _setHasAlert = true;
         loading.hide();
     }
   }

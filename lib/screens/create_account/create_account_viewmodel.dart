@@ -69,38 +69,27 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   @override
-  bool get hasAlert => _hasAlert;
-
-  bool _hasAlert = false;
-  set _setHasAlert(bool value) {
-    _hasAlert = value;
-    notifyListeners();
-  }
+  bool get hasAlert => _validationMessage != CreateAccountErrorType.none;
 
   // TODO: Update so more than one error can be dislpayed - might want to create a list on the screen itself
   bool _passwordIsNotValid(String password) {
     if (password.length < 12) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordTooShort;
       return true;
     }
     if (!password.contains(RegExp(r'[A-Z]'))) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoUppercase;
       return true;
     }
     if (!password.contains(RegExp(r'[a-z]'))) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoLowercase;
       return true;
     }
     if (!password.contains(RegExp(r'[0-9]'))) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoDigit;
       return true;
     }
     if (!password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordNoSpecial;
       return true;
     }
@@ -109,12 +98,10 @@ class CreateAccountViewmodel extends ChangeNotifier
 
   bool _isFormValid(String email, String passwordOne, String passwordTwo) {
     if (email.isEmpty && passwordOne.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.noPasswordNoEmail;
       return false;
     }
     if (email.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.noEmail;
       return false;
     }
@@ -122,12 +109,10 @@ class CreateAccountViewmodel extends ChangeNotifier
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.badEmail;
       return false;
     }
     if (passwordOne.isEmpty) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.noPassword;
       return false;
     }
@@ -135,11 +120,9 @@ class CreateAccountViewmodel extends ChangeNotifier
       return false;
     }
     if (passwordOne != passwordTwo) {
-      _setHasAlert = true;
       _setValidationMessage = CreateAccountErrorType.passwordsDontMatch;
       return false;
     }
-    _setHasAlert = false;
     _setValidationMessage = CreateAccountErrorType.none;
     return true;
   }
@@ -167,7 +150,6 @@ class CreateAccountViewmodel extends ChangeNotifier
         loading.hide();
       case Error():
         _setValidationMessage = CreateAccountErrorType.unknownError;
-        _setHasAlert = true;
         loading.hide();
     }
   }

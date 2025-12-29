@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/theme/app_logo_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
-class CreateAccountConfirmationImage extends StatelessWidget {
-  const CreateAccountConfirmationImage({super.key});
+class ConfirmationImage extends StatelessWidget {
+  final IconData icon;
+
+  const ConfirmationImage({required this.icon, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +13,6 @@ class CreateAccountConfirmationImage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final imageSize = AppLogoSize(sectionHeight: screenHeight).large;
 
-    return Icon(
-      Icons.check_circle,
-      size: imageSize,
-      color: colorScheme.success,
-    );
+    return Icon(icon, size: imageSize, color: colorScheme.success);
   }
 }

@@ -1,17 +1,14 @@
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
-import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
-import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
-import 'package:wishing_well/screens/reset_password_confirmation/reset_password_confirmation_screen.dart';
 
 import '../repositories/mock_auth_repository.dart';
 
@@ -37,7 +34,8 @@ GoRouter createMockRouter() => GoRouter(
         GoRoute(
           path: 'confirm',
           name: 'forgot-password-confirm',
-          builder: (context, state) => const ForgotPasswordConfirmationScreen(),
+          builder: (context, state) =>
+              const ConfirmationScreen.forgotPassword(),
         ),
         GoRoute(
           path: 'reset',
@@ -54,7 +52,7 @@ GoRouter createMockRouter() => GoRouter(
               path: 'confirm',
               name: 'reset-password-confirmation',
               builder: (context, state) =>
-                  const ResetPasswordConfirmationScreen(),
+                  const ConfirmationScreen.resetPassword(),
             ),
           ],
         ),
@@ -70,12 +68,12 @@ GoRouter createMockRouter() => GoRouter(
         GoRoute(
           path: 'confirm',
           name: 'create-account-confirm',
-          builder: (context, state) => const CreateAccountConfirmationScreen(),
+          builder: (context, state) => const ConfirmationScreen.createAccount(),
         ),
         GoRoute(
           path: 'account-confirm',
           name: 'account-confirm',
-          builder: (context, state) => const AccountConfirmationScreen(),
+          builder: (context, state) => const ConfirmationScreen.account(),
         ),
       ],
     ),

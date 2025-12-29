@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/reset_password_confirmation/reset_password_confirmation_screen.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -22,7 +22,7 @@ dynamic startAppWithResetPasswordConfirmationScreen(WidgetTester tester) async {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const ResetPasswordConfirmationScreen(),
+          home: const ConfirmationScreen.resetPassword(),
         ),
       );
   await tester.pumpWidget(app);

@@ -3,18 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
-import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
-import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
-import 'package:wishing_well/screens/reset_password_confirmation/reset_password_confirmation_screen.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login', // should change to home once auth is set up
@@ -71,7 +68,7 @@ GoRouter router() => GoRouter(
           path: Routes.forgotPasswordConfirm.path,
           name: Routes.forgotPasswordConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ForgotPasswordConfirmationScreen(),
+            child: const ConfirmationScreen.forgotPassword(),
             transitionDuration: Duration.zero,
             transitionsBuilder: (_, animation, _, child) {
               const begin = Offset(0.0, 1.0);
@@ -123,7 +120,7 @@ GoRouter router() => GoRouter(
               path: Routes.resetPasswordConfirmation.path,
               name: Routes.resetPasswordConfirmation.name,
               pageBuilder: (context, state) => CustomTransitionPage(
-                child: const ResetPasswordConfirmationScreen(),
+                child: const ConfirmationScreen.resetPassword(),
                 transitionDuration: Duration.zero,
                 transitionsBuilder: (_, animation, _, child) {
                   const begin = Offset(0.0, 1.0);
@@ -174,7 +171,7 @@ GoRouter router() => GoRouter(
           path: Routes.createAccountConfirm.path,
           name: Routes.createAccountConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
-            child: const CreateAccountConfirmationScreen(),
+            child: const ConfirmationScreen.createAccount(),
             transitionDuration: Duration.zero,
             transitionsBuilder: (_, animation, _, child) {
               const begin = Offset(0.0, 1.0);
@@ -197,7 +194,7 @@ GoRouter router() => GoRouter(
           path: Routes.accountConfirm.path,
           name: Routes.accountConfirm.name,
           pageBuilder: (context, state) => CustomTransitionPage(
-            child: const AccountConfirmationScreen(),
+            child: const ConfirmationScreen.account(),
             transitionDuration: Duration.zero,
             transitionsBuilder: (_, animation, _, child) {
               const begin = Offset(0.0, 1.0);

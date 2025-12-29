@@ -3,8 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
-import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 dynamic startAppWithCreateAccountConfirmationScreen(WidgetTester tester) async {
@@ -22,7 +22,7 @@ dynamic startAppWithCreateAccountConfirmationScreen(WidgetTester tester) async {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const CreateAccountConfirmationScreen(),
+          home: const ConfirmationScreen.createAccount(),
         ),
       );
   await tester.pumpWidget(app);

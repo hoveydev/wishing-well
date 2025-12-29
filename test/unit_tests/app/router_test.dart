@@ -3,15 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:wishing_well/components/screen/screen.dart';
 
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/screens/account_confirmation/account_confirmation_screen.dart';
-import 'package:wishing_well/screens/create_account_confirmation/create_account_confirmation_screen.dart';
-import 'package:wishing_well/screens/forgot_password_confirmation/forgot_password_confirmation_screen.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
@@ -65,7 +62,7 @@ void main() {
       expect(find.byType(ForgotPasswordScreen), findsOneWidget);
       goRouter.goNamed(Routes.forgotPasswordConfirm.name);
       await tester.pumpAndSettle();
-      expect(find.byType(ForgotPasswordConfirmationScreen), findsOneWidget);
+      expect(find.byType(ConfirmationScreen), findsOneWidget);
     });
 
     testWidgets('navigates to sign up', (tester) async {
@@ -86,7 +83,7 @@ void main() {
       expect(find.byType(CreateAccountScreen), findsOneWidget);
       goRouter.goNamed(Routes.createAccountConfirm.name);
       await tester.pumpAndSettle();
-      expect(find.byType(CreateAccountConfirmationScreen), findsOneWidget);
+      expect(find.byType(ConfirmationScreen), findsOneWidget);
     });
 
     testWidgets('navigates to home', (tester) async {
@@ -104,7 +101,7 @@ void main() {
       await tester.pumpAndSettle();
       goRouter.goNamed(Routes.accountConfirm.name);
       await tester.pumpAndSettle();
-      expect(find.byType(AccountConfirmationScreen), findsOneWidget);
+      expect(find.byType(ConfirmationScreen), findsOneWidget);
     });
 
     testWidgets('navigates to reset password', (tester) async {
@@ -122,7 +119,7 @@ void main() {
       await tester.pumpAndSettle();
       goRouter.goNamed(Routes.resetPasswordConfirmation.name);
       await tester.pumpAndSettle();
-      expect(find.byType(Screen), findsOneWidget);
+      expect(find.byType(ConfirmationScreen), findsOneWidget);
     });
   });
 }

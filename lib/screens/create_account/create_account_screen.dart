@@ -10,9 +10,8 @@ import 'package:wishing_well/screens/create_account/create_account_inputs.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
 class CreateAccountScreen extends StatefulWidget {
-  final CreateAccountViewmodel viewModel;
-
   const CreateAccountScreen({required this.viewModel, super.key});
+  final CreateAccountViewmodel viewModel;
 
   @override
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();
@@ -36,7 +35,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       ),
     ),
     children: [
-      // TODO: consider having a 'password requirements' section that can check off each satisfying criteria
+      // TODO: consider having a 'password requirements' section
+      // that can check off each satisfying criteria
       const AppSpacer.xlarge(),
       const CreateAccountHeader(),
       const AppSpacer.xlarge(),

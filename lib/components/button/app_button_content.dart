@@ -4,13 +4,6 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 enum _AppButtonContentType { icon, label, labelWithIcon }
 
 class AppButtonContent extends StatelessWidget {
-  final String? label;
-  final IconData? icon;
-  final bool isLoading;
-  final MainAxisAlignment alignment;
-  final AppButtonType buttonType;
-  final _AppButtonContentType _appButtonContentType;
-
   const AppButtonContent._({
     required this.isLoading,
     required this.alignment,
@@ -67,6 +60,12 @@ class AppButtonContent extends StatelessWidget {
          alignment: alignment,
          appButtonContentType: _AppButtonContentType.labelWithIcon,
        );
+  final String? label;
+  final IconData? icon;
+  final bool isLoading;
+  final MainAxisAlignment alignment;
+  final AppButtonType buttonType;
+  final _AppButtonContentType _appButtonContentType;
 
   @override
   Widget build(BuildContext context) {

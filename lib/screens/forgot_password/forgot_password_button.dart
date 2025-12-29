@@ -6,9 +6,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
-  final ForgotPasswordViewModel viewModel;
-
   const ForgotPasswordButton({required this.viewModel, super.key});
+  final ForgotPasswordViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

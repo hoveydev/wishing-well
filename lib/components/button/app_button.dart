@@ -7,14 +7,6 @@ import 'package:wishing_well/components/button/types/tertiary_button.dart';
 enum _AppButtonContentType { icon, label, labelWithIcon }
 
 class AppButton extends StatelessWidget {
-  final String? label;
-  final IconData? icon;
-  final VoidCallback onPressed;
-  final bool isLoading;
-  final MainAxisAlignment alignment;
-  final AppButtonType type;
-  final _AppButtonContentType _appButtonContentType;
-
   const AppButton._({
     required this.onPressed,
     required this.isLoading,
@@ -78,6 +70,13 @@ class AppButton extends StatelessWidget {
          type: type,
          appButtonContentType: _AppButtonContentType.labelWithIcon,
        );
+  final String? label;
+  final IconData? icon;
+  final VoidCallback onPressed;
+  final bool isLoading;
+  final MainAxisAlignment alignment;
+  final AppButtonType type;
+  final _AppButtonContentType _appButtonContentType;
 
   Widget _button(void Function()? onPressHandler) {
     switch (type) {

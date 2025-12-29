@@ -58,9 +58,9 @@ extension AppThemeExtension on BuildContext {
 /// additional color scheme variables
 @immutable
 class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
+  const ColorSchemeExtension({this.success, this.onSuccess});
   final Color? success;
   final Color? onSuccess;
-  const ColorSchemeExtension({this.success, this.onSuccess});
 
   @override
   ColorSchemeExtension copyWith({Color? success, Color? onSuccess}) =>

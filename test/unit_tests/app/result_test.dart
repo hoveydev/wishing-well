@@ -252,16 +252,14 @@ void main() {
 
 // Test helpers
 class _TestUser {
+  _TestUser({required this.id, required this.name});
   final int id;
   final String name;
-
-  _TestUser({required this.id, required this.name});
 }
 
 class _CustomException implements Exception {
-  final String message;
-
   _CustomException(this.message);
+  final String message;
 
   @override
   String toString() => 'CustomException: $message';

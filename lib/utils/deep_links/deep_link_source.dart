@@ -4,9 +4,6 @@ typedef InitialLinkProvider = Future<Uri?> Function();
 typedef LinkStreamProvider = Stream<Uri?> Function();
 
 class DeepLinkSource {
-  final InitialLinkProvider initial;
-  final LinkStreamProvider stream;
-
   const DeepLinkSource({required this.initial, required this.stream});
 
   // coverage:ignore-start
@@ -14,5 +11,7 @@ class DeepLinkSource {
     initial: () async => await getInitialUri(),
     stream: () => uriLinkStream,
   );
+  final InitialLinkProvider initial;
+  final LinkStreamProvider stream;
   // coverage:ignore-end
 }

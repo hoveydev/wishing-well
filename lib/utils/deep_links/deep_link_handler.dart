@@ -7,11 +7,10 @@ typedef NavigateFn =
     void Function(String routeName, Map<String, dynamic>? queryParameters);
 
 class DeepLinkHandler {
+  DeepLinkHandler(this.navigate, {required this.source});
   final NavigateFn navigate;
   final DeepLinkSource source;
   StreamSubscription? _sub;
-
-  DeepLinkHandler(this.navigate, {required this.source});
 
   void init() {
     _handleInitialUri();
@@ -39,7 +38,8 @@ class DeepLinkHandler {
           navigate(Routes.accountConfirm.name, null);
         } else {
           log(
-            'unrecognized type parameter (or it may not exist) - routed to unknown route',
+            'unrecognized type parameter (or it may not exist) '
+            '- routed to unknown route',
           );
           navigate('unknown', null);
         }

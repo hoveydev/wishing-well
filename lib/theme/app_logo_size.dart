@@ -1,7 +1,6 @@
 class AppLogoSize {
-  final double? sectionHeight;
-
   const AppLogoSize({this.sectionHeight});
+  final double? sectionHeight;
 
   static const double _large = 60.0;
   static const double _headerLargeRatio = 0.12;

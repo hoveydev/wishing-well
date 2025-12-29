@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 
 class AppInlineAlert extends StatelessWidget {
+  const AppInlineAlert({required this.message, required this.type, super.key});
   final String message;
   final AppInlineAlertType type;
-
-  const AppInlineAlert({required this.message, required this.type, super.key});
 
   @override
   Widget build(BuildContext context) {

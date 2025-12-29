@@ -9,9 +9,8 @@ enum Routes {
   createAccountConfirm('confirm'), // create-account/confirm
   accountConfirm('account-confirm'); // create-account/account-confirm
 
-  final String path;
-
   const Routes(this.path);
+  final String path;
 
   String get name => _toKebabCase(toString().split('.').last);
 

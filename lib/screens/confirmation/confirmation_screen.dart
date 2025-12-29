@@ -11,14 +11,13 @@ import 'package:wishing_well/screens/confirmation/confirmation_image.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_subtext.dart';
 
 class ConfirmationScreenContent {
+  ConfirmationScreenContent({this.header, Object? icon = _unset, this.subtext})
+    : icon = icon == _unset ? Icons.check_circle : icon as IconData;
   String? header;
   IconData? icon;
   String? subtext;
 
   static const _unset = Object();
-
-  ConfirmationScreenContent({this.header, Object? icon = _unset, this.subtext})
-    : icon = icon == _unset ? Icons.check_circle : icon as IconData;
 }
 
 enum _ConfirmationScreenFlavor {
@@ -29,11 +28,6 @@ enum _ConfirmationScreenFlavor {
 }
 
 class ConfirmationScreen extends StatelessWidget {
-  final String? header;
-  final IconData? icon;
-  final String? subtext;
-  final _ConfirmationScreenFlavor _confirmationScreenFlavor;
-
   // coverage:ignore-start
   const ConfirmationScreen._({
     required _ConfirmationScreenFlavor confirmationScreenFlavor,
@@ -66,6 +60,10 @@ class ConfirmationScreen extends StatelessWidget {
         key: key,
         confirmationScreenFlavor: _ConfirmationScreenFlavor.resetPassword,
       );
+  final String? header;
+  final IconData? icon;
+  final String? subtext;
+  final _ConfirmationScreenFlavor _confirmationScreenFlavor;
   // coverage:ignore-end
 
   @override

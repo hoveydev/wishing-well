@@ -5,13 +5,6 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
 class PrimaryButton extends StatelessWidget {
-  final IconData? icon;
-  final String? label;
-  final VoidCallback onPressed;
-  final bool isLoading;
-  final MainAxisAlignment alignment;
-  final _PrimaryButtonContentType _primaryButtonContentType;
-
   const PrimaryButton._({
     required this.onPressed,
     required this.isLoading,
@@ -68,6 +61,12 @@ class PrimaryButton extends StatelessWidget {
          alignment: alignment,
          primaryButtonContentType: _PrimaryButtonContentType.labelWithIcon,
        );
+  final IconData? icon;
+  final String? label;
+  final VoidCallback onPressed;
+  final bool isLoading;
+  final MainAxisAlignment alignment;
+  final _PrimaryButtonContentType _primaryButtonContentType;
 
   @override
   Widget build(BuildContext context) {

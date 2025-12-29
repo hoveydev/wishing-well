@@ -58,8 +58,6 @@ class AppConfig {
     supabaseUrl;
     supabaseSecret;
 
-    log(
-      '✅ All required environment variables are present for ${_environment.name}',
-    );
+    log('✅ All environment variables are present for ${_environment.name}');
   }
 }

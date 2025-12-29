@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 
 class MockDeepLinkSource extends DeepLinkSource {
-  final StreamController<Uri?> _controller = StreamController<Uri?>.broadcast();
-  final Uri? _initialUri;
-
   MockDeepLinkSource({Uri? initialUri})
     : _initialUri = initialUri,
       super(
         initial: () async => initialUri,
         stream: () => const Stream.empty(),
       );
+  final StreamController<Uri?> _controller = StreamController<Uri?>.broadcast();
+  final Uri? _initialUri;
 
   @override
   Future<Uri?> Function() get initial =>

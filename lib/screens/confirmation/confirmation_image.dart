@@ -3,9 +3,8 @@ import 'package:wishing_well/theme/app_logo_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class ConfirmationImage extends StatelessWidget {
-  final IconData icon;
-
   const ConfirmationImage({required this.icon, super.key});
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {

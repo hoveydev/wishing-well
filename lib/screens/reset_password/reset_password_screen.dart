@@ -9,9 +9,8 @@ import 'package:wishing_well/screens/reset_password/reset_password_inputs.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  final ResetPasswordViewmodel viewmodel;
-
   const ResetPasswordScreen({required this.viewmodel, super.key});
+  final ResetPasswordViewmodel viewmodel;
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -38,7 +37,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ],
     ),
     children: [
-      // TODO: consider having a 'password requirements' section that can check off each satisfying criteria
+      // TODO: consider having a 'password requirements' section
+      // that can check off each satisfying criteria
       const AppSpacer.xlarge(),
       const ResetPasswordHeader(),
       const AppSpacer.xlarge(),

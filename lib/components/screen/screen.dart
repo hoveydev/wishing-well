@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 
 class Screen extends StatelessWidget {
-  final List<Widget> children;
-  final EdgeInsetsGeometry? padding;
-  final PreferredSizeWidget? appBar; // essentially navbar
+  // essentially navbar
   const Screen({
     super.key,
     this.children = const [],
     this.padding,
     this.appBar,
   });
+  final List<Widget> children;
+  final EdgeInsetsGeometry? padding;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) {

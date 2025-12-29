@@ -3,16 +3,15 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 
 class AppInput extends StatelessWidget {
-  final String placeholder;
-  final AppInputType type;
-  final ValueChanged<String>? onChanged;
-
   const AppInput({
     required this.placeholder,
     required this.type,
     required this.onChanged,
     super.key,
   });
+  final String placeholder;
+  final AppInputType type;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {

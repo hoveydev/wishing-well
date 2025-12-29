@@ -71,7 +71,8 @@ class CreateAccountViewmodel extends ChangeNotifier
   @override
   bool get hasAlert => _validationMessage != CreateAccountErrorType.none;
 
-  // TODO: Update so more than one error can be dislpayed - might want to create a list on the screen itself
+  // TODO: Update so more than one error can be dislpayed
+  // might want to create a list on the screen itself
   bool _passwordIsNotValid(String password) {
     if (password.length < 12) {
       _setValidationMessage = CreateAccountErrorType.passwordTooShort;

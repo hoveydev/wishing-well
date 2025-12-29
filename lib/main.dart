@@ -39,14 +39,13 @@ Future<void> main() async {
 }
 
 class MainApp extends StatefulWidget {
-  final GoRouter router;
-  final DeepLinkHandler deepLinkHandler;
-
   const MainApp({
     required this.router,
     required this.deepLinkHandler,
     super.key,
   });
+  final GoRouter router;
+  final DeepLinkHandler deepLinkHandler;
 
   @override
   State<MainApp> createState() => _MainAppState();

@@ -6,9 +6,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
 class CreateAccountButton extends StatelessWidget {
-  final CreateAccountViewmodel viewModel;
-
   const CreateAccountButton({required this.viewModel, super.key});
+  final CreateAccountViewmodel viewModel;
 
   @override
   Widget build(BuildContext context) {

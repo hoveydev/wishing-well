@@ -32,15 +32,14 @@ enum ResetPasswordErrorType {
 
 class ResetPasswordViewmodel extends ChangeNotifier
     implements ResetPasswordViewmodelContract {
-  final AuthRepository _authRepository;
-  final String email;
-  final String token;
-
   ResetPasswordViewmodel({
     required AuthRepository authRepository,
     required this.email,
     required this.token,
   }) : _authRepository = authRepository;
+  final AuthRepository _authRepository;
+  final String email;
+  final String token;
 
   String _passwordOne = '';
   String _passwordTwo = '';
@@ -67,7 +66,8 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   bool get hasAlert => _validationMessage != ResetPasswordErrorType.none;
 
-  // TODO: Update so more than one error can be dislpayed - might want to create a list on the screen itself
+  // TODO: Update so more than one error can be dislpayed
+  // might want to create a list on the screen itself
   bool _passwordIsNotValid(String passwordOne, String passwordTwo) {
     if (passwordOne.isEmpty) {
       _setValidationMessage = ResetPasswordErrorType.noPassword;

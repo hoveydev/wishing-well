@@ -5,12 +5,6 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 enum _TertiaryButtonContentType { icon, label, labelWithIcon }
 
 class TertiaryButton extends StatelessWidget {
-  final IconData? icon;
-  final String? label;
-  final VoidCallback onPressed;
-  final bool isLoading;
-  final _TertiaryButtonContentType _tertiaryButtonContentType;
-
   const TertiaryButton._({
     required this.onPressed,
     required _TertiaryButtonContentType tertiaryButtonContentType,
@@ -60,6 +54,11 @@ class TertiaryButton extends StatelessWidget {
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.labelWithIcon,
        );
+  final IconData? icon;
+  final String? label;
+  final VoidCallback onPressed;
+  final bool isLoading;
+  final _TertiaryButtonContentType _tertiaryButtonContentType;
 
   @override
   Widget build(BuildContext context) {

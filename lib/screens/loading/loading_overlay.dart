@@ -4,10 +4,9 @@ import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoadingOverlay extends StatelessWidget {
-  final Widget child;
-
   // coverage:ignore-start
   const LoadingOverlay({required this.child, super.key});
+  final Widget child;
   // coverage:ignore-end
 
   @override

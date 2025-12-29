@@ -8,9 +8,8 @@ import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginButtons extends StatelessWidget {
-  final LoginViewModel viewModel;
-
   const LoginButtons({required this.viewModel, super.key});
+  final LoginViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

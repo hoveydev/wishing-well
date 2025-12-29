@@ -9,9 +9,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginInputs extends StatelessWidget {
-  final LoginViewModel viewModel;
-
   const LoginInputs({required this.viewModel, super.key});
+  final LoginViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

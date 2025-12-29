@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ConfirmationHeader extends StatelessWidget {
-  final String headerText;
-
   const ConfirmationHeader({required this.headerText, super.key});
+  final String headerText;
 
   @override
   Widget build(BuildContext context) {

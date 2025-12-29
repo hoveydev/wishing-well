@@ -7,9 +7,8 @@ import 'package:wishing_well/screens/login/login_inputs.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
-  final LoginViewModel viewModel;
-
   const LoginScreen({required this.viewModel, super.key});
+  final LoginViewModel viewModel;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

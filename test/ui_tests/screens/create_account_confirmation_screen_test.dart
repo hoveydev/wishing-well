@@ -43,7 +43,8 @@ void main() {
       expect(iconWidgetFinder, findsOneWidget);
       expect(
         find.text(
-          'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.',
+          'Please check your email to confirm your account. '
+          'Your account must be confirmed before you are able to log in.',
         ),
         findsOneWidget,
       );

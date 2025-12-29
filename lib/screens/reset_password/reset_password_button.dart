@@ -6,9 +6,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
 
 class ResetPasswordButton extends StatelessWidget {
-  final ResetPasswordViewmodel viewmodel;
-
   const ResetPasswordButton({required this.viewmodel, super.key});
+  final ResetPasswordViewmodel viewmodel;
 
   @override
   Widget build(BuildContext context) {

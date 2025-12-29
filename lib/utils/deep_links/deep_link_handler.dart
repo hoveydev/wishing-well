@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 
@@ -34,12 +35,14 @@ class DeepLinkHandler {
 
     switch (subPath) {
       case 'account-confirm':
-        navigate(
-          uri.queryParameters['type'] == 'signup'
-              ? Routes.accountConfirm.name
-              : 'unknown',
-          null,
-        );
+        if (uri.queryParameters['type'] == 'signup') {
+          navigate(Routes.accountConfirm.name, null);
+        } else {
+          log(
+            'unrecognized type parameter (or it may not exist) - routed to unknown route',
+          );
+          navigate('unknown', null);
+        }
         break;
       case 'password-reset':
         navigate(Routes.resetPassword.name, {

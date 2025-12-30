@@ -11,10 +11,14 @@ import 'package:wishing_well/routing/routes.dart';
 
 abstract class LoginViewModelContract {
   void updateEmailField(String email);
+  TextEditingController get emailInputController;
   void updatePasswordField(String password);
+  TextEditingController get passwordInputController;
   bool get hasAlert;
   LoginErrorType get validationMessage;
+  void tapForgotPasswordButton(BuildContext context);
   Future<void> tapLoginButton(BuildContext context);
+  void tapCreateAccountButton(BuildContext context);
 }
 
 enum LoginErrorType {
@@ -41,9 +45,18 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   @override
+  TextEditingController get emailInputController => _emailInputController;
+  final TextEditingController _emailInputController = TextEditingController();
+
+  @override
   void updatePasswordField(String password) {
     _password = password;
   }
+
+  @override
+  TextEditingController get passwordInputController => _passwordInputController;
+  final TextEditingController _passwordInputController =
+      TextEditingController();
 
   @override
   LoginErrorType get validationMessage => _validationMessage;
@@ -82,6 +95,13 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   }
 
   @override
+  void tapForgotPasswordButton(BuildContext context) {
+    _emailInputController.clear();
+    _passwordInputController.clear();
+    context.pushNamed(Routes.forgotPassword.name);
+  }
+
+  @override
   Future<void> tapLoginButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
 
@@ -106,5 +126,12 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
         _setValidationMessage = LoginErrorType.unknownError;
         loading.hide();
     }
+  }
+
+  @override
+  void tapCreateAccountButton(BuildContext context) {
+    _emailInputController.clear();
+    _passwordInputController.clear();
+    context.pushNamed(Routes.createAccount.name);
   }
 }

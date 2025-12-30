@@ -7,11 +7,13 @@ class AppInput extends StatelessWidget {
     required this.placeholder,
     required this.type,
     required this.onChanged,
+    this.controller,
     super.key,
   });
   final String placeholder;
   final AppInputType type;
   final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class AppInput extends StatelessWidget {
         keyboardType: _getKeyboardType(),
         autofillHints: _getAutofillHints(),
         onChanged: onChanged,
+        controller: controller,
       ),
     );
   }

@@ -24,11 +24,13 @@ class LoginInputs extends StatelessWidget {
           placeholder: l10n.email,
           type: AppInputType.email,
           onChanged: (String val) => viewModel.updateEmailField(val),
+          controller: viewModel.emailInputController,
         ),
         AppInput(
           placeholder: l10n.password,
           type: AppInputType.password,
           onChanged: (String val) => viewModel.updatePasswordField(val),
+          controller: viewModel.passwordInputController,
         ),
         ListenableBuilder(
           listenable: viewModel,

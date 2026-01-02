@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/throbber/app_throbber_size.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 dynamic startGenericApp(WidgetTester tester, Widget child) async {
-  final Widget app = MaterialApp(home: Scaffold(body: child));
+  final Widget app = MaterialApp(
+    theme: AppTheme.lightTheme,
+    darkTheme: AppTheme.darkTheme,
+    home: Screen(children: [child]),
+  );
   await tester.pumpWidget(app);
   await tester.pump();
 }

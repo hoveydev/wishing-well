@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 class Screen extends StatelessWidget {
   // essentially navbar
@@ -15,7 +16,7 @@ class Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Scaffold(
       appBar: appBar,
       backgroundColor: colorScheme.surface,

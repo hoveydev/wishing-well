@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 enum _TertiaryButtonContentType { icon, label, labelWithIcon }
 
@@ -63,11 +64,13 @@ class TertiaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
+    final colorScheme = context.colorScheme;
 
     return TextButton(
       style: ButtonStyle(
         overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.primary),
         padding: WidgetStateProperty.all(
           _tertiaryButtonContentType == _TertiaryButtonContentType.icon
               ? const EdgeInsets.all(0)

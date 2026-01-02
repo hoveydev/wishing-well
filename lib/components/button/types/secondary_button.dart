@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 enum _SecondaryButtonContentType { icon, label, labelWithIcon }
 
@@ -63,7 +64,7 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     return TextButton(
       style: ButtonStyle(
@@ -72,7 +73,7 @@ class SecondaryButton extends StatelessWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 25),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 0.15),
+                color: colorScheme.primary!.withValues(alpha: 0.15),
               ),
               child: child,
             );
@@ -85,6 +86,7 @@ class SecondaryButton extends StatelessWidget {
           }
         },
         overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.primary),
         padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         ),
@@ -93,7 +95,7 @@ class SecondaryButton extends StatelessWidget {
         ),
         elevation: WidgetStateProperty.all(0),
         shadowColor: WidgetStateProperty.all(Colors.transparent),
-        side: WidgetStatePropertyAll(BorderSide(color: colorScheme.primary)),
+        side: WidgetStatePropertyAll(BorderSide(color: colorScheme.primary!)),
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

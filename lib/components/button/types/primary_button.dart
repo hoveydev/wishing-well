@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
@@ -71,7 +72,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     return TextButton(
       style: ButtonStyle(
@@ -80,7 +81,7 @@ class PrimaryButton extends StatelessWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 25),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 0.5),
+                color: colorScheme.primary!.withValues(alpha: 0.5),
               ),
               child: child,
             );
@@ -88,7 +89,7 @@ class PrimaryButton extends StatelessWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 100),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 1),
+                color: colorScheme.primary!.withValues(alpha: 1),
               ),
               child: child,
             );

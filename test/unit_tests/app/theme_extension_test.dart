@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 void main() {
   group('color theme extension', () {

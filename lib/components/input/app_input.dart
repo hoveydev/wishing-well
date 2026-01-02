@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 class AppInput extends StatelessWidget {
   const AppInput({
@@ -18,11 +19,11 @@ class AppInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.primary),
+        border: Border.all(color: colorScheme.primary!),
         borderRadius: BorderRadius.circular(AppBorderRadius.medium),
       ),
       child: TextField(
@@ -36,6 +37,7 @@ class AppInput extends StatelessWidget {
             borderSide: BorderSide.none,
           ),
         ),
+        cursorColor: colorScheme.primary,
         keyboardType: _getKeyboardType(),
         autofillHints: _getAutofillHints(),
         onChanged: onChanged,

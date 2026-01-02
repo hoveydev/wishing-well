@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
@@ -17,6 +18,8 @@ dynamic startAppWithLoginScreen(WidgetTester tester) async {
       ChangeNotifierProvider<LoadingController>.value(
         value: controller,
         child: MaterialApp(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

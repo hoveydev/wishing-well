@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/throbber/app_throbber_size.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 class AppThrobber extends StatelessWidget {
   // coverage:ignore-start
@@ -13,7 +14,7 @@ class AppThrobber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     final CircularProgressIndicator spinner =
         CircularProgressIndicator.adaptive(
           backgroundColor: colorScheme.primary,

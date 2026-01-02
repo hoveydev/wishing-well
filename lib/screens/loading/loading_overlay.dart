@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoadingOverlay extends StatelessWidget {
@@ -16,7 +17,7 @@ class LoadingOverlay extends StatelessWidget {
       Consumer<LoadingController>(
         builder: (context, controller, _) {
           final visible = controller.isLoading;
-          final colorScheme = Theme.of(context).colorScheme;
+          final colorScheme = context.colorScheme;
 
           return IgnorePointer(
             ignoring: !visible,

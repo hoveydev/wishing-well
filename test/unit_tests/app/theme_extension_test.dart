@@ -8,49 +8,49 @@ void main() {
       test('overrides provided values', () {
         const original = ColorSchemeExtension(
           success: Color(0xFF00FF00),
-          onSuccess: Color(0xFFFFFFFF),
+          primary: Color(0xFFFFFFFF),
         );
 
         final updated = original.copyWith(success: const Color(0xFF0000FF));
 
         expect(updated.success, const Color(0xFF0000FF));
-        expect(updated.onSuccess, const Color(0xFFFFFFFF));
+        expect(updated.primary, const Color(0xFFFFFFFF));
       });
 
       test('keeps original values when null', () {
         const original = ColorSchemeExtension(
           success: Color(0xFF00FF00),
-          onSuccess: Color(0xFFFFFFFF),
+          primary: Color(0xFFFFFFFF),
         );
 
         final updated = original.copyWith();
 
         expect(updated.success, original.success);
-        expect(updated.onSuccess, original.onSuccess);
+        expect(updated.primary, original.primary);
       });
     });
 
     group('ColorSchemeExtension.lerp', () {
       const a = ColorSchemeExtension(
         success: Color(0xFF000000),
-        onSuccess: Color(0xFFFFFFFF),
+        primary: Color(0xFFFFFFFF),
       );
 
       const b = ColorSchemeExtension(
         success: Color(0xFFFFFFFF),
-        onSuccess: Color(0xFF000000),
+        primary: Color(0xFF000000),
       );
 
       test('returns start when t = 0', () {
         final result = a.lerp(b, 0.0);
         expect(result.success, a.success);
-        expect(result.onSuccess, a.onSuccess);
+        expect(result.primary, a.primary);
       });
 
       test('returns end when t = 1', () {
         final result = a.lerp(b, 1.0);
         expect(result.success, b.success);
-        expect(result.onSuccess, b.onSuccess);
+        expect(result.primary, b.primary);
       });
 
       test('returns this when other is different type', () {

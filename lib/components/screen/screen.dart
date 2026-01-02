@@ -19,7 +19,7 @@ class Screen extends StatelessWidget {
     final colorScheme = context.colorScheme;
     return Scaffold(
       appBar: appBar,
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.background,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) => SingleChildScrollView(

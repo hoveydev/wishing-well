@@ -32,7 +32,7 @@ class LoadingOverlay extends StatelessWidget {
                     color: Colors.transparent,
                   ),
                   Container(
-                    color: colorScheme.surface,
+                    color: colorScheme.background,
                     child: const Center(child: AppThrobber.xlarge()),
                   ),
                 ],

@@ -115,5 +115,4 @@ void main() {
       },
     );
   });
-  // TODO: add dark mode tests for coloring
 }

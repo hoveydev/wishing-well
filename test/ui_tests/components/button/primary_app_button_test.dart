@@ -44,7 +44,7 @@ void main() {
       expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
       expect(
         buttonWidget.style!.foregroundColor?.resolve({}),
-        AppColors.darkText,
+        AppColors.onPrimary,
       );
       await tester.tap(find.byType(AppButton));
       expect(buttonTapped, true);
@@ -127,7 +127,7 @@ void main() {
         expect(buttonWidget.style!.padding!.resolve({}), edgeInsets);
         expect(
           buttonWidget.style!.foregroundColor?.resolve({}),
-          AppColors.darkText,
+          AppColors.onPrimary,
         );
         await tester.tap(find.byType(AppButton));
         expect(buttonTapped, true);
@@ -147,5 +147,4 @@ void main() {
       },
     );
   });
-  // TODO: add dark mode tests for coloring
 }

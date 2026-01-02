@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
+import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 class AppInlineAlert extends StatelessWidget {
   const AppInlineAlert({required this.message, required this.type, super.key});
@@ -9,17 +11,20 @@ class AppInlineAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
+    final colorScheme = context.colorScheme;
 
     return Row(
       children: [
         // Icon based on type
-        Icon(_getIcon(), color: _getColor()),
+        Icon(_getIcon(), color: _getColor(colorScheme)),
         const SizedBox(width: 8),
         // Message text
         Expanded(
           child: Text(
             message,
-            style: textStyle.bodyMedium?.copyWith(color: _getColor()),
+            style: textStyle.bodyMedium?.copyWith(
+              color: _getColor(colorScheme),
+            ),
           ),
         ),
       ],
@@ -39,17 +44,16 @@ class AppInlineAlert extends StatelessWidget {
     }
   }
 
-  Color _getColor() {
-    // TODO: Replace with theme colors
+  Color? _getColor(ColorSchemeExtension colorScheme) {
     switch (type) {
       case AppInlineAlertType.info:
-        return Colors.blue;
+        return colorScheme.primary;
       case AppInlineAlertType.success:
-        return Colors.green;
+        return colorScheme.success;
       case AppInlineAlertType.warning:
-        return Colors.orange;
+        return colorScheme.warning;
       case AppInlineAlertType.error:
-        return Colors.red;
+        return colorScheme.error;
     }
   }
 }

@@ -12,8 +12,11 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       ColorSchemeExtension(
         primary: AppColors.primary,
-        onPrimary: AppColors.darkText,
-        success: AppColors.alertSuccess,
+        onPrimary: AppColors.onPrimary,
+        background: AppColors.background,
+        success: AppColors.success,
+        warning: AppColors.warning,
+        error: AppColors.error,
       ),
     ],
     textTheme: GoogleFonts.nunitoSansTextTheme(
@@ -21,7 +24,6 @@ class AppTheme {
     ).apply(bodyColor: AppColors.primary, displayColor: AppColors.primary),
   );
 
-  // TODO: update colors
   static ThemeData get darkTheme => ThemeData(
     splashFactory: NoSplash.splashFactory,
     brightness: Brightness.dark,
@@ -30,8 +32,11 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       ColorSchemeExtension(
         primary: AppColors.darkPrimary,
-        onPrimary: AppColors.darkBackground,
-        success: AppColors.darkAlertSuccess,
+        onPrimary: AppColors.darkOnPrimary,
+        background: AppColors.darkBackground,
+        success: AppColors.darkSuccess,
+        warning: AppColors.darkWarning,
+        error: AppColors.darkError,
       ),
     ],
     textTheme: GoogleFonts.nunitoSansTextTheme(ThemeData.dark().textTheme)

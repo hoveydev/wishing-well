@@ -3,13 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
-Widget createTestWidget(Widget child) => MaterialApp(
-  theme: AppTheme.lightTheme,
-  darkTheme: AppTheme.darkTheme,
-  home: Scaffold(body: child),
-);
+import '../../../../testing_resources/helpers/create_test_widget.dart';
 
 final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(14),

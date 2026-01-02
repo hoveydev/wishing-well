@@ -4,13 +4,8 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
-Widget createTestWidget(Widget child) => MaterialApp(
-  theme: AppTheme.lightTheme,
-  darkTheme: AppTheme.darkTheme,
-  home: Scaffold(body: child),
-);
+import '../../../../testing_resources/helpers/create_test_widget.dart';
 
 void main() {
   group('All Input Styles', () {

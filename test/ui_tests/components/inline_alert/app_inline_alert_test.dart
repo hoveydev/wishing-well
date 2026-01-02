@@ -2,39 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
-import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
-Widget createTestWidget(AppInlineAlertType alertType) => MaterialApp(
-  theme: AppTheme.lightTheme,
-  darkTheme: AppTheme.darkTheme,
-  home: Screen(
-    children: [AppInlineAlert(message: 'testMessage', type: alertType)],
-  ),
-);
+import '../../../../testing_resources/helpers/create_test_widget.dart';
 
 void main() {
   group('inline alert types', () {
-    testWidgets('info type', (tester) async {
-      final successAlert = createTestWidget(AppInlineAlertType.info);
-      await tester.pumpWidget(successAlert);
+    testWidgets('info', (tester) async {
+      final infoAlert = createTestWidget(
+        const AppInlineAlert(
+          message: 'infoMessage',
+          type: AppInlineAlertType.info,
+        ),
+      );
+      await tester.pumpWidget(infoAlert);
       expect(find.byType(AppInlineAlert), findsOneWidget);
-      final successAlertTextFinder = find.byWidgetPredicate(
-        (widget) => widget is Text && widget.data == 'testMessage',
+      final infoAlertTextFinder = find.byWidgetPredicate(
+        (widget) => widget is Text && widget.data == 'infoMessage',
       );
-      final successAlertTextWidget = tester.widget<Text>(
-        successAlertTextFinder,
-      );
-      expect(successAlertTextWidget.style?.color, AppColors.primary);
+      final infoAlertTextWidget = tester.widget<Text>(infoAlertTextFinder);
+      expect(infoAlertTextWidget.style?.color, AppColors.primary);
     });
 
-    testWidgets('success type', (tester) async {
-      final successAlert = createTestWidget(AppInlineAlertType.success);
+    testWidgets('success', (tester) async {
+      final successAlert = createTestWidget(
+        const AppInlineAlert(
+          message: 'successMessage',
+          type: AppInlineAlertType.success,
+        ),
+      );
       await tester.pumpWidget(successAlert);
       expect(find.byType(AppInlineAlert), findsOneWidget);
       final successAlertTextFinder = find.byWidgetPredicate(
-        (widget) => widget is Text && widget.data == 'testMessage',
+        (widget) => widget is Text && widget.data == 'successMessage',
       );
       final successAlertTextWidget = tester.widget<Text>(
         successAlertTextFinder,
@@ -42,30 +42,38 @@ void main() {
       expect(successAlertTextWidget.style?.color, AppColors.success);
     });
 
-    testWidgets('warning type', (tester) async {
-      final successAlert = createTestWidget(AppInlineAlertType.warning);
-      await tester.pumpWidget(successAlert);
+    testWidgets('warning', (tester) async {
+      final warningAlert = createTestWidget(
+        const AppInlineAlert(
+          message: 'warningMessage',
+          type: AppInlineAlertType.warning,
+        ),
+      );
+      await tester.pumpWidget(warningAlert);
       expect(find.byType(AppInlineAlert), findsOneWidget);
-      final successAlertTextFinder = find.byWidgetPredicate(
-        (widget) => widget is Text && widget.data == 'testMessage',
+      final warningAlertTextFinder = find.byWidgetPredicate(
+        (widget) => widget is Text && widget.data == 'warningMessage',
       );
-      final successAlertTextWidget = tester.widget<Text>(
-        successAlertTextFinder,
+      final warningAlertTextWidget = tester.widget<Text>(
+        warningAlertTextFinder,
       );
-      expect(successAlertTextWidget.style?.color, AppColors.warning);
+      expect(warningAlertTextWidget.style?.color, AppColors.warning);
     });
 
-    testWidgets('error type', (tester) async {
-      final successAlert = createTestWidget(AppInlineAlertType.error);
-      await tester.pumpWidget(successAlert);
+    testWidgets('error', (tester) async {
+      final errorAlert = createTestWidget(
+        const AppInlineAlert(
+          message: 'errorMessage',
+          type: AppInlineAlertType.error,
+        ),
+      );
+      await tester.pumpWidget(errorAlert);
       expect(find.byType(AppInlineAlert), findsOneWidget);
-      final successAlertTextFinder = find.byWidgetPredicate(
-        (widget) => widget is Text && widget.data == 'testMessage',
+      final errorAlertTextFinder = find.byWidgetPredicate(
+        (widget) => widget is Text && widget.data == 'errorMessage',
       );
-      final successAlertTextWidget = tester.widget<Text>(
-        successAlertTextFinder,
-      );
-      expect(successAlertTextWidget.style?.color, AppColors.error);
+      final errorAlertTextWidget = tester.widget<Text>(errorAlertTextFinder);
+      expect(errorAlertTextWidget.style?.color, AppColors.error);
     });
   });
 }

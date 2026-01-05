@@ -1,5 +1,5 @@
-class AppLogoSize {
-  const AppLogoSize({this.sectionHeight});
+class AppIconSize {
+  const AppIconSize({this.sectionHeight});
   final double? sectionHeight;
 
   static const double _large = 60.0;

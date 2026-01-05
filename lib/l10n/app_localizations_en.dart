@@ -65,37 +65,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccountErrorBadEmail => 'Invalid email format';
 
   @override
-  String get createAccountErrorNoPasswordNoEmail =>
-      'Email and password cannot be empty';
-
-  @override
   String get createAccountErrorNoEmail => 'Email cannot be empty';
 
   @override
-  String get createAccountErrorNoPassword => 'Password cannot be empty';
-
-  @override
-  String get createAccountErrorPasswordTooShort =>
-      'Password must be at least 12 characters long';
-
-  @override
-  String get createAccountErrorPasswordNoUppercase =>
-      'Password must contain at least 1 uppercase letter';
-
-  @override
-  String get createAccountErrorPasswordNoLowercase =>
-      'Password must contain at least 1 lowercase letter';
-
-  @override
-  String get createAccountErrorPasswordNoDigit =>
-      'Password must contain at least 1 digit';
-
-  @override
-  String get createAccountErrorPasswordNoSpecial =>
-      'Password must contain at least 1 special character';
-
-  @override
-  String get createAccountErrorPasswordsDontMatch => 'Passwords must match';
+  String get createAccountErrorPasswordNotValid =>
+      'Password does not meet above requirements';
 
   @override
   String get createAccountErrorUnknown =>
@@ -137,30 +111,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter and confirm your new password below';
 
   @override
-  String get resetPasswordErrorNoPassword => 'Password cannot be empty';
-
-  @override
-  String get resetPasswordErrorPasswordTooShort =>
-      'Password must be at least 12 characters long';
-
-  @override
-  String get resetPasswordErrorPasswordNoUppercase =>
-      'Password must contain at least 1 uppercase letter';
-
-  @override
-  String get resetPasswordErrorPasswordNoLowercase =>
-      'Password must contain at least 1 lowercase letter';
-
-  @override
-  String get resetPasswordErrorPasswordNoDigit =>
-      'Password must contain at least 1 digit';
-
-  @override
-  String get resetPasswordErrorPasswordNoSpecial =>
-      'Password must contain at least 1 special character';
-
-  @override
-  String get resetPasswordErrorPasswordsDontMatch => 'Passwords must match';
+  String get resetPasswordErrorPasswordNotValid =>
+      'Password does not meet above requirements';
 
   @override
   String get resetPasswordErrorUnknown =>
@@ -172,6 +124,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get resetPasswordConfirmationInfoMessage =>
       'You may now log in with your new password';
+
+  @override
+  String get passwordRequirementsHeader => 'Password must include:';
+
+  @override
+  String get passwordRequirementsMinimumChars => 'At least 12 characters';
+
+  @override
+  String get passwordRequirementsUppercase => 'One uppercase letter';
+
+  @override
+  String get passwordRequirementsLowercase => 'One lowercase letter';
+
+  @override
+  String get passwordRequirementsDigit => 'One number';
+
+  @override
+  String get passwordRequirementsSpecialChar => 'One special character';
+
+  @override
+  String get passwordRequirementsMatching => 'Passwords must match';
 
   @override
   String get submit => 'Submit';

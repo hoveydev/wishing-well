@@ -6,7 +6,9 @@ import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/create_account/create_account_button.dart';
 import 'package:wishing_well/screens/create_account/create_account_header.dart';
+import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
 import 'package:wishing_well/screens/create_account/create_account_inputs.dart';
+import 'package:wishing_well/screens/create_account/create_account_password_checklist.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -35,12 +37,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       ),
     ),
     children: [
-      // TODO: consider having a 'password requirements' section
-      // that can check off each satisfying criteria
-      const AppSpacer.xlarge(),
       const CreateAccountHeader(),
       const AppSpacer.xlarge(),
       CreateAccountInputs(viewModel: widget.viewModel),
+      const AppSpacer.large(),
+      CreateAccountPasswordChecklist(viewModel: widget.viewModel),
+      CreateAccountInlineError(viewModel: widget.viewModel),
       const Spacer(),
       CreateAccountButton(viewModel: widget.viewModel),
       const AppSpacer.large(),

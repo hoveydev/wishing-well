@@ -129,30 +129,13 @@ void main() {
       final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppButton && widget.label == 'Reset Password',
       );
+      await tester.ensureVisible(resetPasswordButtonWidgetFinder);
       await tester.tap(resetPasswordButtonWidgetFinder);
       await tester.pumpAndSettle();
-      expect(find.text('Email and password cannot be empty'), findsNothing);
-      expect(find.text('Email cannot be empty'), findsNothing);
-      expect(find.text('Password cannot be empty'), findsNothing);
-      expect(find.text('Invalid email format'), findsNothing);
       expect(
-        find.text('Password must be at least 12 characters long'),
+        find.text('Password does not meet above requirements'),
         findsNothing,
       );
-      expect(
-        find.text('Password must contain at least 1 uppercase letter'),
-        findsNothing,
-      );
-      expect(
-        find.text('Password must contain at least 1 lowercase letter'),
-        findsNothing,
-      );
-      expect(find.text('Password must contain at least 1 digit'), findsNothing);
-      expect(
-        find.text('Password must contain at least 1 special character'),
-        findsNothing,
-      );
-      expect(find.text('Passwords must match'), findsNothing);
     });
 
     group('Reset Password Error Scenarios', () {
@@ -161,9 +144,13 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
-        expect(find.text('Password cannot be empty'), findsOneWidget);
+        expect(
+          find.text('Password does not meet above requirements'),
+          findsOneWidget,
+        );
       });
 
       testWidgets('invalid password length error', (WidgetTester tester) async {
@@ -178,10 +165,11 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
         expect(
-          find.text('Password must be at least 12 characters long'),
+          find.text('Password does not meet above requirements'),
           findsOneWidget,
         );
       });
@@ -200,10 +188,11 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
         expect(
-          find.text('Password must contain at least 1 uppercase letter'),
+          find.text('Password does not meet above requirements'),
           findsOneWidget,
         );
       });
@@ -222,10 +211,11 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
         expect(
-          find.text('Password must contain at least 1 lowercase letter'),
+          find.text('Password does not meet above requirements'),
           findsOneWidget,
         );
       });
@@ -242,10 +232,11 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
         expect(
-          find.text('Password must contain at least 1 digit'),
+          find.text('Password does not meet above requirements'),
           findsOneWidget,
         );
       });
@@ -264,10 +255,11 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
         expect(
-          find.text('Password must contain at least 1 special character'),
+          find.text('Password does not meet above requirements'),
           findsOneWidget,
         );
       });
@@ -294,9 +286,13 @@ void main() {
         final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
           (widget) => widget is AppButton && widget.label == 'Reset Password',
         );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
         await tester.tap(resetPasswordButtonWidgetFinder);
         await tester.pumpAndSettle();
-        expect(find.text('Passwords must match'), findsOneWidget);
+        expect(
+          find.text('Password does not meet above requirements'),
+          findsOneWidget,
+        );
       });
     });
   });

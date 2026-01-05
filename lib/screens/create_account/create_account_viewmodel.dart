@@ -15,22 +15,25 @@ abstract class CreateAccountViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   CreateAccountErrorType get validationMessage;
+  Set<CreateAccountPasswordRequirements> get metPasswordRequirements;
   Future<void> tapCreateAccountButton(BuildContext context);
 }
 
 enum CreateAccountErrorType {
   none,
-  noPasswordNoEmail,
   noEmail,
   badEmail,
-  noPassword,
-  passwordTooShort,
-  passwordNoUppercase,
-  passwordNoLowercase,
-  passwordNoDigit,
-  passwordNoSpecial,
-  passwordsDontMatch,
+  passwordRequirementsNotMet,
   unknownError,
+}
+
+enum CreateAccountPasswordRequirements {
+  adequateLength,
+  containsUppercase,
+  containsLowercase,
+  containsDigit,
+  containsSpecial,
+  matching,
 }
 
 class CreateAccountViewmodel extends ChangeNotifier
@@ -52,11 +55,32 @@ class CreateAccountViewmodel extends ChangeNotifier
   @override
   void updatePasswordOneField(String password) {
     _passwordOne = password;
+    _checkPasswordRequirements(password);
   }
 
   @override
   void updatePasswordTwoField(String password) {
     _passwordTwo = password;
+    _checkPasswordsMatch(_passwordOne, _passwordTwo);
+  }
+
+  @override
+  Set<CreateAccountPasswordRequirements> get metPasswordRequirements =>
+      _metPasswordRequirements;
+
+  final Set<CreateAccountPasswordRequirements> _metPasswordRequirements = {};
+  set _addMetPasswordRequirement(
+    CreateAccountPasswordRequirements requirement,
+  ) {
+    _metPasswordRequirements.add(requirement);
+    notifyListeners();
+  }
+
+  set _removeMetPasswordRequirement(
+    CreateAccountPasswordRequirements requirement,
+  ) {
+    _metPasswordRequirements.remove(requirement);
+    notifyListeners();
   }
 
   @override
@@ -71,37 +95,58 @@ class CreateAccountViewmodel extends ChangeNotifier
   @override
   bool get hasAlert => _validationMessage != CreateAccountErrorType.none;
 
-  // TODO: Update so more than one error can be dislpayed
-  // might want to create a list on the screen itself
-  bool _passwordIsNotValid(String password) {
-    if (password.length < 12) {
-      _setValidationMessage = CreateAccountErrorType.passwordTooShort;
-      return true;
+  void _checkPasswordRequirements(String password) {
+    if (password.length >= 12) {
+      _addMetPasswordRequirement =
+          CreateAccountPasswordRequirements.adequateLength;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.adequateLength;
     }
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      _setValidationMessage = CreateAccountErrorType.passwordNoUppercase;
-      return true;
+    if (password.contains(RegExp(r'[A-Z]'))) {
+      _addMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsUppercase;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsUppercase;
     }
-    if (!password.contains(RegExp(r'[a-z]'))) {
-      _setValidationMessage = CreateAccountErrorType.passwordNoLowercase;
-      return true;
+    if (password.contains(RegExp(r'[a-z]'))) {
+      _addMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsLowercase;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsLowercase;
     }
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      _setValidationMessage = CreateAccountErrorType.passwordNoDigit;
-      return true;
+    if (password.contains(RegExp(r'[0-9]'))) {
+      _addMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsDigit;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsDigit;
     }
-    if (!password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-      _setValidationMessage = CreateAccountErrorType.passwordNoSpecial;
-      return true;
+    if (password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
+      _addMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsSpecial;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.containsSpecial;
     }
-    return false;
   }
 
-  bool _isFormValid(String email, String passwordOne, String passwordTwo) {
-    if (email.isEmpty && passwordOne.isEmpty) {
-      _setValidationMessage = CreateAccountErrorType.noPasswordNoEmail;
-      return false;
+  void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
+    if (passwordOne == passwordTwo) {
+      _addMetPasswordRequirement = CreateAccountPasswordRequirements.matching;
+    } else {
+      _removeMetPasswordRequirement =
+          CreateAccountPasswordRequirements.matching;
     }
+  }
+
+  bool _passwordIsValid() => metPasswordRequirements.containsAll(
+    CreateAccountPasswordRequirements.values,
+  );
+
+  bool _isFormValid(String email, String passwordOne, String passwordTwo) {
     if (email.isEmpty) {
       _setValidationMessage = CreateAccountErrorType.noEmail;
       return false;
@@ -113,15 +158,8 @@ class CreateAccountViewmodel extends ChangeNotifier
       _setValidationMessage = CreateAccountErrorType.badEmail;
       return false;
     }
-    if (passwordOne.isEmpty) {
-      _setValidationMessage = CreateAccountErrorType.noPassword;
-      return false;
-    }
-    if (_passwordIsNotValid(passwordOne)) {
-      return false;
-    }
-    if (passwordOne != passwordTwo) {
-      _setValidationMessage = CreateAccountErrorType.passwordsDontMatch;
+    if (!_passwordIsValid()) {
+      _setValidationMessage = CreateAccountErrorType.passwordRequirementsNotMet;
       return false;
     }
     _setValidationMessage = CreateAccountErrorType.none;

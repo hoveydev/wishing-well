@@ -10,5 +10,5 @@ class AppSpacer extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) => SizedBox(height: height);
+  Widget build(BuildContext context) => SizedBox(height: height, width: height);
 }

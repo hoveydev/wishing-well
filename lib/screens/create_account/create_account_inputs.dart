@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
-import 'package:wishing_well/components/inline_alert/app_inline_alert_spacing.dart';
-import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
@@ -39,54 +36,7 @@ class CreateAccountInputs extends StatelessWidget {
           onChanged: (String password) =>
               viewModel.updatePasswordTwoField(password),
         ),
-        ListenableBuilder(
-          listenable: viewModel,
-          builder: (context, _) => Visibility(
-            visible: viewModel.hasAlert,
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            child: Padding(
-              padding: AppInlineAlertSpacing.inputPadding,
-              child: AppInlineAlert(
-                message: _validationMessage(context),
-                type: AppInlineAlertType.error,
-              ),
-            ),
-          ),
-        ),
       ],
     );
-  }
-
-  String _validationMessage(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    switch (viewModel.validationMessage) {
-      case CreateAccountErrorType.badEmail:
-        return l10n.createAccountErrorBadEmail;
-      case CreateAccountErrorType.noEmail:
-        return l10n.createAccountErrorNoEmail;
-      case CreateAccountErrorType.noPassword:
-        return l10n.createAccountErrorNoPassword;
-      case CreateAccountErrorType.noPasswordNoEmail:
-        return l10n.createAccountErrorNoPasswordNoEmail;
-      case CreateAccountErrorType.passwordTooShort:
-        return l10n.createAccountErrorPasswordTooShort;
-      case CreateAccountErrorType.passwordNoUppercase:
-        return l10n.createAccountErrorPasswordNoUppercase;
-      case CreateAccountErrorType.passwordNoLowercase:
-        return l10n.createAccountErrorPasswordNoLowercase;
-      case CreateAccountErrorType.passwordNoDigit:
-        return l10n.createAccountErrorPasswordNoDigit;
-      case CreateAccountErrorType.passwordNoSpecial:
-        return l10n.createAccountErrorPasswordNoSpecial;
-      case CreateAccountErrorType.passwordsDontMatch:
-        return l10n.createAccountErrorPasswordsDontMatch;
-      case CreateAccountErrorType.unknownError:
-        return l10n.createAccountErrorUnknown;
-      case CreateAccountErrorType.none:
-        return '';
-    }
   }
 }

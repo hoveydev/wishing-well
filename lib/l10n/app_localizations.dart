@@ -202,59 +202,17 @@ abstract class AppLocalizations {
   /// **'Invalid email format'**
   String get createAccountErrorBadEmail;
 
-  /// Create account error message when both email and password are empty
-  ///
-  /// In en, this message translates to:
-  /// **'Email and password cannot be empty'**
-  String get createAccountErrorNoPasswordNoEmail;
-
   /// Create account error message when email is empty
   ///
   /// In en, this message translates to:
   /// **'Email cannot be empty'**
   String get createAccountErrorNoEmail;
 
-  /// Create account error message when password is empty
+  /// Create account error message when password is not valid
   ///
   /// In en, this message translates to:
-  /// **'Password cannot be empty'**
-  String get createAccountErrorNoPassword;
-
-  /// Create account error message when password is less than 12 characters
-  ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 12 characters long'**
-  String get createAccountErrorPasswordTooShort;
-
-  /// Create account error message when password does not contain an uppercase letter
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 uppercase letter'**
-  String get createAccountErrorPasswordNoUppercase;
-
-  /// Create account error message when password does not contain an lowercase letter
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 lowercase letter'**
-  String get createAccountErrorPasswordNoLowercase;
-
-  /// Create account error message when password does not contain a digit
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 digit'**
-  String get createAccountErrorPasswordNoDigit;
-
-  /// Create account error message when password does not contain a special character
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 special character'**
-  String get createAccountErrorPasswordNoSpecial;
-
-  /// Create account error message when passwords do not match
-  ///
-  /// In en, this message translates to:
-  /// **'Passwords must match'**
-  String get createAccountErrorPasswordsDontMatch;
+  /// **'Password does not meet above requirements'**
+  String get createAccountErrorPasswordNotValid;
 
   /// Create account error message when supabase call has an error
   ///
@@ -322,47 +280,11 @@ abstract class AppLocalizations {
   /// **'Enter and confirm your new password below'**
   String get resetPasswordSubtext;
 
-  /// Reset password error message when password is empty
+  /// Create account error message when password is not valid
   ///
   /// In en, this message translates to:
-  /// **'Password cannot be empty'**
-  String get resetPasswordErrorNoPassword;
-
-  /// Reset password error message when password is less than 12 characters
-  ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 12 characters long'**
-  String get resetPasswordErrorPasswordTooShort;
-
-  /// Reset password error message when password does not contain an uppercase letter
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 uppercase letter'**
-  String get resetPasswordErrorPasswordNoUppercase;
-
-  /// Reset password error message when password does not contain an lowercase letter
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 lowercase letter'**
-  String get resetPasswordErrorPasswordNoLowercase;
-
-  /// Reset password error message when password does not contain a digit
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 digit'**
-  String get resetPasswordErrorPasswordNoDigit;
-
-  /// Reset password error message when password does not contain a special character
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain at least 1 special character'**
-  String get resetPasswordErrorPasswordNoSpecial;
-
-  /// Reset password error message when passwords do not match
-  ///
-  /// In en, this message translates to:
-  /// **'Passwords must match'**
-  String get resetPasswordErrorPasswordsDontMatch;
+  /// **'Password does not meet above requirements'**
+  String get resetPasswordErrorPasswordNotValid;
 
   /// Reset password error message when supabase call has an error
   ///
@@ -381,6 +303,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You may now log in with your new password'**
   String get resetPasswordConfirmationInfoMessage;
+
+  /// Header for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'Password must include:'**
+  String get passwordRequirementsHeader;
+
+  /// Minimum characters requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'At least 12 characters'**
+  String get passwordRequirementsMinimumChars;
+
+  /// Uppercase letter requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'One uppercase letter'**
+  String get passwordRequirementsUppercase;
+
+  /// Lowercase letter requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'One lowercase letter'**
+  String get passwordRequirementsLowercase;
+
+  /// Number requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'One number'**
+  String get passwordRequirementsDigit;
+
+  /// Special character requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'One special character'**
+  String get passwordRequirementsSpecialChar;
+
+  /// Matching passwords requirement for password requirements checklist
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords must match'**
+  String get passwordRequirementsMatching;
 
   /// Label for submit button on Forgot Password screen
   ///

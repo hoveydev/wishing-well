@@ -146,6 +146,7 @@ void main() {
             widget.placeholder == 'Confirm Password',
       );
       await tester.enterText(confirmPasswordWidgetFinder, 'Password123!');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/create-account/confirm');
@@ -198,6 +199,7 @@ void main() {
           widget.type == AppButtonType.primary &&
           widget.label == 'Reset Password',
     );
+    await tester.ensureVisible(resetPasswordButtonWidgetFinder);
     await tester.tap(resetPasswordButtonWidgetFinder);
     await tester.pumpAndSettle();
     expect(mockRouter.state.uri.path, '/forgot-password/reset/confirm');

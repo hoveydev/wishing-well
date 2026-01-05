@@ -12,7 +12,7 @@ import 'package:wishing_well/screens/create_account/create_account_viewmodel.dar
 
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-dynamic startAppWithForgotPasswordScreen(WidgetTester tester) async {
+dynamic startAppWithCreateAccountScreen(WidgetTester tester) async {
   final controller = LoadingController();
   final ChangeNotifierProvider app =
       ChangeNotifierProvider<LoadingController>.value(
@@ -43,7 +43,7 @@ void main() {
     testWidgets('Renders Screen With All Elements', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       expect(find.text('Create an Account'), findsOneWidget);
       expect(find.text('Please enter your credentials below'), findsOneWidget);
       expect(find.widgetWithText(TextField, 'Email'), findsOneWidget);
@@ -56,7 +56,7 @@ void main() {
     });
 
     testWidgets('email text field updates', (WidgetTester tester) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -71,7 +71,7 @@ void main() {
     });
 
     testWidgets('password text field updates', (WidgetTester tester) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final passwordWidgetFinder = find.byWidgetPredicate(
         (widget) =>
             widget is AppInput &&
@@ -91,7 +91,7 @@ void main() {
     testWidgets('confirm password text field updates', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final confirmPasswordWidgetFinder = find.byWidgetPredicate(
         (widget) =>
             widget is AppInput &&
@@ -111,7 +111,7 @@ void main() {
     testWidgets('create account validation success', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -133,30 +133,16 @@ void main() {
         confirmPasswordWidgetFinder,
         'passwordPASSWORD123@#',
       );
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
-      expect(find.text('Email and password cannot be empty'), findsNothing);
       expect(find.text('Email cannot be empty'), findsNothing);
       expect(find.text('Password cannot be empty'), findsNothing);
       expect(find.text('Invalid email format'), findsNothing);
       expect(
-        find.text('Password must be at least 12 characters long'),
+        find.text('Password does not meet above requirements'),
         findsNothing,
       );
-      expect(
-        find.text('Password must contain at least 1 uppercase letter'),
-        findsNothing,
-      );
-      expect(
-        find.text('Password must contain at least 1 lowercase letter'),
-        findsNothing,
-      );
-      expect(find.text('Password must contain at least 1 digit'), findsNothing);
-      expect(
-        find.text('Password must contain at least 1 special character'),
-        findsNothing,
-      );
-      expect(find.text('Passwords must match'), findsNothing);
     });
   });
 
@@ -164,16 +150,17 @@ void main() {
     testWidgets('no email no password create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
-      expect(find.text('Email and password cannot be empty'), findsOneWidget);
+      expect(find.text('Email cannot be empty'), findsOneWidget);
     });
 
     testWidgets('no email only create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final passwordWidgetFinder = find.byWidgetPredicate(
         (widget) =>
             widget is AppInput &&
@@ -181,6 +168,7 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'password');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(find.text('Email cannot be empty'), findsOneWidget);
@@ -189,20 +177,24 @@ void main() {
     testWidgets('no password only create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
       await tester.enterText(emailWidgetFinder, 'email@email.com');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
-      expect(find.text('Password cannot be empty'), findsOneWidget);
+      expect(
+        find.text('Password does not meet above requirements'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('invalid email create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -214,6 +206,7 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'password');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(find.text('Invalid email format'), findsOneWidget);
@@ -222,7 +215,7 @@ void main() {
     testWidgets('invalid password length create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -234,10 +227,11 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'password');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(
-        find.text('Password must be at least 12 characters long'),
+        find.text('Password does not meet above requirements'),
         findsOneWidget,
       );
     });
@@ -245,7 +239,7 @@ void main() {
     testWidgets('no uppercase in password create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -257,10 +251,11 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'password123456');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(
-        find.text('Password must contain at least 1 uppercase letter'),
+        find.text('Password does not meet above requirements'),
         findsOneWidget,
       );
     });
@@ -268,7 +263,7 @@ void main() {
     testWidgets('no lowercase in password create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -280,10 +275,11 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'PASSWORD123456');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(
-        find.text('Password must contain at least 1 lowercase letter'),
+        find.text('Password does not meet above requirements'),
         findsOneWidget,
       );
     });
@@ -291,7 +287,7 @@ void main() {
     testWidgets('no digits in password create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -303,10 +299,11 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(
-        find.text('Password must contain at least 1 digit'),
+        find.text('Password does not meet above requirements'),
         findsOneWidget,
       );
     });
@@ -314,7 +311,7 @@ void main() {
     testWidgets('no special character in password create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -326,10 +323,11 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(passwordWidgetFinder, 'password123456PASSWORD');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
       expect(
-        find.text('Password must contain at least 1 special character'),
+        find.text('Password does not meet above requirements'),
         findsOneWidget,
       );
     });
@@ -337,7 +335,7 @@ void main() {
     testWidgets('passwords don\'t match create account error', (
       WidgetTester tester,
     ) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithCreateAccountScreen(tester);
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -356,9 +354,13 @@ void main() {
             widget.placeholder == 'Password',
       );
       await tester.enterText(confirmPasswordWidgetFinder, 'password123456P@#');
+      await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();
-      expect(find.text('Passwords must match'), findsOneWidget);
+      expect(
+        find.text('Password does not meet above requirements'),
+        findsOneWidget,
+      );
     });
   });
 }

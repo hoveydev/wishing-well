@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_logo_size.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
@@ -12,7 +12,7 @@ class LoginHeader extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final screenHeight = MediaQuery.of(context).size.height;
-    final logoSize = AppLogoSize(sectionHeight: screenHeight).large;
+    final logoSize = AppIconSize(sectionHeight: screenHeight).large;
 
     return Column(
       spacing: AppSpacerSize.small,

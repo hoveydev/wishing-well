@@ -72,41 +72,13 @@
     "@createAccountErrorBadEmail": {
         "description": "Create account error message when email format is invalid"
     },
-    "createAccountErrorNoPasswordNoEmail": "Email and password cannot be empty",
-    "@createAccountErrorNoPasswordNoEmail": {
-        "description": "Create account error message when both email and password are empty"
-    },
     "createAccountErrorNoEmail": "Email cannot be empty",
     "@createAccountErrorNoEmail": {
         "description": "Create account error message when email is empty"
     },
-    "createAccountErrorNoPassword": "Password cannot be empty",
-    "@createAccountErrorNoPassword": {
-        "description": "Create account error message when password is empty"
-    },
-    "createAccountErrorPasswordTooShort": "Password must be at least 12 characters long",
-    "@createAccountErrorPasswordTooShort": {
-        "description": "Create account error message when password is less than 12 characters"
-    },
-    "createAccountErrorPasswordNoUppercase": "Password must contain at least 1 uppercase letter",
-    "@createAccountErrorPasswordNoUppercase": {
-        "description": "Create account error message when password does not contain an uppercase letter"
-    },
-    "createAccountErrorPasswordNoLowercase": "Password must contain at least 1 lowercase letter",
-    "@createAccountErrorPasswordNoLowercase": {
-        "description": "Create account error message when password does not contain an lowercase letter"
-    },
-    "createAccountErrorPasswordNoDigit": "Password must contain at least 1 digit",
-    "@createAccountErrorPasswordNoDigit": {
-        "description": "Create account error message when password does not contain a digit"
-    },
-    "createAccountErrorPasswordNoSpecial": "Password must contain at least 1 special character",
-    "@createAccountErrorPasswordNoSpecial": {
-        "description": "Create account error message when password does not contain a special character"
-    },
-    "createAccountErrorPasswordsDontMatch": "Passwords must match",
-    "@createAccountErrorPasswordsDontMatch": {
-        "description": "Create account error message when passwords do not match"
+    "createAccountErrorPasswordNotValid": "Password does not meet above requirements",
+    "@createAccountErrorPasswordNotValid": {
+        "description": "Create account error message when password is not valid"
     },
     "createAccountErrorUnknown": "An unknown error occured. Please try again",
     "@createAccountErrorUnknown": {
@@ -152,33 +124,9 @@
     "@resetPasswordSubtext": {
         "description": "Subtext for Reset Password screen"
     },
-    "resetPasswordErrorNoPassword": "Password cannot be empty",
-    "@resetPasswordErrorNoPassword": {
-        "description": "Reset password error message when password is empty"
-    },
-    "resetPasswordErrorPasswordTooShort": "Password must be at least 12 characters long",
-    "@resetPasswordErrorPasswordTooShort": {
-        "description": "Reset password error message when password is less than 12 characters"
-    },
-    "resetPasswordErrorPasswordNoUppercase": "Password must contain at least 1 uppercase letter",
-    "@resetPasswordErrorPasswordNoUppercase": {
-        "description": "Reset password error message when password does not contain an uppercase letter"
-    },
-    "resetPasswordErrorPasswordNoLowercase": "Password must contain at least 1 lowercase letter",
-    "@resetPasswordErrorPasswordNoLowercase": {
-        "description": "Reset password error message when password does not contain an lowercase letter"
-    },
-    "resetPasswordErrorPasswordNoDigit": "Password must contain at least 1 digit",
-    "@resetPasswordErrorPasswordNoDigit": {
-        "description": "Reset password error message when password does not contain a digit"
-    },
-    "resetPasswordErrorPasswordNoSpecial": "Password must contain at least 1 special character",
-    "@resetPasswordErrorPasswordNoSpecial": {
-        "description": "Reset password error message when password does not contain a special character"
-    },
-    "resetPasswordErrorPasswordsDontMatch": "Passwords must match",
-    "@resetPasswordErrorPasswordsDontMatch": {
-        "description": "Reset password error message when passwords do not match"
+    "resetPasswordErrorPasswordNotValid": "Password does not meet above requirements",
+    "@resetPasswordErrorPasswordNotValid": {
+        "description": "Create account error message when password is not valid"
     },
     "resetPasswordErrorUnknown": "An unknown error occured. Please try again",
     "@resetPasswordErrorUnknown": {
@@ -191,6 +139,34 @@
     "resetPasswordConfirmationInfoMessage": "You may now log in with your new password",
     "@resetPasswordConfirmationInfoMessage": {
         "description": "Reset password confirmation screen info on reset confirmation"
+    },
+    "passwordRequirementsHeader": "Password must include:",
+    "@passwordRequirementsHeader": {
+        "description": "Header for password requirements checklist"
+    },
+    "passwordRequirementsMinimumChars": "At least 12 characters",
+    "@passwordRequirementsMinimumChars": {
+        "description": "Minimum characters requirement for password requirements checklist"
+    },
+    "passwordRequirementsUppercase": "One uppercase letter",
+    "@passwordRequirementsUppercase": {
+        "description": "Uppercase letter requirement for password requirements checklist"
+    },
+    "passwordRequirementsLowercase": "One lowercase letter",
+    "@passwordRequirementsLowercase": {
+        "description": "Lowercase letter requirement for password requirements checklist"
+    },
+    "passwordRequirementsDigit": "One number",
+    "@passwordRequirementsDigit": {
+        "description": "Number requirement for password requirements checklist"
+    },
+    "passwordRequirementsSpecialChar": "One special character",
+    "@passwordRequirementsSpecialChar": {
+        "description": "Special character requirement for password requirements checklist"
+    },
+    "passwordRequirementsMatching": "Passwords must match",
+    "@passwordRequirementsMatching": {
+        "description": "Matching passwords requirement for password requirements checklist"
     },
     "submit": "Submit",
     "@submit": {

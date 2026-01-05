@@ -14,20 +14,20 @@ abstract class ResetPasswordViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   ResetPasswordErrorType get validationMessage;
+  Set<ResetPasswordRequirements> get metPasswordRequirements;
   Future<void> tapResetPasswordButton(BuildContext context);
   void tapCloseButton(BuildContext context);
 }
 
-enum ResetPasswordErrorType {
-  none,
-  noPassword,
-  passwordTooShort,
-  passwordNoUppercase,
-  passwordNoLowercase,
-  passwordNoDigit,
-  passwordNoSpecial,
-  passwordsDontMatch,
-  unknownError,
+enum ResetPasswordErrorType { none, passwordRequirementsNotMet, unknownError }
+
+enum ResetPasswordRequirements {
+  adequateLength,
+  containsUppercase,
+  containsLowercase,
+  containsDigit,
+  containsSpecial,
+  matching,
 }
 
 class ResetPasswordViewmodel extends ChangeNotifier
@@ -47,11 +47,28 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   void updatePasswordOneField(String password) {
     _passwordOne = password;
+    _checkPasswordRequirements(password);
   }
 
   @override
   void updatePasswordTwoField(String password) {
     _passwordTwo = password;
+    _checkPasswordsMatch(_passwordOne, _passwordTwo);
+  }
+
+  @override
+  Set<ResetPasswordRequirements> get metPasswordRequirements =>
+      _metPasswordRequirements;
+
+  final Set<ResetPasswordRequirements> _metPasswordRequirements = {};
+  set _addMetPasswordRequirement(ResetPasswordRequirements requirement) {
+    _metPasswordRequirements.add(requirement);
+    notifyListeners();
+  }
+
+  set _removeMetPasswordRequirement(ResetPasswordRequirements requirement) {
+    _metPasswordRequirements.remove(requirement);
+    notifyListeners();
   }
 
   @override
@@ -66,39 +83,49 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   bool get hasAlert => _validationMessage != ResetPasswordErrorType.none;
 
-  // TODO: Update so more than one error can be dislpayed
-  // might want to create a list on the screen itself
-  bool _passwordIsNotValid(String passwordOne, String passwordTwo) {
-    if (passwordOne.isEmpty) {
-      _setValidationMessage = ResetPasswordErrorType.noPassword;
-      return true;
+  void _checkPasswordRequirements(String password) {
+    if (password.length >= 12) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
+    } else {
+      _removeMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
     }
-    if (passwordOne.length < 12) {
-      _setValidationMessage = ResetPasswordErrorType.passwordTooShort;
-      return true;
+    if (password.contains(RegExp(r'[A-Z]'))) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.containsUppercase;
+    } else {
+      _removeMetPasswordRequirement =
+          ResetPasswordRequirements.containsUppercase;
     }
-    if (!passwordOne.contains(RegExp(r'[A-Z]'))) {
-      _setValidationMessage = ResetPasswordErrorType.passwordNoUppercase;
-      return true;
+    if (password.contains(RegExp(r'[a-z]'))) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.containsLowercase;
+    } else {
+      _removeMetPasswordRequirement =
+          ResetPasswordRequirements.containsLowercase;
     }
-    if (!passwordOne.contains(RegExp(r'[a-z]'))) {
-      _setValidationMessage = ResetPasswordErrorType.passwordNoLowercase;
-      return true;
+    if (password.contains(RegExp(r'[0-9]'))) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
+    } else {
+      _removeMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
     }
-    if (!passwordOne.contains(RegExp(r'[0-9]'))) {
-      _setValidationMessage = ResetPasswordErrorType.passwordNoDigit;
-      return true;
+    if (password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
+    } else {
+      _removeMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
     }
-    if (!passwordOne.contains(RegExp(r'[^a-zA-Z0-9]'))) {
-      _setValidationMessage = ResetPasswordErrorType.passwordNoSpecial;
-      return true;
+  }
+
+  void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
+    if (passwordOne == passwordTwo) {
+      _addMetPasswordRequirement = ResetPasswordRequirements.matching;
+    } else {
+      _removeMetPasswordRequirement = ResetPasswordRequirements.matching;
     }
-    if (passwordOne != passwordTwo) {
-      _setValidationMessage = ResetPasswordErrorType.passwordsDontMatch;
-      return true;
-    }
-    _setValidationMessage = ResetPasswordErrorType.none;
-    return false;
+  }
+
+  bool _passwordIsValid() {
+    _setValidationMessage = ResetPasswordErrorType.passwordRequirementsNotMet;
+    return metPasswordRequirements.containsAll(
+      ResetPasswordRequirements.values,
+    );
   }
 
   @override
@@ -111,7 +138,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   Future<void> tapResetPasswordButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
-    if (_passwordIsNotValid(_passwordOne, _passwordTwo)) {
+    if (!_passwordIsValid()) {
       log('Sign up failed: $_validationMessage');
       return;
     }

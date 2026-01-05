@@ -91,7 +91,7 @@ void main() {
       expect(sizedBox.child, isNull);
     });
 
-    testWidgets('AppSpacer has no width constraint', (
+    testWidgets('AppSpacer includes width constraint', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
@@ -99,7 +99,7 @@ void main() {
       );
 
       final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
-      expect(sizedBox.width, isNull);
+      expect(sizedBox.width, AppSpacerSize.medium);
     });
 
     testWidgets('Multiple AppSpacers can be used in sequence', (

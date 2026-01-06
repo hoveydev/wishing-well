@@ -7,6 +7,7 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 
 class ForgotPasswordInput extends StatelessWidget {
   const ForgotPasswordInput({required this.viewModel, super.key});
@@ -48,15 +49,14 @@ class ForgotPasswordInput extends StatelessWidget {
   String _validationMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    switch (viewModel.validationMessage) {
-      case ForgotErrorType.noEmail:
-        return l10n.loginErrorNoEmail;
-      case ForgotErrorType.badEmail:
-        return l10n.loginErrorBadEmail;
-      case ForgotErrorType.none:
-        return '';
-      case ForgotErrorType.unknownError:
-        return l10n.forgotPasswordErrorUnknown;
-    }
+    return switch (viewModel.authError) {
+      UIAuthError(:final type) => switch (type) {
+        ForgotPasswordErrorType.noEmail => l10n.loginErrorNoEmail,
+        ForgotPasswordErrorType.badEmail => l10n.loginErrorBadEmail,
+        ForgotPasswordErrorType.unknown => l10n.loginErrorUnknown,
+        ForgotPasswordErrorType.none => '',
+      },
+      SupabaseAuthError(:final message) => message,
+    };
   }
 }

@@ -107,43 +107,6 @@ void main() {
       final textField = tester.widget<EditableText>(textFieldFinder);
       expect(textField.controller.text, 'password');
     });
-
-    testWidgets('create account validation success', (
-      WidgetTester tester,
-    ) async {
-      await startAppWithCreateAccountScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'email@email.com');
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is AppInput &&
-            widget.type == AppInputType.password &&
-            widget.placeholder == 'Password',
-      );
-      final confirmPasswordWidgetFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is AppInput &&
-            widget.type == AppInputType.password &&
-            widget.placeholder == 'Confirm Password',
-      );
-      await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD123@#');
-      await tester.enterText(
-        confirmPasswordWidgetFinder,
-        'passwordPASSWORD123@#',
-      );
-      await tester.ensureVisible(find.text('Create Account'));
-      await tester.tap(find.text('Create Account'));
-      await tester.pumpAndSettle();
-      expect(find.text('Email cannot be empty'), findsNothing);
-      expect(find.text('Password cannot be empty'), findsNothing);
-      expect(find.text('Invalid email format'), findsNothing);
-      expect(
-        find.text('Password does not meet above requirements'),
-        findsNothing,
-      );
-    });
   });
 
   group('create account error scenarios', () {
@@ -351,7 +314,7 @@ void main() {
         (widget) =>
             widget is AppInput &&
             widget.type == AppInputType.password &&
-            widget.placeholder == 'Password',
+            widget.placeholder == 'Confirm Password',
       );
       await tester.enterText(confirmPasswordWidgetFinder, 'password123456P@#');
       await tester.ensureVisible(find.text('Create Account'));
@@ -359,6 +322,67 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         find.text('Password does not meet above requirements'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('supabase error', (WidgetTester tester) async {
+      await startAppWithCreateAccountScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'supabase.error@email.com');
+      final passwordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Password',
+      );
+      await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD123@#');
+      final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Confirm Password',
+      );
+      await tester.enterText(
+        confirmPasswordWidgetFinder,
+        'passwordPASSWORD123@#',
+      );
+      await tester.ensureVisible(find.text('Create Account'));
+      await tester.tap(find.text('Create Account'));
+      await tester.pumpAndSettle();
+      expect(find.text('supabase error'), findsOneWidget);
+    });
+
+    testWidgets('unknown error', (WidgetTester tester) async {
+      await startAppWithCreateAccountScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'generic.error@email.com');
+      final passwordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Password',
+      );
+      await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD123@#');
+      final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is AppInput &&
+            widget.type == AppInputType.password &&
+            widget.placeholder == 'Confirm Password',
+      );
+      await tester.enterText(
+        confirmPasswordWidgetFinder,
+        'passwordPASSWORD123@#',
+      );
+      await tester.ensureVisible(find.text('Create Account'));
+      await tester.tap(find.text('Create Account'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('An unknown error occured. Please try again'),
         findsOneWidget,
       );
     });

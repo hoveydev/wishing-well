@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -17,6 +18,9 @@ class MockAuthRepository extends AuthRepository {
       _isAuthenticated = true;
       notifyListeners();
       return const Result.ok(null);
+    } else if (email == 'supabase.error@email.com') {
+      notifyListeners();
+      return Result.error(AuthApiException('supabase error'));
     } else {
       notifyListeners();
       return Result.error(Exception('invalid username and password'));
@@ -40,12 +44,16 @@ class MockAuthRepository extends AuthRepository {
     required String email,
     required String password,
   }) async {
-    if (email == 'new.account@email.com' && password == 'Password123!') {
+    if (email == 'new.account@email.com' &&
+        password == 'passwordPASSWORD123@#') {
       notifyListeners();
       return const Result.ok(null);
+    } else if (email == 'supabase.error@email.com') {
+      notifyListeners();
+      return Result.error(AuthApiException('supabase error'));
     } else {
       notifyListeners();
-      return Result.error(Exception('unknown service error'));
+      return Result.error(Exception('generic error'));
     }
   }
 
@@ -54,6 +62,9 @@ class MockAuthRepository extends AuthRepository {
     if (email == 'forgot.password@email.com') {
       notifyListeners();
       return const Result.ok(null);
+    } else if (email == 'supabase.error@email.com') {
+      notifyListeners();
+      return Result.error(AuthApiException('supabase error'));
     } else {
       notifyListeners();
       return Result.error(Exception('unknown service error'));
@@ -69,6 +80,9 @@ class MockAuthRepository extends AuthRepository {
     if (token == 'valid-token') {
       notifyListeners();
       return const Result.ok(null);
+    } else if (token == 'supabase-error-token') {
+      notifyListeners();
+      return Result.error(AuthApiException('supabase error'));
     } else {
       notifyListeners();
       return Result.error(Exception('unknown service error'));

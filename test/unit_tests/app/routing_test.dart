@@ -138,14 +138,17 @@ void main() {
             widget.type == AppInputType.password &&
             widget.placeholder == 'Password',
       );
-      await tester.enterText(passwordWidgetFinder, 'Password123!');
+      await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD123@#');
       final confirmPasswordWidgetFinder = find.byWidgetPredicate(
         (widget) =>
             widget is AppInput &&
             widget.type == AppInputType.password &&
             widget.placeholder == 'Confirm Password',
       );
-      await tester.enterText(confirmPasswordWidgetFinder, 'Password123!');
+      await tester.enterText(
+        confirmPasswordWidgetFinder,
+        'passwordPASSWORD123@#',
+      );
       await tester.ensureVisible(find.text('Create Account'));
       await tester.tap(find.text('Create Account'));
       await tester.pumpAndSettle();

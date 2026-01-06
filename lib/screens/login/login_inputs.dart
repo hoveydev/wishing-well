@@ -6,6 +6,7 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginInputs extends StatelessWidget {
@@ -55,19 +56,16 @@ class LoginInputs extends StatelessWidget {
   String _validationMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    switch (viewModel.validationMessage) {
-      case LoginErrorType.noPasswordNoEmail:
-        return l10n.loginErrorNoPasswordNoEmail;
-      case LoginErrorType.noEmail:
-        return l10n.loginErrorNoEmail;
-      case LoginErrorType.noPassword:
-        return l10n.loginErrorNoPassword;
-      case LoginErrorType.badEmail:
-        return l10n.loginErrorBadEmail;
-      case LoginErrorType.unknownError:
-        return l10n.loginErrorUnknown;
-      case LoginErrorType.none:
-        return '';
-    }
+    return switch (viewModel.authError) {
+      UIAuthError(:final type) => switch (type) {
+        LoginErrorType.noPasswordNoEmail => l10n.loginErrorNoPasswordNoEmail,
+        LoginErrorType.noEmail => l10n.loginErrorNoEmail,
+        LoginErrorType.badEmail => l10n.loginErrorBadEmail,
+        LoginErrorType.noPassword => l10n.loginErrorNoPassword,
+        LoginErrorType.unknown => l10n.loginErrorUnknown,
+        LoginErrorType.none => '',
+      },
+      SupabaseAuthError(:final message) => message,
+    };
   }
 }

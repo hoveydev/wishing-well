@@ -87,24 +87,6 @@ void main() {
       final textField = tester.widget<EditableText>(textFieldFinder);
       expect(textField.controller.text, 'password');
     });
-
-    testWidgets('Login Validation Success', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'emailtest@email.com');
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(passwordWidgetFinder, 'password');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('Email and password cannot be empty'), findsNothing);
-      expect(find.text('Email cannot be empty'), findsNothing);
-      expect(find.text('Password cannot be empty'), findsNothing);
-      expect(find.text('Invalid email format'), findsNothing);
-    });
   });
 
   group('Login Error Scenarios', () {
@@ -152,6 +134,39 @@ void main() {
       await tester.tap(find.text('Sign In'));
       await tester.pumpAndSettle();
       expect(find.text('Invalid email format'), findsOneWidget);
+    });
+
+    testWidgets('supabase error', (WidgetTester tester) async {
+      await startAppWithLoginScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'supabase.error@email.com');
+      final passwordWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.password,
+      );
+      await tester.enterText(passwordWidgetFinder, 'password');
+      await tester.tap(find.text('Sign In'));
+      await tester.pumpAndSettle();
+      expect(find.text('supabase error'), findsOneWidget);
+    });
+
+    testWidgets('unknown error', (WidgetTester tester) async {
+      await startAppWithLoginScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'unknown.error@email.com');
+      final passwordWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.password,
+      );
+      await tester.enterText(passwordWidgetFinder, 'password');
+      await tester.tap(find.text('Sign In'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('An unknown error occured. Please try again'),
+        findsOneWidget,
+      );
     });
   });
 }

@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -14,17 +16,9 @@ abstract class CreateAccountViewmodelContract {
   void updatePasswordOneField(String password);
   void updatePasswordTwoField(String password);
   bool get hasAlert;
-  CreateAccountErrorType get validationMessage;
+  AuthError<CreateAccountErrorType> get authError;
   Set<CreateAccountPasswordRequirements> get metPasswordRequirements;
   Future<void> tapCreateAccountButton(BuildContext context);
-}
-
-enum CreateAccountErrorType {
-  none,
-  noEmail,
-  badEmail,
-  passwordRequirementsNotMet,
-  unknownError,
 }
 
 enum CreateAccountPasswordRequirements {
@@ -84,16 +78,19 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   @override
-  CreateAccountErrorType get validationMessage => _validationMessage;
+  AuthError<CreateAccountErrorType> get authError => _authError;
 
-  CreateAccountErrorType _validationMessage = CreateAccountErrorType.none;
-  set _setValidationMessage(CreateAccountErrorType message) {
-    _validationMessage = message;
+  AuthError<CreateAccountErrorType> _authError = const UIAuthError(
+    CreateAccountErrorType.none,
+  );
+  set _setAuthError(AuthError<CreateAccountErrorType> error) {
+    _authError = error;
     notifyListeners();
   }
 
   @override
-  bool get hasAlert => _validationMessage != CreateAccountErrorType.none;
+  bool get hasAlert =>
+      _authError != const UIAuthError(CreateAccountErrorType.none);
 
   void _checkPasswordRequirements(String password) {
     if (password.length >= 12) {
@@ -148,21 +145,23 @@ class CreateAccountViewmodel extends ChangeNotifier
 
   bool _isFormValid(String email, String passwordOne, String passwordTwo) {
     if (email.isEmpty) {
-      _setValidationMessage = CreateAccountErrorType.noEmail;
+      _setAuthError = const UIAuthError(CreateAccountErrorType.noEmail);
       return false;
     }
     final emailRegex = RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setValidationMessage = CreateAccountErrorType.badEmail;
+      _setAuthError = const UIAuthError(CreateAccountErrorType.badEmail);
       return false;
     }
     if (!_passwordIsValid()) {
-      _setValidationMessage = CreateAccountErrorType.passwordRequirementsNotMet;
+      _setAuthError = const UIAuthError(
+        CreateAccountErrorType.passwordRequirementsNotMet,
+      );
       return false;
     }
-    _setValidationMessage = CreateAccountErrorType.none;
+    _setAuthError = const UIAuthError(CreateAccountErrorType.none);
     return true;
   }
 
@@ -170,7 +169,7 @@ class CreateAccountViewmodel extends ChangeNotifier
   Future<void> tapCreateAccountButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_isFormValid(_email, _passwordOne, _passwordTwo)) {
-      log('Sign up failed: $_validationMessage');
+      log('Sign up failed: $_authError');
       return;
     }
 
@@ -187,8 +186,13 @@ class CreateAccountViewmodel extends ChangeNotifier
           unawaited(context.pushNamed(Routes.createAccountConfirm.name));
         }
         loading.hide();
-      case Error():
-        _setValidationMessage = CreateAccountErrorType.unknownError;
+      case Error(:final error):
+        log(error.toString());
+        if (error is AuthApiException) {
+          _setAuthError = SupabaseAuthError(error.message);
+        } else {
+          _setAuthError = const UIAuthError(CreateAccountErrorType.unknown);
+        }
         loading.hide();
     }
   }

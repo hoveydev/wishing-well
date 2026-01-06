@@ -347,7 +347,7 @@ void main() {
       test('returns \'Ok\' on successful account creation', () async {
         final result = await mockRepository.createAccount(
           email: 'new.account@email.com',
-          password: 'Password123!',
+          password: 'passwordPASSWORD123@#',
         );
 
         expect(result, isA<Ok<void>>());
@@ -393,7 +393,7 @@ void main() {
       test('Can be Called Multiple Times', () async {
         final result1 = await mockRepository.createAccount(
           email: 'new.account@email.com',
-          password: 'Password123!',
+          password: 'passwordPASSWORD123@#',
         );
         expect(result1, isA<Ok<void>>());
 
@@ -401,7 +401,7 @@ void main() {
 
         final result2 = await mockRepository.createAccount(
           email: 'new.account@email.com',
-          password: 'Password123!',
+          password: 'passwordPASSWORD123@#',
         );
         expect(result2, isA<Ok<void>>());
       });

@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -13,13 +15,11 @@ abstract class ResetPasswordViewmodelContract {
   void updatePasswordOneField(String password);
   void updatePasswordTwoField(String password);
   bool get hasAlert;
-  ResetPasswordErrorType get validationMessage;
+  AuthError<ResetPasswordErrorType> get authError;
   Set<ResetPasswordRequirements> get metPasswordRequirements;
   Future<void> tapResetPasswordButton(BuildContext context);
   void tapCloseButton(BuildContext context);
 }
-
-enum ResetPasswordErrorType { none, passwordRequirementsNotMet, unknownError }
 
 enum ResetPasswordRequirements {
   adequateLength,
@@ -72,16 +72,19 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   @override
-  ResetPasswordErrorType get validationMessage => _validationMessage;
+  AuthError<ResetPasswordErrorType> get authError => _authError;
 
-  ResetPasswordErrorType _validationMessage = ResetPasswordErrorType.none;
-  set _setValidationMessage(ResetPasswordErrorType message) {
-    _validationMessage = message;
+  AuthError<ResetPasswordErrorType> _authError = const UIAuthError(
+    ResetPasswordErrorType.none,
+  );
+  set _setAuthError(AuthError<ResetPasswordErrorType> error) {
+    _authError = error;
     notifyListeners();
   }
 
   @override
-  bool get hasAlert => _validationMessage != ResetPasswordErrorType.none;
+  bool get hasAlert =>
+      _authError != const UIAuthError(ResetPasswordErrorType.none);
 
   void _checkPasswordRequirements(String password) {
     if (password.length >= 12) {
@@ -122,7 +125,9 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   bool _passwordIsValid() {
-    _setValidationMessage = ResetPasswordErrorType.passwordRequirementsNotMet;
+    _setAuthError = const UIAuthError(
+      ResetPasswordErrorType.passwordRequirementsNotMet,
+    );
     return metPasswordRequirements.containsAll(
       ResetPasswordRequirements.values,
     );
@@ -139,7 +144,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   Future<void> tapResetPasswordButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_passwordIsValid()) {
-      log('Sign up failed: $_validationMessage');
+      log('Sign up failed: $_authError');
       return;
     }
 
@@ -157,8 +162,13 @@ class ResetPasswordViewmodel extends ChangeNotifier
           unawaited(context.pushNamed(Routes.resetPasswordConfirmation.name));
         }
         loading.hide();
-      case Error():
-        _setValidationMessage = ResetPasswordErrorType.unknownError;
+      case Error(:final Exception error):
+        log(error.toString());
+        if (error is AuthApiException) {
+          _setAuthError = SupabaseAuthError(error.message);
+        } else {
+          _setAuthError = const UIAuthError(ResetPasswordErrorType.unknown);
+        }
         loading.hide();
     }
   }

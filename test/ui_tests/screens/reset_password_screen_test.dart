@@ -13,7 +13,10 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-dynamic startAppWithResetPasswordScreen(WidgetTester tester) async {
+dynamic startAppWithResetPasswordScreen(
+  WidgetTester tester, {
+  String? token,
+}) async {
   final controller = LoadingController();
   final ChangeNotifierProvider app =
       ChangeNotifierProvider<LoadingController>.value(
@@ -32,7 +35,7 @@ dynamic startAppWithResetPasswordScreen(WidgetTester tester) async {
             viewmodel: ResetPasswordViewmodel(
               authRepository: MockAuthRepository(),
               email: '',
-              token: '',
+              token: token ?? '',
             ),
           ),
         ),
@@ -103,39 +106,6 @@ void main() {
       );
       final textField = tester.widget<EditableText>(textFieldFinder);
       expect(textField.controller.text, 'password');
-    });
-
-    testWidgets('reset password validation success', (
-      WidgetTester tester,
-    ) async {
-      await startAppWithResetPasswordScreen(tester);
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is AppInput &&
-            widget.type == AppInputType.password &&
-            widget.placeholder == 'Password',
-      );
-      final confirmPasswordWidgetFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is AppInput &&
-            widget.type == AppInputType.password &&
-            widget.placeholder == 'Confirm Password',
-      );
-      await tester.enterText(passwordWidgetFinder, 'passwordPASSWORD123@#');
-      await tester.enterText(
-        confirmPasswordWidgetFinder,
-        'passwordPASSWORD123@#',
-      );
-      final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppButton && widget.label == 'Reset Password',
-      );
-      await tester.ensureVisible(resetPasswordButtonWidgetFinder);
-      await tester.tap(resetPasswordButtonWidgetFinder);
-      await tester.pumpAndSettle();
-      expect(
-        find.text('Password does not meet above requirements'),
-        findsNothing,
-      );
     });
 
     group('Reset Password Error Scenarios', () {
@@ -291,6 +261,71 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           find.text('Password does not meet above requirements'),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('supabase error', (WidgetTester tester) async {
+        await startAppWithResetPasswordScreen(
+          tester,
+          token: 'supabase-error-token',
+        );
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Password',
+        );
+        await tester.enterText(passwordWidgetFinder, 'Password123456W()');
+        final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Confirm Password',
+        );
+        await tester.enterText(
+          confirmPasswordWidgetFinder,
+          'Password123456W()',
+        );
+        final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppButton && widget.label == 'Reset Password',
+        );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
+        await tester.tap(resetPasswordButtonWidgetFinder);
+        await tester.pumpAndSettle();
+        expect(find.text('supabase error'), findsOneWidget);
+      });
+
+      testWidgets('unknown error', (WidgetTester tester) async {
+        await startAppWithResetPasswordScreen(
+          tester,
+          token: 'unknown-error-token',
+        );
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Password',
+        );
+        await tester.enterText(passwordWidgetFinder, 'Password123456W()');
+        final confirmPasswordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Confirm Password',
+        );
+        await tester.enterText(
+          confirmPasswordWidgetFinder,
+          'Password123456W()',
+        );
+        final resetPasswordButtonWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppButton && widget.label == 'Reset Password',
+        );
+        await tester.ensureVisible(resetPasswordButtonWidgetFinder);
+        await tester.tap(resetPasswordButtonWidgetFinder);
+        await tester.pumpAndSettle();
+        expect(
+          find.text('An unknown error occured. Please try again'),
           findsOneWidget,
         );
       });

@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -12,11 +14,9 @@ import 'package:wishing_well/routing/routes.dart';
 abstract class ForgotViewModelContract {
   void updateEmailField(String email);
   bool get hasAlert;
-  ForgotErrorType get validationMessage;
+  AuthError<ForgotPasswordErrorType> get authError;
   Future<void> tapSendResetLinkButton(BuildContext context);
 }
-
-enum ForgotErrorType { none, noEmail, badEmail, unknownError }
 
 class ForgotPasswordViewModel extends ChangeNotifier
     implements ForgotViewModelContract {
@@ -33,30 +33,33 @@ class ForgotPasswordViewModel extends ChangeNotifier
   }
 
   @override
-  ForgotErrorType get validationMessage => _validationMessage;
+  AuthError<ForgotPasswordErrorType> get authError => _authError;
 
-  ForgotErrorType _validationMessage = ForgotErrorType.none;
-  set _setValidationMessage(ForgotErrorType message) {
-    _validationMessage = message;
+  AuthError<ForgotPasswordErrorType> _authError = const UIAuthError(
+    ForgotPasswordErrorType.none,
+  );
+  set _setAuthError(AuthError<ForgotPasswordErrorType> error) {
+    _authError = error;
     notifyListeners();
   }
 
   @override
-  bool get hasAlert => _validationMessage != ForgotErrorType.none;
+  bool get hasAlert =>
+      _authError != const UIAuthError(ForgotPasswordErrorType.none);
 
   bool _isEmailValid(String email) {
     if (email.isEmpty) {
-      _setValidationMessage = ForgotErrorType.noEmail;
+      _setAuthError = const UIAuthError(ForgotPasswordErrorType.noEmail);
       return false;
     }
     final emailRegex = RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setValidationMessage = ForgotErrorType.badEmail;
+      _setAuthError = const UIAuthError(ForgotPasswordErrorType.badEmail);
       return false;
     }
-    _setValidationMessage = ForgotErrorType.none;
+    _setAuthError = const UIAuthError(ForgotPasswordErrorType.none);
     return true;
   }
 
@@ -64,7 +67,7 @@ class ForgotPasswordViewModel extends ChangeNotifier
   Future<void> tapSendResetLinkButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_isEmailValid(_email)) {
-      log('Email validation failed: $_validationMessage');
+      log('Email validation failed: $_authError');
       return;
     }
 
@@ -80,8 +83,13 @@ class ForgotPasswordViewModel extends ChangeNotifier
           unawaited(context.pushNamed(Routes.forgotPasswordConfirm.name));
         }
         loading.hide();
-      case Error():
-        _setValidationMessage = ForgotErrorType.unknownError;
+      case Error(:final error):
+        log(error.toString());
+        if (error is AuthApiException) {
+          _setAuthError = SupabaseAuthError(error.message);
+        } else {
+          _setAuthError = const UIAuthError(ForgotPasswordErrorType.unknown);
+        }
         loading.hide();
     }
   }

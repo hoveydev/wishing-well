@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -15,19 +17,10 @@ abstract class LoginViewModelContract {
   void updatePasswordField(String password);
   TextEditingController get passwordInputController;
   bool get hasAlert;
-  LoginErrorType get validationMessage;
+  AuthError<LoginErrorType> get authError;
   void tapForgotPasswordButton(BuildContext context);
   Future<void> tapLoginButton(BuildContext context);
   void tapCreateAccountButton(BuildContext context);
-}
-
-enum LoginErrorType {
-  none,
-  noPasswordNoEmail,
-  noEmail,
-  noPassword,
-  badEmail,
-  unknownError,
 }
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
@@ -59,38 +52,38 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       TextEditingController();
 
   @override
-  LoginErrorType get validationMessage => _validationMessage;
+  AuthError<LoginErrorType> get authError => _authError;
 
-  LoginErrorType _validationMessage = LoginErrorType.none;
-  set _setValidationMessage(LoginErrorType message) {
-    _validationMessage = message;
+  AuthError<LoginErrorType> _authError = const UIAuthError(LoginErrorType.none);
+  set _setAuthError(AuthError<LoginErrorType> error) {
+    _authError = error;
     notifyListeners();
   }
 
   @override
-  bool get hasAlert => _validationMessage != LoginErrorType.none;
+  bool get hasAlert => _authError != const UIAuthError(LoginErrorType.none);
 
   bool _isFormValid(String email, String password) {
     if (email.isEmpty && password.isEmpty) {
-      _setValidationMessage = LoginErrorType.noPasswordNoEmail;
+      _setAuthError = const UIAuthError(LoginErrorType.noPasswordNoEmail);
       return false;
     }
     if (email.isEmpty) {
-      _setValidationMessage = LoginErrorType.noEmail;
+      _setAuthError = const UIAuthError(LoginErrorType.noEmail);
       return false;
     }
     if (password.isEmpty) {
-      _setValidationMessage = LoginErrorType.noPassword;
+      _setAuthError = const UIAuthError(LoginErrorType.noPassword);
       return false;
     }
     final emailRegex = RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
     );
     if (!emailRegex.hasMatch(email)) {
-      _setValidationMessage = LoginErrorType.badEmail;
+      _setAuthError = const UIAuthError(LoginErrorType.badEmail);
       return false;
     }
-    _setValidationMessage = LoginErrorType.none;
+    _setAuthError = const UIAuthError(LoginErrorType.none);
     return true;
   }
 
@@ -106,7 +99,7 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     final loading = context.read<LoadingController>();
 
     if (!_isFormValid(_email, _password)) {
-      log('Login failed: $_validationMessage');
+      log('Login failed: $_authError');
       return;
     }
 
@@ -122,8 +115,13 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
           unawaited(context.pushNamed(Routes.home.name));
         }
         loading.hide();
-      case Error():
-        _setValidationMessage = LoginErrorType.unknownError;
+      case Error(:final Exception error):
+        log(error.toString());
+        if (error is AuthApiException) {
+          _setAuthError = SupabaseAuthError(error.message);
+        } else {
+          _setAuthError = const UIAuthError(LoginErrorType.unknown);
+        }
         loading.hide();
     }
   }

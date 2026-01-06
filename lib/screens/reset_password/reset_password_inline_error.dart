@@ -4,6 +4,7 @@ import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart'
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 
 class ResetPasswordInlineError extends StatelessWidget {
   const ResetPasswordInlineError({required this.viewModel, super.key});
@@ -32,13 +33,14 @@ class ResetPasswordInlineError extends StatelessWidget {
   String _validationMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    switch (viewModel.validationMessage) {
-      case ResetPasswordErrorType.passwordRequirementsNotMet:
-        return l10n.resetPasswordErrorPasswordNotValid;
-      case ResetPasswordErrorType.unknownError:
-        return l10n.resetPasswordErrorUnknown;
-      case ResetPasswordErrorType.none:
-        return '';
-    }
+    return switch (viewModel.authError) {
+      UIAuthError(:final type) => switch (type) {
+        ResetPasswordErrorType.passwordRequirementsNotMet =>
+          l10n.resetPasswordErrorPasswordNotValid,
+        ResetPasswordErrorType.unknown => l10n.resetPasswordErrorUnknown,
+        ResetPasswordErrorType.none => '',
+      },
+      SupabaseAuthError(:final message) => message,
+    };
   }
 }

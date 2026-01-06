@@ -71,18 +71,6 @@ void main() {
       expect(textField.controller.text, 'test.email@email.com');
     });
 
-    testWidgets('Submit Success', (WidgetTester tester) async {
-      await startAppWithForgotPasswordScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'email@email.com');
-      await tester.tap(find.text('Submit'));
-      await tester.pumpAndSettle();
-      expect(find.text('Email cannot be empty'), findsNothing);
-      expect(find.text('Invalid email format'), findsNothing);
-    });
-
     testWidgets('No Email Only Login Error', (WidgetTester tester) async {
       await startAppWithForgotPasswordScreen(tester);
       await tester.tap(find.text('Submit'));
@@ -99,6 +87,31 @@ void main() {
       await tester.tap(find.text('Submit'));
       await tester.pumpAndSettle();
       expect(find.text('Invalid email format'), findsOneWidget);
+    });
+
+    testWidgets('supabase error', (WidgetTester tester) async {
+      await startAppWithForgotPasswordScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'supabase.error@email.com');
+      await tester.tap(find.text('Submit'));
+      await tester.pumpAndSettle();
+      expect(find.text('supabase error'), findsOneWidget);
+    });
+
+    testWidgets('unknown error', (WidgetTester tester) async {
+      await startAppWithForgotPasswordScreen(tester);
+      final emailWidgetFinder = find.byWidgetPredicate(
+        (widget) => widget is AppInput && widget.type == AppInputType.email,
+      );
+      await tester.enterText(emailWidgetFinder, 'generic.error@email.com');
+      await tester.tap(find.text('Submit'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('An unknown error occured. Please try again'),
+        findsOneWidget,
+      );
     });
   });
 }

@@ -4,6 +4,7 @@ import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart'
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/utils/auth_error.dart';
 
 class CreateAccountInlineError extends StatelessWidget {
   const CreateAccountInlineError({required this.viewModel, super.key});
@@ -32,17 +33,16 @@ class CreateAccountInlineError extends StatelessWidget {
   String _validationMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    switch (viewModel.validationMessage) {
-      case CreateAccountErrorType.badEmail:
-        return l10n.createAccountErrorBadEmail;
-      case CreateAccountErrorType.noEmail:
-        return l10n.createAccountErrorNoEmail;
-      case CreateAccountErrorType.passwordRequirementsNotMet:
-        return l10n.createAccountErrorPasswordNotValid;
-      case CreateAccountErrorType.unknownError:
-        return l10n.createAccountErrorUnknown;
-      case CreateAccountErrorType.none:
-        return '';
-    }
+    return switch (viewModel.authError) {
+      UIAuthError(:final type) => switch (type) {
+        CreateAccountErrorType.noEmail => l10n.createAccountErrorNoEmail,
+        CreateAccountErrorType.badEmail => l10n.createAccountErrorBadEmail,
+        CreateAccountErrorType.passwordRequirementsNotMet =>
+          l10n.createAccountErrorPasswordNotValid,
+        CreateAccountErrorType.unknown => l10n.createAccountErrorUnknown,
+        CreateAccountErrorType.none => '',
+      },
+      SupabaseAuthError(:final message) => message,
+    };
   }
 }

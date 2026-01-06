@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wishing_well/components/button/app_button.dart';
-import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -72,17 +72,9 @@ class ConfirmationScreen extends StatelessWidget {
     final ConfirmationScreenContent content = _content(l10n);
 
     return Screen(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: [
-          FittedBox(
-            child: AppButton.icon(
-              icon: Icons.close,
-              onPressed: () => context.goNamed(Routes.login.name),
-              type: AppButtonType.tertiary,
-            ),
-          ),
-        ],
+      appBar: AppMenuBar(
+        action: () => context.goNamed(Routes.login.name),
+        type: AppMenuBarType.close,
       ),
       children: [
         const AppSpacer.large(),

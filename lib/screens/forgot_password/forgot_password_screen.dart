@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wishing_well/components/button/app_button.dart';
-import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_button.dart';
@@ -27,14 +27,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) => Screen(
-    appBar: AppBar(
-      leading: FittedBox(
-        child: AppButton.icon(
-          icon: Icons.keyboard_arrow_down,
-          onPressed: () => context.pop(),
-          type: AppButtonType.tertiary,
-        ),
-      ),
+    appBar: AppMenuBar(
+      action: () => context.pop(),
+      type: AppMenuBarType.dismiss,
     ),
     children: [
       const AppSpacer.xlarge(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/button/app_button.dart';
-import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_button.dart';
@@ -26,17 +26,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) => Screen(
-    appBar: AppBar(
-      automaticallyImplyLeading: false,
-      actions: [
-        FittedBox(
-          child: AppButton.icon(
-            icon: Icons.close,
-            onPressed: () => widget.viewmodel.tapCloseButton(context),
-            type: AppButtonType.tertiary,
-          ),
-        ),
-      ],
+    appBar: AppMenuBar(
+      action: () => widget.viewmodel.tapCloseButton(context),
+      type: AppMenuBarType.close,
     ),
     children: [
       const ResetPasswordHeader(),

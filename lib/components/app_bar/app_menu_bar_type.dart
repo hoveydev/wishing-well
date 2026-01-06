@@ -1,0 +1,1 @@
+enum AppMenuBarType { close, dismiss }

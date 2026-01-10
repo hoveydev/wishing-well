@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/home/home_screen.dart';
+import 'package:wishing_well/screens/home/home_viewmodel.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
 
 GoRouter router() => GoRouter(
-  initialLocation: '/login', // should change to home once auth is set up
+  initialLocation: '/login',
   routes: [
     GoRoute(
       path: Routes.login.path,
@@ -219,7 +220,9 @@ GoRouter router() => GoRouter(
       path: Routes.home.path,
       name: Routes.home.name,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: const Screen(children: [Text('Home')]),
+        child: HomeScreen(
+          viewmodel: HomeViewmodel(authRepository: context.read()),
+        ),
         transitionsBuilder: (_, _, _, child) => child,
       ),
     ),

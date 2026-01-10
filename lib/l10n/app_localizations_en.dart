@@ -148,4 +148,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submit => 'Submit';
+
+  @override
+  String get welcomeHeader => 'Welcome!';
+
+  @override
+  String welcomeHeaderWithName(String name) {
+    return 'Welcome, $name!';
+  }
+
+  @override
+  String get comingUpTitle => 'Coming Up';
 }

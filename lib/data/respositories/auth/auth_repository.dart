@@ -4,6 +4,7 @@ import 'package:wishing_well/utils/result.dart';
 abstract class AuthRepository extends ChangeNotifier {
   /// Returns true when user is logged in
   bool get isAuthenticated;
+  String? get userFirstName;
 
   /// Login
   Future<Result<void>> login({required String email, required String password});

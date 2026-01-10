@@ -1,10 +1,11 @@
 import 'package:go_router/go_router.dart';
-import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/home/home_screen.dart';
+import 'package:wishing_well/screens/home/home_viewmodel.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
@@ -80,7 +81,9 @@ GoRouter createMockRouter() => GoRouter(
     GoRoute(
       path: '/home',
       name: 'home',
-      builder: (context, state) => const Screen(),
+      builder: (context, state) => HomeScreen(
+        viewmodel: HomeViewmodel(authRepository: MockAuthRepository()),
+      ),
     ),
   ],
 );

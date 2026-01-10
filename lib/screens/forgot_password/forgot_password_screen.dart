@@ -36,7 +36,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       const ForgotPasswordHeader(),
       const AppSpacer.xlarge(),
       ForgotPasswordInput(viewModel: widget.viewModel),
-      const Spacer(),
       ForgotPasswordButton(viewModel: widget.viewModel),
       const AppSpacer.large(),
     ],

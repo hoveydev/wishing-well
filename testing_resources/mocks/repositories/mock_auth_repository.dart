@@ -7,6 +7,9 @@ class MockAuthRepository extends AuthRepository {
   @override
   bool get isAuthenticated => _isAuthenticated;
 
+  @override
+  String? get userFirstName => 'TestUser';
+
   bool _isAuthenticated = false;
 
   @override

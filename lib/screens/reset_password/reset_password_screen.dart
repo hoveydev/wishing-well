@@ -37,7 +37,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       const AppSpacer.large(),
       ResetPasswordChecklist(viewModel: widget.viewmodel),
       ResetPasswordInlineError(viewModel: widget.viewmodel),
-      const Spacer(),
       ResetPasswordButton(viewmodel: widget.viewmodel),
       const AppSpacer.large(),
     ],

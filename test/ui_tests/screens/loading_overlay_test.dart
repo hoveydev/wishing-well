@@ -17,7 +17,7 @@ dynamic startAppWithLoadingScreen(
         child: MaterialApp(
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          home: const LoadingOverlay(child: Screen()),
+          home: const LoadingOverlay(child: Screen(children: [])),
         ),
       );
   await tester.pumpWidget(app);

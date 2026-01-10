@@ -23,11 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) => Screen(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       const LoginHeader(),
       LoginInputs(viewModel: widget.viewModel),
       LoginButtons(viewModel: widget.viewModel),
-      const AppSpacer.medium(),
+      const AppSpacer.large(),
     ],
   );
 }

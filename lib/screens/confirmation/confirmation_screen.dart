@@ -85,7 +85,6 @@ class ConfirmationScreen extends StatelessWidget {
         const AppSpacer.xlarge(),
         if (content.subtext != null)
           ConfirmationSubtext(subtext: content.subtext!),
-        const Spacer(),
       ],
     );
   }

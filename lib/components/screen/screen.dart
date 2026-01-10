@@ -1,46 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
 class Screen extends StatelessWidget {
-  // essentially navbar
   const Screen({
+    required this.children,
     super.key,
-    this.children = const [],
-    this.padding,
     this.appBar,
+    this.padding,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   });
+
   final List<Widget> children;
-  final EdgeInsetsGeometry? padding;
   final PreferredSizeWidget? appBar;
+  final EdgeInsetsGeometry? padding;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    return Scaffold(
-      appBar: appBar,
-      backgroundColor: colorScheme.background,
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) => SingleChildScrollView(
-            padding:
-                padding ??
-                const EdgeInsets.symmetric(
-                  horizontal: AppSpacerSize.medium,
-                ), // will we ever not want this padding for general screens?
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: IntrinsicHeight(
-                // maybe find a different solution here since this is expensive
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: children,
-                ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: appBar,
+    body: SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Padding(
+              padding: padding ?? const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: mainAxisAlignment,
+                crossAxisAlignment: crossAxisAlignment,
+                children: children,
               ),
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

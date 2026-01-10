@@ -351,6 +351,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit'**
   String get submit;
+
+  /// header for home screen (no name)
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome!'**
+  String get welcomeHeader;
+
+  /// header for home screen with name
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome, {name}!'**
+  String welcomeHeaderWithName(String name);
+
+  /// title for coming up section on home
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Up'**
+  String get comingUpTitle;
 }
 
 class _AppLocalizationsDelegate

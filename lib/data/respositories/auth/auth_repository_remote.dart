@@ -8,6 +8,7 @@ class AuthRepositoryRemote extends AuthRepository {
 
   final SupabaseClient _supabase;
   bool _isAuthenticated = false;
+  String? _userFirstName;
 
   @override
   bool get isAuthenticated {
@@ -15,6 +16,16 @@ class AuthRepositoryRemote extends AuthRepository {
     _isAuthenticated = session?.user.aud == 'authenticated';
     return _isAuthenticated;
   }
+
+  // coverage:ignore-start
+  // userFirstName getter is not tested because tests use MockAuthRepository
+  @override
+  String? get userFirstName {
+    final user = _supabase.auth.currentUser;
+    _userFirstName = user?.userMetadata?['first_name'];
+    return _userFirstName;
+  }
+  // coverage:ignore-end
 
   @override
   Future<Result<void>> login({

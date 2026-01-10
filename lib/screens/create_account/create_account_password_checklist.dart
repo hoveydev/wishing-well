@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -38,7 +39,6 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const AppSpacer.medium(),
               Row(
                 children: [
                   Text(
@@ -85,6 +85,7 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
               ),
               const AppSpacer.medium(),
               Divider(color: colorScheme.primary, thickness: 0.5),
+              CreateAccountInlineError(viewModel: viewModel),
             ],
           ),
         );

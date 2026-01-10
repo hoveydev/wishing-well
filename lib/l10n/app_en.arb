@@ -171,5 +171,23 @@
     "submit": "Submit",
     "@submit": {
         "description": "Label for submit button on Forgot Password screen"
+    },
+    "welcomeHeader": "Welcome!",
+    "@welcomeHeader": {
+        "description": "header for home screen (no name)"
+    },
+    "welcomeHeaderWithName": "Welcome, {name}!",
+    "@welcomeHeaderWithName": {
+        "description": "header for home screen with name",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Hank"
+            }
+        }
+    },
+    "comingUpTitle": "Coming Up",
+    "@comingUpTitle": {
+        "description": "title for coming up section on home"
     }
 }

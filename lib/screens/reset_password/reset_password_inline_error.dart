@@ -36,8 +36,8 @@ class ResetPasswordInlineError extends StatelessWidget {
     return switch (viewModel.authError) {
       UIAuthError(:final type) => switch (type) {
         ResetPasswordErrorType.passwordRequirementsNotMet =>
-          l10n.resetPasswordErrorPasswordNotValid,
-        ResetPasswordErrorType.unknown => l10n.resetPasswordErrorUnknown,
+          l10n.errorPasswordRequirements,
+        ResetPasswordErrorType.unknown => l10n.errorUnknown,
         ResetPasswordErrorType.none => '',
       },
       SupabaseAuthError(:final message) => message,

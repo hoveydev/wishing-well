@@ -8,177 +8,161 @@
     "@appTagline": {
         "description": "The tagline of the application"
     },
-    "email": "Email",
-    "@email": {
+    "authEmail": "Email",
+    "@authEmail": {
         "description": "Label for the email input field"
     },
-    "password": "Password",
-    "@password": {
+    "authPassword": "Password",
+    "@authPassword": {
         "description": "Label for the password input field"
     },
-    "confirmPassword": "Confirm Password",
-    "@confirmPassword": {
+    "authConfirmPassword": "Confirm Password",
+    "@authConfirmPassword": {
         "description": "Label for the confirm password field"
     },
-    "forgotPassword": "Forgot Password?",
-    "@forgotPassword": {
-        "description": "Text for the forgot password link"
-    },
-    "signIn": "Sign In",
-    "@signIn": {
+    "authSignIn": "Sign In",
+    "@authSignIn": {
         "description": "Text for the sign in button"
     },
-    "createAccount": "Create an Account",
-    "@createAccount": {
+    "authCreateAccount": "Create an Account",
+    "@authCreateAccount": {
         "description": "Text for the create account link"
     },
-    "loginErrorNoPasswordNoEmail": "Email and password cannot be empty",
-    "@loginErrorNoPasswordNoEmail": {
-        "description": "Login error message when both email and password are empty"
+    "authCreateAccountButton": "Create Account",
+    "@authCreateAccountButton": {
+        "description": "Text for the create account button"
     },
-    "loginErrorNoEmail": "Email cannot be empty",
-    "@loginErrorNoEmail": {
-        "description": "Login error message when email is empty"
+    "authForgotPassword": "Forgot Password?",
+    "@authForgotPassword": {
+        "description": "Text for the forgot password link"
     },
-    "loginErrorNoPassword": "Password cannot be empty",
-    "@loginErrorNoPassword": {
-        "description": "Login Error message when password is empty"
+    "authResetPassword": "Reset Password",
+    "@authResetPassword": {
+        "description": "Text for the reset password button/header"
     },
-    "loginErrorBadEmail": "Invalid email format",
-    "@loginErrorBadEmail": {
-        "description": "Login error message when email format is invalid"
+    "authSubmit": "Submit",
+    "@authSubmit": {
+        "description": "Label for the submit button"
     },
-    "loginErrorUnknown": "An unknown error occured. Please try again",
-    "@loginErrorUnknown": {
-        "description": "Login error message when supabase call has an error"
+    "errorInvalidEmail": "Invalid email format",
+    "@errorInvalidEmail": {
+        "description": "Error message when email format is invalid"
     },
-    "forgotPasswordHeader": "Forgot Password",
-    "@forgotPasswordHeader": {
+    "errorEmailRequired": "Email cannot be empty",
+    "@errorEmailRequired": {
+        "description": "Error message when email is empty"
+    },
+    "errorPasswordRequired": "Password cannot be empty",
+    "@errorPasswordRequired": {
+        "description": "Error message when password is empty"
+    },
+    "errorEmailPasswordRequired": "Email and password cannot be empty",
+    "@errorEmailPasswordRequired": {
+        "description": "Error message when both email and password are empty"
+    },
+    "errorPasswordRequirements": "Password does not meet above requirements",
+    "@errorPasswordRequirements": {
+        "description": "Error message when password does not meet requirements"
+    },
+    "errorUnknown": "An unknown error occured. Please try again",
+    "@errorUnknown": {
+        "description": "Generic error message when an unknown error occurs"
+    },
+    "loginScreenHeader": "Welcome to WishingWell",
+    "@loginScreenHeader": {
+        "description": "Header for login screen"
+    },
+    "loginScreenSubtext": "Please enter your credentials below",
+    "@loginScreenSubtext": {
+        "description": "Subtext for login screen"
+    },
+    "forgotPasswordScreenHeader": "Forgot Password",
+    "@forgotPasswordScreenHeader": {
         "description": "Header for Forgot Password screen"
     },
-    "forgotPasswordSubtext": "Enter your email address below to receive a password reset link",
-    "@forgotPasswordSubtext": {
+    "forgotPasswordScreenSubtext": "Enter your email address below to receive a password reset link",
+    "@forgotPasswordScreenSubtext": {
         "description": "Subtext for Forgot Password screen"
-    },
-    "createAccountButtonLabel": "Create Account",
-    "@createAccountButtonLabel": {
-        "description": "Create account button label"
-    },
-    "createAccountSubtext": "Please enter your credentials below",
-    "@createAccountSubtext": {
-        "description": "Create account error message when email format is invalid"
-    },
-    "createAccountErrorBadEmail": "Invalid email format",
-    "@createAccountErrorBadEmail": {
-        "description": "Create account error message when email format is invalid"
-    },
-    "createAccountErrorNoEmail": "Email cannot be empty",
-    "@createAccountErrorNoEmail": {
-        "description": "Create account error message when email is empty"
-    },
-    "createAccountErrorPasswordNotValid": "Password does not meet above requirements",
-    "@createAccountErrorPasswordNotValid": {
-        "description": "Create account error message when password is not valid"
-    },
-    "createAccountErrorUnknown": "An unknown error occured. Please try again",
-    "@createAccountErrorUnknown": {
-        "description": "Create account error message when supabase call has an error"
-    },
-    "createAccountConfirmationHeader": "Account Successfully Created!",
-    "@createAccountConfirmationHeader": {
-        "description": "Create account confirmation screen header"
-    },
-    "createAccountConfirmationInfoMessage": "Please check your email to confirm your account. Your account must be confirmed before you are able to log in.",
-    "@createAccountConfirmationInfoMessage": {
-        "description": "Create account confirmation screen instructions on account confirmation"
     },
     "forgotPasswordConfirmationHeader": "Reset Password Request Sent!",
     "@forgotPasswordConfirmationHeader": {
         "description": "Forgot password confirmation screen header"
     },
-    "forgotPasswordConfirmationInfoMessage": "Please check your email for password reset instructions.",
-    "@forgotPasswordConfirmationInfoMessage": {
+    "forgotPasswordConfirmationMessage": "Please check your email for password reset instructions.",
+    "@forgotPasswordConfirmationMessage": {
         "description": "Forgot password screen instructions on password reset"
     },
-    "forgotPasswordErrorUnknown": "An unknown error occured. Please try again",
-    "@forgotPasswordErrorUnknown": {
-        "description": "Forgot password error message when supabase call has an error"
+    "createAccountScreenHeader": "Create an Account",
+    "@createAccountScreenHeader": {
+        "description": "Header for Create Account screen"
+    },
+    "createAccountConfirmationHeader": "Account Successfully Created!",
+    "@createAccountConfirmationHeader": {
+        "description": "Create account confirmation screen header"
+    },
+    "createAccountConfirmationMessage": "Please check your email to confirm your account. Your account must be confirmed before you are able to log in.",
+    "@createAccountConfirmationMessage": {
+        "description": "Create account confirmation screen instructions on account confirmation"
     },
     "accountConfirmationHeader": "Account Confirmed!",
     "@accountConfirmationHeader": {
         "description": "Account confirmation screen header"
     },
-    "accountConfirmationInfoMessage": "You may now securely log in to WishingWell",
-    "@accountConfirmationInfoMessage": {
+    "accountConfirmationMessage": "You may now securely log in to WishingWell",
+    "@accountConfirmationMessage": {
         "description": "Account confirmation screen info message"
     },
-    "resetPasswordButtonLabel": "Reset Password",
-    "@resetPasswordButtonLabel": {
-        "description": "Reset password button label"
-    },
-    "resetPasswordHeader": "Reset Password",
-    "@resetPasswordHeader": {
+    "resetPasswordScreenHeader": "Reset Password",
+    "@resetPasswordScreenHeader": {
         "description": "Header for Reset Password screen"
     },
-    "resetPasswordSubtext": "Enter and confirm your new password below",
-    "@resetPasswordSubtext": {
+    "resetPasswordScreenSubtext": "Enter and confirm your new password below",
+    "@resetPasswordScreenSubtext": {
         "description": "Subtext for Reset Password screen"
-    },
-    "resetPasswordErrorPasswordNotValid": "Password does not meet above requirements",
-    "@resetPasswordErrorPasswordNotValid": {
-        "description": "Create account error message when password is not valid"
-    },
-    "resetPasswordErrorUnknown": "An unknown error occured. Please try again",
-    "@resetPasswordErrorUnknown": {
-        "description": "Reset password error message when supabase call has an error"
     },
     "resetPasswordConfirmationHeader": "Password Successfully Reset!",
     "@resetPasswordConfirmationHeader": {
         "description": "Reset password confirmation screen header"
     },
-    "resetPasswordConfirmationInfoMessage": "You may now log in with your new password",
-    "@resetPasswordConfirmationInfoMessage": {
+    "resetPasswordConfirmationMessage": "You may now log in with your new password",
+    "@resetPasswordConfirmationMessage": {
         "description": "Reset password confirmation screen info on reset confirmation"
     },
     "passwordRequirementsHeader": "Password must include:",
     "@passwordRequirementsHeader": {
         "description": "Header for password requirements checklist"
     },
-    "passwordRequirementsMinimumChars": "At least 12 characters",
-    "@passwordRequirementsMinimumChars": {
-        "description": "Minimum characters requirement for password requirements checklist"
+    "passwordRequirementsMinChars": "At least 12 characters",
+    "@passwordRequirementsMinChars": {
+        "description": "Minimum characters requirement for password"
     },
     "passwordRequirementsUppercase": "One uppercase letter",
     "@passwordRequirementsUppercase": {
-        "description": "Uppercase letter requirement for password requirements checklist"
+        "description": "Uppercase letter requirement for password"
     },
     "passwordRequirementsLowercase": "One lowercase letter",
     "@passwordRequirementsLowercase": {
-        "description": "Lowercase letter requirement for password requirements checklist"
+        "description": "Lowercase letter requirement for password"
     },
     "passwordRequirementsDigit": "One number",
     "@passwordRequirementsDigit": {
-        "description": "Number requirement for password requirements checklist"
+        "description": "Number requirement for password"
     },
     "passwordRequirementsSpecialChar": "One special character",
     "@passwordRequirementsSpecialChar": {
-        "description": "Special character requirement for password requirements checklist"
+        "description": "Special character requirement for password"
     },
     "passwordRequirementsMatching": "Passwords must match",
     "@passwordRequirementsMatching": {
-        "description": "Matching passwords requirement for password requirements checklist"
+        "description": "Matching passwords requirement"
     },
-    "submit": "Submit",
-    "@submit": {
-        "description": "Label for submit button on Forgot Password screen"
+    "homeWelcome": "Welcome!",
+    "@homeWelcome": {
+        "description": "Welcome header on home screen without name"
     },
-    "welcomeHeader": "Welcome!",
-    "@welcomeHeader": {
-        "description": "header for home screen (no name)"
-    },
-    "welcomeHeaderWithName": "Welcome, {name}!",
-    "@welcomeHeaderWithName": {
-        "description": "header for home screen with name",
+    "homeWelcomeWithName": "Welcome, {name}!",
+    "@homeWelcomeWithName": {
+        "description": "Welcome header on home screen with name",
         "placeholders": {
             "name": {
                 "type": "String",
@@ -186,8 +170,8 @@
             }
         }
     },
-    "comingUpTitle": "Coming Up",
-    "@comingUpTitle": {
-        "description": "title for coming up section on home"
+    "homeComingUp": "Coming Up",
+    "@homeComingUp": {
+        "description": "Title for coming up section on home"
     }
 }

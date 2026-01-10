@@ -18,7 +18,7 @@ class CreateAccountButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppButton.label(
-          label: l10n.createAccountButtonLabel,
+          label: l10n.authCreateAccountButton,
           onPressed: () => viewModel.tapCreateAccountButton(context),
           type: AppButtonType.primary,
         ),

@@ -22,7 +22,7 @@ class ForgotPasswordInput extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppInput(
-          placeholder: l10n.email,
+          placeholder: l10n.authEmail,
           type: AppInputType.email,
           onChanged: (String val) => viewModel.updateEmailField(val),
         ),
@@ -51,9 +51,9 @@ class ForgotPasswordInput extends StatelessWidget {
 
     return switch (viewModel.authError) {
       UIAuthError(:final type) => switch (type) {
-        ForgotPasswordErrorType.noEmail => l10n.loginErrorNoEmail,
-        ForgotPasswordErrorType.badEmail => l10n.loginErrorBadEmail,
-        ForgotPasswordErrorType.unknown => l10n.loginErrorUnknown,
+        ForgotPasswordErrorType.noEmail => l10n.errorEmailRequired,
+        ForgotPasswordErrorType.badEmail => l10n.errorInvalidEmail,
+        ForgotPasswordErrorType.unknown => l10n.errorUnknown,
         ForgotPasswordErrorType.none => '',
       },
       SupabaseAuthError(:final message) => message,

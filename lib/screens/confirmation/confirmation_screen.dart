@@ -92,22 +92,22 @@ class ConfirmationScreen extends StatelessWidget {
       case _ConfirmationScreenFlavor.account:
         return ConfirmationScreenContent(
           header: l10n.accountConfirmationHeader,
-          subtext: l10n.accountConfirmationInfoMessage,
+          subtext: l10n.accountConfirmationMessage,
         );
       case _ConfirmationScreenFlavor.createAccount:
         return ConfirmationScreenContent(
           header: l10n.createAccountConfirmationHeader,
-          subtext: l10n.createAccountConfirmationInfoMessage,
+          subtext: l10n.createAccountConfirmationMessage,
         );
       case _ConfirmationScreenFlavor.forgotPassword:
         return ConfirmationScreenContent(
           header: l10n.forgotPasswordConfirmationHeader,
-          subtext: l10n.forgotPasswordConfirmationInfoMessage,
+          subtext: l10n.forgotPasswordConfirmationMessage,
         );
       case _ConfirmationScreenFlavor.resetPassword:
         return ConfirmationScreenContent(
           header: l10n.resetPasswordConfirmationHeader,
-          subtext: l10n.resetPasswordConfirmationInfoMessage,
+          subtext: l10n.resetPasswordConfirmationMessage,
         );
     }
   }

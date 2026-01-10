@@ -15,12 +15,12 @@ class CreateAccountHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          l10n.createAccount,
+          l10n.createAccountScreenHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
         ),
         Text(
-          l10n.createAccountSubtext,
+          l10n.loginScreenSubtext,
           style: textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),

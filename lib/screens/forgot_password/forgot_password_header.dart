@@ -15,12 +15,12 @@ class ForgotPasswordHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          l10n.forgotPasswordHeader,
+          l10n.forgotPasswordScreenHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
         ),
         Text(
-          l10n.forgotPasswordSubtext,
+          l10n.forgotPasswordScreenSubtext,
           style: textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),

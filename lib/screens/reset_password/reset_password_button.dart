@@ -18,7 +18,7 @@ class ResetPasswordButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppButton.label(
-          label: l10n.resetPasswordButtonLabel,
+          label: l10n.authResetPassword,
           onPressed: () => viewmodel.tapResetPasswordButton(context),
           type: AppButtonType.primary,
         ),

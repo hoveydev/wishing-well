@@ -22,13 +22,13 @@ class LoginInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppInput(
-          placeholder: l10n.email,
+          placeholder: l10n.authEmail,
           type: AppInputType.email,
           onChanged: (String val) => viewModel.updateEmailField(val),
           controller: viewModel.emailInputController,
         ),
         AppInput(
-          placeholder: l10n.password,
+          placeholder: l10n.authPassword,
           type: AppInputType.password,
           onChanged: (String val) => viewModel.updatePasswordField(val),
           controller: viewModel.passwordInputController,
@@ -58,11 +58,11 @@ class LoginInputs extends StatelessWidget {
 
     return switch (viewModel.authError) {
       UIAuthError(:final type) => switch (type) {
-        LoginErrorType.noPasswordNoEmail => l10n.loginErrorNoPasswordNoEmail,
-        LoginErrorType.noEmail => l10n.loginErrorNoEmail,
-        LoginErrorType.badEmail => l10n.loginErrorBadEmail,
-        LoginErrorType.noPassword => l10n.loginErrorNoPassword,
-        LoginErrorType.unknown => l10n.loginErrorUnknown,
+        LoginErrorType.noPasswordNoEmail => l10n.errorEmailPasswordRequired,
+        LoginErrorType.noEmail => l10n.errorEmailRequired,
+        LoginErrorType.badEmail => l10n.errorInvalidEmail,
+        LoginErrorType.noPassword => l10n.errorPasswordRequired,
+        LoginErrorType.unknown => l10n.errorUnknown,
         LoginErrorType.none => '',
       },
       SupabaseAuthError(:final message) => message,

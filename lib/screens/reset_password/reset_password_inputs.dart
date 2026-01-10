@@ -18,13 +18,13 @@ class ResetPasswordInputs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppInput(
-          placeholder: l10n.password,
+          placeholder: l10n.authPassword,
           type: AppInputType.password,
           onChanged: (String password) =>
               viewmodel.updatePasswordOneField(password),
         ),
         AppInput(
-          placeholder: l10n.confirmPassword,
+          placeholder: l10n.authConfirmPassword,
           type: AppInputType.password,
           onChanged: (String password) =>
               viewmodel.updatePasswordTwoField(password),

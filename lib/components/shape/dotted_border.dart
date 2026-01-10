@@ -15,7 +15,6 @@ class DottedBorder extends ShapeBorder {
   final double dotLength;
   final double dotSpacing;
 
-  // coverage:ignore-start
   @override
   // ShapeBorder methods are called by Flutter's rendering system
   EdgeInsetsGeometry get dimensions => EdgeInsets.all(width);
@@ -64,5 +63,4 @@ class DottedBorder extends ShapeBorder {
     dotLength: dotLength * t,
     dotSpacing: dotSpacing * t,
   );
-  // coverage:ignore-end
 }

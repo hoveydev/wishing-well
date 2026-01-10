@@ -28,24 +28,22 @@ class HomeComingUp extends StatelessWidget {
     );
   }
 
-  Widget _comingUpCards(
-    TextTheme textTheme,
-    ColorSchemeExtension colorScheme,
-  ) => SizedBox(
-    width: double.infinity,
-    child: Card(
-      margin: EdgeInsets.zero,
-      elevation: 0,
-      shape: DottedBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
-        color: colorScheme.borderGray!,
-      ),
-      color: colorScheme.surfaceGray,
-      child: Padding(
-        padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
-        // will change to a calendar component
-        child: Text('Nothing yet :)', style: textTheme.bodySmall),
-      ),
-    ),
-  );
+  Widget _comingUpCards(TextTheme textTheme, AppColorScheme colorScheme) =>
+      SizedBox(
+        width: double.infinity,
+        child: Card(
+          margin: EdgeInsets.zero,
+          elevation: 0,
+          shape: DottedBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+            color: colorScheme.borderGray!,
+          ),
+          color: colorScheme.surfaceGray,
+          child: Padding(
+            padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
+            // will change to a calendar component
+            child: Text('Nothing yet :)', style: textTheme.bodySmall),
+          ),
+        ),
+      );
 }

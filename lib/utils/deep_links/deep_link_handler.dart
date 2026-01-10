@@ -23,12 +23,9 @@ class DeepLinkHandler {
     try {
       final uri = await source.initial();
       if (uri != null) _navigateFromUri(uri);
-      // coverage:ignore-start
     } catch (e, stackTrace) {
-      // Error case not covered in tests
       log('Error handling initial URI: $e', stackTrace: stackTrace);
     }
-    // coverage:ignore-end
   }
 
   void _navigateFromUri(Uri uri) {

@@ -5,10 +5,8 @@ import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoadingOverlay extends StatelessWidget {
-  // coverage:ignore-start
   const LoadingOverlay({required this.child, super.key});
   final Widget child;
-  // coverage:ignore-end
 
   @override
   Widget build(BuildContext context) => Stack(

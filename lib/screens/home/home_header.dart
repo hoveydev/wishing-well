@@ -15,12 +15,9 @@ class HomeHeader extends StatelessWidget {
     );
   }
 
-  // coverage:ignore-start
-  // firstName is never null in tests (always 'TestUser' from mock)
   String _welcomeHeaderText(String? firstName, AppLocalizations l10n) =>
       switch (firstName) {
         null => l10n.welcomeHeader,
         _ => l10n.welcomeHeaderWithName(firstName),
       };
-  // coverage:ignore-end
 }

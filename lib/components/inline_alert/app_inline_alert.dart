@@ -44,7 +44,7 @@ class AppInlineAlert extends StatelessWidget {
     }
   }
 
-  Color? _getColor(ColorSchemeExtension colorScheme) {
+  Color? _getColor(AppColorScheme colorScheme) {
     switch (type) {
       case AppInlineAlertType.info:
         return colorScheme.primary;

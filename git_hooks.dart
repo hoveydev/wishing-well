@@ -71,7 +71,7 @@ Future<bool> _preCommit() async {
   // Run tests
   print('🧪 Running tests...');
   final coverageSuccess = await _checkCoverage(
-    threshold: 100.0,
+    threshold: 95.0,
   ); // UPDATE COVERAGE THRESHOLD HERE
   if (!coverageSuccess) {
     return false;

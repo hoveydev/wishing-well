@@ -4,9 +4,9 @@ import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 void main() {
   group('color theme extension', () {
-    group('ColorSchemeExtension.copyWith', () {
+    group('AppColorScheme.copyWith', () {
       test('overrides provided values', () {
-        const original = ColorSchemeExtension(
+        const original = AppColorScheme(
           success: Color(0xFF00FF00),
           primary: Color(0xFFFFFFFF),
         );
@@ -18,7 +18,7 @@ void main() {
       });
 
       test('keeps original values when null', () {
-        const original = ColorSchemeExtension(
+        const original = AppColorScheme(
           success: Color(0xFF00FF00),
           primary: Color(0xFFFFFFFF),
         );
@@ -30,13 +30,13 @@ void main() {
       });
     });
 
-    group('ColorSchemeExtension.lerp', () {
-      const a = ColorSchemeExtension(
+    group('AppColorScheme.lerp', () {
+      const a = AppColorScheme(
         success: Color(0xFF000000),
         primary: Color(0xFFFFFFFF),
       );
 
-      const b = ColorSchemeExtension(
+      const b = AppColorScheme(
         success: Color(0xFFFFFFFF),
         primary: Color(0xFF000000),
       );

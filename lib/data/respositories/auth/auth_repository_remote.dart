@@ -17,7 +17,6 @@ class AuthRepositoryRemote extends AuthRepository {
     return _isAuthenticated;
   }
 
-  // coverage:ignore-start
   // userFirstName getter is not tested because tests use MockAuthRepository
   @override
   String? get userFirstName {
@@ -25,7 +24,6 @@ class AuthRepositoryRemote extends AuthRepository {
     _userFirstName = user?.userMetadata?['first_name'];
     return _userFirstName;
   }
-  // coverage:ignore-end
 
   @override
   Future<Result<void>> login({

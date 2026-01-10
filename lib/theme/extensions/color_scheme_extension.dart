@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
-  const ColorSchemeExtension({
+class AppColorScheme extends ThemeExtension<AppColorScheme> {
+  const AppColorScheme({
     this.primary,
     this.onPrimary,
     this.background,
@@ -22,7 +22,7 @@ class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
   final Color? error;
 
   @override
-  ColorSchemeExtension copyWith({
+  AppColorScheme copyWith({
     Color? primary,
     Color? onPrimary,
     Color? background,
@@ -31,7 +31,7 @@ class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
     Color? success,
     Color? warning,
     Color? error,
-  }) => ColorSchemeExtension(
+  }) => AppColorScheme(
     primary: primary ?? this.primary,
     onPrimary: onPrimary ?? this.onPrimary,
     background: background ?? this.background,
@@ -43,12 +43,9 @@ class ColorSchemeExtension extends ThemeExtension<ColorSchemeExtension> {
   );
 
   @override
-  ColorSchemeExtension lerp(
-    ThemeExtension<ColorSchemeExtension>? other,
-    double t,
-  ) {
-    if (other is! ColorSchemeExtension) return this;
-    return ColorSchemeExtension(
+  AppColorScheme lerp(ThemeExtension<AppColorScheme>? other, double t) {
+    if (other is! AppColorScheme) return this;
+    return AppColorScheme(
       primary: Color.lerp(primary, other.primary, t),
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t),
       background: Color.lerp(background, other.background, t),

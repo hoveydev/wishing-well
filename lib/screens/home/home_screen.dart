@@ -27,9 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) => Screen(
     appBar: AppMenuBar(
       // TODO: Update action to go to profile screen (when built)
-      // coverage:ignore-start
       action: () => log('profile screen'),
-      // coverage:ignore-end
       type: AppMenuBarType.main,
     ),
     crossAxisAlignment: CrossAxisAlignment.start,

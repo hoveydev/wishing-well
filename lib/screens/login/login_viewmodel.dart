@@ -132,14 +132,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     context.pushNamed(Routes.createAccount.name);
   }
 
-  // coverage:ignore-start
-  // Dispose is called automatically by Flutter when the widget is disposed
   @override
   void dispose() {
     _emailInputController.dispose();
     _passwordInputController.dispose();
     super.dispose();
   }
-
-  // coverage:ignore-end
 }

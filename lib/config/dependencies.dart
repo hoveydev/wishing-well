@@ -5,11 +5,7 @@ import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository_remote.dart';
 
 List<SingleChildWidget> get providersRemote => [
-  Provider(
-    // coverage:ignore-start
-    create: (_) => Supabase.instance.client,
-    // coverage:ignore-end
-  ),
+  Provider(create: (_) => Supabase.instance.client),
   ChangeNotifierProvider(
     create: (context) =>
         AuthRepositoryRemote(supabase: context.read()) as AuthRepository,

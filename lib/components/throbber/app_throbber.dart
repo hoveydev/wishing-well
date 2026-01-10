@@ -3,14 +3,12 @@ import 'package:wishing_well/components/throbber/app_throbber_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AppThrobber extends StatelessWidget {
-  // coverage:ignore-start
   const AppThrobber.xsmall({super.key}) : size = AppThrobberSize.xsmall;
   const AppThrobber.small({super.key}) : size = AppThrobberSize.small;
   const AppThrobber.medium({super.key}) : size = AppThrobberSize.medium;
   const AppThrobber.large({super.key}) : size = AppThrobberSize.large;
   const AppThrobber.xlarge({super.key}) : size = AppThrobberSize.xlarge;
   final double size;
-  // coverage:ignore-end
 
   @override
   Widget build(BuildContext context) {

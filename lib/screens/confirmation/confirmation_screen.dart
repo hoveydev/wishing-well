@@ -28,7 +28,6 @@ enum _ConfirmationScreenFlavor {
 }
 
 class ConfirmationScreen extends StatelessWidget {
-  // coverage:ignore-start
   const ConfirmationScreen._({
     required _ConfirmationScreenFlavor confirmationScreenFlavor,
     super.key,
@@ -64,7 +63,6 @@ class ConfirmationScreen extends StatelessWidget {
   final IconData? icon;
   final String? subtext;
   final _ConfirmationScreenFlavor _confirmationScreenFlavor;
-  // coverage:ignore-end
 
   @override
   Widget build(BuildContext context) {

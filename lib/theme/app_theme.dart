@@ -10,7 +10,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
     extensions: const <ThemeExtension<dynamic>>[
-      ColorSchemeExtension(
+      AppColorScheme(
         primary: AppColors.primary,
         onPrimary: AppColors.onPrimary,
         background: AppColors.background,
@@ -32,7 +32,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.darkBackground,
     primaryColor: AppColors.darkPrimary,
     extensions: const <ThemeExtension<dynamic>>[
-      ColorSchemeExtension(
+      AppColorScheme(
         primary: AppColors.darkPrimary,
         onPrimary: AppColors.darkOnPrimary,
         background: AppColors.darkBackground,
@@ -52,6 +52,5 @@ class AppTheme {
 }
 
 extension AppThemeExtension on BuildContext {
-  ColorSchemeExtension get colorScheme =>
-      Theme.of(this).extension<ColorSchemeExtension>()!;
+  AppColorScheme get colorScheme => Theme.of(this).extension<AppColorScheme>()!;
 }

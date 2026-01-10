@@ -18,17 +18,17 @@ class LoginButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppButton.label(
-          label: l10n.forgotPassword,
+          label: l10n.authForgotPassword,
           onPressed: () => viewModel.tapForgotPasswordButton(context),
           type: AppButtonType.tertiary,
         ),
         AppButton.label(
-          label: l10n.signIn,
+          label: l10n.authSignIn,
           onPressed: () => viewModel.tapLoginButton(context),
           type: AppButtonType.primary,
         ),
         AppButton.label(
-          label: l10n.createAccount,
+          label: l10n.authCreateAccount,
           onPressed: () => viewModel.tapCreateAccountButton(context),
           type: AppButtonType.secondary,
         ),

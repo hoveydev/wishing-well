@@ -17,7 +17,7 @@ class HomeHeader extends StatelessWidget {
 
   String _welcomeHeaderText(String? firstName, AppLocalizations l10n) =>
       switch (firstName) {
-        null => l10n.welcomeHeader,
-        _ => l10n.welcomeHeaderWithName(firstName),
+        null => l10n.homeWelcome,
+        _ => l10n.homeWelcomeWithName(firstName),
       };
 }

@@ -110,127 +110,115 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Email'**
-  String get email;
+  String get authEmail;
 
   /// Label for the password input field
   ///
   /// In en, this message translates to:
   /// **'Password'**
-  String get password;
+  String get authPassword;
 
   /// Label for the confirm password field
   ///
   /// In en, this message translates to:
   /// **'Confirm Password'**
-  String get confirmPassword;
-
-  /// Text for the forgot password link
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot Password?'**
-  String get forgotPassword;
+  String get authConfirmPassword;
 
   /// Text for the sign in button
   ///
   /// In en, this message translates to:
   /// **'Sign In'**
-  String get signIn;
+  String get authSignIn;
 
   /// Text for the create account link
   ///
   /// In en, this message translates to:
   /// **'Create an Account'**
-  String get createAccount;
+  String get authCreateAccount;
 
-  /// Login error message when both email and password are empty
+  /// Text for the create account button
   ///
   /// In en, this message translates to:
-  /// **'Email and password cannot be empty'**
-  String get loginErrorNoPasswordNoEmail;
+  /// **'Create Account'**
+  String get authCreateAccountButton;
 
-  /// Login error message when email is empty
+  /// Text for the forgot password link
   ///
   /// In en, this message translates to:
-  /// **'Email cannot be empty'**
-  String get loginErrorNoEmail;
+  /// **'Forgot Password?'**
+  String get authForgotPassword;
 
-  /// Login Error message when password is empty
+  /// Text for the reset password button/header
   ///
   /// In en, this message translates to:
-  /// **'Password cannot be empty'**
-  String get loginErrorNoPassword;
+  /// **'Reset Password'**
+  String get authResetPassword;
 
-  /// Login error message when email format is invalid
+  /// Label for the submit button
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get authSubmit;
+
+  /// Error message when email format is invalid
   ///
   /// In en, this message translates to:
   /// **'Invalid email format'**
-  String get loginErrorBadEmail;
+  String get errorInvalidEmail;
 
-  /// Login error message when supabase call has an error
+  /// Error message when email is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email cannot be empty'**
+  String get errorEmailRequired;
+
+  /// Error message when password is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get errorPasswordRequired;
+
+  /// Error message when both email and password are empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email and password cannot be empty'**
+  String get errorEmailPasswordRequired;
+
+  /// Error message when password does not meet requirements
+  ///
+  /// In en, this message translates to:
+  /// **'Password does not meet above requirements'**
+  String get errorPasswordRequirements;
+
+  /// Generic error message when an unknown error occurs
   ///
   /// In en, this message translates to:
   /// **'An unknown error occured. Please try again'**
-  String get loginErrorUnknown;
+  String get errorUnknown;
+
+  /// Header for login screen
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to WishingWell'**
+  String get loginScreenHeader;
+
+  /// Subtext for login screen
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your credentials below'**
+  String get loginScreenSubtext;
 
   /// Header for Forgot Password screen
   ///
   /// In en, this message translates to:
   /// **'Forgot Password'**
-  String get forgotPasswordHeader;
+  String get forgotPasswordScreenHeader;
 
   /// Subtext for Forgot Password screen
   ///
   /// In en, this message translates to:
   /// **'Enter your email address below to receive a password reset link'**
-  String get forgotPasswordSubtext;
-
-  /// Create account button label
-  ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
-  String get createAccountButtonLabel;
-
-  /// Create account error message when email format is invalid
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your credentials below'**
-  String get createAccountSubtext;
-
-  /// Create account error message when email format is invalid
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email format'**
-  String get createAccountErrorBadEmail;
-
-  /// Create account error message when email is empty
-  ///
-  /// In en, this message translates to:
-  /// **'Email cannot be empty'**
-  String get createAccountErrorNoEmail;
-
-  /// Create account error message when password is not valid
-  ///
-  /// In en, this message translates to:
-  /// **'Password does not meet above requirements'**
-  String get createAccountErrorPasswordNotValid;
-
-  /// Create account error message when supabase call has an error
-  ///
-  /// In en, this message translates to:
-  /// **'An unknown error occured. Please try again'**
-  String get createAccountErrorUnknown;
-
-  /// Create account confirmation screen header
-  ///
-  /// In en, this message translates to:
-  /// **'Account Successfully Created!'**
-  String get createAccountConfirmationHeader;
-
-  /// Create account confirmation screen instructions on account confirmation
-  ///
-  /// In en, this message translates to:
-  /// **'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.'**
-  String get createAccountConfirmationInfoMessage;
+  String get forgotPasswordScreenSubtext;
 
   /// Forgot password confirmation screen header
   ///
@@ -242,13 +230,25 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Please check your email for password reset instructions.'**
-  String get forgotPasswordConfirmationInfoMessage;
+  String get forgotPasswordConfirmationMessage;
 
-  /// Forgot password error message when supabase call has an error
+  /// Header for Create Account screen
   ///
   /// In en, this message translates to:
-  /// **'An unknown error occured. Please try again'**
-  String get forgotPasswordErrorUnknown;
+  /// **'Create an Account'**
+  String get createAccountScreenHeader;
+
+  /// Create account confirmation screen header
+  ///
+  /// In en, this message translates to:
+  /// **'Account Successfully Created!'**
+  String get createAccountConfirmationHeader;
+
+  /// Create account confirmation screen instructions on account confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.'**
+  String get createAccountConfirmationMessage;
 
   /// Account confirmation screen header
   ///
@@ -260,37 +260,19 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'You may now securely log in to WishingWell'**
-  String get accountConfirmationInfoMessage;
-
-  /// Reset password button label
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Password'**
-  String get resetPasswordButtonLabel;
+  String get accountConfirmationMessage;
 
   /// Header for Reset Password screen
   ///
   /// In en, this message translates to:
   /// **'Reset Password'**
-  String get resetPasswordHeader;
+  String get resetPasswordScreenHeader;
 
   /// Subtext for Reset Password screen
   ///
   /// In en, this message translates to:
   /// **'Enter and confirm your new password below'**
-  String get resetPasswordSubtext;
-
-  /// Create account error message when password is not valid
-  ///
-  /// In en, this message translates to:
-  /// **'Password does not meet above requirements'**
-  String get resetPasswordErrorPasswordNotValid;
-
-  /// Reset password error message when supabase call has an error
-  ///
-  /// In en, this message translates to:
-  /// **'An unknown error occured. Please try again'**
-  String get resetPasswordErrorUnknown;
+  String get resetPasswordScreenSubtext;
 
   /// Reset password confirmation screen header
   ///
@@ -302,7 +284,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'You may now log in with your new password'**
-  String get resetPasswordConfirmationInfoMessage;
+  String get resetPasswordConfirmationMessage;
 
   /// Header for password requirements checklist
   ///
@@ -310,65 +292,59 @@ abstract class AppLocalizations {
   /// **'Password must include:'**
   String get passwordRequirementsHeader;
 
-  /// Minimum characters requirement for password requirements checklist
+  /// Minimum characters requirement for password
   ///
   /// In en, this message translates to:
   /// **'At least 12 characters'**
-  String get passwordRequirementsMinimumChars;
+  String get passwordRequirementsMinChars;
 
-  /// Uppercase letter requirement for password requirements checklist
+  /// Uppercase letter requirement for password
   ///
   /// In en, this message translates to:
   /// **'One uppercase letter'**
   String get passwordRequirementsUppercase;
 
-  /// Lowercase letter requirement for password requirements checklist
+  /// Lowercase letter requirement for password
   ///
   /// In en, this message translates to:
   /// **'One lowercase letter'**
   String get passwordRequirementsLowercase;
 
-  /// Number requirement for password requirements checklist
+  /// Number requirement for password
   ///
   /// In en, this message translates to:
   /// **'One number'**
   String get passwordRequirementsDigit;
 
-  /// Special character requirement for password requirements checklist
+  /// Special character requirement for password
   ///
   /// In en, this message translates to:
   /// **'One special character'**
   String get passwordRequirementsSpecialChar;
 
-  /// Matching passwords requirement for password requirements checklist
+  /// Matching passwords requirement
   ///
   /// In en, this message translates to:
   /// **'Passwords must match'**
   String get passwordRequirementsMatching;
 
-  /// Label for submit button on Forgot Password screen
-  ///
-  /// In en, this message translates to:
-  /// **'Submit'**
-  String get submit;
-
-  /// header for home screen (no name)
+  /// Welcome header on home screen without name
   ///
   /// In en, this message translates to:
   /// **'Welcome!'**
-  String get welcomeHeader;
+  String get homeWelcome;
 
-  /// header for home screen with name
+  /// Welcome header on home screen with name
   ///
   /// In en, this message translates to:
   /// **'Welcome, {name}!'**
-  String welcomeHeaderWithName(String name);
+  String homeWelcomeWithName(String name);
 
-  /// title for coming up section on home
+  /// Title for coming up section on home
   ///
   /// In en, this message translates to:
   /// **'Coming Up'**
-  String get comingUpTitle;
+  String get homeComingUp;
 }
 
 class _AppLocalizationsDelegate

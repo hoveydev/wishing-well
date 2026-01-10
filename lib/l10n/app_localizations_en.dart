@@ -15,121 +15,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTagline => 'Your personal well for thoughtful giving';
 
   @override
-  String get email => 'Email';
+  String get authEmail => 'Email';
 
   @override
-  String get password => 'Password';
+  String get authPassword => 'Password';
 
   @override
-  String get confirmPassword => 'Confirm Password';
+  String get authConfirmPassword => 'Confirm Password';
 
   @override
-  String get forgotPassword => 'Forgot Password?';
+  String get authSignIn => 'Sign In';
 
   @override
-  String get signIn => 'Sign In';
+  String get authCreateAccount => 'Create an Account';
 
   @override
-  String get createAccount => 'Create an Account';
+  String get authCreateAccountButton => 'Create Account';
 
   @override
-  String get loginErrorNoPasswordNoEmail =>
-      'Email and password cannot be empty';
+  String get authForgotPassword => 'Forgot Password?';
 
   @override
-  String get loginErrorNoEmail => 'Email cannot be empty';
+  String get authResetPassword => 'Reset Password';
 
   @override
-  String get loginErrorNoPassword => 'Password cannot be empty';
+  String get authSubmit => 'Submit';
 
   @override
-  String get loginErrorBadEmail => 'Invalid email format';
+  String get errorInvalidEmail => 'Invalid email format';
 
   @override
-  String get loginErrorUnknown => 'An unknown error occured. Please try again';
+  String get errorEmailRequired => 'Email cannot be empty';
 
   @override
-  String get forgotPasswordHeader => 'Forgot Password';
+  String get errorPasswordRequired => 'Password cannot be empty';
 
   @override
-  String get forgotPasswordSubtext =>
-      'Enter your email address below to receive a password reset link';
+  String get errorEmailPasswordRequired => 'Email and password cannot be empty';
 
   @override
-  String get createAccountButtonLabel => 'Create Account';
-
-  @override
-  String get createAccountSubtext => 'Please enter your credentials below';
-
-  @override
-  String get createAccountErrorBadEmail => 'Invalid email format';
-
-  @override
-  String get createAccountErrorNoEmail => 'Email cannot be empty';
-
-  @override
-  String get createAccountErrorPasswordNotValid =>
+  String get errorPasswordRequirements =>
       'Password does not meet above requirements';
 
   @override
-  String get createAccountErrorUnknown =>
-      'An unknown error occured. Please try again';
+  String get errorUnknown => 'An unknown error occured. Please try again';
 
   @override
-  String get createAccountConfirmationHeader => 'Account Successfully Created!';
+  String get loginScreenHeader => 'Welcome to WishingWell';
 
   @override
-  String get createAccountConfirmationInfoMessage =>
-      'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.';
+  String get loginScreenSubtext => 'Please enter your credentials below';
+
+  @override
+  String get forgotPasswordScreenHeader => 'Forgot Password';
+
+  @override
+  String get forgotPasswordScreenSubtext =>
+      'Enter your email address below to receive a password reset link';
 
   @override
   String get forgotPasswordConfirmationHeader => 'Reset Password Request Sent!';
 
   @override
-  String get forgotPasswordConfirmationInfoMessage =>
+  String get forgotPasswordConfirmationMessage =>
       'Please check your email for password reset instructions.';
 
   @override
-  String get forgotPasswordErrorUnknown =>
-      'An unknown error occured. Please try again';
+  String get createAccountScreenHeader => 'Create an Account';
+
+  @override
+  String get createAccountConfirmationHeader => 'Account Successfully Created!';
+
+  @override
+  String get createAccountConfirmationMessage =>
+      'Please check your email to confirm your account. Your account must be confirmed before you are able to log in.';
 
   @override
   String get accountConfirmationHeader => 'Account Confirmed!';
 
   @override
-  String get accountConfirmationInfoMessage =>
+  String get accountConfirmationMessage =>
       'You may now securely log in to WishingWell';
 
   @override
-  String get resetPasswordButtonLabel => 'Reset Password';
+  String get resetPasswordScreenHeader => 'Reset Password';
 
   @override
-  String get resetPasswordHeader => 'Reset Password';
-
-  @override
-  String get resetPasswordSubtext =>
+  String get resetPasswordScreenSubtext =>
       'Enter and confirm your new password below';
-
-  @override
-  String get resetPasswordErrorPasswordNotValid =>
-      'Password does not meet above requirements';
-
-  @override
-  String get resetPasswordErrorUnknown =>
-      'An unknown error occured. Please try again';
 
   @override
   String get resetPasswordConfirmationHeader => 'Password Successfully Reset!';
 
   @override
-  String get resetPasswordConfirmationInfoMessage =>
+  String get resetPasswordConfirmationMessage =>
       'You may now log in with your new password';
 
   @override
   String get passwordRequirementsHeader => 'Password must include:';
 
   @override
-  String get passwordRequirementsMinimumChars => 'At least 12 characters';
+  String get passwordRequirementsMinChars => 'At least 12 characters';
 
   @override
   String get passwordRequirementsUppercase => 'One uppercase letter';
@@ -147,16 +133,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordRequirementsMatching => 'Passwords must match';
 
   @override
-  String get submit => 'Submit';
+  String get homeWelcome => 'Welcome!';
 
   @override
-  String get welcomeHeader => 'Welcome!';
-
-  @override
-  String welcomeHeaderWithName(String name) {
+  String homeWelcomeWithName(String name) {
     return 'Welcome, $name!';
   }
 
   @override
-  String get comingUpTitle => 'Coming Up';
+  String get homeComingUp => 'Coming Up';
 }

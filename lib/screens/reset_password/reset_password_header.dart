@@ -15,12 +15,12 @@ class ResetPasswordHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          l10n.resetPasswordHeader,
+          l10n.resetPasswordScreenHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
         ),
         Text(
-          l10n.resetPasswordSubtext,
+          l10n.resetPasswordScreenSubtext,
           style: textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),

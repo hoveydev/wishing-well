@@ -19,7 +19,7 @@ class HomeComingUp extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n.comingUpTitle,
+          l10n.homeComingUp,
           style: textTheme.titleMedium,
           textAlign: TextAlign.left,
         ),

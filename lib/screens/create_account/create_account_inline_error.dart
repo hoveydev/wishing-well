@@ -29,11 +29,11 @@ class CreateAccountInlineError extends StatelessWidget {
 
     return switch (viewModel.authError) {
       UIAuthError(:final type) => switch (type) {
-        CreateAccountErrorType.noEmail => l10n.createAccountErrorNoEmail,
-        CreateAccountErrorType.badEmail => l10n.createAccountErrorBadEmail,
+        CreateAccountErrorType.noEmail => l10n.errorEmailRequired,
+        CreateAccountErrorType.badEmail => l10n.errorInvalidEmail,
         CreateAccountErrorType.passwordRequirementsNotMet =>
-          l10n.createAccountErrorPasswordNotValid,
-        CreateAccountErrorType.unknown => l10n.createAccountErrorUnknown,
+          l10n.errorPasswordRequirements,
+        CreateAccountErrorType.unknown => l10n.errorUnknown,
         CreateAccountErrorType.none => '',
       },
       SupabaseAuthError(:final message) => message,

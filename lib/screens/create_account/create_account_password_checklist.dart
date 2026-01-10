@@ -50,7 +50,7 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
               const AppSpacer.medium(),
               buildChecklistItem(
                 context,
-                l10n.passwordRequirementsMinimumChars,
+                l10n.passwordRequirementsMinChars,
                 minimumCharsSatisfied,
               ),
               const AppSpacer.xsmall(),

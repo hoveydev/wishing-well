@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
+import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/loading/loading_overlay.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 dynamic startAppWithLoadingScreen(
@@ -37,12 +37,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await startAppWithLoadingScreen(tester, loadingController);
-      final throbberFinder = find.byWidgetPredicate(
-        (widget) => widget is CircularProgressIndicator,
-      );
-      final throbber = tester.widget<CircularProgressIndicator>(throbberFinder);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(throbber.backgroundColor, AppColors.primary);
+      expect(find.byType(AppThrobber), findsOneWidget);
     });
 
     testWidgets('loading spinner hidden by defaiult', (

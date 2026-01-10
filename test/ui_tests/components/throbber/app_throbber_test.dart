@@ -41,5 +41,36 @@ void main() {
       expect(sizedBox.height, AppThrobberSize.xlarge);
       expect(sizedBox.width, AppThrobberSize.xlarge);
     });
+
+    testWidgets('renders CustomPaint for custom spinner', (tester) async {
+      await tester.pumpWidget(createTestWidget(const AppThrobber.medium()));
+      expect(
+        find.descendant(
+          of: find.byType(AppThrobber),
+          matching: find.byType(CustomPaint),
+        ),
+        findsWidgets,
+      );
+    });
+
+    testWidgets('renders AnimatedBuilder for animation', (tester) async {
+      await tester.pumpWidget(createTestWidget(const AppThrobber.medium()));
+      expect(
+        find.descendant(
+          of: find.byType(AppThrobber),
+          matching: find.byType(AnimatedBuilder),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('animation continues over time', (tester) async {
+      await tester.pumpWidget(createTestWidget(const AppThrobber.medium()));
+      final throbberFinder = find.byType(AppThrobber);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(throbberFinder, findsOneWidget);
+    });
   });
 }

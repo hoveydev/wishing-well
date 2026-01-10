@@ -91,17 +91,23 @@ class AppButtonContent extends StatelessWidget {
         return [Icon(icon!, size: textTheme.headlineLarge!.fontSize)];
       case _AppButtonContentType.label:
         return [
-          Text(
-            label!,
-            style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
+          Flexible(
+            child: Text(
+              label!,
+              style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
+              textAlign: TextAlign.center,
+            ),
           ),
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
           Icon(icon!, size: textTheme.headlineLarge!.fontSize),
-          Text(
-            label!,
-            style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              label!,
+              style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
+            ),
           ),
         ];
     }

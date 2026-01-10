@@ -197,5 +197,37 @@ void main() {
       expect(textWidget.style!.color, AppColors.primary);
       changedValue = '';
     });
+
+    testWidgets('Email Input accepts FocusNode', (WidgetTester tester) async {
+      final focusNode = FocusNode();
+      final Widget textInput = AppInput(
+        placeholder: 'Email Input',
+        type: AppInputType.email,
+        onChanged: (String val) => changedValue = val,
+        focusNode: focusNode,
+      );
+      await tester.pumpWidget(createTestWidget(textInput));
+      final TextField input = tester.widget<TextField>(find.byType(TextField));
+      expect(input.focusNode, focusNode);
+      focusNode.dispose();
+      changedValue = '';
+    });
+
+    testWidgets('Password Input accepts FocusNode', (
+      WidgetTester tester,
+    ) async {
+      final focusNode = FocusNode();
+      final Widget textInput = AppInput(
+        placeholder: 'Password Input',
+        type: AppInputType.password,
+        onChanged: (String val) => changedValue = val,
+        focusNode: focusNode,
+      );
+      await tester.pumpWidget(createTestWidget(textInput));
+      final TextField input = tester.widget<TextField>(find.byType(TextField));
+      expect(input.focusNode, focusNode);
+      focusNode.dispose();
+      changedValue = '';
+    });
   });
 }

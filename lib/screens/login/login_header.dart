@@ -12,7 +12,11 @@ class LoginHeader extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final screenHeight = MediaQuery.of(context).size.height;
-    final logoSize = AppIconSize(sectionHeight: screenHeight).large;
+    final isSmallScreen = screenHeight < 700;
+
+    final logoSize = isSmallScreen
+        ? AppIconSize(sectionHeight: screenHeight).large * 0.8
+        : AppIconSize(sectionHeight: screenHeight).large;
 
     return Column(
       spacing: AppSpacerSize.small,
@@ -21,13 +25,19 @@ class LoginHeader extends StatelessWidget {
         AppLogo(size: logoSize),
         Text(
           l10n.appName,
-          style: textTheme.headlineLarge,
+          style: isSmallScreen
+              ? textTheme.headlineMedium
+              : textTheme.headlineLarge,
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.appName,
         ),
         Text(
           l10n.appTagline,
-          style: textTheme.bodyMedium,
+          style: textTheme.bodyMedium?.copyWith(
+            color: textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+          ),
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.appTagline,
         ),
       ],
     );

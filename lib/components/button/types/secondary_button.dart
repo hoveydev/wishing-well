@@ -88,7 +88,7 @@ class SecondaryButton extends StatelessWidget {
         overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         foregroundColor: WidgetStatePropertyAll(colorScheme.primary),
         padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+          const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         ),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

@@ -15,13 +15,8 @@ class LoginButtons extends StatelessWidget {
 
     return Column(
       spacing: AppSpacerSize.small,
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppButton.label(
-          label: l10n.authForgotPassword,
-          onPressed: () => viewModel.tapForgotPasswordButton(context),
-          type: AppButtonType.tertiary,
-        ),
         AppButton.label(
           label: l10n.authSignIn,
           onPressed: () => viewModel.tapLoginButton(context),
@@ -31,6 +26,14 @@ class LoginButtons extends StatelessWidget {
           label: l10n.authCreateAccount,
           onPressed: () => viewModel.tapCreateAccountButton(context),
           type: AppButtonType.secondary,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: AppSpacerSize.small),
+          child: AppButton.label(
+            label: l10n.authForgotPassword,
+            onPressed: () => viewModel.tapForgotPasswordButton(context),
+            type: AppButtonType.tertiary,
+          ),
         ),
       ],
     );

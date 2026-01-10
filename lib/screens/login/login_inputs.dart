@@ -10,8 +10,15 @@ import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 
 class LoginInputs extends StatelessWidget {
-  const LoginInputs({required this.viewModel, super.key});
+  const LoginInputs({
+    required this.viewModel,
+    this.emailFocusNode,
+    this.passwordFocusNode,
+    super.key,
+  });
   final LoginViewModel viewModel;
+  final FocusNode? emailFocusNode;
+  final FocusNode? passwordFocusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +26,21 @@ class LoginInputs extends StatelessWidget {
 
     return Column(
       spacing: AppSpacerSize.small,
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppInput(
           placeholder: l10n.authEmail,
           type: AppInputType.email,
           onChanged: (String val) => viewModel.updateEmailField(val),
           controller: viewModel.emailInputController,
+          focusNode: emailFocusNode,
         ),
         AppInput(
           placeholder: l10n.authPassword,
           type: AppInputType.password,
           onChanged: (String val) => viewModel.updatePasswordField(val),
           controller: viewModel.passwordInputController,
+          focusNode: passwordFocusNode,
         ),
         ListenableBuilder(
           listenable: viewModel,

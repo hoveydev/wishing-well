@@ -12,7 +12,7 @@ final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
 
 EdgeInsets edgeInsets = const EdgeInsets.symmetric(
   vertical: 16,
-  horizontal: 32,
+  horizontal: 24,
 );
 BorderSide borderSide = const BorderSide(color: AppColors.primary);
 
@@ -137,5 +137,21 @@ void main() {
         expect(iconWidget.size, 32.0);
       },
     );
+
+    testWidgets('Secondary Label with Long Text Wraps', (
+      WidgetTester tester,
+    ) async {
+      final Widget longTextButton = AppButton.label(
+        label:
+            'This is a very long button label that should wrap to multiple'
+            'lines when screen is small or text size is large',
+        onPressed: () {},
+        type: AppButtonType.secondary,
+      );
+      await tester.pumpWidget(createTestWidget(longTextButton));
+      final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.maxLines, null);
+      expect(textWidget.overflow, null);
+    });
   });
 }

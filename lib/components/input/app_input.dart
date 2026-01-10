@@ -9,12 +9,14 @@ class AppInput extends StatelessWidget {
     required this.type,
     required this.onChanged,
     this.controller,
+    this.focusNode,
     super.key,
   });
   final String placeholder;
   final AppInputType type;
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class AppInput extends StatelessWidget {
         autofillHints: _getAutofillHints(),
         onChanged: onChanged,
         controller: controller,
+        focusNode: focusNode,
       ),
     );
   }

@@ -12,7 +12,7 @@ final RoundedRectangleBorder roundedRectangle = RoundedRectangleBorder(
 
 EdgeInsets edgeInsets = const EdgeInsets.symmetric(
   vertical: 16,
-  horizontal: 32,
+  horizontal: 24,
 );
 
 void main() {
@@ -141,5 +141,21 @@ void main() {
         expect(iconWidget.size, 32.0);
       },
     );
+
+    testWidgets('Primary Label with Long Text Wraps', (
+      WidgetTester tester,
+    ) async {
+      final Widget longTextButton = AppButton.label(
+        label:
+            'This is a very long button label that should wrap to multiple'
+            'lines when the screen is small or text size is large',
+        onPressed: () {},
+        type: AppButtonType.primary,
+      );
+      await tester.pumpWidget(createTestWidget(longTextButton));
+      final textWidget = tester.widget<Text>(find.byType(Text));
+      expect(textWidget.maxLines, null);
+      expect(textWidget.overflow, null);
+    });
   });
 }

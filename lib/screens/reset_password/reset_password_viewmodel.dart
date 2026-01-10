@@ -8,6 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/auth_error.dart';
+import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -87,29 +88,29 @@ class ResetPasswordViewmodel extends ChangeNotifier
       _authError != const UIAuthError(ResetPasswordErrorType.none);
 
   void _checkPasswordRequirements(String password) {
-    if (password.length >= 12) {
+    if (InputValidators.hasAdequateLength(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
     } else {
       _removeMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
     }
-    if (password.contains(RegExp(r'[A-Z]'))) {
+    if (InputValidators.hasUppercase(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.containsUppercase;
     } else {
       _removeMetPasswordRequirement =
           ResetPasswordRequirements.containsUppercase;
     }
-    if (password.contains(RegExp(r'[a-z]'))) {
+    if (InputValidators.hasLowercase(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.containsLowercase;
     } else {
       _removeMetPasswordRequirement =
           ResetPasswordRequirements.containsLowercase;
     }
-    if (password.contains(RegExp(r'[0-9]'))) {
+    if (InputValidators.hasDigit(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
     } else {
       _removeMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
     }
-    if (password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
+    if (InputValidators.hasSpecialCharacter(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
     } else {
       _removeMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
@@ -117,7 +118,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (passwordOne == passwordTwo) {
+    if (InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.matching;
     } else {
       _removeMetPasswordRequirement = ResetPasswordRequirements.matching;

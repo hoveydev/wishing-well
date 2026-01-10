@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/auth_error.dart';
+import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -64,22 +65,20 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   bool get hasAlert => _authError != const UIAuthError(LoginErrorType.none);
 
   bool _isFormValid(String email, String password) {
-    if (email.isEmpty && password.isEmpty) {
+    if (InputValidators.isEmailEmpty(email) &&
+        InputValidators.isPasswordEmpty(password)) {
       _setAuthError = const UIAuthError(LoginErrorType.noPasswordNoEmail);
       return false;
     }
-    if (email.isEmpty) {
+    if (InputValidators.isEmailEmpty(email)) {
       _setAuthError = const UIAuthError(LoginErrorType.noEmail);
       return false;
     }
-    if (password.isEmpty) {
+    if (InputValidators.isPasswordEmpty(password)) {
       _setAuthError = const UIAuthError(LoginErrorType.noPassword);
       return false;
     }
-    final emailRegex = RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
-    );
-    if (!emailRegex.hasMatch(email)) {
+    if (!InputValidators.isEmailValid(email)) {
       _setAuthError = const UIAuthError(LoginErrorType.badEmail);
       return false;
     }
@@ -132,4 +131,15 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     _passwordInputController.clear();
     context.pushNamed(Routes.createAccount.name);
   }
+
+  // coverage:ignore-start
+  // Dispose is called automatically by Flutter when the widget is disposed
+  @override
+  void dispose() {
+    _emailInputController.dispose();
+    _passwordInputController.dispose();
+    super.dispose();
+  }
+
+  // coverage:ignore-end
 }

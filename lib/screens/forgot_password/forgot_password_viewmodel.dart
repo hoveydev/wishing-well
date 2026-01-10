@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/auth_error.dart';
+import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -48,14 +49,11 @@ class ForgotPasswordViewModel extends ChangeNotifier
       _authError != const UIAuthError(ForgotPasswordErrorType.none);
 
   bool _isEmailValid(String email) {
-    if (email.isEmpty) {
+    if (InputValidators.isEmailEmpty(email)) {
       _setAuthError = const UIAuthError(ForgotPasswordErrorType.noEmail);
       return false;
     }
-    final emailRegex = RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
-    );
-    if (!emailRegex.hasMatch(email)) {
+    if (!InputValidators.isEmailValid(email)) {
       _setAuthError = const UIAuthError(ForgotPasswordErrorType.badEmail);
       return false;
     }

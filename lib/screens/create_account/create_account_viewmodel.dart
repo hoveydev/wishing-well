@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/auth_error.dart';
+import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -93,35 +94,35 @@ class CreateAccountViewmodel extends ChangeNotifier
       _authError != const UIAuthError(CreateAccountErrorType.none);
 
   void _checkPasswordRequirements(String password) {
-    if (password.length >= 12) {
+    if (InputValidators.hasAdequateLength(password)) {
       _addMetPasswordRequirement =
           CreateAccountPasswordRequirements.adequateLength;
     } else {
       _removeMetPasswordRequirement =
           CreateAccountPasswordRequirements.adequateLength;
     }
-    if (password.contains(RegExp(r'[A-Z]'))) {
+    if (InputValidators.hasUppercase(password)) {
       _addMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsUppercase;
     } else {
       _removeMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsUppercase;
     }
-    if (password.contains(RegExp(r'[a-z]'))) {
+    if (InputValidators.hasLowercase(password)) {
       _addMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsLowercase;
     } else {
       _removeMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsLowercase;
     }
-    if (password.contains(RegExp(r'[0-9]'))) {
+    if (InputValidators.hasDigit(password)) {
       _addMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsDigit;
     } else {
       _removeMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsDigit;
     }
-    if (password.contains(RegExp(r'[^a-zA-Z0-9]'))) {
+    if (InputValidators.hasSpecialCharacter(password)) {
       _addMetPasswordRequirement =
           CreateAccountPasswordRequirements.containsSpecial;
     } else {
@@ -131,7 +132,7 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (passwordOne == passwordTwo) {
+    if (InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
       _addMetPasswordRequirement = CreateAccountPasswordRequirements.matching;
     } else {
       _removeMetPasswordRequirement =
@@ -144,14 +145,11 @@ class CreateAccountViewmodel extends ChangeNotifier
   );
 
   bool _isFormValid(String email, String passwordOne, String passwordTwo) {
-    if (email.isEmpty) {
+    if (InputValidators.isEmailEmpty(email)) {
       _setAuthError = const UIAuthError(CreateAccountErrorType.noEmail);
       return false;
     }
-    final emailRegex = RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
-    );
-    if (!emailRegex.hasMatch(email)) {
+    if (!InputValidators.isEmailValid(email)) {
       _setAuthError = const UIAuthError(CreateAccountErrorType.badEmail);
       return false;
     }

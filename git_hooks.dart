@@ -15,19 +15,52 @@ void main(List<String> arguments) async {
 }
 
 Future<void> _installHooks() async {
-  final hooksDir = Directory('.git/hooks');
+  Directory? hooksDir = Directory('.git/hooks');
+  String? worktreePath;
+
+  // Check if we're in a worktree (.git is a file, not a directory)
+  final gitDir = File('.git');
+  if (gitDir.existsSync()) {
+    final content = await gitDir.readAsString();
+    if (content.startsWith('gitdir:')) {
+      final gitdirPath = content.substring('gitdir:'.length).trim();
+      final commondirFile = File('$gitdirPath/commondir');
+
+      if (commondirFile.existsSync()) {
+        final commondir = (await commondirFile.readAsString()).trim();
+        // commondir is relative to worktrees directory
+        final worktreesDir = Directory(gitdirPath).parent;
+        hooksDir = Directory('${worktreesDir.path}/$commondir/hooks');
+        worktreePath = Directory.current.path;
+      } else {
+        hooksDir = Directory('$gitdirPath/hooks');
+        if (!hooksDir.existsSync()) {
+          await hooksDir.create(recursive: true);
+        }
+      }
+    }
+  }
 
   if (!hooksDir.existsSync()) {
     print('❌ .git/hooks directory not found. Are you in a git repository?');
     exit(1);
   }
 
-  final preCommitHook = File('.git/hooks/pre-commit');
+  final preCommitHook = File('${hooksDir.path}/pre-commit');
 
   // Create the pre-commit hook that calls this Dart script
-  const hookContent = '''#!/bin/sh
-  dart run git_hooks.dart pre-commit
-  ''';
+  final hookContent = worktreePath != null
+      ? '''#!/bin/sh
+cd "$worktreePath"
+export FLUTTER_ROOT=/Users/rhovey/Development/flutter
+export PATH="/Users/rhovey/Development/flutter/bin:\$PATH"
+dart run git_hooks.dart pre-commit
+'''
+      : '''#!/bin/sh
+export FLUTTER_ROOT=/Users/rhovey/Development/flutter
+export PATH="/Users/rhovey/Development/flutter/bin:\$PATH"
+dart run git_hooks.dart pre-commit
+''';
 
   await preCommitHook.writeAsString(hookContent);
 
@@ -46,11 +79,11 @@ Future<bool> _preCommit() async {
     'format',
     '--set-exit-if-changed',
     '.',
-  ]);
+  ], runInShell: true);
 
   if (formatResult.exitCode != 0) {
     print('❌ Code is not formatted. Running dart format...');
-    await Process.run('dart', ['format', '.']);
+    await Process.run('dart', ['format', '.'], runInShell: true);
     print('✅ Code formatted. Please stage the changes and commit again.\n');
     return false;
   }
@@ -58,7 +91,10 @@ Future<bool> _preCommit() async {
 
   // Run dart analyze
   print('🔎 Running static analysis...');
-  final analyzeResult = await Process.run('dart', ['analyze', '--fatal-infos']);
+  final analyzeResult = await Process.run('dart', [
+    'analyze',
+    '--fatal-infos',
+  ], runInShell: true);
 
   if (analyzeResult.exitCode != 0) {
     print('❌ Analysis found issues:');
@@ -82,11 +118,23 @@ Future<bool> _preCommit() async {
 }
 
 Future<bool> _checkCoverage({required double threshold}) async {
+  // Run pub get first to ensure dependencies are resolved
+  await Process.run('/Users/rhovey/Development/flutter/bin/flutter', [
+    'pub',
+    'get',
+  ], runInShell: true);
+
   // Run tests with coverage
-  final testResult = await Process.run('flutter', ['test', '--coverage']);
+  final testResult = await Process.run(
+    '/Users/rhovey/Development/flutter/bin/flutter',
+    ['test', '--coverage'],
+    runInShell: true,
+  );
 
   if (testResult.exitCode != 0) {
     print('❌ Tests failed. Fix tests before checking coverage.\n');
+    print(testResult.stdout);
+    print(testResult.stderr);
     return false;
   }
 

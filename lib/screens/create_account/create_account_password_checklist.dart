@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
@@ -33,61 +32,56 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
             .contains(CreateAccountPasswordRequirements.matching);
         final textTheme = Theme.of(context).textTheme;
 
-        return Padding(
-          padding: const EdgeInsetsGeometry.symmetric(
-            horizontal: AppSpacerSize.xsmall,
-          ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    l10n.passwordRequirementsHeader,
-                    style: textTheme.titleMedium,
-                  ),
-                ],
-              ),
-              const AppSpacer.medium(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsMinChars,
-                minimumCharsSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsUppercase,
-                uppercaseSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsLowercase,
-                lowercaseSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsDigit,
-                digitSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsSpecialChar,
-                specialCharSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsMatching,
-                passwordsMatchSatisfied,
-              ),
-              const AppSpacer.medium(),
-              Divider(color: colorScheme.primary, thickness: 0.5),
-              CreateAccountInlineError(viewModel: viewModel),
-            ],
-          ),
+        return Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  l10n.passwordRequirementsHeader,
+                  style: textTheme.titleMedium,
+                ),
+              ],
+            ),
+            const AppSpacer.medium(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsMinChars,
+              minimumCharsSatisfied,
+            ),
+            const AppSpacer.xsmall(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsUppercase,
+              uppercaseSatisfied,
+            ),
+            const AppSpacer.xsmall(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsLowercase,
+              lowercaseSatisfied,
+            ),
+            const AppSpacer.xsmall(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsDigit,
+              digitSatisfied,
+            ),
+            const AppSpacer.xsmall(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsSpecialChar,
+              specialCharSatisfied,
+            ),
+            const AppSpacer.xsmall(),
+            buildChecklistItem(
+              context,
+              l10n.passwordRequirementsMatching,
+              passwordsMatchSatisfied,
+            ),
+            Divider(color: colorScheme.primary, thickness: 0.5),
+            CreateAccountInlineError(viewModel: viewModel),
+            const AppSpacer.large(),
+          ],
         );
       },
     );

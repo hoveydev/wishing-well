@@ -105,7 +105,8 @@ void main() {
 
     group('Pattern Matching / Type Checking', () {
       test('can switch on Result type', () {
-        const Result<int> okResult = Result<int>.ok(42);
+        // ignore: prefer_const_constructors
+        final Result<int> okResult = Result<int>.ok(42);
         final errorResult = Result<int>.error(Exception('Error'));
 
         String handleResult(Result<int> result) => switch (result) {

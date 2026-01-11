@@ -100,7 +100,7 @@ echo ""
 
 # Remove worktree
 echo "Removing worktree at: $WORKTREE_ACTUAL_PATH"
-git worktree remove "$WORKTREE_ACTUAL_PATH"
+git worktree remove --force "$WORKTREE_ACTUAL_PATH"
 echo -e "${GREEN}✓ Worktree removed successfully${NC}"
 echo ""
 

@@ -51,15 +51,10 @@ Future<void> _installHooks() async {
   // Create the pre-commit hook that calls this Dart script
   final hookContent = worktreePath != null
       ? '''#!/bin/sh
-cd "$worktreePath"
-export FLUTTER_ROOT=/Users/rhovey/Development/flutter
-export PATH="/Users/rhovey/Development/flutter/bin:\$PATH"
-dart run git_hooks.dart pre-commit
+exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'cd "$worktreePath" && dart run git_hooks.dart pre-commit'
 '''
       : '''#!/bin/sh
-export FLUTTER_ROOT=/Users/rhovey/Development/flutter
-export PATH="/Users/rhovey/Development/flutter/bin:\$PATH"
-dart run git_hooks.dart pre-commit
+exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'dart run git_hooks.dart pre-commit'
 ''';
 
   await preCommitHook.writeAsString(hookContent);

@@ -74,13 +74,13 @@ class ConfirmationScreen extends StatelessWidget {
         action: () => context.goNamed(Routes.login.name),
         type: AppMenuBarType.close,
       ),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const AppSpacer.large(),
         if (content.header != null)
           ConfirmationHeader(headerText: content.header!),
-        const AppSpacer.xlarge(),
+        const AppSpacer.large(),
         if (content.icon != null) ConfirmationImage(icon: content.icon!),
-        const AppSpacer.xlarge(),
+        const AppSpacer.large(),
         if (content.subtext != null)
           ConfirmationSubtext(subtext: content.subtext!),
       ],

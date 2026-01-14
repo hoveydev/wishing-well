@@ -15,6 +15,7 @@ class ConfirmationSubtext extends StatelessWidget {
         subtext,
         style: textTheme.bodyLarge,
         textAlign: TextAlign.center,
+        semanticsLabel: subtext,
       ),
     );
   }

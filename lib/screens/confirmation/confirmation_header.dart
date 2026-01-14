@@ -12,6 +12,7 @@ class ConfirmationHeader extends StatelessWidget {
       headerText,
       style: textTheme.headlineLarge,
       textAlign: TextAlign.center,
+      semanticsLabel: headerText,
     );
   }
 }

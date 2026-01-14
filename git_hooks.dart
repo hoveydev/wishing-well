@@ -16,7 +16,6 @@ void main(List<String> arguments) async {
 
 Future<void> _installHooks() async {
   Directory? hooksDir = Directory('.git/hooks');
-  String? worktreePath;
 
   // Check if we're in a worktree (.git is a file, not a directory)
   final gitDir = File('.git');
@@ -28,10 +27,8 @@ Future<void> _installHooks() async {
 
       if (commondirFile.existsSync()) {
         final commondir = (await commondirFile.readAsString()).trim();
-        // commondir is relative to worktrees directory
         final worktreesDir = Directory(gitdirPath).parent;
         hooksDir = Directory('${worktreesDir.path}/$commondir/hooks');
-        worktreePath = Directory.current.path;
       } else {
         hooksDir = Directory('$gitdirPath/hooks');
         if (!hooksDir.existsSync()) {
@@ -49,12 +46,10 @@ Future<void> _installHooks() async {
   final preCommitHook = File('${hooksDir.path}/pre-commit');
 
   // Create the pre-commit hook that calls this Dart script
-  final hookContent = worktreePath != null
-      ? '''#!/bin/sh
-exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'cd "$worktreePath" && dart run git_hooks.dart pre-commit'
-'''
-      : '''#!/bin/sh
-exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'dart run git_hooks.dart pre-commit'
+  final hookContent = '''#!/bin/sh
+# Get the repository root dynamically (works for both normal repos and worktrees)
+GIT_ROOT=\$(git rev-parse --show-toplevel)
+exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'cd "\$GIT_ROOT" && dart run git_hooks.dart pre-commit'
 ''';
 
   await preCommitHook.writeAsString(hookContent);

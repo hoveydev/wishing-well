@@ -12,6 +12,9 @@ class ConfirmationImage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final imageSize = AppIconSize(sectionHeight: screenHeight).large;
 
-    return Icon(icon, size: imageSize, color: colorScheme.success);
+    return Semantics(
+      label: 'Success',
+      child: Icon(icon, size: imageSize, color: colorScheme.success),
+    );
   }
 }

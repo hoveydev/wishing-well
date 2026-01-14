@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/checklist/checklist_item.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/create_account/create_account_checklist_icon.dart';
 import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class CreateAccountPasswordChecklist extends StatelessWidget {
@@ -22,44 +21,31 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
     return ListenableBuilder(
       listenable: viewModel,
       builder: (_, _) {
-        final requirements = [
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsMinChars,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.adequateLength,
-            ),
-          ),
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsUppercase,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.containsUppercase,
-            ),
-          ),
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsLowercase,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.containsLowercase,
-            ),
-          ),
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsDigit,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.containsDigit,
-            ),
-          ),
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsSpecialChar,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.containsSpecial,
-            ),
-          ),
-          _PasswordRequirement(
-            label: l10n.passwordRequirementsMatching,
-            isSatisfied: viewModel.metPasswordRequirements.contains(
-              CreateAccountPasswordRequirements.matching,
-            ),
-          ),
-        ];
+        final requirementLabels = <CreateAccountPasswordRequirements, String>{
+          CreateAccountPasswordRequirements.adequateLength:
+              l10n.passwordRequirementsMinChars,
+          CreateAccountPasswordRequirements.containsUppercase:
+              l10n.passwordRequirementsUppercase,
+          CreateAccountPasswordRequirements.containsLowercase:
+              l10n.passwordRequirementsLowercase,
+          CreateAccountPasswordRequirements.containsDigit:
+              l10n.passwordRequirementsDigit,
+          CreateAccountPasswordRequirements.containsSpecial:
+              l10n.passwordRequirementsSpecialChar,
+          CreateAccountPasswordRequirements.matching:
+              l10n.passwordRequirementsMatching,
+        };
+
+        final requirements = CreateAccountPasswordRequirements.values
+            .map(
+              (requirement) => ChecklistRequirement(
+                label: requirementLabels[requirement]!,
+                isSatisfied: viewModel.metPasswordRequirements.contains(
+                  requirement,
+                ),
+              ),
+            )
+            .toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +64,10 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (int i = 0; i < requirements.length; i++) ...[
-                    _buildChecklistItem(context, requirements[i]),
+                    ChecklistItem(
+                      label: requirements[i].label,
+                      isSatisfied: requirements[i].isSatisfied,
+                    ),
                     if (i < requirements.length - 1) const AppSpacer.xsmall(),
                   ],
                 ],
@@ -92,42 +81,10 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
       },
     );
   }
-
-  Widget _buildChecklistItem(
-    BuildContext context,
-    _PasswordRequirement requirement,
-  ) {
-    final colorScheme = context.colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final isSatisfied = requirement.isSatisfied;
-    final bgColor = isSatisfied
-        ? colorScheme.success!
-        : colorScheme.background!;
-    final borderColor = isSatisfied
-        ? colorScheme.success!
-        : colorScheme.borderGray!;
-
-    return Semantics(
-      label: requirement.label,
-      checked: isSatisfied,
-      child: Row(
-        children: [
-          ChecklistIcon(
-            iconColor: AppColors.background,
-            bgColor: bgColor,
-            borderColor: borderColor,
-            icon: isSatisfied ? Icons.check : null,
-          ),
-          const AppSpacer.small(),
-          Expanded(child: Text(requirement.label, style: textTheme.bodyMedium)),
-        ],
-      ),
-    );
-  }
 }
 
-class _PasswordRequirement {
-  const _PasswordRequirement({required this.label, required this.isSatisfied});
+class ChecklistRequirement {
+  const ChecklistRequirement({required this.label, required this.isSatisfied});
 
   final String label;
   final bool isSatisfied;

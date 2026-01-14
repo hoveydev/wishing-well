@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/checklist/checklist_item.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class CreateAccountPasswordChecklist extends StatelessWidget {
@@ -14,101 +16,76 @@ class CreateAccountPasswordChecklist extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = context.colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return ListenableBuilder(
       listenable: viewModel,
       builder: (_, _) {
-        final bool minimumCharsSatisfied = viewModel.metPasswordRequirements
-            .contains(CreateAccountPasswordRequirements.adequateLength);
-        final bool uppercaseSatisfied = viewModel.metPasswordRequirements
-            .contains(CreateAccountPasswordRequirements.containsUppercase);
-        final bool lowercaseSatisfied = viewModel.metPasswordRequirements
-            .contains(CreateAccountPasswordRequirements.containsLowercase);
-        final bool digitSatisfied = viewModel.metPasswordRequirements.contains(
-          CreateAccountPasswordRequirements.containsDigit,
-        );
-        final bool specialCharSatisfied = viewModel.metPasswordRequirements
-            .contains(CreateAccountPasswordRequirements.containsSpecial);
-        final bool passwordsMatchSatisfied = viewModel.metPasswordRequirements
-            .contains(CreateAccountPasswordRequirements.matching);
-        final textTheme = Theme.of(context).textTheme;
+        final requirementLabels = <CreateAccountPasswordRequirements, String>{
+          CreateAccountPasswordRequirements.adequateLength:
+              l10n.passwordRequirementsMinChars,
+          CreateAccountPasswordRequirements.containsUppercase:
+              l10n.passwordRequirementsUppercase,
+          CreateAccountPasswordRequirements.containsLowercase:
+              l10n.passwordRequirementsLowercase,
+          CreateAccountPasswordRequirements.containsDigit:
+              l10n.passwordRequirementsDigit,
+          CreateAccountPasswordRequirements.containsSpecial:
+              l10n.passwordRequirementsSpecialChar,
+          CreateAccountPasswordRequirements.matching:
+              l10n.passwordRequirementsMatching,
+        };
 
-        return Padding(
-          padding: const EdgeInsetsGeometry.symmetric(
-            horizontal: AppSpacerSize.xsmall,
-          ),
-          child: Column(
-            children: [
-              Row(
+        final requirements = CreateAccountPasswordRequirements.values
+            .map(
+              (requirement) => ChecklistRequirement(
+                label: requirementLabels[requirement]!,
+                isSatisfied: viewModel.metPasswordRequirements.contains(
+                  requirement,
+                ),
+              ),
+            )
+            .toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppSpacer.medium(),
+            Text(l10n.passwordRequirementsHeader, style: textTheme.titleMedium),
+            const AppSpacer.small(),
+            Container(
+              padding: const EdgeInsets.all(AppSpacerSize.medium),
+              decoration: BoxDecoration(
+                color: colorScheme.background!,
+                borderRadius: BorderRadius.circular(AppBorderRadius.medium),
+                border: Border.all(color: colorScheme.borderGray!),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.passwordRequirementsHeader,
-                    style: textTheme.titleMedium,
-                  ),
+                  for (int i = 0; i < requirements.length; i++) ...[
+                    ChecklistItem(
+                      label: requirements[i].label,
+                      isSatisfied: requirements[i].isSatisfied,
+                    ),
+                    if (i < requirements.length - 1) const AppSpacer.xsmall(),
+                  ],
                 ],
               ),
-              const AppSpacer.medium(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsMinChars,
-                minimumCharsSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsUppercase,
-                uppercaseSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsLowercase,
-                lowercaseSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsDigit,
-                digitSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsSpecialChar,
-                specialCharSatisfied,
-              ),
-              const AppSpacer.xsmall(),
-              buildChecklistItem(
-                context,
-                l10n.passwordRequirementsMatching,
-                passwordsMatchSatisfied,
-              ),
-              const AppSpacer.medium(),
-              Divider(color: colorScheme.primary, thickness: 0.5),
-              CreateAccountInlineError(viewModel: viewModel),
-            ],
-          ),
+            ),
+            const AppSpacer.small(),
+            CreateAccountInlineError(viewModel: viewModel),
+            const AppSpacer.large(),
+          ],
         );
       },
     );
   }
+}
 
-  Widget buildChecklistItem(
-    BuildContext context,
-    String text,
-    bool passwordRequirement,
-  ) {
-    final colorScheme = context.colorScheme;
+class ChecklistRequirement {
+  const ChecklistRequirement({required this.label, required this.isSatisfied});
 
-    return Row(
-      children: [
-        if (passwordRequirement)
-          Icon(Icons.check, color: colorScheme.success)
-        else
-          Icon(Icons.circle_outlined, color: colorScheme.primary),
-        const AppSpacer.small(),
-        Text(text),
-      ],
-    );
-  }
+  final String label;
+  final bool isSatisfied;
 }

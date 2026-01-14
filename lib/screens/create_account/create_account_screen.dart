@@ -5,8 +5,6 @@ import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_button.dart';
 import 'package:wishing_well/screens/create_account/create_account_header.dart';
-import 'package:wishing_well/screens/create_account/create_account_inputs.dart';
-import 'package:wishing_well/screens/create_account/create_account_password_checklist.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -30,10 +28,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       type: AppMenuBarType.dismiss,
     ),
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const CreateAccountHeader(),
-      CreateAccountInputs(viewModel: widget.viewModel),
-      CreateAccountPasswordChecklist(viewModel: widget.viewModel),
+      CreateAccountHeader(viewModel: widget.viewModel),
       CreateAccountButton(viewModel: widget.viewModel),
     ],
   );

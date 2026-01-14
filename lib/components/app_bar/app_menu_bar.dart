@@ -44,7 +44,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         AppMenuBarType.main => FittedBox(
           child: Padding(
             padding: const EdgeInsetsGeometry.only(left: AppSpacerSize.xsmall),
-            child: AppLogo(size: const AppIconSize().small),
+            child: AppLogo(size: const AppIconSize().xsmall),
           ),
         ),
         AppMenuBarType.close => null,

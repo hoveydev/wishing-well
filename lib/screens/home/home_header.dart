@@ -9,9 +9,11 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
+    final welcomeText = _welcomeHeaderText(firstName, l10n);
     return Text(
-      _welcomeHeaderText(firstName, l10n),
+      welcomeText,
       style: textTheme.titleLarge,
+      semanticsLabel: welcomeText,
     );
   }
 

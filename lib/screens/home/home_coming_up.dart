@@ -15,16 +15,19 @@ class HomeComingUp extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.homeComingUp,
-          style: textTheme.titleMedium,
-          textAlign: TextAlign.left,
-        ),
-        _comingUpCards(textTheme, colorScheme),
-      ],
+    return Semantics(
+      header: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.homeComingUp,
+            style: textTheme.titleMedium,
+            textAlign: TextAlign.left,
+          ),
+          _comingUpCards(textTheme, colorScheme),
+        ],
+      ),
     );
   }
 

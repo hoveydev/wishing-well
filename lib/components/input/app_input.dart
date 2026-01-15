@@ -23,28 +23,32 @@ class AppInput extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme;
     final colorScheme = context.colorScheme;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.primary!),
-        borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-      ),
-      child: TextField(
-        obscureText: type == AppInputType.password,
-        decoration: InputDecoration(
-          prefixIcon: _getIcon(),
-          prefixIconColor: colorScheme.primary,
-          hint: Text(style: textStyle.bodyMedium, placeholder),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-            borderSide: BorderSide.none,
-          ),
+    return Semantics(
+      label: placeholder,
+      textField: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: colorScheme.primary!),
+          borderRadius: BorderRadius.circular(AppBorderRadius.medium),
         ),
-        cursorColor: colorScheme.primary,
-        keyboardType: _getKeyboardType(),
-        autofillHints: _getAutofillHints(),
-        onChanged: onChanged,
-        controller: controller,
-        focusNode: focusNode,
+        child: TextField(
+          obscureText: type == AppInputType.password,
+          decoration: InputDecoration(
+            prefixIcon: _getIcon(),
+            prefixIconColor: colorScheme.primary,
+            hint: Text(style: textStyle.bodyMedium, placeholder),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppBorderRadius.medium),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          cursorColor: colorScheme.primary,
+          keyboardType: _getKeyboardType(),
+          autofillHints: _getAutofillHints(),
+          onChanged: onChanged,
+          controller: controller,
+          focusNode: focusNode,
+        ),
       ),
     );
   }

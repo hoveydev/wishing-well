@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -15,6 +16,8 @@ dynamic startAppWithLoadingScreen(
       ChangeNotifierProvider<LoadingController>.value(
         value: loadingController,
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           home: const LoadingOverlay(child: Screen(children: [])),

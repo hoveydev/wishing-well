@@ -173,5 +173,13 @@
     "homeComingUp": "Coming Up",
     "@homeComingUp": {
         "description": "Title for coming up section on home"
+    },
+    "loading": "Loading",
+    "@loading": {
+        "description": "Accessibility label for loading state"
+    },
+    "success": "Success",
+    "@success": {
+        "description": "Accessibility label for success indicator"
     }
 }

@@ -3,10 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_button.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_header.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_input.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -31,13 +29,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       action: () => context.pop(),
       type: AppMenuBarType.dismiss,
     ),
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const AppSpacer.xlarge(),
-      const ForgotPasswordHeader(),
-      const AppSpacer.xlarge(),
-      ForgotPasswordInput(viewModel: widget.viewModel),
+      ForgotPasswordHeader(viewmodel: widget.viewModel),
       ForgotPasswordButton(viewModel: widget.viewModel),
-      const AppSpacer.large(),
     ],
   );
 }

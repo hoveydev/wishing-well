@@ -26,10 +26,13 @@ class Screen extends StatelessWidget {
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Padding(
               padding: padding ?? const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: mainAxisAlignment,
-                crossAxisAlignment: crossAxisAlignment,
-                children: children,
+              child: Semantics(
+                container: true,
+                child: Column(
+                  mainAxisAlignment: mainAxisAlignment,
+                  crossAxisAlignment: crossAxisAlignment,
+                  children: children,
+                ),
               ),
             ),
           ),

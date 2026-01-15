@@ -22,11 +22,13 @@ class CreateAccountHeader extends StatelessWidget {
           l10n.createAccountScreenHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.createAccountScreenHeader,
         ),
         Text(
           l10n.loginScreenSubtext,
           style: textTheme.bodyMedium,
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.loginScreenSubtext,
         ),
         const AppSpacer.large(),
         CreateAccountInputs(viewModel: viewModel),

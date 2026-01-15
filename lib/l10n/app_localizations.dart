@@ -345,6 +345,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming Up'**
   String get homeComingUp;
+
+  /// Accessibility label for loading state
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loading;
+
+  /// Accessibility label for success indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
 }
 
 class _AppLocalizationsDelegate

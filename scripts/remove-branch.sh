@@ -98,6 +98,12 @@ echo ""
 echo -e "${GREEN}Removing branch and worktree...${NC}"
 echo ""
 
+# Pull latest changes from origin/main
+echo "Pulling latest changes from origin/main..."
+git pull origin main
+echo -e "${GREEN}✓ Pull complete${NC}"
+echo ""
+
 # Remove worktree
 echo "Removing worktree at: $WORKTREE_ACTUAL_PATH"
 git worktree remove --force "$WORKTREE_ACTUAL_PATH"

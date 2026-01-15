@@ -13,21 +13,25 @@ class AppInlineAlert extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme;
     final colorScheme = context.colorScheme;
 
-    return Row(
-      children: [
-        // Icon based on type
-        Icon(_getIcon(), color: _getColor(colorScheme)),
-        const SizedBox(width: 8),
-        // Message text
-        Expanded(
-          child: Text(
-            message,
-            style: textStyle.bodyMedium?.copyWith(
-              color: _getColor(colorScheme),
+    return Semantics(
+      label: message,
+      liveRegion: true,
+      child: Row(
+        children: [
+          // Icon based on type
+          Icon(_getIcon(), color: _getColor(colorScheme)),
+          const SizedBox(width: 8),
+          // Message text
+          Expanded(
+            child: Text(
+              message,
+              style: textStyle.bodyMedium?.copyWith(
+                color: _getColor(colorScheme),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

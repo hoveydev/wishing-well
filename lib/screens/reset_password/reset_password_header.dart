@@ -22,11 +22,13 @@ class ResetPasswordHeader extends StatelessWidget {
           l10n.resetPasswordScreenHeader,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.resetPasswordScreenHeader,
         ),
         Text(
           l10n.resetPasswordScreenSubtext,
           style: textTheme.bodyMedium,
           textAlign: TextAlign.center,
+          semanticsLabel: l10n.resetPasswordScreenSubtext,
         ),
         const AppSpacer.large(),
         ResetPasswordInputs(viewmodel: viewmodel),

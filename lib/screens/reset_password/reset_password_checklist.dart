@@ -52,24 +52,27 @@ class ResetPasswordChecklist extends StatelessWidget {
             const AppSpacer.medium(),
             Text(l10n.passwordRequirementsHeader, style: textTheme.titleMedium),
             const AppSpacer.small(),
-            Container(
-              padding: const EdgeInsets.all(AppSpacerSize.medium),
-              decoration: BoxDecoration(
-                color: colorScheme.background!,
-                borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-                border: Border.all(color: colorScheme.borderGray!),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < requirements.length; i++) ...[
-                    ChecklistItem(
-                      label: requirements[i].label,
-                      isSatisfied: requirements[i].isSatisfied,
-                    ),
-                    if (i < requirements.length - 1) const AppSpacer.xsmall(),
+            Semantics(
+              container: true,
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacerSize.medium),
+                decoration: BoxDecoration(
+                  color: colorScheme.background!,
+                  borderRadius: BorderRadius.circular(AppBorderRadius.medium),
+                  border: Border.all(color: colorScheme.borderGray!),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < requirements.length; i++) ...[
+                      ChecklistItem(
+                        label: requirements[i].label,
+                        isSatisfied: requirements[i].isSatisfied,
+                      ),
+                      if (i < requirements.length - 1) const AppSpacer.xsmall(),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
             const AppSpacer.small(),

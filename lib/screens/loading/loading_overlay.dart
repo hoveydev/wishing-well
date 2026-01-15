@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
@@ -16,6 +17,7 @@ class LoadingOverlay extends StatelessWidget {
         builder: (context, controller, _) {
           final visible = controller.isLoading;
           final colorScheme = context.colorScheme;
+          final l10n = AppLocalizations.of(context)!;
 
           return IgnorePointer(
             ignoring: !visible,
@@ -31,7 +33,13 @@ class LoadingOverlay extends StatelessWidget {
                   ),
                   Container(
                     color: colorScheme.background,
-                    child: const Center(child: AppThrobber.xlarge()),
+                    child: Center(
+                      child: Semantics(
+                        label: l10n.loading,
+                        liveRegion: true,
+                        child: const AppThrobber.xlarge(),
+                      ),
+                    ),
                   ),
                 ],
               ),

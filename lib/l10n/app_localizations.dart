@@ -357,6 +357,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Success'**
   String get success;
+
+  /// Accessibility label for dismiss button in app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get appBarDismiss;
+
+  /// Accessibility label for profile button in app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get appBarProfile;
+
+  /// Accessibility label for close button in app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get appBarClose;
 }
 
 class _AppLocalizationsDelegate

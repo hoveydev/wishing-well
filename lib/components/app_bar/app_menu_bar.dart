@@ -26,10 +26,10 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorScheme.background,
       surfaceTintColor: colorScheme.primary,
       automaticallyImplyLeading: false,
-      leading: _menuBarLeading(action, textTheme),
+      leading: _menuBarLeading(action, textTheme, l10n),
       centerTitle: false,
       title: _menuBarTitle(l10n, textTheme),
-      actions: _menuBarActions(action),
+      actions: _menuBarActions(action, l10n),
     );
   }
 
@@ -39,40 +39,64 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         _ => null,
       };
 
-  Widget? _menuBarLeading(void Function() action, TextTheme textTheme) =>
-      switch (type) {
-        AppMenuBarType.main => FittedBox(
-          child: Padding(
-            padding: const EdgeInsetsGeometry.only(left: AppSpacerSize.xsmall),
-            child: AppLogo(size: const AppIconSize().xsmall),
-          ),
-        ),
-        AppMenuBarType.close => null,
-        AppMenuBarType.dismiss => FittedBox(
+  Widget? _menuBarLeading(
+    void Function() action,
+    TextTheme textTheme,
+    AppLocalizations l10n,
+  ) => switch (type) {
+    AppMenuBarType.main => FittedBox(
+      child: Padding(
+        padding: const EdgeInsets.only(left: AppSpacerSize.xsmall),
+        child: AppLogo(size: const AppIconSize().xsmall),
+      ),
+    ),
+    AppMenuBarType.close => null,
+    AppMenuBarType.dismiss => FittedBox(
+      child: Builder(
+        builder: (context) => Semantics(
+          label: l10n.appBarDismiss,
+          button: true,
           child: AppButton.icon(
             icon: Icons.keyboard_arrow_down,
             onPressed: action,
             type: AppButtonType.tertiary,
           ),
         ),
-      };
+      ),
+    ),
+  };
 
-  List<Widget>? _menuBarActions(void Function() action) => switch (type) {
+  List<Widget>? _menuBarActions(
+    void Function() action,
+    AppLocalizations l10n,
+  ) => switch (type) {
     AppMenuBarType.main => [
       FittedBox(
-        child: AppButton.icon(
-          icon: Icons.account_circle,
-          onPressed: action,
-          type: AppButtonType.tertiary,
+        child: Builder(
+          builder: (context) => Semantics(
+            label: l10n.appBarProfile,
+            button: true,
+            child: AppButton.icon(
+              icon: Icons.account_circle,
+              onPressed: action,
+              type: AppButtonType.tertiary,
+            ),
+          ),
         ),
       ),
     ],
     AppMenuBarType.close => [
       FittedBox(
-        child: AppButton.icon(
-          icon: Icons.close,
-          onPressed: action,
-          type: AppButtonType.tertiary,
+        child: Builder(
+          builder: (context) => Semantics(
+            label: l10n.appBarClose,
+            button: true,
+            child: AppButton.icon(
+              icon: Icons.close,
+              onPressed: action,
+              type: AppButtonType.tertiary,
+            ),
+          ),
         ),
       ),
     ],

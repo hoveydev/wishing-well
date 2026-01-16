@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
 
 enum _AppButtonContentType { icon, label, labelWithIcon }
 
@@ -88,7 +89,7 @@ class AppButtonContent extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context, TextTheme textTheme) {
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
-        return [Icon(icon!, size: textTheme.headlineLarge!.fontSize)];
+        return [Icon(icon!, size: const AppIconSize().icon)];
       case _AppButtonContentType.label:
         return [
           Flexible(
@@ -101,7 +102,7 @@ class AppButtonContent extends StatelessWidget {
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
-          Icon(icon!, size: textTheme.headlineLarge!.fontSize),
+          Icon(icon!, size: const AppIconSize().icon),
           const SizedBox(width: 8),
           Flexible(
             child: Text(

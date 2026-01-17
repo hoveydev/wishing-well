@@ -148,4 +148,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get success => 'Success';
+
+  @override
+  String get appBarDismiss => 'Dismiss';
+
+  @override
+  String get appBarProfile => 'Profile';
+
+  @override
+  String get appBarClose => 'Close';
 }

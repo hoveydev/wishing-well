@@ -181,5 +181,17 @@
     "success": "Success",
     "@success": {
         "description": "Accessibility label for success indicator"
+    },
+    "appBarDismiss": "Dismiss",
+    "@appBarDismiss": {
+        "description": "Accessibility label for dismiss button in app bar"
+    },
+    "appBarProfile": "Profile",
+    "@appBarProfile": {
+        "description": "Accessibility label for profile button in app bar"
+    },
+    "appBarClose": "Close",
+    "@appBarClose": {
+        "description": "Accessibility label for close button in app bar"
     }
 }

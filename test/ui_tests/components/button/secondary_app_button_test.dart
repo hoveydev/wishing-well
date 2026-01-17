@@ -91,7 +91,7 @@ void main() {
       expect(size.height, greaterThan(0));
       // text styles
       final iconWidget = tester.widget<Icon>(find.byType(Icon));
-      expect(iconWidget.size, 32.0);
+      expect(iconWidget.size, 24.0);
     });
 
     testWidgets(
@@ -134,7 +134,7 @@ void main() {
         expect(size.height, greaterThan(0));
         // text styles
         final iconWidget = tester.widget<Icon>(find.byType(Icon));
-        expect(iconWidget.size, 32.0);
+        expect(iconWidget.size, 24.0);
       },
     );
 

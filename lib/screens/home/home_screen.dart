@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/home/home_coming_up.dart';
 import 'package:wishing_well/screens/home/home_header.dart';
@@ -26,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) => Screen(
     appBar: AppMenuBar(
-      // TODO: Update action to go to profile screen (when built)
-      action: () => log('profile screen'),
+      action: () => context.push(Routes.profile.path),
       type: AppMenuBarType.main,
     ),
     crossAxisAlignment: CrossAxisAlignment.start,

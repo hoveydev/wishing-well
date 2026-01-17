@@ -193,5 +193,9 @@
     "appBarClose": "Close",
     "@appBarClose": {
         "description": "Accessibility label for close button in app bar"
+    },
+    "logout": "Logout",
+    "@logout": {
+        "description": "Label for logout button"
     }
 }

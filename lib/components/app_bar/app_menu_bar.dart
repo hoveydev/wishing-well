@@ -28,6 +28,9 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: colorScheme.primary,
       automaticallyImplyLeading: false,
       leading: _menuBarLeading(action, textTheme, l10n),
+      titleSpacing: type == AppMenuBarType.main
+          ? AppSpacing.appBarTitleSpacing
+          : null,
       centerTitle: false,
       title: _menuBarTitle(l10n, textTheme),
       actions: _menuBarActions(action, l10n),

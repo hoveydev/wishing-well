@@ -11,7 +11,7 @@ import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dar
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
-import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 dynamic startAppWithResetPasswordScreen(
   WidgetTester tester, {

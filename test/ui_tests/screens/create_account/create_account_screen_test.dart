@@ -10,7 +10,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 
-import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 dynamic startAppWithCreateAccountScreen(WidgetTester tester) async {
   final controller = LoadingController();

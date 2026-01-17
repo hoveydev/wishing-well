@@ -6,6 +6,7 @@ import 'package:wishing_well/components/logo/app_logo.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
+import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
@@ -14,7 +15,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
   final void Function() action;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,15 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: _menuBarTitle(l10n, textTheme),
       actions: _menuBarActions(action, l10n),
+      elevation: 1,
+      shadowColor: Colors.transparent,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Container(
+          height: 1,
+          decoration: BoxDecoration(color: Colors.grey.withValues(alpha: 0.1)),
+        ),
+      ),
     );
   }
 

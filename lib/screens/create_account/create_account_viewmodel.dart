@@ -43,30 +43,39 @@ class CreateAccountViewmodel extends ChangeNotifier
   String _passwordOne = '';
   String _passwordTwo = '';
 
+  AuthError<CreateAccountErrorType> _emailError = const UIAuthError(
+    CreateAccountErrorType.none,
+  );
+  AuthError<CreateAccountErrorType> _passwordError = const UIAuthError(
+    CreateAccountErrorType.none,
+  );
+  AuthError<CreateAccountErrorType>? _apiError;
+
   @override
   void updateEmailField(String email) {
-    if (_email != email) {
-      clearError();
-    }
     _email = email;
+    _clearApiError();
+    _validateEmail();
+    _updateCombinedError();
   }
 
   @override
   void updatePasswordOneField(String password) {
-    if (_passwordOne != password) {
-      clearError();
-    }
     _passwordOne = password;
+    _clearApiError();
     _checkPasswordRequirements(password);
+    _checkPasswordsMatch(_passwordOne, _passwordTwo);
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
   void updatePasswordTwoField(String password) {
-    if (_passwordTwo != password) {
-      clearError();
-    }
     _passwordTwo = password;
+    _clearApiError();
     _checkPasswordsMatch(_passwordOne, _passwordTwo);
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
@@ -105,7 +114,53 @@ class CreateAccountViewmodel extends ChangeNotifier
 
   @override
   void clearError() {
-    _setAuthError = const UIAuthError(CreateAccountErrorType.none);
+    _emailError = const UIAuthError(CreateAccountErrorType.none);
+    _passwordError = const UIAuthError(CreateAccountErrorType.none);
+    _apiError = null;
+    _updateCombinedError();
+  }
+
+  void _clearApiError() {
+    _apiError = null;
+  }
+
+  void _validateEmail() {
+    if (InputValidators.isEmailEmpty(_email)) {
+      _emailError = const UIAuthError(CreateAccountErrorType.noEmail);
+      return;
+    }
+    if (!InputValidators.isEmailValid(_email)) {
+      _emailError = const UIAuthError(CreateAccountErrorType.badEmail);
+      return;
+    }
+    _emailError = const UIAuthError(CreateAccountErrorType.none);
+  }
+
+  void _validatePassword() {
+    if (!_passwordIsValid()) {
+      _passwordError = const UIAuthError(
+        CreateAccountErrorType.passwordRequirementsNotMet,
+      );
+    } else {
+      _passwordError = const UIAuthError(CreateAccountErrorType.none);
+    }
+  }
+
+  void _updateCombinedError() {
+    AuthError<CreateAccountErrorType> error;
+    if (_apiError != null) {
+      error = _apiError!;
+    } else if (_emailError != const UIAuthError(CreateAccountErrorType.none)) {
+      error = _emailError;
+    } else if (_passwordError !=
+        const UIAuthError(CreateAccountErrorType.none)) {
+      error = _passwordError;
+    } else {
+      error = const UIAuthError(CreateAccountErrorType.none);
+    }
+    if (error != _authError) {
+      _setAuthError = error;
+    }
   }
 
   void _checkPasswordRequirements(String password) {
@@ -147,7 +202,9 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
+    if (passwordOne.isNotEmpty &&
+        passwordTwo.isNotEmpty &&
+        InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
       _addMetPasswordRequirement = CreateAccountPasswordRequirements.matching;
     } else {
       _removeMetPasswordRequirement =
@@ -159,29 +216,19 @@ class CreateAccountViewmodel extends ChangeNotifier
     CreateAccountPasswordRequirements.values,
   );
 
-  bool _isFormValid(String email, String passwordOne, String passwordTwo) {
-    if (InputValidators.isEmailEmpty(email)) {
-      _setAuthError = const UIAuthError(CreateAccountErrorType.noEmail);
-      return false;
-    }
-    if (!InputValidators.isEmailValid(email)) {
-      _setAuthError = const UIAuthError(CreateAccountErrorType.badEmail);
-      return false;
-    }
-    if (!_passwordIsValid()) {
-      _setAuthError = const UIAuthError(
-        CreateAccountErrorType.passwordRequirementsNotMet,
-      );
-      return false;
-    }
-    clearError();
-    return true;
+  bool _isFormValid() {
+    _validateEmail();
+    _validatePassword();
+    _updateCombinedError();
+    return _apiError == null &&
+        _emailError == const UIAuthError(CreateAccountErrorType.none) &&
+        _passwordError == const UIAuthError(CreateAccountErrorType.none);
   }
 
   @override
   Future<void> tapCreateAccountButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
-    if (!_isFormValid(_email, _passwordOne, _passwordTwo)) {
+    if (!_isFormValid()) {
       log('Sign up failed: $_authError');
       return;
     }
@@ -202,9 +249,11 @@ class CreateAccountViewmodel extends ChangeNotifier
       case Error(:final error):
         log(error.toString());
         if (error is AuthApiException) {
-          _setAuthError = SupabaseAuthError(error.message);
+          _apiError = SupabaseAuthError(error.message);
+          _updateCombinedError();
         } else {
-          _setAuthError = const UIAuthError(CreateAccountErrorType.unknown);
+          _apiError = const UIAuthError(CreateAccountErrorType.unknown);
+          _updateCombinedError();
         }
         loading.hide();
     }

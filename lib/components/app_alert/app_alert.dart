@@ -30,27 +30,35 @@ class AppAlert extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: colorScheme.surfaceGray,
-      title: Row(
-        children: [
-          Icon(
-            _getIcon(),
-            color: _getColor(colorScheme),
-            size: const AppIconSize().large,
-          ),
-          const AppSpacer.small(),
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium,
-              textAlign: TextAlign.center,
+      title: Semantics(
+        label: title,
+        child: Row(
+          children: [
+            Icon(
+              _getIcon(),
+              color: _getColor(colorScheme),
+              size: const AppIconSize().large,
+              semanticLabel: _getSemanticLabel(),
             ),
-          ),
-        ],
+            const AppSpacer.small(),
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
-      content: Text(
-        message,
-        style: theme.textTheme.bodyMedium,
-        textAlign: TextAlign.center,
+      content: Semantics(
+        label: message,
+        liveRegion: true,
+        child: Text(
+          message,
+          style: theme.textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        ),
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
@@ -64,6 +72,19 @@ class AppAlert extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _getSemanticLabel() {
+    switch (type) {
+      case AppAlertType.error:
+        return 'Error';
+      case AppAlertType.warning:
+        return 'Warning';
+      case AppAlertType.success:
+        return 'Success';
+      case AppAlertType.info:
+        return 'Information';
+    }
   }
 
   IconData _getIcon() {

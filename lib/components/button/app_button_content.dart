@@ -89,7 +89,7 @@ class AppButtonContent extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context, TextTheme textTheme) {
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
-        return [Icon(icon!, size: const AppIconSize().icon)];
+        return [Icon(icon!, size: const AppIconSize().large)];
       case _AppButtonContentType.label:
         return [
           Flexible(
@@ -102,7 +102,7 @@ class AppButtonContent extends StatelessWidget {
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
-          Icon(icon!, size: const AppIconSize().icon),
+          Icon(icon!, size: const AppIconSize().large),
           const SizedBox(width: 8),
           Flexible(
             child: Text(

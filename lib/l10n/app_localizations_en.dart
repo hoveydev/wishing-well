@@ -157,4 +157,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appBarClose => 'Close';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get errorAlertTitle => 'Oh no!';
+
+  @override
+  String get ok => 'Ok';
 }

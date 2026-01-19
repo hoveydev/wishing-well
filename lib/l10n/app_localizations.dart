@@ -375,6 +375,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get appBarClose;
+
+  /// Label for logout button
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// Title for error alert modal
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no!'**
+  String get errorAlertTitle;
+
+  /// Ok text
+  ///
+  /// In en, this message translates to:
+  /// **'Ok'**
+  String get ok;
 }
 
 class _AppLocalizationsDelegate

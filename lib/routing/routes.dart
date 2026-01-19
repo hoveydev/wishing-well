@@ -1,5 +1,6 @@
 enum Routes {
   home('/home'),
+  profile('/profile'),
   login('/login'),
   forgotPassword('/forgot-password'),
   forgotPasswordConfirm('confirm'), // forgot-password/confirm

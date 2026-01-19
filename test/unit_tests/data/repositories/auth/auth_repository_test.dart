@@ -62,6 +62,9 @@ void main() {
       });
 
       test('Returns true After Successful Login', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         await mockRepository.login(
           email: 'email@email.com',
           password: 'password',
@@ -71,6 +74,9 @@ void main() {
       });
 
       test('Returns false After Logout', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: Result.error(Exception('error')),
+        );
         // Login first
         await mockRepository.login(
           email: 'email@email.com',
@@ -86,6 +92,9 @@ void main() {
 
     group('Login', () {
       test('Returns Ok on Successful Login', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         final result = await mockRepository.login(
           email: 'email@email.com',
           password: 'password',
@@ -95,6 +104,9 @@ void main() {
       });
 
       test('Returns Error on Failed Login', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: Result.error(Exception('error')),
+        );
         final result = await mockRepository.login(
           email: 'wrong@email.com',
           password: 'wrongpassword',
@@ -104,6 +116,9 @@ void main() {
       });
 
       test('Notifies Listeners on Successful Login', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         var notified = false;
         mockRepository.addListener(() {
           notified = true;
@@ -118,6 +133,9 @@ void main() {
       });
 
       test('Notifies Listeners on Failed Login', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: Result.error(Exception('error')),
+        );
         var notified = false;
         mockRepository.addListener(() {
           notified = true;
@@ -132,6 +150,9 @@ void main() {
       });
 
       test('Updates isAuthenticated to true on Success', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         expect(mockRepository.isAuthenticated, false);
 
         await mockRepository.login(
@@ -143,6 +164,9 @@ void main() {
       });
 
       test('Keeps isAuthenticated false on Failure', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: Result.error(Exception('error')),
+        );
         expect(mockRepository.isAuthenticated, false);
 
         await mockRepository.login(
@@ -154,6 +178,9 @@ void main() {
       });
 
       test('Can be Called Multiple Times', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: Result.error(Exception('error')),
+        );
         final result1 = await mockRepository.login(
           email: 'email@email.com',
           password: 'password',
@@ -171,7 +198,11 @@ void main() {
     });
 
     group('logout', () {
+      // need setup here
       test('Returns Ok on Successful Logout', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         // Login first
         await mockRepository.login(
           email: 'email@email.com',
@@ -184,6 +215,9 @@ void main() {
       });
 
       test('Notifies Listeners on Logout', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         // Login first
         await mockRepository.login(
           email: 'email@email.com',
@@ -201,6 +235,9 @@ void main() {
       });
 
       test('Updates isAuthenticated to false', () async {
+        mockRepository = MockAuthRepository(
+          logoutResult: const Result.ok(null),
+        );
         // Login first
         await mockRepository.login(
           email: 'email@email.com',

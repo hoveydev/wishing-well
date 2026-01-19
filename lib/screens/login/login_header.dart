@@ -15,8 +15,8 @@ class LoginHeader extends StatelessWidget {
     final isSmallScreen = screenHeight < 700;
 
     final logoSize = isSmallScreen
-        ? AppIconSize(sectionHeight: screenHeight).large * 0.8
-        : AppIconSize(sectionHeight: screenHeight).large;
+        ? AppIconSize(sectionHeight: screenHeight).xlarge * 0.8
+        : AppIconSize(sectionHeight: screenHeight).xlarge;
 
     return Column(
       spacing: AppSpacerSize.small,

@@ -127,7 +127,7 @@ void main() {
       testWidgets('has correct preferred height', (tester) async {
         final menuBar = AppMenuBar(type: AppMenuBarType.main, action: () {});
 
-        expect(menuBar.preferredSize.height, kToolbarHeight);
+        expect(menuBar.preferredSize.height, 48);
       });
     });
   });

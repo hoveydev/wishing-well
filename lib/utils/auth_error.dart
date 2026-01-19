@@ -23,6 +23,8 @@ enum ForgotPasswordErrorType { none, noEmail, badEmail, unknown }
 
 enum ResetPasswordErrorType { none, passwordRequirementsNotMet, unknown }
 
+enum ProfileErrorType { none, unknown }
+
 class UIAuthError<T> extends AuthError<T> {
   const UIAuthError(this.type);
   final T type;

@@ -11,7 +11,7 @@ class ConfirmationImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final screenHeight = MediaQuery.of(context).size.height;
-    final imageSize = AppIconSize(sectionHeight: screenHeight).large;
+    final imageSize = AppIconSize(sectionHeight: screenHeight).xlarge;
     final l10n = AppLocalizations.of(context)!;
 
     return Semantics(

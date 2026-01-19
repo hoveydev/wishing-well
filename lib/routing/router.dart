@@ -9,6 +9,7 @@ import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
 import 'package:wishing_well/screens/home/home_viewmodel.dart';
+import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_viewmodel.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
@@ -224,6 +225,28 @@ GoRouter router() => GoRouter(
           viewmodel: HomeViewmodel(authRepository: context.read()),
         ),
         transitionsBuilder: (_, _, _, child) => child,
+      ),
+    ),
+    GoRoute(
+      path: Routes.profile.path,
+      name: Routes.profile.name,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const ProfileScreen(),
+        transitionsBuilder: (_, animation, _, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
       ),
     ),
   ],

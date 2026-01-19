@@ -98,7 +98,7 @@ void main() {
       expect(mockRouter.state.uri.path, '/login');
     });
 
-    testWidgets('Login > Home', (WidgetTester tester) async {
+    testWidgets('Login > Home > Profile', (WidgetTester tester) async {
       final mockRouter = createMockRouter();
       final mockSource = MockDeepLinkSource(
         initialUri: Uri.parse('not_needed'),
@@ -115,6 +115,9 @@ void main() {
       await tester.tap(find.text('Sign In'));
       await tester.pumpAndSettle();
       expect(mockRouter.state.uri.path, '/home');
+      await tester.tap(find.byIcon(Icons.account_circle));
+      await tester.pumpAndSettle();
+      expect(mockRouter.state.uri.path, '/profile');
     });
 
     testWidgets('Login > Create Account > Confirm > Login', (

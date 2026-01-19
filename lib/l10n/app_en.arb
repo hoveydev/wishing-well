@@ -197,5 +197,13 @@
     "logout": "Logout",
     "@logout": {
         "description": "Label for logout button"
+    },
+    "errorAlertTitle": "Oh no!",
+    "@errorAlertTitle": {
+        "description": "Title for error alert modal"
+    },
+    "ok": "Ok",
+    "@ok": {
+        "description": "Ok text"
     }
 }

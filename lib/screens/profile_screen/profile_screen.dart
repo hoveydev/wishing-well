@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/components/app_alert/app_alert.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
@@ -65,19 +66,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Oh no!'),
-          content: Text(_errorMessage(context)),
-          actions: [
-            TextButton(
-              onPressed: () {
-                _viewModel.clearError();
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
+        builder: (context) {
+          final l10n = AppLocalizations.of(context)!;
+          return AppAlert(
+            title: l10n.errorAlertTitle,
+            message: _errorMessage(context),
+            confirmLabel: l10n.ok,
+            onConfirm: () {
+              _viewModel.clearError();
+            },
+          );
+        },
       );
     });
   }

@@ -13,6 +13,7 @@ import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
+import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -121,6 +122,15 @@ void main() {
       goRouter.goNamed(Routes.resetPasswordConfirmation.name);
       await tester.pumpAndSettle();
       expect(find.byType(ConfirmationScreen), findsOneWidget);
+    });
+
+    testWidgets('navigates to profile', (tester) async {
+      final goRouter = router();
+      await tester.pumpWidget(startAppWithRouter(goRouter));
+      await tester.pumpAndSettle();
+      goRouter.goNamed(Routes.profile.name);
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
     });
   });
 }

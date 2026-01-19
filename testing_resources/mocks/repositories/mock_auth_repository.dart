@@ -4,6 +4,10 @@ import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class MockAuthRepository extends AuthRepository {
+  MockAuthRepository({Result<void>? logoutResult})
+    : logoutResult = logoutResult ?? const Result.ok(null);
+  final Result<void> logoutResult;
+
   @override
   bool get isAuthenticated => _isAuthenticated;
 
@@ -32,14 +36,9 @@ class MockAuthRepository extends AuthRepository {
 
   @override
   Future<Result<void>> logout() async {
-    if (isAuthenticated == true) {
-      notifyListeners();
-      _isAuthenticated = false;
-      return const Result.ok(null);
-    } else {
-      notifyListeners();
-      return Result.error(Exception('no valid user is logged in'));
-    }
+    _isAuthenticated = false;
+    notifyListeners();
+    return logoutResult;
   }
 
   @override

@@ -23,30 +23,30 @@ void main() {
     group('large without sectionHeight', () {
       test('large returns default value when sectionHeight is null', () {
         const iconSize = AppIconSize();
-        expect(iconSize.large, 60.0);
+        expect(iconSize.xlarge, 60.0);
       });
     });
 
     group('large with sectionHeight', () {
       test('large calculates based on sectionHeight', () {
         const iconSize = AppIconSize(sectionHeight: 1000);
-        expect(iconSize.large, 120.0);
+        expect(iconSize.xlarge, 120.0);
       });
 
       test('large calculates correctly for different heights', () {
         const iconSize500 = AppIconSize(sectionHeight: 500);
-        expect(iconSize500.large, 60.0);
+        expect(iconSize500.xlarge, 60.0);
 
         const iconSize1000 = AppIconSize(sectionHeight: 1000);
-        expect(iconSize1000.large, 120.0);
+        expect(iconSize1000.xlarge, 120.0);
 
         const iconSize2000 = AppIconSize(sectionHeight: 2000);
-        expect(iconSize2000.large, 240.0);
+        expect(iconSize2000.xlarge, 240.0);
       });
 
       test('large uses 0.12 ratio for calculation', () {
         const iconSize = AppIconSize(sectionHeight: 833.33);
-        expect(iconSize.large, closeTo(100.0, 0.1));
+        expect(iconSize.xlarge, closeTo(100.0, 0.1));
       });
     });
 

@@ -34,12 +34,20 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   String _email = '';
   String _password = '';
 
+  AuthError<LoginErrorType> _emailError = const UIAuthError(
+    LoginErrorType.none,
+  );
+  AuthError<LoginErrorType> _passwordError = const UIAuthError(
+    LoginErrorType.none,
+  );
+  AuthError<LoginErrorType>? _apiError;
+
   @override
   void updateEmailField(String email) {
-    if (_email != email) {
-      clearError();
-    }
     _email = email;
+    _clearApiError();
+    _validateEmail();
+    _updateCombinedError();
   }
 
   @override
@@ -48,10 +56,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   void updatePasswordField(String password) {
-    if (_password != password) {
-      clearError();
-    }
     _password = password;
+    _clearApiError();
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
@@ -73,7 +81,53 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   void clearError() {
-    _setAuthError = const UIAuthError(LoginErrorType.none);
+    _emailError = const UIAuthError(LoginErrorType.none);
+    _passwordError = const UIAuthError(LoginErrorType.none);
+    _apiError = null;
+    _updateCombinedError();
+  }
+
+  void _clearApiError() {
+    _apiError = null;
+  }
+
+  void _validateEmail() {
+    if (InputValidators.isEmailEmpty(_email)) {
+      _emailError = const UIAuthError(LoginErrorType.noEmail);
+      return;
+    }
+    if (!InputValidators.isEmailValid(_email)) {
+      _emailError = const UIAuthError(LoginErrorType.badEmail);
+      return;
+    }
+    _emailError = const UIAuthError(LoginErrorType.none);
+  }
+
+  void _validatePassword() {
+    if (InputValidators.isPasswordEmpty(_password)) {
+      _passwordError = const UIAuthError(LoginErrorType.noPassword);
+      return;
+    }
+    _passwordError = const UIAuthError(LoginErrorType.none);
+  }
+
+  void _updateCombinedError() {
+    AuthError<LoginErrorType> error;
+    if (_apiError != null) {
+      error = _apiError!;
+    } else if (InputValidators.isEmailEmpty(_email) &&
+        InputValidators.isPasswordEmpty(_password)) {
+      error = const UIAuthError(LoginErrorType.noPasswordNoEmail);
+    } else if (_emailError != const UIAuthError(LoginErrorType.none)) {
+      error = _emailError;
+    } else if (_passwordError != const UIAuthError(LoginErrorType.none)) {
+      error = _passwordError;
+    } else {
+      error = const UIAuthError(LoginErrorType.none);
+    }
+    if (error != _authError) {
+      _setAuthError = error;
+    }
   }
 
   bool _isFormValid(String email, String password) {
@@ -129,9 +183,11 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       case Error(:final Exception error):
         log(error.toString());
         if (error is AuthApiException) {
-          _setAuthError = SupabaseAuthError(error.message);
+          _apiError = SupabaseAuthError(error.message);
+          _updateCombinedError();
         } else {
-          _setAuthError = const UIAuthError(LoginErrorType.unknown);
+          _apiError = const UIAuthError(LoginErrorType.unknown);
+          _updateCombinedError();
         }
         loading.hide();
     }

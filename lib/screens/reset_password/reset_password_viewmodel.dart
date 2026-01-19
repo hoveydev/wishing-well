@@ -17,6 +17,7 @@ abstract class ResetPasswordViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   AuthError<ResetPasswordErrorType> get authError;
+  void clearError();
   Set<ResetPasswordRequirements> get metPasswordRequirements;
   Future<void> tapResetPasswordButton(BuildContext context);
   void tapCloseButton(BuildContext context);
@@ -47,12 +48,18 @@ class ResetPasswordViewmodel extends ChangeNotifier
 
   @override
   void updatePasswordOneField(String password) {
+    if (_passwordOne != password) {
+      clearError();
+    }
     _passwordOne = password;
     _checkPasswordRequirements(password);
   }
 
   @override
   void updatePasswordTwoField(String password) {
+    if (_passwordTwo != password) {
+      clearError();
+    }
     _passwordTwo = password;
     _checkPasswordsMatch(_passwordOne, _passwordTwo);
   }
@@ -86,6 +93,11 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   bool get hasAlert =>
       _authError != const UIAuthError(ResetPasswordErrorType.none);
+
+  @override
+  void clearError() {
+    _setAuthError = const UIAuthError(ResetPasswordErrorType.none);
+  }
 
   void _checkPasswordRequirements(String password) {
     if (InputValidators.hasAdequateLength(password)) {

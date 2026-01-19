@@ -18,6 +18,7 @@ abstract class CreateAccountViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   AuthError<CreateAccountErrorType> get authError;
+  void clearError();
   Set<CreateAccountPasswordRequirements> get metPasswordRequirements;
   Future<void> tapCreateAccountButton(BuildContext context);
 }
@@ -44,17 +45,26 @@ class CreateAccountViewmodel extends ChangeNotifier
 
   @override
   void updateEmailField(String email) {
+    if (_email != email) {
+      clearError();
+    }
     _email = email;
   }
 
   @override
   void updatePasswordOneField(String password) {
+    if (_passwordOne != password) {
+      clearError();
+    }
     _passwordOne = password;
     _checkPasswordRequirements(password);
   }
 
   @override
   void updatePasswordTwoField(String password) {
+    if (_passwordTwo != password) {
+      clearError();
+    }
     _passwordTwo = password;
     _checkPasswordsMatch(_passwordOne, _passwordTwo);
   }
@@ -92,6 +102,11 @@ class CreateAccountViewmodel extends ChangeNotifier
   @override
   bool get hasAlert =>
       _authError != const UIAuthError(CreateAccountErrorType.none);
+
+  @override
+  void clearError() {
+    _setAuthError = const UIAuthError(CreateAccountErrorType.none);
+  }
 
   void _checkPasswordRequirements(String password) {
     if (InputValidators.hasAdequateLength(password)) {
@@ -159,7 +174,7 @@ class CreateAccountViewmodel extends ChangeNotifier
       );
       return false;
     }
-    _setAuthError = const UIAuthError(CreateAccountErrorType.none);
+    clearError();
     return true;
   }
 

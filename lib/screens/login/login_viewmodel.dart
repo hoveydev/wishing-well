@@ -19,6 +19,7 @@ abstract class LoginViewModelContract {
   TextEditingController get passwordInputController;
   bool get hasAlert;
   AuthError<LoginErrorType> get authError;
+  void clearError();
   void tapForgotPasswordButton(BuildContext context);
   Future<void> tapLoginButton(BuildContext context);
   void tapCreateAccountButton(BuildContext context);
@@ -35,6 +36,9 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   void updateEmailField(String email) {
+    if (_email != email) {
+      clearError();
+    }
     _email = email;
   }
 
@@ -44,6 +48,9 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   void updatePasswordField(String password) {
+    if (_password != password) {
+      clearError();
+    }
     _password = password;
   }
 
@@ -63,6 +70,11 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
 
   @override
   bool get hasAlert => _authError != const UIAuthError(LoginErrorType.none);
+
+  @override
+  void clearError() {
+    _setAuthError = const UIAuthError(LoginErrorType.none);
+  }
 
   bool _isFormValid(String email, String password) {
     if (InputValidators.isEmailEmpty(email) &&

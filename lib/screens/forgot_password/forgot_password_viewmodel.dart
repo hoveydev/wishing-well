@@ -16,6 +16,7 @@ abstract class ForgotViewModelContract {
   void updateEmailField(String email);
   bool get hasAlert;
   AuthError<ForgotPasswordErrorType> get authError;
+  void clearError();
   Future<void> tapSendResetLinkButton(BuildContext context);
 }
 
@@ -30,6 +31,9 @@ class ForgotPasswordViewModel extends ChangeNotifier
 
   @override
   void updateEmailField(String email) {
+    if (_email != email) {
+      clearError();
+    }
     _email = email;
   }
 
@@ -47,6 +51,11 @@ class ForgotPasswordViewModel extends ChangeNotifier
   @override
   bool get hasAlert =>
       _authError != const UIAuthError(ForgotPasswordErrorType.none);
+
+  @override
+  void clearError() {
+    _setAuthError = const UIAuthError(ForgotPasswordErrorType.none);
+  }
 
   bool _isEmailValid(String email) {
     if (InputValidators.isEmailEmpty(email)) {

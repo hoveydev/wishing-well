@@ -130,26 +130,13 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     }
   }
 
-  bool _isFormValid(String email, String password) {
-    if (InputValidators.isEmailEmpty(email) &&
-        InputValidators.isPasswordEmpty(password)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noPasswordNoEmail);
-      return false;
-    }
-    if (InputValidators.isEmailEmpty(email)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noEmail);
-      return false;
-    }
-    if (InputValidators.isPasswordEmpty(password)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noPassword);
-      return false;
-    }
-    if (!InputValidators.isEmailValid(email)) {
-      _setAuthError = const UIAuthError(LoginErrorType.badEmail);
-      return false;
-    }
-    _setAuthError = const UIAuthError(LoginErrorType.none);
-    return true;
+  bool _isFormValid() {
+    _validateEmail();
+    _validatePassword();
+    _updateCombinedError();
+    return _apiError == null &&
+        _emailError == const UIAuthError(LoginErrorType.none) &&
+        _passwordError == const UIAuthError(LoginErrorType.none);
   }
 
   @override
@@ -163,7 +150,7 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   Future<void> tapLoginButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
 
-    if (!_isFormValid(_email, _password)) {
+    if (!_isFormValid()) {
       log('Login failed: $_authError');
       return;
     }

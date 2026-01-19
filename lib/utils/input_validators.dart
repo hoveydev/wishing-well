@@ -1,7 +1,5 @@
 class InputValidators {
-  static final RegExp _emailRegex = RegExp(
-    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
-  );
+  static final RegExp _emailRegex = RegExp(r'^[\w.+-]+@[\w-]+\.[\w.-]+$');
 
   static bool isEmailValid(String email) => _emailRegex.hasMatch(email);
 

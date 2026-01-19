@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/utils/result.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-dynamic startAppWithForgotPasswordScreen(WidgetTester tester) async {
+dynamic startAppWithForgotPasswordScreen(
+  WidgetTester tester, {
+  AuthRepository? mockAuthRepository,
+}) async {
   final controller = LoadingController();
   final ChangeNotifierProvider app =
       ChangeNotifierProvider<LoadingController>.value(
@@ -29,7 +35,7 @@ dynamic startAppWithForgotPasswordScreen(WidgetTester tester) async {
           supportedLocales: AppLocalizations.supportedLocales,
           home: ForgotPasswordScreen(
             viewModel: ForgotPasswordViewModel(
-              authRepository: MockAuthRepository(),
+              authRepository: mockAuthRepository ?? MockAuthRepository(),
             ),
           ),
         ),
@@ -90,7 +96,14 @@ void main() {
     });
 
     testWidgets('supabase error', (WidgetTester tester) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithForgotPasswordScreen(
+        tester,
+        mockAuthRepository: MockAuthRepository(
+          sendPasswordResetRequestResult: Result.error(
+            AuthApiException('supabase error'),
+          ),
+        ),
+      );
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -101,7 +114,14 @@ void main() {
     });
 
     testWidgets('unknown error', (WidgetTester tester) async {
-      await startAppWithForgotPasswordScreen(tester);
+      await startAppWithForgotPasswordScreen(
+        tester,
+        mockAuthRepository: MockAuthRepository(
+          sendPasswordResetRequestResult: Result.error(
+            Exception('unknown error'),
+          ),
+        ),
+      );
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );

@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/utils/result.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-dynamic startAppWithCreateAccountScreen(WidgetTester tester) async {
+dynamic startAppWithCreateAccountScreen(
+  WidgetTester tester, {
+  AuthRepository? mockAuthRepository,
+}) async {
   final controller = LoadingController();
   final ChangeNotifierProvider app =
       ChangeNotifierProvider<LoadingController>.value(
@@ -29,7 +35,7 @@ dynamic startAppWithCreateAccountScreen(WidgetTester tester) async {
           supportedLocales: AppLocalizations.supportedLocales,
           home: CreateAccountScreen(
             viewModel: CreateAccountViewmodel(
-              authRepository: MockAuthRepository(),
+              authRepository: mockAuthRepository ?? MockAuthRepository(),
             ),
           ),
         ),
@@ -327,7 +333,12 @@ void main() {
     });
 
     testWidgets('supabase error', (WidgetTester tester) async {
-      await startAppWithCreateAccountScreen(tester);
+      await startAppWithCreateAccountScreen(
+        tester,
+        mockAuthRepository: MockAuthRepository(
+          createAccountResult: Result.error(AuthApiException('supabase error')),
+        ),
+      );
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );
@@ -356,7 +367,12 @@ void main() {
     });
 
     testWidgets('unknown error', (WidgetTester tester) async {
-      await startAppWithCreateAccountScreen(tester);
+      await startAppWithCreateAccountScreen(
+        tester,
+        mockAuthRepository: MockAuthRepository(
+          createAccountResult: Result.error(Exception('unknown error')),
+        ),
+      );
       final emailWidgetFinder = find.byWidgetPredicate(
         (widget) => widget is AppInput && widget.type == AppInputType.email,
       );

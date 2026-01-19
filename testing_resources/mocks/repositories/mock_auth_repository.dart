@@ -1,12 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class MockAuthRepository extends AuthRepository {
-  MockAuthRepository({Result<void>? logoutResult})
-    : logoutResult = logoutResult ?? const Result.ok(null);
+  MockAuthRepository({
+    Result<void>? logoutResult,
+    Result<void>? loginResult,
+    Result<void>? createAccountResult,
+    Result<void>? sendPasswordResetRequestResult,
+    Result<void>? resetUserPasswordResult,
+  }) : logoutResult = logoutResult ?? const Result.ok(null),
+       loginResult = loginResult ?? const Result.ok(null),
+       createAccountResult = createAccountResult ?? const Result.ok(null),
+       sendPasswordResetRequestResult =
+           sendPasswordResetRequestResult ?? const Result.ok(null),
+       resetUserPasswordResult =
+           resetUserPasswordResult ?? const Result.ok(null);
+
   final Result<void> logoutResult;
+  final Result<void> loginResult;
+  final Result<void> createAccountResult;
+  final Result<void> sendPasswordResetRequestResult;
+  final Result<void> resetUserPasswordResult;
 
   @override
   bool get isAuthenticated => _isAuthenticated;
@@ -21,22 +36,18 @@ class MockAuthRepository extends AuthRepository {
     required String email,
     required String password,
   }) async {
-    if (email == 'email@email.com' && password == 'password') {
+    if (loginResult is Ok) {
       _isAuthenticated = true;
-      notifyListeners();
-      return const Result.ok(null);
-    } else if (email == 'supabase.error@email.com') {
-      notifyListeners();
-      return Result.error(AuthApiException('supabase error'));
-    } else {
-      notifyListeners();
-      return Result.error(Exception('invalid username and password'));
     }
+    notifyListeners();
+    return loginResult;
   }
 
   @override
   Future<Result<void>> logout() async {
-    _isAuthenticated = false;
+    if (loginResult is Ok) {
+      _isAuthenticated = false;
+    }
     notifyListeners();
     return logoutResult;
   }
@@ -46,31 +57,14 @@ class MockAuthRepository extends AuthRepository {
     required String email,
     required String password,
   }) async {
-    if (email == 'new.account@email.com' &&
-        password == 'passwordPASSWORD123@#') {
-      notifyListeners();
-      return const Result.ok(null);
-    } else if (email == 'supabase.error@email.com') {
-      notifyListeners();
-      return Result.error(AuthApiException('supabase error'));
-    } else {
-      notifyListeners();
-      return Result.error(Exception('generic error'));
-    }
+    notifyListeners();
+    return createAccountResult;
   }
 
   @override
   Future<Result<void>> sendPasswordResetRequest({required String email}) async {
-    if (email == 'forgot.password@email.com') {
-      notifyListeners();
-      return const Result.ok(null);
-    } else if (email == 'supabase.error@email.com') {
-      notifyListeners();
-      return Result.error(AuthApiException('supabase error'));
-    } else {
-      notifyListeners();
-      return Result.error(Exception('unknown service error'));
-    }
+    notifyListeners();
+    return sendPasswordResetRequestResult;
   }
 
   @override
@@ -79,15 +73,7 @@ class MockAuthRepository extends AuthRepository {
     required String newPassword,
     required String token,
   }) async {
-    if (token == 'valid-token') {
-      notifyListeners();
-      return const Result.ok(null);
-    } else if (token == 'supabase-error-token') {
-      notifyListeners();
-      return Result.error(AuthApiException('supabase error'));
-    } else {
-      notifyListeners();
-      return Result.error(Exception('unknown service error'));
-    }
+    notifyListeners();
+    return resetUserPasswordResult;
   }
 }

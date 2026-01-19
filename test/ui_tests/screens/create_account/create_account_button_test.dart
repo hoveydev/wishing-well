@@ -5,43 +5,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
 import 'package:wishing_well/screens/create_account/create_account_button.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
-import 'package:wishing_well/utils/result.dart';
 
-class MockAuthRepository extends AuthRepository {
-  @override
-  bool get isAuthenticated => false;
-
-  @override
-  String? get userFirstName => null;
-
-  @override
-  Future<Result<void>> login({
-    required String email,
-    required String password,
-  }) async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> logout() async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> createAccount({
-    required String email,
-    required String password,
-  }) async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> sendPasswordResetRequest({
-    required String email,
-  }) async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> resetUserPassword({
-    required String email,
-    required String newPassword,
-    required String token,
-  }) async => const Result.ok(null);
-}
+import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 class MockCreateAccountViewmodel extends CreateAccountViewmodel {
   MockCreateAccountViewmodel() : super(authRepository: MockAuthRepository());

@@ -29,12 +29,17 @@ class ForgotPasswordViewModel extends ChangeNotifier
 
   String _email = '';
 
+  AuthError<ForgotPasswordErrorType> _emailError = const UIAuthError(
+    ForgotPasswordErrorType.none,
+  );
+  AuthError<ForgotPasswordErrorType>? _apiError;
+
   @override
   void updateEmailField(String email) {
-    if (_email != email) {
-      clearError();
-    }
     _email = email;
+    _clearApiError();
+    _validateEmail();
+    _updateCombinedError();
   }
 
   @override
@@ -54,26 +59,52 @@ class ForgotPasswordViewModel extends ChangeNotifier
 
   @override
   void clearError() {
-    _setAuthError = const UIAuthError(ForgotPasswordErrorType.none);
+    _emailError = const UIAuthError(ForgotPasswordErrorType.none);
+    _apiError = null;
+    _updateCombinedError();
   }
 
-  bool _isEmailValid(String email) {
-    if (InputValidators.isEmailEmpty(email)) {
-      _setAuthError = const UIAuthError(ForgotPasswordErrorType.noEmail);
-      return false;
+  void _clearApiError() {
+    _apiError = null;
+  }
+
+  void _validateEmail() {
+    if (InputValidators.isEmailEmpty(_email)) {
+      _emailError = const UIAuthError(ForgotPasswordErrorType.noEmail);
+      return;
     }
-    if (!InputValidators.isEmailValid(email)) {
-      _setAuthError = const UIAuthError(ForgotPasswordErrorType.badEmail);
-      return false;
+    if (!InputValidators.isEmailValid(_email)) {
+      _emailError = const UIAuthError(ForgotPasswordErrorType.badEmail);
+      return;
     }
-    _setAuthError = const UIAuthError(ForgotPasswordErrorType.none);
-    return true;
+    _emailError = const UIAuthError(ForgotPasswordErrorType.none);
+  }
+
+  void _updateCombinedError() {
+    AuthError<ForgotPasswordErrorType> error;
+    if (_apiError != null) {
+      error = _apiError!;
+    } else if (_emailError != const UIAuthError(ForgotPasswordErrorType.none)) {
+      error = _emailError;
+    } else {
+      error = const UIAuthError(ForgotPasswordErrorType.none);
+    }
+    if (error != _authError) {
+      _setAuthError = error;
+    }
+  }
+
+  bool _isEmailValid() {
+    _validateEmail();
+    _updateCombinedError();
+    return _apiError == null &&
+        _emailError == const UIAuthError(ForgotPasswordErrorType.none);
   }
 
   @override
   Future<void> tapSendResetLinkButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
-    if (!_isEmailValid(_email)) {
+    if (!_isEmailValid()) {
       log('Email validation failed: $_authError');
       return;
     }
@@ -93,9 +124,11 @@ class ForgotPasswordViewModel extends ChangeNotifier
       case Error(:final error):
         log(error.toString());
         if (error is AuthApiException) {
-          _setAuthError = SupabaseAuthError(error.message);
+          _apiError = SupabaseAuthError(error.message);
+          _updateCombinedError();
         } else {
-          _setAuthError = const UIAuthError(ForgotPasswordErrorType.unknown);
+          _apiError = const UIAuthError(ForgotPasswordErrorType.unknown);
+          _updateCombinedError();
         }
         loading.hide();
     }

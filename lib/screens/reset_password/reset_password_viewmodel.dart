@@ -17,6 +17,7 @@ abstract class ResetPasswordViewmodelContract {
   void updatePasswordTwoField(String password);
   bool get hasAlert;
   AuthError<ResetPasswordErrorType> get authError;
+  void clearError();
   Set<ResetPasswordRequirements> get metPasswordRequirements;
   Future<void> tapResetPasswordButton(BuildContext context);
   void tapCloseButton(BuildContext context);
@@ -45,16 +46,28 @@ class ResetPasswordViewmodel extends ChangeNotifier
   String _passwordOne = '';
   String _passwordTwo = '';
 
+  AuthError<ResetPasswordErrorType> _passwordError = const UIAuthError(
+    ResetPasswordErrorType.none,
+  );
+  AuthError<ResetPasswordErrorType>? _apiError;
+
   @override
   void updatePasswordOneField(String password) {
     _passwordOne = password;
+    _clearApiError();
     _checkPasswordRequirements(password);
+    _checkPasswordsMatch(_passwordOne, _passwordTwo);
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
   void updatePasswordTwoField(String password) {
     _passwordTwo = password;
+    _clearApiError();
     _checkPasswordsMatch(_passwordOne, _passwordTwo);
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
@@ -87,6 +100,42 @@ class ResetPasswordViewmodel extends ChangeNotifier
   bool get hasAlert =>
       _authError != const UIAuthError(ResetPasswordErrorType.none);
 
+  @override
+  void clearError() {
+    _passwordError = const UIAuthError(ResetPasswordErrorType.none);
+    _apiError = null;
+    _updateCombinedError();
+  }
+
+  void _clearApiError() {
+    _apiError = null;
+  }
+
+  void _validatePassword() {
+    if (!_passwordIsValid()) {
+      _passwordError = const UIAuthError(
+        ResetPasswordErrorType.passwordRequirementsNotMet,
+      );
+    } else {
+      _passwordError = const UIAuthError(ResetPasswordErrorType.none);
+    }
+  }
+
+  void _updateCombinedError() {
+    AuthError<ResetPasswordErrorType> error;
+    if (_apiError != null) {
+      error = _apiError!;
+    } else if (_passwordError !=
+        const UIAuthError(ResetPasswordErrorType.none)) {
+      error = _passwordError;
+    } else {
+      error = const UIAuthError(ResetPasswordErrorType.none);
+    }
+    if (error != _authError) {
+      _setAuthError = error;
+    }
+  }
+
   void _checkPasswordRequirements(String password) {
     if (InputValidators.hasAdequateLength(password)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
@@ -118,20 +167,23 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
+    if (passwordOne.isNotEmpty &&
+        passwordTwo.isNotEmpty &&
+        InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
       _addMetPasswordRequirement = ResetPasswordRequirements.matching;
     } else {
       _removeMetPasswordRequirement = ResetPasswordRequirements.matching;
     }
   }
 
-  bool _passwordIsValid() {
-    _setAuthError = const UIAuthError(
-      ResetPasswordErrorType.passwordRequirementsNotMet,
-    );
-    return metPasswordRequirements.containsAll(
-      ResetPasswordRequirements.values,
-    );
+  bool _passwordIsValid() =>
+      metPasswordRequirements.containsAll(ResetPasswordRequirements.values);
+
+  bool _isFormValid() {
+    _validatePassword();
+    _updateCombinedError();
+    return _apiError == null &&
+        _passwordError == const UIAuthError(ResetPasswordErrorType.none);
   }
 
   @override
@@ -144,7 +196,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   @override
   Future<void> tapResetPasswordButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
-    if (!_passwordIsValid()) {
+    if (!_isFormValid()) {
       log('Sign up failed: $_authError');
       return;
     }
@@ -166,9 +218,11 @@ class ResetPasswordViewmodel extends ChangeNotifier
       case Error(:final Exception error):
         log(error.toString());
         if (error is AuthApiException) {
-          _setAuthError = SupabaseAuthError(error.message);
+          _apiError = SupabaseAuthError(error.message);
+          _updateCombinedError();
         } else {
-          _setAuthError = const UIAuthError(ResetPasswordErrorType.unknown);
+          _apiError = const UIAuthError(ResetPasswordErrorType.unknown);
+          _updateCombinedError();
         }
         loading.hide();
     }

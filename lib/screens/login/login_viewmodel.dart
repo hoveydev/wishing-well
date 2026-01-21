@@ -19,6 +19,7 @@ abstract class LoginViewModelContract {
   TextEditingController get passwordInputController;
   bool get hasAlert;
   AuthError<LoginErrorType> get authError;
+  void clearError();
   void tapForgotPasswordButton(BuildContext context);
   Future<void> tapLoginButton(BuildContext context);
   void tapCreateAccountButton(BuildContext context);
@@ -33,9 +34,20 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   String _email = '';
   String _password = '';
 
+  AuthError<LoginErrorType> _emailError = const UIAuthError(
+    LoginErrorType.none,
+  );
+  AuthError<LoginErrorType> _passwordError = const UIAuthError(
+    LoginErrorType.none,
+  );
+  AuthError<LoginErrorType>? _apiError;
+
   @override
   void updateEmailField(String email) {
     _email = email;
+    _clearApiError();
+    _validateEmail();
+    _updateCombinedError();
   }
 
   @override
@@ -45,6 +57,9 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   @override
   void updatePasswordField(String password) {
     _password = password;
+    _clearApiError();
+    _validatePassword();
+    _updateCombinedError();
   }
 
   @override
@@ -64,26 +79,64 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   @override
   bool get hasAlert => _authError != const UIAuthError(LoginErrorType.none);
 
-  bool _isFormValid(String email, String password) {
-    if (InputValidators.isEmailEmpty(email) &&
-        InputValidators.isPasswordEmpty(password)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noPasswordNoEmail);
-      return false;
+  @override
+  void clearError() {
+    _emailError = const UIAuthError(LoginErrorType.none);
+    _passwordError = const UIAuthError(LoginErrorType.none);
+    _apiError = null;
+    _updateCombinedError();
+  }
+
+  void _clearApiError() {
+    _apiError = null;
+  }
+
+  void _validateEmail() {
+    if (InputValidators.isEmailEmpty(_email)) {
+      _emailError = const UIAuthError(LoginErrorType.noEmail);
+      return;
     }
-    if (InputValidators.isEmailEmpty(email)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noEmail);
-      return false;
+    if (!InputValidators.isEmailValid(_email)) {
+      _emailError = const UIAuthError(LoginErrorType.badEmail);
+      return;
     }
-    if (InputValidators.isPasswordEmpty(password)) {
-      _setAuthError = const UIAuthError(LoginErrorType.noPassword);
-      return false;
+    _emailError = const UIAuthError(LoginErrorType.none);
+  }
+
+  void _validatePassword() {
+    if (InputValidators.isPasswordEmpty(_password)) {
+      _passwordError = const UIAuthError(LoginErrorType.noPassword);
+      return;
     }
-    if (!InputValidators.isEmailValid(email)) {
-      _setAuthError = const UIAuthError(LoginErrorType.badEmail);
-      return false;
+    _passwordError = const UIAuthError(LoginErrorType.none);
+  }
+
+  void _updateCombinedError() {
+    AuthError<LoginErrorType> error;
+    if (_apiError != null) {
+      error = _apiError!;
+    } else if (InputValidators.isEmailEmpty(_email) &&
+        InputValidators.isPasswordEmpty(_password)) {
+      error = const UIAuthError(LoginErrorType.noPasswordNoEmail);
+    } else if (_emailError != const UIAuthError(LoginErrorType.none)) {
+      error = _emailError;
+    } else if (_passwordError != const UIAuthError(LoginErrorType.none)) {
+      error = _passwordError;
+    } else {
+      error = const UIAuthError(LoginErrorType.none);
     }
-    _setAuthError = const UIAuthError(LoginErrorType.none);
-    return true;
+    if (error != _authError) {
+      _setAuthError = error;
+    }
+  }
+
+  bool _isFormValid() {
+    _validateEmail();
+    _validatePassword();
+    _updateCombinedError();
+    return _apiError == null &&
+        _emailError == const UIAuthError(LoginErrorType.none) &&
+        _passwordError == const UIAuthError(LoginErrorType.none);
   }
 
   @override
@@ -97,7 +150,7 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   Future<void> tapLoginButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
 
-    if (!_isFormValid(_email, _password)) {
+    if (!_isFormValid()) {
       log('Login failed: $_authError');
       return;
     }
@@ -117,9 +170,11 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
       case Error(:final Exception error):
         log(error.toString());
         if (error is AuthApiException) {
-          _setAuthError = SupabaseAuthError(error.message);
+          _apiError = SupabaseAuthError(error.message);
+          _updateCombinedError();
         } else {
-          _setAuthError = const UIAuthError(LoginErrorType.unknown);
+          _apiError = const UIAuthError(LoginErrorType.unknown);
+          _updateCombinedError();
         }
         loading.hide();
     }

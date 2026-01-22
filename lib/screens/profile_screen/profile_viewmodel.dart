@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';

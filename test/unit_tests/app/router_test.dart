@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';

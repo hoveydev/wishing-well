@@ -14,6 +14,7 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     this.icon,
     this.label,
+    this.semanticLabel,
   }) : _primaryButtonContentType = primaryButtonContentType;
 
   const PrimaryButton.icon({
@@ -22,12 +23,14 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    String? semanticLabel,
   }) : this._(
          key: key,
          icon: icon,
          onPressed: onPressed,
          isLoading: isLoading,
          alignment: alignment,
+         semanticLabel: semanticLabel,
          primaryButtonContentType: _PrimaryButtonContentType.icon,
        );
 
@@ -64,6 +67,7 @@ class PrimaryButton extends StatelessWidget {
        );
   final IconData? icon;
   final String? label;
+  final String? semanticLabel;
   final VoidCallback onPressed;
   final bool isLoading;
   final MainAxisAlignment alignment;
@@ -73,8 +77,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
     final colorScheme = context.colorScheme;
-
-    return TextButton(
+    final buttonWidget = TextButton(
       style: ButtonStyle(
         backgroundBuilder: (context, states, child) {
           if (states.contains(WidgetState.pressed)) {
@@ -109,6 +112,11 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressHandler,
       child: _buildContent(context),
     );
+
+    if (semanticLabel != null) {
+      return Semantics(label: semanticLabel, button: true, child: buttonWidget);
+    }
+    return buttonWidget;
   }
 
   Widget _buildContent(BuildContext context) {

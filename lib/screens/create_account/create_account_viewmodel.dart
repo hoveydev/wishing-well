@@ -5,10 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
 
@@ -35,9 +36,12 @@ enum CreateAccountPasswordRequirements {
 class CreateAccountViewmodel extends ChangeNotifier
     implements CreateAccountViewmodelContract {
   CreateAccountViewmodel({required AuthRepository authRepository})
-    : _authRepository = authRepository;
+    : _authRepository = authRepository,
+      _passwordValidator =
+          PasswordValidator<CreateAccountPasswordRequirements>();
 
   final AuthRepository _authRepository;
+  final PasswordValidator<CreateAccountPasswordRequirements> _passwordValidator;
 
   String _email = '';
   String _passwordOne = '';
@@ -80,22 +84,7 @@ class CreateAccountViewmodel extends ChangeNotifier
 
   @override
   Set<CreateAccountPasswordRequirements> get metPasswordRequirements =>
-      _metPasswordRequirements;
-
-  final Set<CreateAccountPasswordRequirements> _metPasswordRequirements = {};
-  set _addMetPasswordRequirement(
-    CreateAccountPasswordRequirements requirement,
-  ) {
-    _metPasswordRequirements.add(requirement);
-    notifyListeners();
-  }
-
-  set _removeMetPasswordRequirement(
-    CreateAccountPasswordRequirements requirement,
-  ) {
-    _metPasswordRequirements.remove(requirement);
-    notifyListeners();
-  }
+      _passwordValidator.metRequirements;
 
   @override
   AuthError<CreateAccountErrorType> get authError => _authError;
@@ -164,52 +153,26 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordRequirements(String password) {
-    if (InputValidators.hasAdequateLength(password)) {
-      _addMetPasswordRequirement =
-          CreateAccountPasswordRequirements.adequateLength;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.adequateLength;
-    }
-    if (InputValidators.hasUppercase(password)) {
-      _addMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsUppercase;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsUppercase;
-    }
-    if (InputValidators.hasLowercase(password)) {
-      _addMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsLowercase;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsLowercase;
-    }
-    if (InputValidators.hasDigit(password)) {
-      _addMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsDigit;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsDigit;
-    }
-    if (InputValidators.hasSpecialCharacter(password)) {
-      _addMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsSpecial;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.containsSpecial;
-    }
+    final requirements = {
+      CreateAccountPasswordRequirements.adequateLength:
+          InputValidators.hasAdequateLength,
+      CreateAccountPasswordRequirements.containsUppercase:
+          InputValidators.hasUppercase,
+      CreateAccountPasswordRequirements.containsLowercase:
+          InputValidators.hasLowercase,
+      CreateAccountPasswordRequirements.containsDigit: InputValidators.hasDigit,
+      CreateAccountPasswordRequirements.containsSpecial:
+          InputValidators.hasSpecialCharacter,
+    };
+    _passwordValidator.checkRequirements(password, requirements);
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (passwordOne.isNotEmpty &&
-        passwordTwo.isNotEmpty &&
-        InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
-      _addMetPasswordRequirement = CreateAccountPasswordRequirements.matching;
-    } else {
-      _removeMetPasswordRequirement =
-          CreateAccountPasswordRequirements.matching;
-    }
+    _passwordValidator.checkPasswordsMatch(
+      passwordOne,
+      passwordTwo,
+      CreateAccountPasswordRequirements.matching,
+    );
   }
 
   bool _passwordIsValid() => metPasswordRequirements.containsAll(

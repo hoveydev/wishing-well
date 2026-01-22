@@ -5,11 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class ResetPasswordViewmodelContract {
@@ -38,8 +39,10 @@ class ResetPasswordViewmodel extends ChangeNotifier
     required AuthRepository authRepository,
     required this.email,
     required this.token,
-  }) : _authRepository = authRepository;
+  }) : _authRepository = authRepository,
+       _passwordValidator = PasswordValidator<ResetPasswordRequirements>();
   final AuthRepository _authRepository;
+  final PasswordValidator<ResetPasswordRequirements> _passwordValidator;
   final String email;
   final String token;
 
@@ -72,18 +75,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
 
   @override
   Set<ResetPasswordRequirements> get metPasswordRequirements =>
-      _metPasswordRequirements;
-
-  final Set<ResetPasswordRequirements> _metPasswordRequirements = {};
-  set _addMetPasswordRequirement(ResetPasswordRequirements requirement) {
-    _metPasswordRequirements.add(requirement);
-    notifyListeners();
-  }
-
-  set _removeMetPasswordRequirement(ResetPasswordRequirements requirement) {
-    _metPasswordRequirements.remove(requirement);
-    notifyListeners();
-  }
+      _passwordValidator.metRequirements;
 
   @override
   AuthError<ResetPasswordErrorType> get authError => _authError;
@@ -137,43 +129,24 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   void _checkPasswordRequirements(String password) {
-    if (InputValidators.hasAdequateLength(password)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
-    } else {
-      _removeMetPasswordRequirement = ResetPasswordRequirements.adequateLength;
-    }
-    if (InputValidators.hasUppercase(password)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.containsUppercase;
-    } else {
-      _removeMetPasswordRequirement =
-          ResetPasswordRequirements.containsUppercase;
-    }
-    if (InputValidators.hasLowercase(password)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.containsLowercase;
-    } else {
-      _removeMetPasswordRequirement =
-          ResetPasswordRequirements.containsLowercase;
-    }
-    if (InputValidators.hasDigit(password)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
-    } else {
-      _removeMetPasswordRequirement = ResetPasswordRequirements.containsDigit;
-    }
-    if (InputValidators.hasSpecialCharacter(password)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
-    } else {
-      _removeMetPasswordRequirement = ResetPasswordRequirements.containsSpecial;
-    }
+    final requirements = {
+      ResetPasswordRequirements.adequateLength:
+          InputValidators.hasAdequateLength,
+      ResetPasswordRequirements.containsUppercase: InputValidators.hasUppercase,
+      ResetPasswordRequirements.containsLowercase: InputValidators.hasLowercase,
+      ResetPasswordRequirements.containsDigit: InputValidators.hasDigit,
+      ResetPasswordRequirements.containsSpecial:
+          InputValidators.hasSpecialCharacter,
+    };
+    _passwordValidator.checkRequirements(password, requirements);
   }
 
   void _checkPasswordsMatch(String passwordOne, String passwordTwo) {
-    if (passwordOne.isNotEmpty &&
-        passwordTwo.isNotEmpty &&
-        InputValidators.passwordsMatch(passwordOne, passwordTwo)) {
-      _addMetPasswordRequirement = ResetPasswordRequirements.matching;
-    } else {
-      _removeMetPasswordRequirement = ResetPasswordRequirements.matching;
-    }
+    _passwordValidator.checkPasswordsMatch(
+      passwordOne,
+      passwordTwo,
+      ResetPasswordRequirements.matching,
+    );
   }
 
   bool _passwordIsValid() =>

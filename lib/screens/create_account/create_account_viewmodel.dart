@@ -38,7 +38,10 @@ class CreateAccountViewmodel extends ChangeNotifier
   CreateAccountViewmodel({required AuthRepository authRepository})
     : _authRepository = authRepository,
       _passwordValidator =
-          PasswordValidator<CreateAccountPasswordRequirements>();
+          PasswordValidator<CreateAccountPasswordRequirements>() {
+    // Listen to PasswordValidator changes and forward to Viewmodel
+    _passwordValidator.addListener(_onPasswordValidatorChanged);
+  }
 
   final AuthRepository _authRepository;
   final PasswordValidator<CreateAccountPasswordRequirements> _passwordValidator;
@@ -46,6 +49,25 @@ class CreateAccountViewmodel extends ChangeNotifier
   String _email = '';
   String _passwordOne = '';
   String _passwordTwo = '';
+
+  // Cache metPasswordRequirements Set to provide a stable reference
+  // for ListenableBuilder. Without this, the getter returns a new Set
+  // reference each time, which prevents UI rebuilds.
+  Set<CreateAccountPasswordRequirements>? _cachedMetRequirements;
+
+  // Called when PasswordValidator notifies listeners
+  void _onPasswordValidatorChanged() {
+    // Invalidate cache so the getter returns the updated requirements
+    _cachedMetRequirements = null;
+    // Forward the notification to this Viewmodel's listeners (UI)
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _passwordValidator.removeListener(_onPasswordValidatorChanged);
+    super.dispose();
+  }
 
   AuthError<CreateAccountErrorType> _emailError = const UIAuthError(
     CreateAccountErrorType.none,
@@ -83,8 +105,10 @@ class CreateAccountViewmodel extends ChangeNotifier
   }
 
   @override
-  Set<CreateAccountPasswordRequirements> get metPasswordRequirements =>
-      _passwordValidator.metRequirements;
+  Set<CreateAccountPasswordRequirements> get metPasswordRequirements {
+    _cachedMetRequirements ??= _passwordValidator.metRequirements;
+    return _cachedMetRequirements!;
+  }
 
   @override
   AuthError<CreateAccountErrorType> get authError => _authError;

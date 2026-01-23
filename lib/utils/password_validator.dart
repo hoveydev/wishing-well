@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 
-/// Manages password requirement validation tracking
-/// Tracks which password requirements have been met and notifies listeners
 class PasswordValidator<T> extends ChangeNotifier {
   PasswordValidator();
 
@@ -10,16 +8,43 @@ class PasswordValidator<T> extends ChangeNotifier {
   Set<T> get metRequirements => _metRequirements;
 
   /// Updates password requirements based on the provided password
+  ///
+  /// Batches all requirement changes and sends a single notification,
+  /// preventing unnecessary UI rebuilds during the validation loop.
   void checkRequirements(
     String password,
     Map<T, bool Function(String)> requirements,
   ) {
+    // Track which requirements need to be added/removed
+    final toAdd = <T>[];
+    final toRemove = <T>[];
+
     for (final entry in requirements.entries) {
       if (entry.value(password)) {
-        _addMetRequirement(entry.key);
+        toAdd.add(entry.key);
       } else {
-        _removeMetRequirement(entry.key);
+        toRemove.add(entry.key);
       }
+    }
+
+    // Batch update: add all new requirements, remove all old requirements
+    var changed = false;
+
+    for (final requirement in toRemove) {
+      if (_metRequirements.remove(requirement)) {
+        changed = true;
+      }
+    }
+
+    for (final requirement in toAdd) {
+      if (_metRequirements.add(requirement)) {
+        changed = true;
+      }
+    }
+
+    // Only notify listeners if something actually changed
+    if (changed) {
+      notifyListeners();
     }
   }
 
@@ -39,8 +64,7 @@ class PasswordValidator<T> extends ChangeNotifier {
   }
 
   /// Returns true if all password requirements are met
-  // This should be overridden by subclasses or
-  // provided all possible requirements
+  /// This should be overridden by subclasses with specific requirement sets
   bool get isValid => _metRequirements.isNotEmpty;
 
   void _addMetRequirement(T requirement) {
@@ -55,7 +79,7 @@ class PasswordValidator<T> extends ChangeNotifier {
     }
   }
 
-  /// Resets all requirements
+  /// Resets all requirements and notifies listeners
   void reset() {
     if (_metRequirements.isNotEmpty) {
       _metRequirements.clear();

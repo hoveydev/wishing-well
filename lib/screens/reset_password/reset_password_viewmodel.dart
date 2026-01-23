@@ -40,7 +40,11 @@ class ResetPasswordViewmodel extends ChangeNotifier
     required this.email,
     required this.token,
   }) : _authRepository = authRepository,
-       _passwordValidator = PasswordValidator<ResetPasswordRequirements>();
+       _passwordValidator = PasswordValidator<ResetPasswordRequirements>(),
+       _cachedMetRequirements = null {
+    // Listen to PasswordValidator changes and forward to Viewmodel
+    _passwordValidator.addListener(_onPasswordValidatorChanged);
+  }
   final AuthRepository _authRepository;
   final PasswordValidator<ResetPasswordRequirements> _passwordValidator;
   final String email;
@@ -48,6 +52,25 @@ class ResetPasswordViewmodel extends ChangeNotifier
 
   String _passwordOne = '';
   String _passwordTwo = '';
+
+  // Cache metPasswordRequirements Set to provide a stable reference
+  // for ListenableBuilder. Without this, the getter returns a new Set
+  // reference each time, which prevents UI rebuilds.
+  Set<ResetPasswordRequirements>? _cachedMetRequirements;
+
+  // Called when PasswordValidator notifies listeners
+  void _onPasswordValidatorChanged() {
+    // Invalidate cache so the getter returns the updated requirements
+    _cachedMetRequirements = null;
+    // Forward the notification to this Viewmodel's listeners (UI)
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _passwordValidator.removeListener(_onPasswordValidatorChanged);
+    super.dispose();
+  }
 
   AuthError<ResetPasswordErrorType> _passwordError = const UIAuthError(
     ResetPasswordErrorType.none,
@@ -74,8 +97,10 @@ class ResetPasswordViewmodel extends ChangeNotifier
   }
 
   @override
-  Set<ResetPasswordRequirements> get metPasswordRequirements =>
-      _passwordValidator.metRequirements;
+  Set<ResetPasswordRequirements> get metPasswordRequirements {
+    _cachedMetRequirements ??= _passwordValidator.metRequirements;
+    return _cachedMetRequirements!;
+  }
 
   @override
   AuthError<ResetPasswordErrorType> get authError => _authError;

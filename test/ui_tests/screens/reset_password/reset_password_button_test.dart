@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_button.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-class MockResetPasswordViewmodel extends ResetPasswordViewmodel {
-  MockResetPasswordViewmodel()
+class MockResetPasswordViewModel extends ResetPasswordViewModel {
+  MockResetPasswordViewModel()
     : super(
         authRepository: MockAuthRepository(),
         email: 'test@example.com',
@@ -41,24 +41,24 @@ void main() {
     );
 
     testWidgets('renders button', (tester) async {
-      final viewmodel = MockResetPasswordViewmodel();
+      final viewModel = MockResetPasswordViewModel();
 
       await tester.pumpWidget(
-        createTestWidget(ResetPasswordButton(viewmodel: viewmodel)),
+        createTestWidget(ResetPasswordButton(viewModel: viewModel)),
       );
 
       expect(find.text('Reset Password'), findsOneWidget);
     });
 
     testWidgets('calls tapResetPasswordButton when tapped', (tester) async {
-      final viewmodel = MockResetPasswordViewmodel();
+      final viewModel = MockResetPasswordViewModel();
 
       await tester.pumpWidget(
-        createTestWidget(ResetPasswordButton(viewmodel: viewmodel)),
+        createTestWidget(ResetPasswordButton(viewModel: viewModel)),
       );
 
       await tester.tap(find.text('Reset Password'));
-      expect(viewmodel.buttonTapped, true);
+      expect(viewModel.buttonTapped, true);
     });
   });
 }

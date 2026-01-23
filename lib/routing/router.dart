@@ -4,16 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
-import 'package:wishing_well/screens/home/home_viewmodel.dart';
+import 'package:wishing_well/screens/home/home_view_model.dart';
 import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
-import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_view_model.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login',
@@ -94,7 +94,7 @@ GoRouter router() => GoRouter(
           name: Routes.resetPassword.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: ResetPasswordScreen(
-              viewmodel: ResetPasswordViewmodel(
+              viewModel: ResetPasswordViewModel(
                 authRepository: context.read(),
                 email: state.uri.queryParameters['email'] ?? '',
                 token: state.uri.queryParameters['token'] ?? '',
@@ -150,7 +150,7 @@ GoRouter router() => GoRouter(
       name: Routes.createAccount.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: CreateAccountScreen(
-          viewModel: CreateAccountViewmodel(authRepository: context.read()),
+          viewModel: CreateAccountViewModel(authRepository: context.read()),
         ),
         transitionsBuilder: (_, animation, _, child) {
           const begin = Offset(0.0, 1.0);
@@ -222,7 +222,7 @@ GoRouter router() => GoRouter(
       name: Routes.home.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: HomeScreen(
-          viewmodel: HomeViewmodel(authRepository: context.read()),
+          viewModel: HomeViewModel(authRepository: context.read()),
         ),
         transitionsBuilder: (_, _, _, child) => child,
       ),

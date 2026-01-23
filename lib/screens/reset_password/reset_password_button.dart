@@ -3,11 +3,11 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 
 class ResetPasswordButton extends StatelessWidget {
-  const ResetPasswordButton({required this.viewmodel, super.key});
-  final ResetPasswordViewmodel viewmodel;
+  const ResetPasswordButton({required this.viewModel, super.key});
+  final ResetPasswordViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ResetPasswordButton extends StatelessWidget {
       children: [
         AppButton.label(
           label: l10n.authResetPassword,
-          onPressed: () => viewmodel.tapResetPasswordButton(context),
+          onPressed: () => viewModel.tapResetPasswordButton(context),
           type: AppButtonType.primary,
         ),
       ],

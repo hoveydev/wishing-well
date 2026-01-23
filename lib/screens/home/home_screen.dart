@@ -7,11 +7,11 @@ import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/home/home_coming_up.dart';
 import 'package:wishing_well/screens/home/home_header.dart';
-import 'package:wishing_well/screens/home/home_viewmodel.dart';
+import 'package:wishing_well/screens/home/home_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({required this.viewmodel, super.key});
-  final HomeViewmodel viewmodel;
+  const HomeScreen({required this.viewModel, super.key});
+  final HomeViewModel viewModel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      HomeHeader(firstName: widget.viewmodel.firstName),
+      HomeHeader(firstName: widget.viewModel.firstName),
       const AppSpacer.large(),
       const HomeComingUp(),
     ],

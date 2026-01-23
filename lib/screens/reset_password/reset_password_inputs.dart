@@ -4,11 +4,11 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_checklist.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 
 class ResetPasswordInputs extends StatefulWidget {
-  const ResetPasswordInputs({required this.viewmodel, super.key});
-  final ResetPasswordViewmodel viewmodel;
+  const ResetPasswordInputs({required this.viewModel, super.key});
+  final ResetPasswordViewModel viewModel;
 
   @override
   State<ResetPasswordInputs> createState() => _ResetPasswordInputsState();
@@ -24,10 +24,10 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
   void initState() {
     super.initState();
     passwordOneFocusNode.addListener(
-      () => widget.viewmodel.updatePasswordOneField(passwordOneController.text),
+      () => widget.viewModel.updatePasswordOneField(passwordOneController.text),
     );
     passwordTwoFocusNode.addListener(
-      () => widget.viewmodel.updatePasswordTwoField(passwordTwoController.text),
+      () => widget.viewModel.updatePasswordTwoField(passwordTwoController.text),
     );
   }
 
@@ -54,7 +54,7 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
           controller: passwordOneController,
           focusNode: passwordOneFocusNode,
           onChanged: (String password) =>
-              widget.viewmodel.updatePasswordOneField(password),
+              widget.viewModel.updatePasswordOneField(password),
         ),
         AppInput(
           placeholder: l10n.authConfirmPassword,
@@ -62,9 +62,9 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
           controller: passwordTwoController,
           focusNode: passwordTwoFocusNode,
           onChanged: (String password) =>
-              widget.viewmodel.updatePasswordTwoField(password),
+              widget.viewModel.updatePasswordTwoField(password),
         ),
-        ResetPasswordChecklist(viewModel: widget.viewmodel),
+        ResetPasswordChecklist(viewModel: widget.viewModel),
       ],
     );
   }

@@ -5,7 +5,7 @@ import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_button.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_header.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({required this.viewModel, super.key});
@@ -32,7 +32,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      ForgotPasswordHeader(viewmodel: widget.viewModel),
+      ForgotPasswordHeader(viewModel: widget.viewModel),
       ForgotPasswordButton(viewModel: widget.viewModel),
     ],
   );

@@ -13,7 +13,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class ResetPasswordViewmodelContract {
+abstract class ResetPasswordViewModelContract {
   void updatePasswordOneField(String password);
   void updatePasswordTwoField(String password);
   bool get hasAlert;
@@ -33,16 +33,16 @@ enum ResetPasswordRequirements {
   matching,
 }
 
-class ResetPasswordViewmodel extends ChangeNotifier
-    implements ResetPasswordViewmodelContract {
-  ResetPasswordViewmodel({
+class ResetPasswordViewModel extends ChangeNotifier
+    implements ResetPasswordViewModelContract {
+  ResetPasswordViewModel({
     required AuthRepository authRepository,
     required this.email,
     required this.token,
   }) : _authRepository = authRepository,
        _passwordValidator = PasswordValidator<ResetPasswordRequirements>(),
        _cachedMetRequirements = null {
-    // Listen to PasswordValidator changes and forward to Viewmodel
+    // Listen to PasswordValidator changes and forward to ViewModel
     _passwordValidator.addListener(_onPasswordValidatorChanged);
   }
   final AuthRepository _authRepository;
@@ -62,7 +62,7 @@ class ResetPasswordViewmodel extends ChangeNotifier
   void _onPasswordValidatorChanged() {
     // Invalidate cache so the getter returns the updated requirements
     _cachedMetRequirements = null;
-    // Forward the notification to this Viewmodel's listeners (UI)
+    // Forward the notification to this ViewModel's listeners (UI)
     notifyListeners();
   }
 

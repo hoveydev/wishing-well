@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -8,26 +8,22 @@ import '../../../../testing_resources/mocks/repositories/mock_auth_repository.da
 
 void main() {
   late MockAuthRepository authRepository;
-  late ResetPasswordViewmodel viewModel;
+  late CreateAccountViewModel viewModel;
 
   setUp(() {
     authRepository = MockAuthRepository();
-    viewModel = ResetPasswordViewmodel(
-      authRepository: authRepository,
-      email: 'test@example.com',
-      token: 'test-token',
-    );
+    viewModel = CreateAccountViewModel(authRepository: authRepository);
   });
 
-  group('ResetPasswordViewmodel - Initial State', () {
+  group('CreateAccountViewmodel - Initial State', () {
     test('hasAlert returns false when no error', () {
       expect(viewModel.hasAlert, false);
     });
 
-    test('authError is ResetPasswordErrorType.none initially', () {
+    test('authError is CreateAccountErrorType.none initially', () {
       final error = viewModel.authError;
       expect(error, isA<UIAuthError>());
-      expect((error as UIAuthError).type, ResetPasswordErrorType.none);
+      expect((error as UIAuthError).type, CreateAccountErrorType.none);
     });
 
     test('metPasswordRequirements is empty initially', () {
@@ -36,17 +32,52 @@ void main() {
 
     test('clearError can be called without error', () {
       expect(() => viewModel.clearError(), returnsNormally);
-      expect(viewModel.hasAlert, false);
     });
   });
 
-  group('ResetPasswordViewmodel - Password One Field Real-time Validation', () {
-    test('updatePasswordOneField with short password'
-        'does not meet length requirement', () {
+  group('CreateAccountViewmodel - Email Field Real-time Validation', () {
+    test('updateEmailField with empty email sets noEmail error', () {
+      viewModel.updatePasswordOneField('ValidPassword123!');
+      viewModel.updatePasswordTwoField('ValidPassword123!');
+      viewModel.updateEmailField('');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.noEmail);
+    });
+
+    test('updateEmailField with invalid email format sets badEmail error', () {
+      viewModel.updateEmailField('invalid-email');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.badEmail);
+    });
+
+    test('updateEmailField with valid email clears error', () {
+      viewModel.updateEmailField('');
+      expect(viewModel.hasAlert, true);
+      viewModel.updateEmailField('test@example.com');
+      expect(viewModel.hasAlert, false);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.none);
+    });
+
+    test('updateEmailField does not create SupabaseAuthError', () {
+      final repo = MockAuthRepository(
+        createAccountResult: Result.error(AuthApiException('API error')),
+      );
+      final vm = CreateAccountViewModel(authRepository: repo);
+      vm.updateEmailField('test@example.com');
+      expect(vm.authError, isA<UIAuthError>());
+    });
+  });
+
+  group('CreateAccountViewmodel - Password One Field Real-time Validation', () {
+    test('updatePasswordOneField with short'
+        'password does not meet length requirement', () {
       viewModel.updatePasswordOneField('short');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.adequateLength,
+          CreateAccountPasswordRequirements.adequateLength,
         ),
         false,
       );
@@ -58,7 +89,7 @@ void main() {
         viewModel.updatePasswordOneField('Aa1!Aa1!Aa1!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.adequateLength,
+            CreateAccountPasswordRequirements.adequateLength,
           ),
           true,
         );
@@ -71,7 +102,7 @@ void main() {
         viewModel.updatePasswordOneField('password123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.containsUppercase,
+            CreateAccountPasswordRequirements.containsUppercase,
           ),
           false,
         );
@@ -82,7 +113,7 @@ void main() {
       viewModel.updatePasswordOneField('Password123!');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsUppercase,
+          CreateAccountPasswordRequirements.containsUppercase,
         ),
         true,
       );
@@ -94,7 +125,7 @@ void main() {
         viewModel.updatePasswordOneField('PASSWORD123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.containsLowercase,
+            CreateAccountPasswordRequirements.containsLowercase,
           ),
           false,
         );
@@ -105,7 +136,7 @@ void main() {
       viewModel.updatePasswordOneField('PASSWORDa123!');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsLowercase,
+          CreateAccountPasswordRequirements.containsLowercase,
         ),
         true,
       );
@@ -115,7 +146,7 @@ void main() {
       viewModel.updatePasswordOneField('PasswordTest!');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsDigit,
+          CreateAccountPasswordRequirements.containsDigit,
         ),
         false,
       );
@@ -125,7 +156,7 @@ void main() {
       viewModel.updatePasswordOneField('PasswordTest!1');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsDigit,
+          CreateAccountPasswordRequirements.containsDigit,
         ),
         true,
       );
@@ -136,7 +167,7 @@ void main() {
       viewModel.updatePasswordOneField('PasswordTest123');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsSpecial,
+          CreateAccountPasswordRequirements.containsSpecial,
         ),
         false,
       );
@@ -146,7 +177,7 @@ void main() {
       viewModel.updatePasswordOneField('PasswordTest123!');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.containsSpecial,
+          CreateAccountPasswordRequirements.containsSpecial,
         ),
         true,
       );
@@ -158,11 +189,12 @@ void main() {
         viewModel.updatePasswordOneField('short');
         expect(viewModel.hasAlert, true);
         final error = viewModel.authError as UIAuthError;
-        expect(error.type, ResetPasswordErrorType.passwordRequirementsNotMet);
+        expect(error.type, CreateAccountErrorType.passwordRequirementsNotMet);
       },
     );
 
     test('updatePasswordOneField clears error when requirements are met', () {
+      viewModel.updateEmailField('test@example.com');
       viewModel.updatePasswordOneField('short');
       viewModel.updatePasswordTwoField('short');
       expect(viewModel.hasAlert, true);
@@ -170,24 +202,21 @@ void main() {
       viewModel.updatePasswordTwoField('ValidPassword123!');
       expect(viewModel.hasAlert, false);
       final error = viewModel.authError as UIAuthError;
-      expect(error.type, ResetPasswordErrorType.none);
+      expect(error.type, CreateAccountErrorType.none);
     });
 
     test('updatePasswordOneField does not create SupabaseAuthError', () {
       final repo = MockAuthRepository(
-        resetUserPasswordResult: Result.error(AuthApiException('API error')),
+        createAccountResult: Result.error(AuthApiException('API error')),
       );
-      final vm = ResetPasswordViewmodel(
-        authRepository: repo,
-        email: 'test@example.com',
-        token: 'test-token',
-      );
+      final vm = CreateAccountViewModel(authRepository: repo);
+      vm.updateEmailField('test@example.com');
       vm.updatePasswordOneField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
     });
   });
 
-  group('ResetPasswordViewmodel - Password Two Field Real-time Validation', () {
+  group('CreateAccountViewmodel - Password Two Field Real-time Validation', () {
     test(
       'updatePasswordTwoField without matching does not meet requirement',
       () {
@@ -195,7 +224,7 @@ void main() {
         viewModel.updatePasswordTwoField('DifferentPassword123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.matching,
+            CreateAccountPasswordRequirements.matching,
           ),
           false,
         );
@@ -207,7 +236,7 @@ void main() {
       viewModel.updatePasswordTwoField('ValidPassword123!');
       expect(
         viewModel.metPasswordRequirements.contains(
-          ResetPasswordRequirements.matching,
+          CreateAccountPasswordRequirements.matching,
         ),
         true,
       );
@@ -220,14 +249,14 @@ void main() {
         viewModel.updatePasswordTwoField('ValidPassword123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.matching,
+            CreateAccountPasswordRequirements.matching,
           ),
           true,
         );
         viewModel.updatePasswordOneField('DifferentPassword123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.matching,
+            CreateAccountPasswordRequirements.matching,
           ),
           false,
         );
@@ -236,25 +265,22 @@ void main() {
 
     test('updatePasswordTwoField does not create SupabaseAuthError', () {
       final repo = MockAuthRepository(
-        resetUserPasswordResult: Result.error(AuthApiException('API error')),
+        createAccountResult: Result.error(AuthApiException('API error')),
       );
-      final vm = ResetPasswordViewmodel(
-        authRepository: repo,
-        email: 'test@example.com',
-        token: 'test-token',
-      );
+      final vm = CreateAccountViewModel(authRepository: repo);
+      vm.updateEmailField('test@example.com');
       vm.updatePasswordOneField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
     });
   });
 
-  group('ResetPasswordViewmodel - Password Requirements Real-time Updates', () {
+  group('CreateAccountViewmodel - Password Requirements Real-time Updates', () {
     test('all requirements are met with valid password', () {
       viewModel.updatePasswordOneField('ValidPassword123!');
       viewModel.updatePasswordTwoField('ValidPassword123!');
       expect(
         viewModel.metPasswordRequirements.containsAll(
-          ResetPasswordRequirements.values,
+          CreateAccountPasswordRequirements.values,
         ),
         true,
       );
@@ -266,14 +292,14 @@ void main() {
         viewModel.updatePasswordOneField('ValidPassword123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.matching,
+            CreateAccountPasswordRequirements.matching,
           ),
           false,
         );
         viewModel.updatePasswordTwoField('ValidPassword123!');
         expect(
           viewModel.metPasswordRequirements.contains(
-            ResetPasswordRequirements.matching,
+            CreateAccountPasswordRequirements.matching,
           ),
           true,
         );
@@ -281,51 +307,65 @@ void main() {
     );
   });
 
-  group('ResetPasswordViewmodel - Combined Error Handling', () {
+  group('CreateAccountViewmodel - Combined Error Handling', () {
+    test('shows email error when email is invalid and password is invalid', () {
+      viewModel.updateEmailField('invalid-email');
+      viewModel.updatePasswordOneField('short');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.badEmail);
+    });
+
+    test(
+      'shows password error when email is valid but password is invalid',
+      () {
+        viewModel.updateEmailField('test@example.com');
+        viewModel.updatePasswordOneField('short');
+        expect(viewModel.hasAlert, true);
+        final error = viewModel.authError as UIAuthError;
+        expect(error.type, CreateAccountErrorType.passwordRequirementsNotMet);
+      },
+    );
+
     test('clears all errors when clearError is called', () {
+      viewModel.updateEmailField('');
       viewModel.updatePasswordOneField('short');
       expect(viewModel.hasAlert, true);
       viewModel.clearError();
       expect(viewModel.hasAlert, false);
       final error = viewModel.authError as UIAuthError;
-      expect(error.type, ResetPasswordErrorType.none);
+      expect(error.type, CreateAccountErrorType.none);
     });
   });
 
-  group('ResetPasswordViewmodel - Error Priority', () {
+  group('CreateAccountViewmodel - Error Priority', () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
-        resetUserPasswordResult: Result.error(AuthApiException('API error')),
+        createAccountResult: Result.error(AuthApiException('API error')),
       );
-      final vm = ResetPasswordViewmodel(
-        authRepository: repo,
-        email: 'test@example.com',
-        token: 'test-token',
-      );
+      final vm = CreateAccountViewModel(authRepository: repo);
+      vm.updateEmailField('test@example.com');
       vm.updatePasswordOneField('ValidPassword123!');
       vm.updatePasswordTwoField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
-      expect((vm.authError as UIAuthError).type, ResetPasswordErrorType.none);
+      expect((vm.authError as UIAuthError).type, CreateAccountErrorType.none);
     });
 
     test('UI errors change based on input', () {
       final repo = MockAuthRepository(
-        resetUserPasswordResult: Result.error(AuthApiException('API error')),
+        createAccountResult: Result.error(AuthApiException('API error')),
       );
-      final vm = ResetPasswordViewmodel(
-        authRepository: repo,
-        email: 'test@example.com',
-        token: 'test-token',
-      );
+      final vm = CreateAccountViewModel(authRepository: repo);
+      vm.updateEmailField('test@example.com');
       vm.updatePasswordOneField('ValidPassword123!');
       vm.updatePasswordTwoField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
-      expect((vm.authError as UIAuthError).type, ResetPasswordErrorType.none);
-      vm.updatePasswordOneField('short');
+      expect((vm.authError as UIAuthError).type, CreateAccountErrorType.none);
+      vm.updateEmailField('');
       expect(vm.authError, isA<UIAuthError>());
       expect(
         (vm.authError as UIAuthError).type,
-        ResetPasswordErrorType.passwordRequirementsNotMet,
+        CreateAccountErrorType.noEmail,
       );
     });
   });

@@ -5,7 +5,8 @@ import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/screens/home/home_coming_up.dart';
+// import 'package:wishing_well/screens/home/home_coming_up.dart';
+import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/screens/home/home_header.dart';
 import 'package:wishing_well/screens/home/home_view_model.dart';
 
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     children: [
       HomeHeader(firstName: widget.viewModel.firstName),
       const AppSpacer.large(),
-      const HomeComingUp(),
+      const SizedBox(width: double.infinity, child: WishersList()),
     ],
   );
 }

@@ -205,5 +205,17 @@
     "ok": "Ok",
     "@ok": {
         "description": "Ok text"
+    },
+    "wishers": "Wishers",
+    "@wishers": {
+        "description": "Title for wishers section"
+    },
+    "viewAll": "View All",
+    "@viewAll": {
+        "description": "Text for view all button"
+    },
+    "addWishers": "Add Wishers",
+    "@addWishers": {
+        "description": "Text for add wishers button"
     }
 }

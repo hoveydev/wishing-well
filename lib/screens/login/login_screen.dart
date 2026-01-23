@@ -19,11 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();

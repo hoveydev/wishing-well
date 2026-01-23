@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';

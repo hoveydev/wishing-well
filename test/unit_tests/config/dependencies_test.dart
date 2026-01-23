@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:wishing_well/config/dependencies.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository_remote.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository_remote.dart';
 import '../../../testing_resources/services/mock_supabase_client.dart';
 
 void main() {

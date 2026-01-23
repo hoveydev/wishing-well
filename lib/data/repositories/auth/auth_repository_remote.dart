@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class AuthRepositoryRemote extends AuthRepository {
@@ -72,8 +73,7 @@ class AuthRepositoryRemote extends AuthRepository {
       await _supabase.auth.signUp(
         email: email,
         password: password,
-        emailRedirectTo:
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
+        emailRedirectTo: AppConfig.accountConfirmUrl,
       );
       return const Result.ok(null);
     } on Exception catch (err) {
@@ -88,8 +88,7 @@ class AuthRepositoryRemote extends AuthRepository {
     try {
       await _supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo:
-            'https://wishing-well-ayb.pages.dev/auth/password-reset?email=$email',
+        redirectTo: '${AppConfig.passwordResetUrl}?email=$email',
       );
       return const Result.ok(null);
     } on Exception catch (err) {

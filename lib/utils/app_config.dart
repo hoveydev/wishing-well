@@ -31,6 +31,8 @@ class AppConfig {
 
   static String get supabaseUrl => _getOrThrow('SUPABASE_URL');
   static String get supabaseSecret => _getOrThrow('SUPABASE_SECRET');
+  static String get accountConfirmUrl => _getOrThrow('ACCOUNT_CONFIRM_URL');
+  static String get passwordResetUrl => _getOrThrow('PASSWORD_RESET_URL');
 
   static Environment get environment => _environment;
   static bool get isTest => _environment == Environment.test;
@@ -57,6 +59,8 @@ class AppConfig {
     // if a default is provided, it will never throw
     supabaseUrl;
     supabaseSecret;
+    accountConfirmUrl;
+    passwordResetUrl;
 
     log('✅ All environment variables are present for ${_environment.name}');
   }

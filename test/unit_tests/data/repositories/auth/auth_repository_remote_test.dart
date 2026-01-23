@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository_remote.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository_remote.dart';
+import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../../testing_resources/services/mock_supabase_client.dart';
@@ -8,6 +9,10 @@ void main() {
   group('AuthRepositoryRemote Tests', () {
     late MockSupabaseClient mockSupabaseClient;
     late AuthRepositoryRemote repository;
+
+    setUpAll(() async {
+      await AppConfig.initialize(environment: Environment.test);
+    });
 
     setUp(() {
       mockSupabaseClient = MockSupabaseClient();

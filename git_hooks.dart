@@ -49,7 +49,7 @@ Future<void> _installHooks() async {
   final hookContent = '''#!/bin/sh
 # Get the repository root dynamically (works for both normal repos and worktrees)
 GIT_ROOT=\$(git rev-parse --show-toplevel)
-exec env -i HOME="\$HOME" USER="\$USER" PATH="/Users/rhovey/Development/flutter/bin:\$PATH" /bin/zsh -l -c 'cd "\$GIT_ROOT" && dart run git_hooks.dart pre-commit'
+exec env -i HOME="\$HOME" USER="\$USER" /bin/sh -c 'cd "\$GIT_ROOT" && dart run git_hooks.dart pre-commit'
 ''';
 
   await preCommitHook.writeAsString(hookContent);
@@ -109,17 +109,13 @@ Future<bool> _preCommit() async {
 
 Future<bool> _checkCoverage({required double threshold}) async {
   // Run pub get first to ensure dependencies are resolved
-  await Process.run('/Users/rhovey/Development/flutter/bin/flutter', [
-    'pub',
-    'get',
-  ], runInShell: true);
+  await Process.run('flutter', ['pub', 'get'], runInShell: true);
 
   // Run tests with coverage
-  final testResult = await Process.run(
-    '/Users/rhovey/Development/flutter/bin/flutter',
-    ['test', '--coverage'],
-    runInShell: true,
-  );
+  final testResult = await Process.run('flutter', [
+    'test',
+    '--coverage',
+  ], runInShell: true);
 
   if (testResult.exitCode != 0) {
     print('❌ Tests failed. Fix tests before checking coverage.\n');

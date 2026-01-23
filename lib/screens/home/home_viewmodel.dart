@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 
 abstract class HomeViewmodelContract {
   String? get firstName;

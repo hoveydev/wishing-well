@@ -1,5 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class MockAuthRepository extends AuthRepository {
@@ -23,13 +22,13 @@ class MockAuthRepository extends AuthRepository {
   final Result<void> sendPasswordResetRequestResult;
   final Result<void> resetUserPasswordResult;
 
+  bool _isAuthenticated = false;
+
   @override
   bool get isAuthenticated => _isAuthenticated;
 
   @override
   String? get userFirstName => 'TestUser';
-
-  bool _isAuthenticated = false;
 
   @override
   Future<Result<void>> login({

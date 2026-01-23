@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
-import 'package:wishing_well/data/respositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';

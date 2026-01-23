@@ -13,7 +13,7 @@ import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'package:wishing_well/routing/routes.dart';
 
-abstract class CreateAccountViewmodelContract {
+abstract class CreateAccountViewModelContract {
   void updateEmailField(String email);
   void updatePasswordOneField(String password);
   void updatePasswordTwoField(String password);
@@ -33,9 +33,9 @@ enum CreateAccountPasswordRequirements {
   matching,
 }
 
-class CreateAccountViewmodel extends ChangeNotifier
-    implements CreateAccountViewmodelContract {
-  CreateAccountViewmodel({required AuthRepository authRepository})
+class CreateAccountViewModel extends ChangeNotifier
+    implements CreateAccountViewModelContract {
+  CreateAccountViewModel({required AuthRepository authRepository})
     : _authRepository = authRepository,
       _passwordValidator =
           PasswordValidator<CreateAccountPasswordRequirements>() {

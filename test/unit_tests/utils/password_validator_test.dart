@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/password_validator.dart';
 

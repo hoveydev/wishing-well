@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/screens/create_account/create_account_button.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-class MockCreateAccountViewmodel extends CreateAccountViewmodel {
+class MockCreateAccountViewmodel extends CreateAccountViewModel {
   MockCreateAccountViewmodel() : super(authRepository: MockAuthRepository());
 
   bool _buttonTapped = false;

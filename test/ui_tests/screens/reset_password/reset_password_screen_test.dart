@@ -9,7 +9,7 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -36,7 +36,7 @@ dynamic startAppWithResetPasswordScreen(
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: ResetPasswordScreen(
-            viewmodel: ResetPasswordViewmodel(
+            viewModel: ResetPasswordViewModel(
               authRepository: mockAuthRepository ?? MockAuthRepository(),
               email: '',
               token: token ?? '',

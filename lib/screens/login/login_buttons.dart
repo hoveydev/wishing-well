@@ -3,7 +3,7 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_view_model.dart';
 
 class LoginButtons extends StatelessWidget {
   const LoginButtons({required this.viewModel, super.key});

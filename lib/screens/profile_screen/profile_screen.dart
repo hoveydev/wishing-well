@@ -8,7 +8,7 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/profile_screen/profile_viewmodel.dart';
+import 'package:wishing_well/screens/profile_screen/profile_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 
 class ProfileScreen extends StatefulWidget {

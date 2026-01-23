@@ -7,7 +7,7 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/auth_error.dart';
-import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_view_model.dart';
 
 class LoginInputs extends StatelessWidget {
   const LoginInputs({

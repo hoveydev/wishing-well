@@ -5,11 +5,11 @@ import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_button.dart';
 import 'package:wishing_well/screens/create_account/create_account_header.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({required this.viewModel, super.key});
-  final CreateAccountViewmodel viewModel;
+  final CreateAccountViewModel viewModel;
 
   @override
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();

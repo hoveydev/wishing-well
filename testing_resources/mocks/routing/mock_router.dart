@@ -1,15 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
-import 'package:wishing_well/screens/home/home_viewmodel.dart';
+import 'package:wishing_well/screens/home/home_view_model.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
-import 'package:wishing_well/screens/login/login_viewmodel.dart';
+import 'package:wishing_well/screens/login/login_view_model.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 
 import '../repositories/mock_auth_repository.dart';
 
@@ -42,7 +42,7 @@ GoRouter createMockRouter() => GoRouter(
           path: 'reset',
           name: 'reset-password',
           builder: (context, state) => ResetPasswordScreen(
-            viewmodel: ResetPasswordViewmodel(
+            viewModel: ResetPasswordViewModel(
               authRepository: MockAuthRepository(),
               email: 'reset.password@email.com',
               token: 'valid-token',
@@ -63,7 +63,7 @@ GoRouter createMockRouter() => GoRouter(
       path: '/create-account',
       name: 'create-account',
       builder: (context, state) => CreateAccountScreen(
-        viewModel: CreateAccountViewmodel(authRepository: MockAuthRepository()),
+        viewModel: CreateAccountViewModel(authRepository: MockAuthRepository()),
       ),
       routes: [
         GoRoute(
@@ -82,7 +82,7 @@ GoRouter createMockRouter() => GoRouter(
       path: '/home',
       name: 'home',
       builder: (context, state) => HomeScreen(
-        viewmodel: HomeViewmodel(authRepository: MockAuthRepository()),
+        viewModel: HomeViewModel(authRepository: MockAuthRepository()),
       ),
     ),
   ],

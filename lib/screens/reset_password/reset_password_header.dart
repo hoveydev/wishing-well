@@ -3,11 +3,11 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_inputs.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_viewmodel.dart';
+import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 
 class ResetPasswordHeader extends StatelessWidget {
-  const ResetPasswordHeader({required this.viewmodel, super.key});
-  final ResetPasswordViewmodel viewmodel;
+  const ResetPasswordHeader({required this.viewModel, super.key});
+  final ResetPasswordViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ResetPasswordHeader extends StatelessWidget {
           semanticsLabel: l10n.resetPasswordScreenSubtext,
         ),
         const AppSpacer.large(),
-        ResetPasswordInputs(viewmodel: viewmodel),
+        ResetPasswordInputs(viewModel: viewModel),
       ],
     );
   }

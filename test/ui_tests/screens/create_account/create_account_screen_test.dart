@@ -10,7 +10,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
@@ -34,7 +34,7 @@ dynamic startAppWithCreateAccountScreen(
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: CreateAccountScreen(
-            viewModel: CreateAccountViewmodel(
+            viewModel: CreateAccountViewModel(
               authRepository: mockAuthRepository ?? MockAuthRepository(),
             ),
           ),

@@ -3,11 +3,11 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_input.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 
 class ForgotPasswordHeader extends StatelessWidget {
-  const ForgotPasswordHeader({required this.viewmodel, super.key});
-  final ForgotPasswordViewModel viewmodel;
+  const ForgotPasswordHeader({required this.viewModel, super.key});
+  final ForgotPasswordViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ForgotPasswordHeader extends StatelessWidget {
           semanticsLabel: l10n.forgotPasswordScreenSubtext,
         ),
         const AppSpacer.large(),
-        ForgotPasswordInput(viewModel: viewmodel),
+        ForgotPasswordInput(viewModel: viewModel),
       ],
     );
   }

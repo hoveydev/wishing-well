@@ -4,13 +4,13 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/create_account/create_account_inline_error.dart';
-import 'package:wishing_well/screens/create_account/create_account_viewmodel.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class CreateAccountPasswordChecklist extends StatelessWidget {
   const CreateAccountPasswordChecklist({required this.viewModel, super.key});
-  final CreateAccountViewmodel viewModel;
+  final CreateAccountViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';

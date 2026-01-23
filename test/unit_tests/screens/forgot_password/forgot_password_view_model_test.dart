@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_viewmodel.dart';
+import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
 

@@ -8,6 +8,56 @@ class Wisher {
   final String name;
 }
 
+class _WisherItem extends StatefulWidget {
+  const _WisherItem(this.wisher, this.padding);
+  final Wisher wisher;
+  final EdgeInsets padding;
+
+  @override
+  _WisherItemState createState() => _WisherItemState();
+}
+
+class _WisherItemState extends State<_WisherItem> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = TextTheme.of(context);
+    final colorScheme = context.colorScheme;
+    return Padding(
+      padding: widget.padding,
+      child: Column(
+        children: [
+          GestureDetector(
+            onTapDown: (_) => setState(() => _isPressed = true),
+            onTapUp: (_) => setState(() => _isPressed = false),
+            onTapCancel: () => setState(() => _isPressed = false),
+            onTap: () => debugPrint('${widget.wisher.name} tapped'),
+            child: AnimatedOpacity(
+              opacity: _isPressed ? 0.5 : 1.0,
+              duration: _isPressed
+                  ? const Duration(milliseconds: 25)
+                  : const Duration(milliseconds: 100),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: colorScheme.primary,
+                child: Text(
+                  widget.wisher.name[0],
+                  style: textTheme.titleMedium?.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(widget.wisher.name, style: textTheme.bodySmall),
+        ],
+      ),
+    );
+  }
+}
+
 class WishersList extends StatelessWidget {
   const WishersList({super.key});
 
@@ -23,30 +73,11 @@ class WishersList extends StatelessWidget {
   ];
 
   Widget _buildItem(BuildContext context, int index) {
-    final textTheme = TextTheme.of(context);
-    final colorScheme = context.colorScheme;
     final wisher = _wishers[index];
-    return Padding(
-      padding: index == _wishers.length - 1
-          ? EdgeInsets.zero
-          : const EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: colorScheme.primary,
-            child: Text(
-              wisher.name[0],
-              style: textTheme.titleMedium?.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(wisher.name, style: textTheme.bodySmall),
-        ],
-      ),
-    );
+    final padding = index == _wishers.length - 1
+        ? EdgeInsets.zero
+        : const EdgeInsets.only(right: 16);
+    return _WisherItem(wisher, padding);
   }
 
   @override

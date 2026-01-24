@@ -22,20 +22,30 @@ class WishersList extends StatelessWidget {
     final wisher = _wishers[index];
     final padding = index == _wishers.length - 1
         ? EdgeInsets.zero
-        : const EdgeInsets.only(right: 16);
+        : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
     return WisherItem(wisher, padding);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Semantics(
       header: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.wishers, style: Theme.of(context).textTheme.titleMedium),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(l10n.wishers, style: textTheme.titleMedium),
+              GestureDetector(
+                onTap: () => debugPrint('View All tapped'),
+                child: Text('View All', style: textTheme.bodySmall),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           SizedBox(
             height: 80,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -44,7 +45,7 @@ class WisherItemState extends State<WisherItem> {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const AppSpacer.xsmall(),
           Text(widget.wisher.name, style: textTheme.bodySmall),
         ],
       ),

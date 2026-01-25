@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     children: [
       HomeHeader(firstName: widget.viewModel.firstName),
       const AppSpacer.large(),
-      const SizedBox(width: double.infinity, child: WishersList()),
+      const WishersList(),
     ],
   );
 }

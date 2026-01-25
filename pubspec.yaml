@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   coverage: ^1.15.0
+  dotted_border: ^3.1.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.0

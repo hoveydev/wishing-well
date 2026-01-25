@@ -166,4 +166,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'Ok';
+
+  @override
+  String get wishers => 'Wishers';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get add => 'Add';
 }

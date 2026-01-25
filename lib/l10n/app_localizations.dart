@@ -393,6 +393,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ok'**
   String get ok;
+
+  /// Title for wishers section
+  ///
+  /// In en, this message translates to:
+  /// **'Wishers'**
+  String get wishers;
+
+  /// Text for view all button
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// Text for add Wisher item
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
 }
 
 class _AppLocalizationsDelegate

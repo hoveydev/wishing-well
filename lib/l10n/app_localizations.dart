@@ -406,11 +406,11 @@ abstract class AppLocalizations {
   /// **'View All'**
   String get viewAll;
 
-  /// Text for add wishers button
+  /// Text for add Wisher item
   ///
   /// In en, this message translates to:
-  /// **'Add Wishers'**
-  String get addWishers;
+  /// **'Add'**
+  String get add;
 }
 
 class _AppLocalizationsDelegate

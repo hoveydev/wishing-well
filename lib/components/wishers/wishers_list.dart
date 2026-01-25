@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -19,8 +21,17 @@ class WishersList extends StatelessWidget {
   ];
 
   Widget _buildItem(BuildContext context, int index) {
-    final wisher = _wishers[index];
-    final padding = index == _wishers.length - 1
+    // First item is the Add button
+    if (index == 0) {
+      return const AddWisherItem(
+        EdgeInsets.only(right: AppSpacing.wisherSpacing),
+      );
+    }
+
+    // Regular wisher items
+    final wisherIndex = index - 1; // Adjust for Add button
+    final wisher = _wishers[wisherIndex];
+    final padding = wisherIndex == _wishers.length - 1
         ? EdgeInsets.zero
         : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
     return WisherItem(wisher, padding);
@@ -42,11 +53,11 @@ class WishersList extends StatelessWidget {
               Text(l10n.wishers, style: textTheme.titleMedium),
               GestureDetector(
                 onTap: () => debugPrint('View All tapped'),
-                child: Text('View All', style: textTheme.bodySmall),
+                child: Text(l10n.viewAll, style: textTheme.bodySmall),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const AppSpacer.medium(),
           SizedBox(
             height: 80,
             child: Stack(
@@ -62,7 +73,7 @@ class WishersList extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.screenPaddingStandard,
                       ),
-                      itemCount: _wishers.length,
+                      itemCount: _wishers.length + 1, // +1 for Add button
                       itemBuilder: _buildItem,
                     ),
                   ),

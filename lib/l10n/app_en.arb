@@ -214,8 +214,8 @@
     "@viewAll": {
         "description": "Text for view all button"
     },
-    "addWishers": "Add Wishers",
-    "@addWishers": {
-        "description": "Text for add wishers button"
+    "add": "Add",
+    "@add": {
+        "description": "Text for add Wisher item"
     }
 }

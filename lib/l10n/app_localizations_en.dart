@@ -174,5 +174,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewAll => 'View All';
 
   @override
-  String get addWishers => 'Add Wishers';
+  String get add => 'Add';
 }

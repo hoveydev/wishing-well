@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AddWisherItem extends StatefulWidget {
@@ -47,7 +48,7 @@ class AddWisherItemState extends State<AddWisherItem> {
                   child: Center(
                     child: Icon(
                       Icons.add,
-                      size: 24,
+                      size: const AppIconSize().large,
                       color: colorScheme.primary,
                     ),
                   ),

@@ -50,7 +50,7 @@ class WishersList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.wishers, style: textTheme.titleMedium),
+              Text(l10n.wishers, style: textTheme.titleLarge),
               GestureDetector(
                 onTap: () => debugPrint('View All tapped'),
                 child: Text(l10n.viewAll, style: textTheme.bodySmall),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/components/button/button_feedback_style.dart';
 
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
@@ -76,38 +76,10 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
-    final colorScheme = context.colorScheme;
     final buttonWidget = TextButton(
-      style: ButtonStyle(
-        backgroundBuilder: (context, states, child) {
-          if (states.contains(WidgetState.pressed)) {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 25),
-              decoration: BoxDecoration(
-                color: colorScheme.primary!.withValues(alpha: 0.5),
-              ),
-              child: child,
-            );
-          } else {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              decoration: BoxDecoration(
-                color: colorScheme.primary!.withValues(alpha: 1),
-              ),
-              child: child,
-            );
-          }
-        },
-        foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimary),
-        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-        padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        ),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
-        elevation: WidgetStateProperty.all(0),
-        shadowColor: WidgetStateProperty.all(Colors.transparent),
+      style: ButtonFeedbackStyle.primary(
+        context: context,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/components/button/button_feedback_style.dart';
 
 enum _SecondaryButtonContentType { icon, label, labelWithIcon }
 
@@ -64,38 +64,11 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
-    final colorScheme = context.colorScheme;
 
     return TextButton(
-      style: ButtonStyle(
-        backgroundBuilder: (context, states, child) {
-          if (states.contains(WidgetState.pressed)) {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 25),
-              decoration: BoxDecoration(
-                color: colorScheme.primary!.withValues(alpha: 0.15),
-              ),
-              child: child,
-            );
-          } else {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              decoration: const BoxDecoration(color: Colors.transparent),
-              child: child,
-            );
-          }
-        },
-        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-        foregroundColor: WidgetStatePropertyAll(colorScheme.primary),
-        padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        ),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
-        elevation: WidgetStateProperty.all(0),
-        shadowColor: WidgetStateProperty.all(Colors.transparent),
-        side: WidgetStatePropertyAll(BorderSide(color: colorScheme.primary!)),
+      style: ButtonFeedbackStyle.secondary(
+        context: context,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

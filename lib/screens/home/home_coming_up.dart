@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/shape/dotted_border.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:wishing_well/components/dotted_border_config.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -37,15 +38,17 @@ class HomeComingUp extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 0,
-          shape: DottedBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: colorScheme.borderGray!,
-          ),
           color: colorScheme.surfaceGray,
-          child: Padding(
-            padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
-            // will change to a calendar component
-            child: Text('Nothing yet :)', style: textTheme.bodySmall),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          child: DottedBorder(
+            options: DottedBorderConfig.standard(
+              color: colorScheme.borderGray!,
+            ),
+            child: Padding(
+              padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
+              // will change to a calendar component
+              child: Text('Nothing yet :)', style: textTheme.bodySmall),
+            ),
           ),
         ),
       );

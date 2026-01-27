@@ -29,7 +29,7 @@ class AddWisherItem extends StatelessWidget {
                 color: colorScheme.primary!,
               ),
               child: CircleAvatar(
-                radius: 28,
+                radius: 30,
                 backgroundColor: colorScheme.background,
                 child: Icon(
                   Icons.add,

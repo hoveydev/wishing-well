@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:wishing_well/components/dotted_border_config.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -22,10 +23,7 @@ class AddWisherItem extends StatelessWidget {
           TouchFeedbackOpacity(
             onTap: () => debugPrint('Add Wisher tapped'),
             child: DottedBorder(
-              options: CircularDottedBorderOptions(
-                dashPattern: [10, 5],
-                strokeWidth: 2,
-                borderPadding: const EdgeInsets.all(1),
+              options: DottedBorderConfig.circularAvatar(
                 color: colorScheme.primary!,
               ),
               child: CircleAvatar(

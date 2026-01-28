@@ -175,4 +175,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add => 'Add';
+
+  @override
+  String get addWisherScreenHeader => 'Add Wisher';
+
+  @override
+  String get addWisherScreenDescription =>
+      'A wisher is someone special in your life whose special occasions you want to remember and celebrate. Add friends, family, or loved ones to never miss an important moment.';
+
+  @override
+  String get addFromContacts => 'Add From Contacts';
+
+  @override
+  String get addManually => 'Add Manually';
 }

@@ -217,5 +217,21 @@
     "add": "Add",
     "@add": {
         "description": "Text for add Wisher item"
+    },
+    "addWisherScreenHeader": "Add Wisher",
+    "@addWisherScreenHeader": {
+        "description": "Header for add wisher screen"
+    },
+    "addWisherScreenDescription": "A wisher is someone special in your life whose special occasions you want to remember and celebrate. Add friends, family, or loved ones to never miss an important moment.",
+    "@addWisherScreenDescription": {
+        "description": "Description explaining what a wisher is"
+    },
+    "addFromContacts": "Add From Contacts",
+    "@addFromContacts": {
+        "description": "Button text for adding wisher from contacts"
+    },
+    "addManually": "Add Manually",
+    "@addManually": {
+        "description": "Button text for adding wisher manually"
     }
 }

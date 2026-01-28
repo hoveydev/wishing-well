@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_info_screen.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_view_model.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
@@ -232,6 +234,28 @@ GoRouter router() => GoRouter(
       name: Routes.profile.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: const ProfileScreen(),
+        transitionsBuilder: (_, animation, _, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          final tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    ),
+    GoRoute(
+      path: Routes.addWisherLanding.path,
+      name: Routes.addWisherLanding.name,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: AddWisherInfoScreen(viewModel: AddWisherViewModel()),
         transitionsBuilder: (_, animation, _, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;

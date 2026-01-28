@@ -7,7 +7,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 
 class WishersList extends StatelessWidget {
-  const WishersList({super.key});
+  const WishersList({required this.onAddWisherTap, super.key});
+  final void Function() onAddWisherTap;
 
   static const List<Wisher> _wishers = [
     Wisher('Alice'),
@@ -23,8 +24,9 @@ class WishersList extends StatelessWidget {
   Widget _buildItem(BuildContext context, int index) {
     // First item is the Add button
     if (index == 0) {
-      return const AddWisherItem(
-        EdgeInsets.only(right: AppSpacing.wisherSpacing),
+      return AddWisherItem(
+        const EdgeInsets.only(right: AppSpacing.wisherSpacing),
+        onAddWisherTap,
       );
     }
 

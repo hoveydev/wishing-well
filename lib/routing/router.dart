@@ -252,8 +252,8 @@ GoRouter router() => GoRouter(
       ),
     ),
     GoRoute(
-      path: Routes.addWisherLanding.path,
-      name: Routes.addWisherLanding.name,
+      path: Routes.addWisher.path,
+      name: Routes.addWisher.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AddWisherInfoScreen(viewModel: AddWisherViewModel()),
         transitionsBuilder: (_, animation, _, child) {

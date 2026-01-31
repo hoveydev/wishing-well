@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       HomeHeader(firstName: widget.viewModel.firstName),
       const AppSpacer.large(),
       WishersList(
-        onAddWisherTap: () => context.pushNamed(Routes.addWisherLanding.name),
+        onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
       ),
     ],
   );

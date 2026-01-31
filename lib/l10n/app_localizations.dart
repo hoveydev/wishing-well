@@ -411,6 +411,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add'**
   String get add;
+
+  /// Header for add wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Wisher'**
+  String get addWisherScreenHeader;
+
+  /// Description explaining what a wisher is
+  ///
+  /// In en, this message translates to:
+  /// **'A Wisher is someone special in your life — a friend, partner, family member, or anyone who brings a little extra light into your world. They are the people you love to celebrate through both life’s big moments and the quiet, everyday surprises that simply say, “I was thinking of you.”'**
+  String get addWisherScreenDescription;
+
+  /// Button text for adding wisher from contacts
+  ///
+  /// In en, this message translates to:
+  /// **'Add From Contacts'**
+  String get addFromContacts;
+
+  /// Button text for adding wisher manually
+  ///
+  /// In en, this message translates to:
+  /// **'Add Manually'**
+  String get addManually;
 }
 
 class _AppLocalizationsDelegate

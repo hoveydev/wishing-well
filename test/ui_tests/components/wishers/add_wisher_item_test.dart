@@ -13,7 +13,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: AppTheme.lightTheme,
-        home: const Scaffold(body: AddWisherItem(EdgeInsets.zero)),
+        home: Scaffold(body: AddWisherItem(EdgeInsets.zero, () => {})),
       ),
     );
 

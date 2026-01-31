@@ -8,8 +8,9 @@ import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AddWisherItem extends StatelessWidget {
-  const AddWisherItem(this.padding, {super.key});
+  const AddWisherItem(this.padding, this.onTap, {super.key});
   final EdgeInsets padding;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class AddWisherItem extends StatelessWidget {
       child: Column(
         children: [
           TouchFeedbackOpacity(
-            onTap: () => debugPrint('Add Wisher tapped'),
+            onTap: onTap,
             child: DottedBorder(
               options: DottedBorderConfig.circularAvatar(
                 color: colorScheme.primary!,

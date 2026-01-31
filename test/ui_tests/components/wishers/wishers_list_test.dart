@@ -15,7 +15,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -32,7 +32,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -57,7 +57,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -77,7 +77,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -98,7 +98,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -117,7 +117,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -134,7 +134,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -154,7 +154,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -170,7 +170,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -186,7 +186,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -206,7 +206,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -226,7 +226,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -245,7 +245,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -263,7 +263,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -282,7 +282,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.darkTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 
@@ -315,7 +315,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WishersList()),
+          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
         ),
       );
 

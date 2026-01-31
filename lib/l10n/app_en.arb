@@ -217,5 +217,21 @@
     "add": "Add",
     "@add": {
         "description": "Text for add Wisher item"
+    },
+    "addWisherScreenHeader": "Add a Wisher",
+    "@addWisherScreenHeader": {
+        "description": "Header for add wisher screen"
+    },
+    "addWisherScreenDescription": "A Wisher is someone special in your life — a friend, partner, family member, or anyone who brings a little extra light into your world. They are the people you love to celebrate through both life’s big moments and the quiet, everyday surprises that simply say, “I was thinking of you.”",
+    "@addWisherScreenDescription": {
+        "description": "Description explaining what a wisher is"
+    },
+    "addFromContacts": "Add From Contacts",
+    "@addFromContacts": {
+        "description": "Button text for adding wisher from contacts"
+    },
+    "addManually": "Add Manually",
+    "@addManually": {
+        "description": "Button text for adding wisher manually"
     }
 }

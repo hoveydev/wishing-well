@@ -24,9 +24,11 @@ void main() {
 
       expect(
         find.text(
-          'A wisher is someone special in your life whose special occasions '
-          'you want to remember and celebrate. Add friends, family, or loved '
-          'ones to never miss an important moment.',
+          'A Wisher is someone special in your life — a friend, partner, '
+          'family member, or anyone who brings a little extra light into '
+          'your world. They are the people you love to celebrate through '
+          'both life’s big moments and the quiet, everyday surprises '
+          'that simply say, “I was thinking of you.”',
         ),
         findsOneWidget,
       );
@@ -49,7 +51,7 @@ void main() {
 
       expect(find.byType(Text), findsOneWidget);
       expect(
-        find.textContaining('A wisher is someone special'),
+        find.textContaining('A Wisher is someone special'),
         findsOneWidget,
       );
     });
@@ -71,9 +73,11 @@ void main() {
 
       expect(
         find.bySemanticsLabel(
-          'A wisher is someone special in your life whose special occasions '
-          'you want to remember and celebrate. Add friends, family, or loved '
-          'ones to never miss an important moment.',
+          'A Wisher is someone special in your life — a friend, partner, '
+          'family member, or anyone who brings a little extra light into '
+          'your world. They are the people you love to celebrate through '
+          'both life’s big moments and the quiet, everyday surprises '
+          'that simply say, “I was thinking of you.”',
         ),
         findsOneWidget,
       );

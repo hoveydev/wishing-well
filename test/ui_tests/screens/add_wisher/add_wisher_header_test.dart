@@ -22,26 +22,7 @@ void main() {
         ),
       );
 
-      expect(find.text('Add Wisher'), findsOneWidget);
-    });
-
-    testWidgets('uses styled text widget', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(body: AddWisherHeader()),
-        ),
-      );
-
-      expect(find.byType(Text), findsOneWidget);
-      expect(find.text('Add Wisher'), findsOneWidget);
+      expect(find.text('Add a Wisher'), findsOneWidget);
     });
 
     testWidgets('has correct semantics label', (tester) async {
@@ -59,7 +40,7 @@ void main() {
         ),
       );
 
-      expect(find.bySemanticsLabel('Add Wisher'), findsOneWidget);
+      expect(find.bySemanticsLabel('Add a Wisher'), findsOneWidget);
     });
   });
 }

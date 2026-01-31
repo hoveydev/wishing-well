@@ -3,9 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_buttons.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_description.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_header.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_view_model.dart';
 
@@ -33,16 +31,11 @@ class _AddWisherInfoScreenState extends State<AddWisherInfoScreen> {
 
   @override
   Widget build(BuildContext context) => Screen(
-    appBar: AppMenuBar(
-      action: () => context.pop(),
-      type: AppMenuBarType.dismiss,
-    ),
+    appBar: AppMenuBar(action: () => context.pop(), type: AppMenuBarType.close),
     crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       const AddWisherHeader(),
-      const AppSpacer.medium(),
-      const AddWisherDescription(),
-      const AppSpacer.large(),
       AddWisherButtons(
         onAddFromContacts: _handleAddFromContacts,
         onAddManually: _handleAddManually,

@@ -185,31 +185,5 @@ void main() {
         expect((vm.authError as UIAuthError).type, LoginErrorType.none);
       });
     });
-
-    // group(TestGroups.stateChanges, () {
-    //   test('email controller text updates with updateEmailField', () {
-    //     const testEmail = 'test@example.com';
-    //     viewModel.updateEmailField(testEmail);
-
-    //     expect(viewModel.emailInputController.text, testEmail);
-    //   });
-
-    //   test('password controller text updates with updatePasswordField', () {
-    //     const testPassword = 'password123';
-    //     viewModel.updatePasswordField(testPassword);
-
-    //     expect(viewModel.passwordInputController.text, testPassword);
-    //   });
-
-    //   test('multiple field updates work correctly', () {
-    //     viewModel.updateEmailField('first@example.com');
-    //     viewModel.updateEmailField('second@example.com');
-    //     viewModel.updatePasswordField('password1');
-    //     viewModel.updatePasswordField('password2');
-
-    //     expect(viewModel.emailInputController.text, 'second@example.com');
-    //     expect(viewModel.passwordInputController.text, 'password2');
-    //   });
-    // });
   });
 }

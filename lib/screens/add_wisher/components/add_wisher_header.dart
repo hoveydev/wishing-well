@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_description.dart';
+import 'package:wishing_well/screens/add_wisher/components/add_wisher_description.dart';
 
 class AddWisherHeader extends StatelessWidget {
   const AddWisherHeader({super.key});

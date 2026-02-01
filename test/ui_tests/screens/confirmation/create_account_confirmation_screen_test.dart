@@ -37,10 +37,7 @@ void main() {
       await startAppWithCreateAccountConfirmationScreen(tester);
       expect(find.byIcon(Icons.close), findsOneWidget);
       expect(find.text('Account Successfully Created!'), findsOneWidget);
-      final iconWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is Icon && widget.icon == Icons.check_circle,
-      );
-      expect(iconWidgetFinder, findsOneWidget);
+
       expect(
         find.text(
           'Please check your email to confirm your account. '

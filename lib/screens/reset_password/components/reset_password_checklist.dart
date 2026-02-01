@@ -3,7 +3,7 @@ import 'package:wishing_well/components/checklist/checklist_item.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_inline_error.dart';
+import 'package:wishing_well/screens/reset_password/components/reset_password_inline_error.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -14,9 +14,9 @@ class ResetPasswordChecklist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final colorScheme = context.colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return ListenableBuilder(
       listenable: viewModel,

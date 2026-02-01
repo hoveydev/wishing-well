@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_header.dart';
+import 'package:wishing_well/screens/add_wisher/components/add_wisher_header.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 void main() {

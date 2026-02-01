@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_checklist.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
+import 'package:wishing_well/screens/create_account/components/create_account_password_checklist.dart';
+import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 
-class ResetPasswordInputs extends StatefulWidget {
-  const ResetPasswordInputs({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+class CreateAccountInputs extends StatefulWidget {
+  const CreateAccountInputs({required this.viewModel, super.key});
+  final CreateAccountViewModel viewModel;
 
   @override
-  State<ResetPasswordInputs> createState() => _ResetPasswordInputsState();
+  State<CreateAccountInputs> createState() => _CreateAccountInputsState();
 }
 
-class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
+class _CreateAccountInputsState extends State<CreateAccountInputs> {
+  final emailFocusNode = FocusNode();
   final passwordOneFocusNode = FocusNode();
   final passwordTwoFocusNode = FocusNode();
+  final emailController = TextEditingController();
   final passwordOneController = TextEditingController();
   final passwordTwoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    emailFocusNode.addListener(
+      () => widget.viewModel.updateEmailField(emailController.text),
+    );
     passwordOneFocusNode.addListener(
       () => widget.viewModel.updatePasswordOneField(passwordOneController.text),
     );
@@ -33,8 +39,10 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
 
   @override
   void dispose() {
+    emailFocusNode.dispose();
     passwordOneFocusNode.dispose();
     passwordTwoFocusNode.dispose();
+    emailController.dispose();
     passwordOneController.dispose();
     passwordTwoController.dispose();
     super.dispose();
@@ -48,6 +56,14 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
       spacing: AppSpacerSize.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        AppInput(
+          placeholder: l10n.authEmail,
+          type: AppInputType.email,
+          controller: emailController,
+          focusNode: emailFocusNode,
+          onChanged: (String email) => widget.viewModel.updateEmailField(email),
+        ),
+        const AppSpacer.large(),
         AppInput(
           placeholder: l10n.authPassword,
           type: AppInputType.password,
@@ -64,7 +80,7 @@ class _ResetPasswordInputsState extends State<ResetPasswordInputs> {
           onChanged: (String password) =>
               widget.viewModel.updatePasswordTwoField(password),
         ),
-        ResetPasswordChecklist(viewModel: widget.viewModel),
+        CreateAccountPasswordChecklist(viewModel: widget.viewModel),
       ],
     );
   }

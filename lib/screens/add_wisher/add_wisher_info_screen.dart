@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_buttons.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_header.dart';
+import 'package:wishing_well/screens/add_wisher/components/add_wisher_buttons.dart';
+import 'package:wishing_well/screens/add_wisher/components/add_wisher_header.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_view_model.dart';
 
 class AddWisherInfoScreen extends StatefulWidget {

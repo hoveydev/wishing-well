@@ -6,12 +6,19 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
+import 'package:wishing_well/screens/login/login_view_model.dart';
 
-class ForgotPasswordInput extends StatelessWidget {
-  const ForgotPasswordInput({required this.viewModel, super.key});
-  final ForgotPasswordViewModel viewModel;
+class LoginInputs extends StatelessWidget {
+  const LoginInputs({
+    required this.viewModel,
+    this.emailFocusNode,
+    this.passwordFocusNode,
+    super.key,
+  });
+  final LoginViewModel viewModel;
+  final FocusNode? emailFocusNode;
+  final FocusNode? passwordFocusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +26,21 @@ class ForgotPasswordInput extends StatelessWidget {
 
     return Column(
       spacing: AppSpacerSize.small,
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppInput(
           placeholder: l10n.authEmail,
           type: AppInputType.email,
           onChanged: (String val) => viewModel.updateEmailField(val),
+          controller: viewModel.emailInputController,
+          focusNode: emailFocusNode,
+        ),
+        AppInput(
+          placeholder: l10n.authPassword,
+          type: AppInputType.password,
+          onChanged: (String val) => viewModel.updatePasswordField(val),
+          controller: viewModel.passwordInputController,
+          focusNode: passwordFocusNode,
         ),
         ListenableBuilder(
           listenable: viewModel,
@@ -36,7 +52,7 @@ class ForgotPasswordInput extends StatelessWidget {
             child: Padding(
               padding: AppInlineAlertSpacing.inputPadding,
               child: AppInlineAlert(
-                message: _validationMessage(context),
+                message: _validationMessage(l10n),
                 type: AppInlineAlertType.error,
               ),
             ),
@@ -46,17 +62,16 @@ class ForgotPasswordInput extends StatelessWidget {
     );
   }
 
-  String _validationMessage(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return switch (viewModel.authError) {
-      UIAuthError(:final type) => switch (type) {
-        ForgotPasswordErrorType.noEmail => l10n.errorEmailRequired,
-        ForgotPasswordErrorType.badEmail => l10n.errorInvalidEmail,
-        ForgotPasswordErrorType.unknown => l10n.errorUnknown,
-        ForgotPasswordErrorType.none => '',
-      },
-      SupabaseAuthError(:final message) => message,
-    };
-  }
+  String _validationMessage(AppLocalizations l10n) =>
+      switch (viewModel.authError) {
+        UIAuthError(:final type) => switch (type) {
+          LoginErrorType.noPasswordNoEmail => l10n.errorEmailPasswordRequired,
+          LoginErrorType.noEmail => l10n.errorEmailRequired,
+          LoginErrorType.badEmail => l10n.errorInvalidEmail,
+          LoginErrorType.noPassword => l10n.errorPasswordRequired,
+          LoginErrorType.unknown => l10n.errorUnknown,
+          LoginErrorType.none => '',
+        },
+        SupabaseAuthError(:final message) => message,
+      };
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/screens/login/login_buttons.dart';
-import 'package:wishing_well/screens/login/login_header.dart';
-import 'package:wishing_well/screens/login/login_inputs.dart';
+import 'package:wishing_well/screens/login/components/login_buttons.dart';
+import 'package:wishing_well/screens/login/components/login_header.dart';
+import 'package:wishing_well/screens/login/components/login_inputs.dart';
 import 'package:wishing_well/screens/login/login_view_model.dart';
 
 class LoginScreen extends StatefulWidget {

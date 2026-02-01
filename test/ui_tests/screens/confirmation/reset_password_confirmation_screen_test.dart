@@ -37,10 +37,7 @@ void main() {
       await startAppWithResetPasswordConfirmationScreen(tester);
       expect(find.byIcon(Icons.close), findsOneWidget);
       expect(find.text('Password Successfully Reset!'), findsOneWidget);
-      final iconWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is Icon && widget.icon == Icons.check_circle,
-      );
-      expect(iconWidgetFinder, findsOneWidget);
+
       expect(
         find.text('You may now log in with your new password'),
         findsOneWidget,

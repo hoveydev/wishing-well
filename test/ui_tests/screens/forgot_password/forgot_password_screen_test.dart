@@ -51,7 +51,7 @@ void main() {
     ) async {
       await startAppWithForgotPasswordScreen(tester);
       expect(find.byIcon(Icons.keyboard_arrow_down), findsOneWidget);
-      expect(find.text('Forgot Password'), findsOneWidget);
+      expect(find.text('Reset Password'), findsOneWidget);
       expect(
         find.text(
           'Enter your email address below to receive a password reset link',

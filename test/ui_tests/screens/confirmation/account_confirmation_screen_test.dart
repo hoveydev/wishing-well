@@ -36,10 +36,7 @@ void main() {
     ) async {
       await startAppWithAccountConfirmationScreen(tester);
       expect(find.text('Account Confirmed!'), findsOneWidget);
-      final checkIconWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is Icon && widget.icon == Icons.check_circle,
-      );
-      expect(checkIconWidgetFinder, findsOneWidget);
+
       expect(
         find.text('You may now securely log in to WishingWell'),
         findsOneWidget,

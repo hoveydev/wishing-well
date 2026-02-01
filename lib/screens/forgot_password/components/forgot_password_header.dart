@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_input.dart';
+import 'package:wishing_well/screens/forgot_password/components/forgot_password_input.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 
 class ForgotPasswordHeader extends StatelessWidget {
@@ -19,10 +19,10 @@ class ForgotPasswordHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          l10n.forgotPasswordScreenHeader,
+          l10n.authResetPassword,
           style: textTheme.headlineLarge,
           textAlign: TextAlign.center,
-          semanticsLabel: l10n.forgotPasswordScreenHeader,
+          semanticsLabel: l10n.authResetPassword,
         ),
         Text(
           l10n.forgotPasswordScreenSubtext,

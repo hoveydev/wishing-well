@@ -14,30 +14,27 @@ lib/screens/add_wisher/
 
 ## ✅ Benefits of This Approach
 
-### **1. Localization Property Pattern**
+### **1. Simple Screen Component Pattern**
 ```dart
-// In screen components - accept localization via properties
 class AddWisherButtons extends StatelessWidget {
   const AddWisherButtons({
     required this.onAddFromContacts,
     required this.onAddManually,
-    this.addFromContactsText,    // Optional: override default
-    this.addManuallyText,        // Optional: override default
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Column(
       children: [
         AppButton.label(
-          label: addFromContactsText ?? l10n.addFromContacts,
+          label: l10n.addFromContacts,
           onPressed: onAddFromContacts,
         ),
         AppButton.label(
-          label: addManuallyText ?? l10n.addManually,
+          label: l10n.addManually,
           onPressed: onAddManually,
         ),
       ],
@@ -51,10 +48,8 @@ class AddWisherButtons extends StatelessWidget {
 // In tests - now works correctly!
 testWidgets('AddWisherButtons renders correctly', (WidgetTester tester) async {
   await tester.pumpWidget(
-    createComponentTestWidget( // ✅ Components use this
+    createScreenComponentTestWidget( // ✅ Screen components use this
       AddWisherButtons(
-        addFromContactsText: 'Add From Contacts', // Optional override
-        addManuallyText: 'Add Manually',           // Optional override
         onAddFromContacts: () {},
         onAddManually: () {},
       ),
@@ -72,17 +67,20 @@ testWidgets('AddWisherButtons renders correctly', (WidgetTester tester) async {
 // Other screen components follow same pattern
 class AddWisherDescription extends StatelessWidget {
   const AddWisherDescription({
-    this.descriptionText, // Optional override
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final textTheme = TextTheme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     return Text(
-      descriptionText ?? l10n.addWisherDescription,
-      style: Theme.of(context).textTheme.bodyLarge,
+      l10n.addWisherDescription,
+      style: textTheme.bodyLarge?.copyWith(
+        color: colorScheme.onPrimary,
+      ),
     );
   }
 }
@@ -107,7 +105,7 @@ mv lib/screens/add_wisher/add_wisher_header.dart lib/screens/add_wisher/componen
 - Keep AppLocalizations.of(context) usage (it's correct!)
 - Remove hardcoded strings
 
-### **Phase 4: Update Info Screen**
+### **Phase 4: Update Screens**
 - Import components from new `components/` subdirectory
 - Pass localization properties when needed
 
@@ -117,13 +115,13 @@ mv lib/screens/add_wisher/add_wisher_header.dart lib/screens/add_wisher/componen
 
 ## 🎯 Final Architecture Benefits
 
-✅ **Logical Organization**: All add_wisher code grouped together  
+✅ **Logical Organization**: All screen code grouped together  
 ✅ **Reusability**: Components can be used by other screens  
 ✅ **Testing Clarity**: Clear separation of component vs screen tests  
-✅ **Localization**: Proper pattern with optional overrides  
+✅ **BuildContext**: Proper pattern with required provider pattern  
 ✅ **Discoverability**: Developers know where to find related code  
 ✅ **Consistency**: Follows established screen component pattern  
 
 ---
 
-**This architecture solves both the categorization issue AND preserves localization requirements! 🚀**
+**This architecture maintains the simple, effective pattern while enabling proper component testing! 🚀**

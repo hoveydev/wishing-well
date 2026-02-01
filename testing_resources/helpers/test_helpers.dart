@@ -14,6 +14,20 @@ Widget createComponentTestWidget(Widget child) => MaterialApp(
   home: Screen(children: [child]),
 );
 
+/// Standardized test wrapper for component tests
+Widget createScreenComponentTestWidget(Widget child) => MaterialApp(
+  theme: AppTheme.lightTheme,
+  darkTheme: AppTheme.darkTheme,
+  localizationsDelegates: const [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Screen(children: [child]),
+);
+
 /// Standardized test wrapper for screen tests with localization
 Widget createScreenTestWidget({
   required Widget child,

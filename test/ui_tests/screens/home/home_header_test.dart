@@ -1,69 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/home/components/home_header.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('HomeHeader', () {
-    Widget createTestWidget(Widget child) => MaterialApp(
-      theme: AppTheme.lightTheme,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: child),
-    );
+    group(TestGroups.rendering, () {
+      testWidgets('renders welcome text when firstName is not provided', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeHeader()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('renders welcome text without firstName', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeHeader()));
+        TestHelpers.expectTextOnce('Welcome!');
+      });
 
-      expect(find.text('Welcome!'), findsOneWidget);
+      testWidgets('renders welcome text with firstName parameter', (
+        WidgetTester tester,
+      ) async {
+        const firstName = 'John';
+
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeHeader(firstName: firstName)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Welcome, $firstName!');
+      });
+
+      testWidgets('uses titleLarge text style for header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeHeader()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final textFinder = find.text('Welcome!');
+        final textWidget = tester.widget<Text>(textFinder);
+        expect(textWidget.style?.fontSize, isNotNull);
+        expect(textWidget.style?.fontWeight, equals(FontWeight.w400));
+      });
     });
 
-    testWidgets('renders welcome text with firstName', (tester) async {
-      const firstName = 'John';
+    group(TestGroups.accessibility, () {
+      testWidgets('has correct semantics label with firstName', (
+        WidgetTester tester,
+      ) async {
+        const firstName = 'Jane';
 
-      await tester.pumpWidget(
-        createTestWidget(const HomeHeader(firstName: firstName)),
-      );
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeHeader(firstName: firstName)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text('Welcome, $firstName!'), findsOneWidget);
-    });
+        final textFinder = find.text('Welcome, $firstName!');
+        final textWidget = tester.widget<Text>(textFinder);
+        expect(textWidget.semanticsLabel, equals('Welcome, $firstName!'));
+      });
 
-    testWidgets('uses titleLarge text style', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeHeader()));
+      testWidgets('handles empty firstName gracefully', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeHeader(firstName: '')),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text('Welcome!');
-      final textWidget = tester.widget<Text>(textFinder);
-
-      expect(textWidget.style?.fontSize, isNotNull);
-      expect(textWidget.style?.fontWeight, FontWeight.w400);
-    });
-
-    testWidgets('has correct semantics label', (tester) async {
-      const firstName = 'Jane';
-
-      await tester.pumpWidget(
-        createTestWidget(const HomeHeader(firstName: firstName)),
-      );
-
-      final textFinder = find.text('Welcome, $firstName!');
-      final textWidget = tester.widget<Text>(textFinder);
-
-      expect(textWidget.semanticsLabel, 'Welcome, $firstName!');
-    });
-
-    testWidgets('handles empty string firstName', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(const HomeHeader(firstName: '')),
-      );
-
-      expect(find.text('Welcome, !'), findsOneWidget);
+        TestHelpers.expectTextOnce('Welcome, !');
+      });
     });
   });
 }

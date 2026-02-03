@@ -6,7 +6,7 @@ import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('Create Account Confirmation Screen', () {
-    group('Rendering', () {
+    group(TestGroups.rendering, () {
       testWidgets('renders screen with all required elements', (
         WidgetTester tester,
       ) async {

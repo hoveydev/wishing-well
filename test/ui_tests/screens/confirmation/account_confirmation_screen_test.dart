@@ -6,7 +6,7 @@ import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('Account Confirmation Screen', () {
-    group('Rendering', () {
+    group(TestGroups.rendering, () {
       testWidgets('renders screen with all required elements', (
         WidgetTester tester,
       ) async {
@@ -23,7 +23,7 @@ void main() {
       });
     });
 
-    group('Behavior', () {
+    group(TestGroups.behavior, () {
       testWidgets('handles close icon correctly', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenTestWidget(child: const ConfirmationScreen.account()),

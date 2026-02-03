@@ -7,7 +7,7 @@ import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('ConfirmationHeader', () {
-    group('Rendering', () {
+    group(TestGroups.rendering, () {
       testWidgets('renders account confirmation header', (
         WidgetTester tester,
       ) async {
@@ -67,7 +67,7 @@ void main() {
       });
     });
 
-    group('Behavior', () {
+    group(TestGroups.behavior, () {
       testWidgets('uses headlineLarge text style for account confirmation', (
         WidgetTester tester,
       ) async {

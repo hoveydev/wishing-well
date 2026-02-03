@@ -6,7 +6,7 @@ import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('ConfirmationImage', () {
-    group('Rendering', () {
+    group(TestGroups.rendering, () {
       testWidgets('renders icon', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
@@ -32,7 +32,7 @@ void main() {
       });
     });
 
-    group('Behavior', () {
+    group(TestGroups.behavior, () {
       testWidgets('calculates size based on screen height', (
         WidgetTester tester,
       ) async {

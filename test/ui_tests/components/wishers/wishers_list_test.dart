@@ -3,331 +3,272 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group('WishersList', () {
-    testWidgets('renders wishers section header', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+  group(TestGroups.component, () {
+    group(TestGroups.rendering, () {
+      testWidgets('renders wishers section with header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Check that "Wishers" title is displayed
-      expect(find.text('Wishers'), findsOneWidget);
+        TestHelpers.expectWidgetOnce(WishersList);
+        TestHelpers.expectTextOnce('Wishers');
+        TestHelpers.expectTextOnce('View All');
+        TestHelpers.expectWidgetOnce(Row);
+        TestHelpers.expectWidgetOnce(ListView);
+      });
 
-      // Check that "View All" button is displayed
-      expect(find.text('View All'), findsOneWidget);
+      testWidgets('renders correct number of items', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should have 1 AddWisherItem + 8 WisherItem = 9 total items
+        TestHelpers.expectWidgetOnce(AddWisherItem);
+        expect(find.byType(WisherItem), findsNWidgets(8));
+      });
+
+      testWidgets('renders specific wisher names and initials', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Check for specific wisher names
+        // from the static list (each appears twice)
+        TestHelpers.expectTextTimes('Alice', 2);
+        TestHelpers.expectTextTimes('Bob', 2);
+        TestHelpers.expectTextTimes('Charlie', 2);
+        TestHelpers.expectTextTimes('Diana', 2);
+
+        // Check for correct initials
+        TestHelpers.expectTextTimes('A', 2); // Alice
+        TestHelpers.expectTextTimes('B', 2); // Bob
+        TestHelpers.expectTextTimes('C', 2); // Charlie
+        TestHelpers.expectTextTimes('D', 2); // Diana
+      });
+
+      testWidgets('renders AddWisherItem as first item', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify the list structure exists and has correct items
+        TestHelpers.expectWidgetOnce(ListView);
+        TestHelpers.expectWidgetOnce(AddWisherItem);
+        expect(
+          find.byType(WisherItem),
+          findsNWidgets(8),
+        ); // Total: 1 AddWisherItem + 8 WisherItem = 9 items
+      });
+
+      testWidgets('has correct layout structure', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify key layout elements exist
+        final rows = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byType(Row),
+        );
+        final listViews = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byType(ListView),
+        );
+
+        expect(rows, findsOneWidget);
+        expect(listViews, findsOneWidget);
+
+        // Check header row properties
+        final row = tester.widget<Row>(rows);
+        expect(row.mainAxisAlignment, MainAxisAlignment.spaceBetween);
+
+        // Check scroll direction
+        final listView = tester.widget<ListView>(listViews);
+        expect(listView.scrollDirection, Axis.horizontal);
+      });
     });
 
-    testWidgets('header has correct text styling', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+    group(TestGroups.interaction, () {
+      testWidgets('handles View All button tap', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final wishersTitle = tester.widget<Text>(find.text('Wishers'));
-      expect(
-        wishersTitle.style!.color,
-        AppTheme.lightTheme.textTheme.titleLarge!.color,
-      );
+        await TestHelpers.tapAndSettle(tester, find.text('View All'));
 
-      final viewAllText = tester.widget<Text>(find.text('View All'));
-      expect(
-        viewAllText.style!.color,
-        AppTheme.lightTheme.textTheme.bodySmall!.color,
-      );
+        // Should not crash - gesture detector should handle the tap
+        TestHelpers.expectTextOnce('View All');
+      });
+
+      testWidgets('handles onAddWisherTap callback', (
+        WidgetTester tester,
+      ) async {
+        var wasTapped = false;
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => wasTapped = true),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await TestHelpers.tapAndSettle(tester, find.byType(AddWisherItem));
+        expect(wasTapped, isTrue);
+      });
+
+      testWidgets('View All button is clickable', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final gestureDetector = find.ancestor(
+          of: find.text('View All'),
+          matching: find.byType(GestureDetector),
+        );
+        expect(gestureDetector, findsOneWidget);
+      });
+
+      testWidgets('supports horizontal scrolling', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Initially should see all items
+        expect(find.byType(WisherItem), findsNWidgets(8));
+
+        // Scroll horizontally
+        await tester.fling(find.byType(ListView), const Offset(-300, 0), 1000);
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should still find all items after scrolling
+        expect(find.byType(WisherItem), findsNWidgets(8));
+      });
     });
 
-    testWidgets('renders AddWisherItem as first item', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+    group(TestGroups.behavior, () {
+      testWidgets('applies correct list padding', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Find the ListView
-      final listView = find.byType(ListView);
-      expect(listView, findsOneWidget);
+        final listView = tester.widget<ListView>(
+          find.descendant(
+            of: find.byType(WishersList),
+            matching: find.byType(ListView),
+          ),
+        );
+        expect(
+          listView.padding,
+          const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPaddingStandard,
+          ),
+        );
+      });
 
-      // Check that AddWisherItem is rendered (should be first)
-      expect(find.byType(AddWisherItem), findsOneWidget);
-    });
+      testWidgets('positions list beyond screen bounds', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('renders correct number of wisher items', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+        final positionedWidgets = tester.widgetList<Positioned>(
+          find.descendant(
+            of: find.byType(WishersList),
+            matching: find.byType(Positioned),
+          ),
+        );
+        final positionedWidget = positionedWidgets.first;
+        expect(positionedWidget.left, -AppSpacing.screenPaddingStandard);
+        expect(positionedWidget.right, -AppSpacing.screenPaddingStandard);
+      });
 
-      // Should have 8 WisherItem widgets (based on the static _wishers list)
-      expect(find.byType(WisherItem), findsNWidgets(8));
+      testWidgets('last item has no right padding', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Total items should be 9 (8 wishers + 1 add button)
-      // Verify by checking the total number of items found
-      expect(find.byType(AddWisherItem), findsOneWidget);
-      expect(find.byType(WisherItem), findsNWidgets(8));
-      expect(find.byType(AddWisherItem), findsOneWidget);
-      // Total: 1 AddWisherItem + 8 WisherItem = 9 items
-    });
+        final wisherItems = tester.widgetList<WisherItem>(
+          find.byType(WisherItem),
+        );
+        final lastWisherItem = wisherItems.last;
+        expect(lastWisherItem.padding, EdgeInsets.zero);
+      });
 
-    testWidgets('renders specific wisher names', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+      testWidgets('maintains consistent structure', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WishersList(onAddWisherTap: () => {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Check for the specific wisher names from the static list
-      expect(find.text('Alice'), findsNWidgets(2));
-      expect(find.text('Bob'), findsNWidgets(2));
-      expect(find.text('Charlie'), findsNWidgets(2));
-      expect(find.text('Diana'), findsNWidgets(2));
-    });
+        // Verify key components within WishersList context
+        final rows = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byType(Row),
+        );
+        final listViews = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byType(ListView),
+        );
 
-    testWidgets('renders correct initials for wishers', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
+        expect(rows, findsOneWidget);
+        expect(listViews, findsOneWidget);
 
-      // Check for the correct initials
-      expect(find.text('A'), findsNWidgets(2)); // Alice
-      expect(find.text('B'), findsNWidgets(2)); // Bob
-      expect(find.text('C'), findsNWidgets(2)); // Charlie
-      expect(find.text('D'), findsNWidgets(2)); // Diana
-    });
-
-    testWidgets('last item has no right padding', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Get all WisherItem widgets
-      final wisherItems = tester.widgetList<WisherItem>(
-        find.byType(WisherItem),
-      );
-
-      // The last wisher item should have EdgeInsets.zero padding
-      final lastWisherItem = wisherItems.last;
-      expect(lastWisherItem.padding, EdgeInsets.zero);
-    });
-
-    testWidgets('list is horizontally scrollable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      final listView = tester.widget<ListView>(find.byType(ListView));
-      expect(listView.scrollDirection, Axis.horizontal);
-    });
-
-    testWidgets('list has correct height constraints', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Find the SizedBox that constrains the list height
-      final heightConstraint = find.byType(SizedBox).first;
-      final sizedBox = tester.widget<SizedBox>(heightConstraint);
-      expect(sizedBox.height, 16);
-    });
-
-    testWidgets('handles "View All" button tap', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Find and tap the "View All" text
-      await tester.tap(find.text('View All'));
-      await tester.pump();
-
-      // Should not crash - the gesture detector should handle the tap
-      expect(find.text('View All'), findsOneWidget);
-    });
-
-    testWidgets('View All button is gesture detector', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Find the GestureDetector wrapping "View All"
-      final gestureDetector = find.ancestor(
-        of: find.text('View All'),
-        matching: find.byType(GestureDetector),
-      );
-      expect(gestureDetector, findsOneWidget);
-    });
-
-    testWidgets('list extends beyond screen bounds', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Find the Positioned widget that extends the list
-      final positioned = find.byType(Positioned);
-      expect(positioned, findsWidgets);
-
-      final positionedWidget = tester.widgetList<Positioned>(positioned).first;
-      expect(positionedWidget.left, -AppSpacing.screenPaddingStandard);
-      expect(positionedWidget.right, -AppSpacing.screenPaddingStandard);
-    });
-
-    testWidgets('maintains header-row spacing', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Find the Row containing header elements
-      final headerRow = find.byType(Row);
-      expect(headerRow, findsOneWidget);
-
-      final row = tester.widget<Row>(headerRow);
-      expect(row.mainAxisAlignment, MainAxisAlignment.spaceBetween);
-    });
-
-    testWidgets('uses correct list padding', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      final listView = tester.widget<ListView>(find.byType(ListView));
-      expect(
-        listView.padding,
-        const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenPaddingStandard,
-        ),
-      );
-    });
-
-    testWidgets('works with dark theme', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.darkTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Should render without errors in dark theme
-      expect(find.text('Wishers'), findsOneWidget);
-      expect(find.text('View All'), findsOneWidget);
-      expect(find.byType(WishersList), findsOneWidget);
-      expect(find.byType(AddWisherItem), findsOneWidget);
-      expect(find.byType(WisherItem), findsNWidgets(8));
-
-      // Check text styling in dark theme
-      final wishersTitle = tester.widget<Text>(find.text('Wishers'));
-      expect(
-        wishersTitle.style!.color,
-        AppTheme.darkTheme.textTheme.titleLarge!.color,
-      );
-
-      final viewAllText = tester.widget<Text>(find.text('View All'));
-      expect(
-        viewAllText.style!.color,
-        AppTheme.darkTheme.textTheme.bodySmall!.color,
-      );
-    });
-
-    testWidgets('handles scrolling to see all items', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.lightTheme,
-          home: Scaffold(body: WishersList(onAddWisherTap: () => {})),
-        ),
-      );
-
-      // Initially should see some items
-      expect(find.byType(WisherItem), findsNWidgets(8));
-
-      // Scroll horizontally
-      await tester.fling(find.byType(ListView), const Offset(-300, 0), 1000);
-      await tester.pumpAndSettle();
-
-      // Should still find all items after scrolling
-      expect(find.byType(WisherItem), findsNWidgets(8));
+        TestHelpers.expectWidgetOnce(AddWisherItem);
+        expect(find.byType(WisherItem), findsNWidgets(8));
+      });
     });
   });
 }

@@ -6,7 +6,7 @@ import 'package:wishing_well/components/throbber/app_throbber_size.dart';
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group(TestGroups.component, () {
+  group('AppThrobber', () {
     group(TestGroups.rendering, () {
       testWidgets('renders correctly with xsmall size', (
         WidgetTester tester,

@@ -8,7 +8,7 @@ import 'package:wishing_well/theme/app_spacing.dart';
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group(TestGroups.component, () {
+  group('WisherList', () {
     group(TestGroups.rendering, () {
       testWidgets('renders wishers section with header', (
         WidgetTester tester,

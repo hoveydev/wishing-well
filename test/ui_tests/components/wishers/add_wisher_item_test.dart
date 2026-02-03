@@ -7,7 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group(TestGroups.component, () {
+  group('AddWisherItem', () {
     group(TestGroups.rendering, () {
       testWidgets('renders with correct structure', (
         WidgetTester tester,

@@ -71,24 +71,21 @@ import '../../../testing_resources/mocks/...'; // Required mocks
 ### 2. Test Group Organization
 ```dart
 void main() {
-  group('FeatureName', () {
-    group(TestGroups.initialState, () {
-      // Test initial state
+  group('ComponentName', () {
+    // OR use TestGroups constants (see note below)
+    group('Rendering', () {
+      // Test rendering behavior
     });
     
-    group(TestGroups.validation, () {
-      // Test validation logic
-    });
-    
-    group(TestGroups.interaction, () {
+    group('Interaction', () {
       // Test user interactions
     });
     
-    group(TestGroups.behavior, () {
+    group('Behavior', () {
       // Test component behavior and properties
     });
     
-    group(TestGroups.errorHandling, () {
+    group('Error Handling', () {
       // Test error scenarios
     });
   });
@@ -123,6 +120,22 @@ test('empty email sets noEmail error');
 test('Primary Label button renders correctly');
 test('calls onAddFromContacts when primary button is tapped');
 ```
+
+### ⚠️ **Top-Level Group Naming Convention**
+**🎯 CRITICAL**: Top-level group names should be **component-specific**:
+
+```dart
+// ✅ CORRECT - Component-specific naming
+group('AppButton', () {           // Tests AppButton component
+group('AddWisherButtons', () {      // Tests AddWisherButtons component
+group('LoginViewModel', () {        // Tests LoginViewModel
+
+// ❌ AVOID - Generic or constant-based top-level naming
+group('Component', () {            // Too generic
+group(TestGroups.component, () {      // IDE resolution issues (see above)
+```
+
+**Rule**: Top-level group = exact component/class name being tested
 
 ## Standard Test Patterns
 
@@ -437,6 +450,37 @@ Test names should clearly describe what is being tested and what the expected ou
 ### 5. Use Standard Helpers
 Always use the provided helper functions for common operations to maintain consistency.
 
+### ⚠️ **IDE Compatibility Requirements**
+**🛠️ Flutter Test Framework Known Issue - Top-Level Group Names**:
+
+**Issue**: TestGroups constants may cause IDE debug console issues when used for **top-level group names**
+
+**Solution**: Use **component-specific literal strings** for top-level groups (which follows best practices anyway)
+
+```dart
+// ✅ CORRECT - Component-specific top-level names
+group('AppButton', () {              // Tests AppButton component  
+group('AddWisherButtons', () {        // Tests AddWisherButtons component
+group('LoginViewModel', () {           // Tests LoginViewModel class
+
+// ✅ CORRECT - TestGroups constants for sub-groups
+group(TestGroups.rendering, () {         // ✅ Works fine in sub-groups
+group(TestGroups.interaction, () {        // ✅ Works fine in sub-groups  
+group(TestGroups.behavior, () {          // ✅ Works fine in sub-groups
+
+// ❌ AVOID - Generic or component-agnostic top-level names
+group('Component', () {               // Too generic anyway  
+group(TestGroups.component, () {         // May cause IDE issues
+```
+
+**Helper Usage**: Standard helpers ensure IDE compatibility and consistent test behavior
+**Test Discovery**: Proper group naming ensures tests are discoverable via `--name` parameter
+
+**Constants Usage**:
+- ✅ **Sub-groups**: TestGroups constants work perfectly for nested groups
+- ✅ **Test logic**: TestHelpers methods and other constants work fine
+- ⚠️ **Top-level only**: Use component-specific literal names for main groups
+
 ## Redundancy Guidelines
 
 ### Consolidate When:
@@ -557,3 +601,102 @@ class MockAuthRepository extends AuthRepository {
 8. **Group Related Tests**: Use logical groupings with TestGroups constants
 9. **Use Result<T> Pattern**: Mock repositories should return Result<T> types to match implementation
 10. **Follow Project Architecture**: Tests should mirror the MVVM+Repository pattern used in the codebase
+
+---
+
+## 🛠️ **TROUBLESHOOTING GUIDE**
+
+### **Common Issues and Solutions**
+
+#### **Issue: "No tests match regular expression" in IDE Debug Console**
+**Symptoms**:
+- IDE debug console shows error about test regex matching
+- Tests work in command line but not in IDE
+- Error mentions TestGroups constants
+
+**Root Cause**: Flutter test framework has issues resolving static constants as **top-level group names only**.
+
+**Solution**:
+```dart
+// ❌ AVOID - Issues with top-level groups only
+group(TestGroups.component, () {        // Problem here
+group(TestGroups.rendering, () {        // Problem here
+
+// ✅ USE - Component-specific top-level names  
+group('AppButton', () {              // ✅ Always works
+group('AddWisherButtons', () {        // ✅ Always works
+
+// ✅ SAFE - TestGroups constants work fine in sub-groups
+group(TestGroups.rendering, () {         // ✅ Sub-groups are fine
+group(TestGroups.interaction, () {        // ✅ Sub-groups are fine
+group(TestGroups.behavior, () {          // ✅ Sub-groups are fine
+```
+
+#### **Issue: Tests Not Discoverable via --name parameter**
+**Symptoms**:
+- `flutter test --name="Component"` finds no tests
+- Top-level group names not resolving
+
+**Solution**: Use component-specific literal string group names as shown above.
+
+#### **Issue: Multiple pumpWidget calls warning**
+**Symptoms**:
+- Analysis script shows multiple `await tester.pumpWidget()` calls
+- Inconsistent test setup patterns
+
+**Solution**:
+```dart
+// ❌ AVOID
+await tester.pumpWidget(MaterialApp(...));
+
+// ✅ USE  
+await tester.pumpWidget(createScreenComponentTestWidget(child));
+await TestHelpers.pumpAndSettle(tester);
+```
+
+#### **Issue: "Replace MaterialApp setup with createTestWidget helper"**
+**Symptoms**:
+- Analysis script flags manual MaterialApp setups
+- Inconsistent test structure
+
+**Solution**: Use appropriate helper:
+- `createScreenComponentTestWidget()` for components
+- `createScreenTestWidget()` for screens
+
+#### **Issue: Test duplication or fragmentation**
+**Symptoms**:
+- Multiple files testing same component
+- Redundant test coverage
+- Maintenance overhead
+
+**Solution**: Follow "One Component, One Test File" principle:
+- Each component has one dedicated test file
+- Integration tests in separate files
+- No duplicate functionality testing
+
+### **Quick Fix Commands**
+```bash
+# Fix common issues:
+flutter clean && flutter pub get    # Clear cache and reinstall dependencies
+dart analyze .                    # Rebuild analysis index
+flutter test --name="Component"   # Test specific group
+flutter test --name="AddWisherButtons"  # Test component-specific group
+```
+
+### **Diagnostic Commands**
+```bash
+# Identify group resolution issues:
+flutter test --name="TestGroups.component"  # Should return no results if problematic
+
+# Verify component-specific groups work:
+flutter test --name="AppButton"         # Should find AppButton tests
+flutter test --name="AddWisherButtons"  # Should find AddWisherButtons tests
+```
+
+### **When to Open an Issue**
+If you encounter test framework issues:
+1. Check if it's documented here
+2. Try command line to verify tests work
+3. Check for TestGroups constant usage in group names
+4. Ensure proper helper function usage
+5. Verify one-component-per-file structure

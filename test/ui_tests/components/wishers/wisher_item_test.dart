@@ -6,7 +6,7 @@ import 'package:wishing_well/data/models/wisher.dart';
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group(TestGroups.component, () {
+  group('WisherItem', () {
     const testWisher = Wisher('Alice');
 
     group(TestGroups.rendering, () {

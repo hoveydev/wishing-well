@@ -1,127 +1,119 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/confirmation/components/confirmation_header.dart';
 import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('ConfirmationHeader', () {
-    testWidgets('renders account confirmation header', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
+    group('Rendering', () {
+      testWidgets('renders account confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text('Account Confirmed!'), findsOneWidget);
-    });
+        TestHelpers.expectTextOnce('Account Confirmed!');
+      });
 
-    testWidgets('renders create account confirmation header', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: ConfirmationHeader(
+      testWidgets('renders create account confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
               flavor: ConfirmationScreenFlavor.createAccount,
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text('Account Successfully Created!'), findsOneWidget);
-    });
+        TestHelpers.expectTextOnce('Account Successfully Created!');
+      });
 
-    testWidgets('uses headlineLarge text style', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: ConfirmationHeader(
+      testWidgets('renders forgot password confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
               flavor: ConfirmationScreenFlavor.forgotPassword,
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text('Reset Password Request Sent!');
-      final textWidget = tester.widget<Text>(textFinder);
+        TestHelpers.expectTextOnce('Reset Password Request Sent!');
+      });
 
-      expect(textWidget.style?.fontSize, isNotNull);
-      expect(textWidget.style?.fontWeight, isNotNull);
-    });
-
-    testWidgets('centers text', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: ConfirmationHeader(
+      testWidgets('renders reset password confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
               flavor: ConfirmationScreenFlavor.resetPassword,
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text('Password Successfully Reset!');
-      final textWidget = tester.widget<Text>(textFinder);
-
-      expect(textWidget.textAlign, TextAlign.center);
+        TestHelpers.expectTextOnce('Password Successfully Reset!');
+      });
     });
 
-    testWidgets('has correct semantics label', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const Scaffold(
-            body: ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
+    group('Behavior', () {
+      testWidgets('uses headlineLarge text style for account confirmation', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text('Account Confirmed!');
-      final textWidget = tester.widget<Text>(textFinder);
+        final textFinder = find.text('Account Confirmed!');
+        final textWidget = tester.widget<Text>(textFinder);
 
-      expect(textWidget.semanticsLabel, 'Account Confirmed!');
+        expect(textWidget.style?.fontSize, isNotNull);
+        expect(textWidget.style?.fontWeight, isNotNull);
+      });
+
+      testWidgets('centers text correctly', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
+              flavor: ConfirmationScreenFlavor.resetPassword,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final textFinder = find.text('Password Successfully Reset!');
+        final textWidget = tester.widget<Text>(textFinder);
+
+        expect(textWidget.textAlign, TextAlign.center);
+      });
+
+      testWidgets('has correct semantics label', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final textFinder = find.text('Account Confirmed!');
+        final textWidget = tester.widget<Text>(textFinder);
+
+        expect(textWidget.semanticsLabel, 'Account Confirmed!');
+      });
     });
   });
 }

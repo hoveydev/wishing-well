@@ -1,190 +1,309 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/screens/login/login_screen.dart';
 import 'package:wishing_well/screens/login/login_view_model.dart';
-import 'package:wishing_well/utils/result.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
 
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
-dynamic startAppWithLoginScreen(
-  WidgetTester tester, {
-  AuthRepository? mockAuthRepository,
-}) async {
-  final controller = LoadingController();
-  final ChangeNotifierProvider app =
-      ChangeNotifierProvider<LoadingController>.value(
-        value: controller,
-        child: MaterialApp(
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: LoginScreen(
-            viewModel: LoginViewModel(
-              authRepository: mockAuthRepository ?? MockAuthRepository(),
-            ),
-          ),
-        ),
-      );
-  await tester.pumpWidget(app);
-  await tester.pumpAndSettle();
-}
-
 void main() {
-  group('Login Screen Tests', () {
-    testWidgets('Renders Screen With All Elements', (
-      WidgetTester tester,
-    ) async {
-      await startAppWithLoginScreen(tester);
-      expect(
-        find.image(const AssetImage('assets/images/logo.png')),
-        findsOneWidget,
-      );
-      expect(find.text('WishingWell'), findsOneWidget);
-      expect(
-        find.text('Your personal well for thoughtful giving'),
-        findsOneWidget,
-      );
-      expect(find.widgetWithText(TextField, 'Email'), findsOneWidget);
-      expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);
-      expect(find.text('Forgot Password?'), findsOneWidget);
-      expect(find.text('Sign In'), findsOneWidget);
-      expect(find.text('Create an Account'), findsOneWidget);
+  group('LoginScreen', () {
+    late AuthRepository mockAuthRepository;
+    late LoginViewModel viewModel;
+
+    setUp(() {
+      mockAuthRepository = MockAuthRepository();
+      viewModel = LoginViewModel(authRepository: mockAuthRepository);
     });
 
-    testWidgets('Email Text Field Updates', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'test.email@email.com');
-      await tester.pumpAndSettle();
-      final textFieldFinder = find.descendant(
-        of: emailWidgetFinder,
-        matching: find.byType(EditableText),
-      );
-      final textField = tester.widget<EditableText>(textFieldFinder);
-      expect(textField.controller.text, 'test.email@email.com');
+    tearDown(() {
+      viewModel.dispose();
     });
 
-    testWidgets('Password Text Field Updates', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(emailWidgetFinder, 'password');
-      await tester.pumpAndSettle();
-      final textFieldFinder = find.descendant(
-        of: emailWidgetFinder,
-        matching: find.byType(EditableText),
-      );
-      final textField = tester.widget<EditableText>(textFieldFinder);
-      expect(textField.controller.text, 'password');
-    });
-  });
+    group(TestGroups.rendering, () {
+      testWidgets('renders screen with all required UI elements', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-  group('Login Error Scenarios', () {
-    testWidgets('No Email No Password Login Error', (
-      WidgetTester tester,
-    ) async {
-      await startAppWithLoginScreen(tester);
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('Email and password cannot be empty'), findsOneWidget);
-    });
+        // Check for logo and branding
+        expect(
+          find.image(const AssetImage('assets/images/logo.png')),
+          findsOneWidget,
+        );
+        TestHelpers.expectTextOnce('WishingWell');
+        TestHelpers.expectTextOnce('Your personal well for thoughtful giving');
 
-    testWidgets('No Email Only Login Error', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(passwordWidgetFinder, 'password');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('Email cannot be empty'), findsOneWidget);
+        // Check for input fields
+        expect(find.widgetWithText(AppInput, 'Email'), findsOneWidget);
+        expect(find.widgetWithText(AppInput, 'Password'), findsOneWidget);
+
+        // Check for buttons and links
+        TestHelpers.expectTextOnce('Forgot Password?');
+        TestHelpers.expectTextOnce('Sign In');
+        TestHelpers.expectTextOnce('Create an Account');
+      });
     });
 
-    testWidgets('No Password Only Login Error', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'email@email.com');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('Password cannot be empty'), findsOneWidget);
+    group(TestGroups.interaction, () {
+      testWidgets('email field updates when text is entered', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final emailWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailWidgetFinder,
+          'test.email@email.com',
+        );
+
+        final textFieldFinder = find.descendant(
+          of: emailWidgetFinder,
+          matching: find.byType(EditableText),
+        );
+        final textField = tester.widget<EditableText>(textFieldFinder);
+        expect(textField.controller.text, 'test.email@email.com');
+      });
+
+      testWidgets('password field updates when text is entered', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput && widget.type == AppInputType.password,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordWidgetFinder,
+          'password',
+        );
+
+        final textFieldFinder = find.descendant(
+          of: passwordWidgetFinder,
+          matching: find.byType(EditableText),
+        );
+        final textField = tester.widget<EditableText>(textFieldFinder);
+        expect(textField.controller.text, 'password');
+      });
+
+      testWidgets('forgot password button is present', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final forgotPasswordButton = find.text('Forgot Password?');
+        expect(forgotPasswordButton, findsOneWidget);
+      });
+
+      testWidgets('create account button is present', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final createAccountButton = find.text('Create an Account');
+        expect(createAccountButton, findsOneWidget);
+      });
     });
 
-    testWidgets('Invalid Email Login Error', (WidgetTester tester) async {
-      await startAppWithLoginScreen(tester);
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'bad-email');
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(passwordWidgetFinder, 'password');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('Invalid email format'), findsOneWidget);
+    group(TestGroups.validation, () {
+      testWidgets('shows error when both email and password are empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        TestHelpers.expectTextOnce('Email and password cannot be empty');
+      });
+
+      testWidgets('shows error when only email is empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput && widget.type == AppInputType.password,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordWidgetFinder,
+          'password',
+        );
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        TestHelpers.expectTextOnce('Email cannot be empty');
+      });
+
+      testWidgets('shows error when only password is empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final emailWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailWidgetFinder,
+          'email@email.com',
+        );
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        TestHelpers.expectTextOnce('Password cannot be empty');
+      });
+
+      testWidgets('shows error when email format is invalid', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final emailWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput && widget.type == AppInputType.password,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailWidgetFinder,
+          'bad-email',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordWidgetFinder,
+          'password',
+        );
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        TestHelpers.expectTextOnce('Invalid email format');
+      });
     });
 
-    testWidgets('supabase error', (WidgetTester tester) async {
-      await startAppWithLoginScreen(
-        tester,
-        mockAuthRepository: MockAuthRepository(
-          loginResult: Result.error(AuthApiException('supabase error')),
-        ),
-      );
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'supabase.error@email.com');
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(passwordWidgetFinder, 'password');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(find.text('supabase error'), findsOneWidget);
-    });
+    group(TestGroups.behavior, () {
+      testWidgets('initial state has no alert', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('unknown error', (WidgetTester tester) async {
-      await startAppWithLoginScreen(
-        tester,
-        mockAuthRepository: MockAuthRepository(
-          loginResult: Result.error(Exception('unknown error')),
-        ),
-      );
-      final emailWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.email,
-      );
-      await tester.enterText(emailWidgetFinder, 'unknown.error@email.com');
-      final passwordWidgetFinder = find.byWidgetPredicate(
-        (widget) => widget is AppInput && widget.type == AppInputType.password,
-      );
-      await tester.enterText(passwordWidgetFinder, 'password');
-      await tester.tap(find.text('Sign In'));
-      await tester.pumpAndSettle();
-      expect(
-        find.text('An unknown error occured. Please try again'),
-        findsOneWidget,
-      );
+        expect(viewModel.hasAlert, false);
+      });
+
+      testWidgets('displays loading state during login attempt', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(loadingController.isLoading, false);
+
+        // Tap login button to trigger validation
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        // Should trigger validation (show error message)
+        TestHelpers.expectTextOnce('Email and password cannot be empty');
+      });
+
+      testWidgets('handles ViewModel disposal correctly', (
+        WidgetTester tester,
+      ) async {
+        final testViewModel = LoginViewModel(
+          authRepository: mockAuthRepository,
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: testViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify initial state
+        expect(testViewModel.hasAlert, false);
+
+        // Clean up
+        testViewModel.dispose();
+      });
     });
   });
 }

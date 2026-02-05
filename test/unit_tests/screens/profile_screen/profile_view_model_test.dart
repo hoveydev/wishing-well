@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/screens/profile_screen/profile_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
-
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 void main() {
@@ -15,19 +15,25 @@ void main() {
   });
 
   group('ProfileViewModel', () {
-    test('hasAlert returns false when no error', () {
-      expect(viewModel.hasAlert, false);
+    tearDown(() {
+      viewModel.dispose();
     });
 
-    test('authError is ProfileErrorType.none initially', () {
-      final error = viewModel.authError;
-      expect(error, isA<UIAuthError>());
-      expect((error as UIAuthError).type, ProfileErrorType.none);
-    });
+    group(TestGroups.initialState, () {
+      test('hasAlert returns false when no error', () {
+        expect(viewModel.hasAlert, false);
+      });
 
-    test('clearError can be called without error', () {
-      expect(() => viewModel.clearError(), returnsNormally);
-      expect(viewModel.hasAlert, false);
+      test('authError is ProfileErrorType.none initially', () {
+        final error = viewModel.authError;
+        expect(error, isA<UIAuthError>());
+        expect((error as UIAuthError).type, ProfileErrorType.none);
+      });
+
+      test('clearError can be called without error', () {
+        expect(() => viewModel.clearError(), returnsNormally);
+        expect(viewModel.hasAlert, false);
+      });
     });
   });
 }

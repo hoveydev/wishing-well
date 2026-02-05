@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/screens/login/login_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
-
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 void main() {
@@ -15,7 +15,7 @@ void main() {
     viewModel = LoginViewModel(authRepository: authRepository);
   });
 
-  group('LoginViewModel - Initial State', () {
+  group(TestGroups.initialState, () {
     test('hasAlert returns false when no error', () {
       expect(viewModel.hasAlert, false);
     });
@@ -31,7 +31,7 @@ void main() {
     });
   });
 
-  group('LoginViewModel - Email Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updateEmailField with empty email sets noEmail error', () {
       viewModel.updatePasswordField('password');
       viewModel.updateEmailField('');
@@ -67,7 +67,7 @@ void main() {
     });
   });
 
-  group('LoginViewModel - Password Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updatePasswordField with empty password sets noPassword error', () {
       viewModel.updateEmailField('test@example.com');
       viewModel.updatePasswordField('');
@@ -97,7 +97,7 @@ void main() {
     });
   });
 
-  group('LoginViewModel - Combined Error Handling', () {
+  group(TestGroups.errorHandling, () {
     test('shows noPasswordNoEmail when both fields are empty', () {
       viewModel.updateEmailField('');
       viewModel.updatePasswordField('');
@@ -133,7 +133,7 @@ void main() {
     });
   });
 
-  group('LoginViewModel - Error Priority', () {
+  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         loginResult: Result.error(AuthApiException('API error')),
@@ -162,14 +162,12 @@ void main() {
     });
   });
 
-  group('LoginViewModel - Email Controller', () {
+  group(TestGroups.behavior, () {
     test('emailInputController is available', () {
       expect(viewModel.emailInputController, isNotNull);
       expect(viewModel.emailInputController.text, isEmpty);
     });
-  });
 
-  group('LoginViewModel - Password Controller', () {
     test('passwordInputController is available', () {
       expect(viewModel.passwordInputController, isNotNull);
       expect(viewModel.passwordInputController.text, isEmpty);

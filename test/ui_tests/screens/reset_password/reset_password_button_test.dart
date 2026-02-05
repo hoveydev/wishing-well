@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/screens/reset_password/components/reset_password_button.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 class MockResetPasswordViewModel extends ResetPasswordViewModel {
@@ -28,37 +26,63 @@ class MockResetPasswordViewModel extends ResetPasswordViewModel {
 
 void main() {
   group('ResetPasswordButton', () {
-    Widget createTestWidget(Widget child) => MaterialApp(
-      theme: AppTheme.lightTheme,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: child),
-    );
+    group(TestGroups.rendering, () {
+      testWidgets('renders reset password button with correct label', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = MockResetPasswordViewModel();
 
-    testWidgets('renders button', (tester) async {
-      final viewModel = MockResetPasswordViewModel();
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            ResetPasswordButton(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      await tester.pumpWidget(
-        createTestWidget(ResetPasswordButton(viewModel: viewModel)),
-      );
-
-      expect(find.text('Reset Password'), findsOneWidget);
+        TestHelpers.expectTextOnce('Reset Password');
+      });
     });
 
-    testWidgets('calls tapResetPasswordButton when tapped', (tester) async {
-      final viewModel = MockResetPasswordViewModel();
+    group(TestGroups.interaction, () {
+      testWidgets('calls tapResetPasswordButton when button is tapped', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = MockResetPasswordViewModel();
 
-      await tester.pumpWidget(
-        createTestWidget(ResetPasswordButton(viewModel: viewModel)),
-      );
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            ResetPasswordButton(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      await tester.tap(find.text('Reset Password'));
-      expect(viewModel.buttonTapped, true);
+        await TestHelpers.tapAndSettle(tester, find.text('Reset Password'));
+
+        expect(viewModel.buttonTapped, isTrue);
+      });
+    });
+
+    group(TestGroups.behavior, () {
+      testWidgets('has correct button configuration and styling', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = MockResetPasswordViewModel();
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            ResetPasswordButton(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final buttonFinder = find.byType(ResetPasswordButton);
+        expect(buttonFinder, findsOneWidget);
+
+        final resetPasswordButton = tester.widget<ResetPasswordButton>(
+          buttonFinder,
+        );
+        expect(resetPasswordButton.viewModel, isNotNull);
+      });
     });
   });
 }

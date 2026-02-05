@@ -1,94 +1,99 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import '../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('LoadingController', () {
-    test('initial state is not loading', () {
-      final controller = LoadingController();
-      expect(controller.isLoading, false);
+    group(TestGroups.initialState, () {
+      test('initial state is not loading', () {
+        final controller = LoadingController();
+        expect(controller.isLoading, false);
+      });
     });
 
-    test('show sets isLoading to true', () {
-      final controller = LoadingController();
-      controller.show();
-      expect(controller.isLoading, true);
-    });
-
-    test('hide sets isLoading to false', () {
-      final controller = LoadingController();
-      controller.show();
-      expect(controller.isLoading, true);
-      controller.hide();
-      expect(controller.isLoading, false);
-    });
-
-    test('show does nothing when already loading', () {
-      final controller = LoadingController();
-      bool notified = false;
-      controller.addListener(() {
-        notified = true;
+    group(TestGroups.behavior, () {
+      test('show sets isLoading to true', () {
+        final controller = LoadingController();
+        controller.show();
+        expect(controller.isLoading, true);
       });
 
-      controller.show();
-      expect(controller.isLoading, true);
-      expect(notified, true);
-
-      notified = false;
-      controller.show();
-      expect(controller.isLoading, true);
-      expect(notified, false);
-    });
-
-    test('hide does nothing when not loading', () {
-      final controller = LoadingController();
-      bool notified = false;
-      controller.addListener(() {
-        notified = true;
+      test('hide sets isLoading to false', () {
+        final controller = LoadingController();
+        controller.show();
+        expect(controller.isLoading, true);
+        controller.hide();
+        expect(controller.isLoading, false);
       });
 
-      controller.hide();
-      expect(controller.isLoading, false);
-      expect(notified, false);
-    });
+      test('show does nothing when already loading', () {
+        final controller = LoadingController();
+        bool notified = false;
+        controller.addListener(() {
+          notified = true;
+        });
 
-    test('show/hide notifies listeners', () {
-      final controller = LoadingController();
-      int notifyCount = 0;
-      controller.addListener(() {
-        notifyCount++;
+        controller.show();
+        expect(controller.isLoading, true);
+        expect(notified, true);
+
+        notified = false;
+        controller.show();
+        expect(controller.isLoading, true);
+        expect(notified, false);
       });
 
-      controller.show();
-      expect(notifyCount, 1);
+      test('hide does nothing when not loading', () {
+        final controller = LoadingController();
+        bool notified = false;
+        controller.addListener(() {
+          notified = true;
+        });
 
-      controller.hide();
-      expect(notifyCount, 2);
+        controller.hide();
+        expect(controller.isLoading, false);
+        expect(notified, false);
+      });
 
-      controller.show();
-      expect(notifyCount, 3);
-    });
+      test('show/hide notifies listeners', () {
+        final controller = LoadingController();
+        int notifyCount = 0;
+        controller.addListener(() {
+          notifyCount++;
+        });
 
-    test('multiple show/hide cycles work correctly', () {
-      final controller = LoadingController();
-      expect(controller.isLoading, false);
+        controller.show();
+        expect(notifyCount, 1);
 
-      controller.show();
-      expect(controller.isLoading, true);
+        controller.hide();
+        expect(notifyCount, 2);
 
-      controller.hide();
-      expect(controller.isLoading, false);
+        controller.show();
+        expect(notifyCount, 3);
+      });
 
-      controller.show();
-      expect(controller.isLoading, true);
+      test('multiple show/hide cycles work correctly', () {
+        final controller = LoadingController();
+        expect(controller.isLoading, false);
 
-      controller.show();
-      expect(controller.isLoading, true);
+        controller.show();
+        expect(controller.isLoading, true);
 
-      controller.hide();
-      expect(controller.isLoading, false);
+        controller.hide();
+        expect(controller.isLoading, false);
 
-      controller.hide();
-      expect(controller.isLoading, false);
+        controller.show();
+        expect(controller.isLoading, true);
+
+        controller.show();
+        expect(controller.isLoading, true);
+
+        controller.hide();
+        expect(controller.isLoading, false);
+
+        controller.hide();
+        expect(controller.isLoading, false);
+      });
     });
   });
 }

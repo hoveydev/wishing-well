@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/utilities.dart';
 
 void main() {
-  group('App Utilities', () {
+  group('Utilities', () {
     tearDown(() {
       debugDefaultTargetPlatformOverride = null;
     });

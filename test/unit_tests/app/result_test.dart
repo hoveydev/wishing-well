@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/result.dart';
+import '../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('Result', () {
@@ -56,53 +57,55 @@ void main() {
         expect(result, isNot(isA<Error<int>>()));
       });
     });
+  });
 
-    group('Error', () {
-      test('creates Error result with exception', () {
-        final exception = Exception('Something went wrong');
-        final result = Result<int>.error(exception);
+  group('Error', () {
+    test('creates Error result with exception', () {
+      final exception = Exception('Something went wrong');
+      final result = Result<int>.error(exception);
 
-        expect(result, isA<Error<int>>());
-        expect((result as Error<int>).error, exception);
-      });
-
-      test('creates Error result with custom exception', () {
-        final exception = _CustomException('Custom error');
-        final result = Result<String>.error(exception);
-
-        expect(result, isA<Error<String>>());
-        expect((result as Error<String>).error, exception);
-        expect((result.error as _CustomException).message, 'Custom error');
-      });
-
-      test('toString returns correct format', () {
-        final exception = Exception('Test error');
-        final result = Result<int>.error(exception);
-
-        expect(
-          result.toString(),
-          contains('Result<int>.error(Exception: Test error)'),
-        );
-      });
-
-      test('Error preserves type information', () {
-        final exception = Exception('Error');
-        final result = Result<String>.error(exception);
-
-        expect(result, isA<Result<String>>());
-        expect(result, isA<Error<String>>());
-        expect(result, isNot(isA<Ok<String>>()));
-      });
-
-      test('Error instances with same exception are not equal', () {
-        final exception = Exception('Error');
-        final result1 = Result<int>.error(exception);
-        final result2 = Result<int>.error(exception);
-
-        expect(identical(result1, result2), false);
-      });
+      expect(result, isA<Error<int>>());
+      expect((result as Error<int>).error, exception);
     });
 
+    test('creates Error result with custom exception', () {
+      final exception = _CustomException('Custom error');
+      final result = Result<String>.error(exception);
+
+      expect(result, isA<Error<String>>());
+      expect((result as Error<String>).error, exception);
+      expect((result.error as _CustomException).message, 'Custom error');
+    });
+
+    test('toString returns correct format', () {
+      final exception = Exception('Test error');
+      final result = Result<int>.error(exception);
+
+      expect(
+        result.toString(),
+        contains('Result<int>.error(Exception: Test error)'),
+      );
+    });
+
+    test('Error preserves type information', () {
+      final exception = Exception('Error');
+      final result = Result<String>.error(exception);
+
+      expect(result, isA<Result<String>>());
+      expect(result, isA<Error<String>>());
+      expect(result, isNot(isA<Ok<String>>()));
+    });
+
+    test('Error instances with same exception are not equal', () {
+      final exception = Exception('Error');
+      final result1 = Result<int>.error(exception);
+      final result2 = Result<int>.error(exception);
+
+      expect(identical(result1, result2), false);
+    });
+  });
+
+  group(TestGroups.behavior, () {
     group('Pattern Matching / Type Checking', () {
       test('can switch on Result type', () {
         // ignore: prefer_const_constructors
@@ -142,7 +145,9 @@ void main() {
         }
       });
     });
+  });
 
+  group(TestGroups.behavior, () {
     group('Use Cases', () {
       test('handles async operation success', () async {
         Future<Result<String>> fetchData() async {
@@ -210,7 +215,9 @@ void main() {
         expect(processResult(divide(10, 0)), contains('Failed:'));
       });
     });
+  });
 
+  group(TestGroups.behavior, () {
     group('Edge Cases', () {
       test('Ok with empty string', () {
         const Result result = Result<String>.ok('');

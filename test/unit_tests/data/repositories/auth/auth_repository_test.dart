@@ -3,9 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+import '../../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
-  group('AuthRepository', () {
+  group('MockAuthRepository', () {
     late MockAuthRepository mockRepository;
 
     setUp(() {
@@ -16,23 +17,27 @@ void main() {
       mockRepository.dispose();
     });
 
-    group('Contract', () {
-      test('Is a ChangeNotifier', () {
+    group(TestGroups.initialState, () {
+      test('is a ChangeNotifier', () {
         expect(mockRepository, isA<ChangeNotifier>());
       });
 
-      test('Has isAuthenticated Getter', () {
+      test('has isAuthenticated getter', () {
         expect(mockRepository.isAuthenticated, isA<bool>());
       });
 
-      test('Has Login Method', () {
+      test('returns false by default', () {
+        expect(mockRepository.isAuthenticated, false);
+      });
+
+      test('has login method', () {
         expect(
           mockRepository.login(email: 'any@email.com', password: 'any'),
           isA<Future<Result<void>>>(),
         );
       });
 
-      test('Has Logout Method', () {
+      test('has logout method', () {
         expect(mockRepository.logout(), isA<Future<Result<void>>>());
       });
 
@@ -49,21 +54,28 @@ void main() {
           isA<Future<Result<void>>>(),
         );
       });
+
+      test('has reset password method', () {
+        expect(
+          mockRepository.resetUserPassword(
+            email: 'any@email.com',
+            newPassword: 'any',
+            token: 'any',
+          ),
+          isA<Future<Result<void>>>(),
+        );
+      });
     });
 
-    group('isAuthenticated', () {
-      test('returns false by default', () {
-        expect(mockRepository.isAuthenticated, false);
-      });
-
-      test('Returns true After Successful Login', () async {
+    group(TestGroups.behavior, () {
+      test('returns true after successful login', () async {
         mockRepository = MockAuthRepository(loginResult: const Result.ok(null));
         await mockRepository.login(email: 'any@email.com', password: 'any');
 
         expect(mockRepository.isAuthenticated, true);
       });
 
-      test('Returns false After Logout', () async {
+      test('returns false after logout', () async {
         mockRepository = MockAuthRepository(
           loginResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -75,7 +87,7 @@ void main() {
         expect(mockRepository.isAuthenticated, false);
       });
 
-      test('Keeps false After Failed Login', () async {
+      test('keeps false after failed login', () async {
         mockRepository = MockAuthRepository(
           loginResult: Result.error(Exception('error')),
         );
@@ -86,7 +98,7 @@ void main() {
     });
 
     group('Login', () {
-      test('Returns Ok on Success and Notifies Listeners', () async {
+      test('returns ok on success and notifies listeners', () async {
         mockRepository = MockAuthRepository(loginResult: const Result.ok(null));
         var notified = false;
         mockRepository.addListener(() {
@@ -102,7 +114,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Returns Error on Failure and Notifies Listeners', () async {
+      test('returns error on failure and notifies listeners', () async {
         mockRepository = MockAuthRepository(
           loginResult: Result.error(Exception('error')),
         );
@@ -120,7 +132,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Can be Called Multiple Times', () async {
+      test('can be called multiple times', () async {
         mockRepository = MockAuthRepository(
           loginResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -143,9 +155,9 @@ void main() {
       });
     });
 
-    group('logout', () {
+    group('Logout', () {
       test(
-        'Returns Ok, Notifies Listeners, and Updates isAuthenticated',
+        'returns ok, notifies listeners, and updates isAuthenticated',
         () async {
           mockRepository = MockAuthRepository(
             loginResult: const Result.ok(null),
@@ -168,8 +180,66 @@ void main() {
       );
     });
 
-    group('sendPasswordResetRequest', () {
-      test('Returns Ok on Success and Notifies Listeners', () async {
+    group('Create Account', () {
+      test('returns ok on success and notifies listeners', () async {
+        mockRepository = MockAuthRepository(
+          createAccountResult: const Result.ok(null),
+        );
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        final result = await mockRepository.createAccount(
+          email: 'any@email.com',
+          password: 'any',
+        );
+
+        expect(result, isA<Ok<void>>());
+        expect(notified, true);
+      });
+
+      test('returns error on failure and notifies listeners', () async {
+        mockRepository = MockAuthRepository(
+          createAccountResult: Result.error(Exception('error')),
+        );
+        var notified = false;
+        mockRepository.addListener(() {
+          notified = true;
+        });
+
+        final result = await mockRepository.createAccount(
+          email: 'any@email.com',
+          password: 'any',
+        );
+
+        expect(result, isA<Error<void>>());
+        expect(notified, true);
+      });
+
+      test('can be called multiple times', () async {
+        mockRepository = MockAuthRepository(
+          createAccountResult: const Result.ok(null),
+          logoutResult: const Result.ok(null),
+        );
+        final result1 = await mockRepository.createAccount(
+          email: 'any@email.com',
+          password: 'any',
+        );
+        expect(result1, isA<Ok<void>>());
+
+        await mockRepository.logout();
+
+        final result2 = await mockRepository.createAccount(
+          email: 'any@email.com',
+          password: 'any',
+        );
+        expect(result2, isA<Ok<void>>());
+      });
+    });
+
+    group('Send Password Reset Request', () {
+      test('returns ok on success and notifies listeners', () async {
         mockRepository = MockAuthRepository(
           sendPasswordResetRequestResult: const Result.ok(null),
         );
@@ -186,7 +256,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Returns Error on Failure and Notifies Listeners', () async {
+      test('returns error on failure and notifies listeners', () async {
         mockRepository = MockAuthRepository(
           sendPasswordResetRequestResult: Result.error(Exception('error')),
         );
@@ -203,7 +273,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Can be Called Multiple Times', () async {
+      test('can be called multiple times', () async {
         mockRepository = MockAuthRepository(
           sendPasswordResetRequestResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -222,8 +292,8 @@ void main() {
       });
     });
 
-    group('resetUserPassword', () {
-      test('Returns Ok on Success and Notifies Listeners', () async {
+    group('Reset User Password', () {
+      test('returns ok on success and notifies listeners', () async {
         mockRepository = MockAuthRepository(
           resetUserPasswordResult: const Result.ok(null),
         );
@@ -242,7 +312,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Returns Error on Failure and Notifies Listeners', () async {
+      test('returns error on failure and notifies listeners', () async {
         mockRepository = MockAuthRepository(
           resetUserPasswordResult: Result.error(Exception('error')),
         );
@@ -261,7 +331,7 @@ void main() {
         expect(notified, true);
       });
 
-      test('Can be Called Multiple Times', () async {
+      test('can be called multiple times', () async {
         mockRepository = MockAuthRepository(
           resetUserPasswordResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -284,66 +354,8 @@ void main() {
       });
     });
 
-    group('createAccount', () {
-      test('Returns Ok on Success and Notifies Listeners', () async {
-        mockRepository = MockAuthRepository(
-          createAccountResult: const Result.ok(null),
-        );
-        var notified = false;
-        mockRepository.addListener(() {
-          notified = true;
-        });
-
-        final result = await mockRepository.createAccount(
-          email: 'any@email.com',
-          password: 'any',
-        );
-
-        expect(result, isA<Ok<void>>());
-        expect(notified, true);
-      });
-
-      test('Returns Error on Failure and Notifies Listeners', () async {
-        mockRepository = MockAuthRepository(
-          createAccountResult: Result.error(Exception('error')),
-        );
-        var notified = false;
-        mockRepository.addListener(() {
-          notified = true;
-        });
-
-        final result = await mockRepository.createAccount(
-          email: 'any@email.com',
-          password: 'any',
-        );
-
-        expect(result, isA<Error<void>>());
-        expect(notified, true);
-      });
-
-      test('Can be Called Multiple Times', () async {
-        mockRepository = MockAuthRepository(
-          createAccountResult: const Result.ok(null),
-          logoutResult: const Result.ok(null),
-        );
-        final result1 = await mockRepository.createAccount(
-          email: 'any@email.com',
-          password: 'any',
-        );
-        expect(result1, isA<Ok<void>>());
-
-        await mockRepository.logout();
-
-        final result2 = await mockRepository.createAccount(
-          email: 'any@email.com',
-          password: 'any',
-        );
-        expect(result2, isA<Ok<void>>());
-      });
-    });
-
     group('ChangeNotifier Behavior', () {
-      test('Notifies Listeners Exactly once on Login', () async {
+      test('notifies listeners exactly once on login', () async {
         mockRepository = MockAuthRepository(loginResult: const Result.ok(null));
         var notifyCount = 0;
         mockRepository.addListener(() {
@@ -355,7 +367,7 @@ void main() {
         expect(notifyCount, 1);
       });
 
-      test('Notifies Listeners Exactly Once on Logout', () async {
+      test('notifies listeners exactly once on logout', () async {
         mockRepository = MockAuthRepository(
           loginResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -372,7 +384,7 @@ void main() {
         expect(notifyCount, 1);
       });
 
-      test('Can Remove Listeners', () async {
+      test('can remove listeners', () async {
         mockRepository = MockAuthRepository(
           loginResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -391,7 +403,7 @@ void main() {
         expect(notifyCount, 1);
       });
 
-      test('Can Have Multiple Listeners', () async {
+      test('can have multiple listeners', () async {
         mockRepository = MockAuthRepository(loginResult: const Result.ok(null));
         var listener1Count = 0;
         var listener2Count = 0;
@@ -410,8 +422,8 @@ void main() {
       });
     });
 
-    group('State Transitions', () {
-      test('Login -> Logout -> Login Flow', () async {
+    group(TestGroups.stateChanges, () {
+      test('login -> logout -> login flow', () async {
         mockRepository = MockAuthRepository(
           loginResult: const Result.ok(null),
           logoutResult: const Result.ok(null),
@@ -428,7 +440,7 @@ void main() {
         expect(mockRepository.isAuthenticated, true);
       });
 
-      test('Multiple Failed Logins do not Change State', () async {
+      test('multiple failed logins do not change state', () async {
         mockRepository = MockAuthRepository(
           loginResult: Result.error(Exception('error')),
         );

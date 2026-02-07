@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/screens/confirmation/components/confirmation_image.dart';
+import 'package:wishing_well/screens/shared/confirmation/components/confirmation_image.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 

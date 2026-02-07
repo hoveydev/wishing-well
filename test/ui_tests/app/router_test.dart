@@ -8,13 +8,13 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
+import 'package:wishing_well/screens/shared/confirmation/confirmation_screen.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_screen.dart';
+import 'package:wishing_well/screens/auth/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
-import 'package:wishing_well/screens/login/login_screen.dart';
+import 'package:wishing_well/screens/auth/login/login_screen.dart';
 import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
+import 'package:wishing_well/screens/auth/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../testing_resources/helpers/test_helpers.dart';

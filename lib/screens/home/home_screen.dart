@@ -6,7 +6,7 @@ import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/screens/home/home_header.dart';
+import 'package:wishing_well/screens/home/components/home_header.dart';
 import 'package:wishing_well/screens/home/home_view_model.dart';
 
 class HomeScreen extends StatefulWidget {

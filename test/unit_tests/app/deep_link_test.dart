@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
+import '../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   late StreamController<Uri?> stream;
@@ -28,62 +29,66 @@ void main() {
     );
   }
 
-  group('deep link tests', () {
-    test('navigates to create-account/confirm for signup', () async {
-      final handler = createHandler(
-        initialUri: Uri.parse(
-          'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
-        ),
-      );
+  group('DeepLinkHandler', () {
+    group(TestGroups.initialState, () {
+      test('navigates to create-account/confirm for signup', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
+          ),
+        );
 
-      handler.init();
-      await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'account-confirm');
+        expect(navigatedTo, 'account-confirm');
+      });
+
+      test('navigates to unknown for non-signup', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
+          ),
+        );
+
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(navigatedTo, 'unknown');
+      });
     });
 
-    test('navigates to unknown for non-signup', () async {
-      final handler = createHandler(
-        initialUri: Uri.parse(
-          'https://wishing-well-ayb.pages.dev/auth/account-confirm',
-        ),
-      );
+    group(TestGroups.behavior, () {
+      test('navigates to forgot-password on reset link', () async {
+        final handler = createHandler();
+        handler.init();
 
-      handler.init();
-      await Future<void>.delayed(Duration.zero);
+        stream.add(
+          Uri.parse('https://wishing-well-ayb.pages.dev/auth/password-reset'),
+        );
+        await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'unknown');
-    });
+        expect(navigatedTo, 'reset-password');
+      });
 
-    test('navigates to forgot-password on reset link', () async {
-      final handler = createHandler();
-      handler.init();
+      test('ignores unrelated links', () async {
+        final handler = createHandler();
+        handler.init();
 
-      stream.add(
-        Uri.parse('https://wishing-well-ayb.pages.dev/auth/password-reset'),
-      );
-      await Future<void>.delayed(Duration.zero);
+        stream.add(Uri.parse('https://wishingwell.app/foo'));
+        await Future<void>.delayed(Duration.zero);
 
-      expect(navigatedTo, 'reset-password');
-    });
+        expect(navigatedTo, isNull);
+      });
 
-    test('ignores unrelated links', () async {
-      final handler = createHandler();
-      handler.init();
+      test('dispose cancels stream subscription', () {
+        final handler = createHandler();
+        handler.init();
 
-      stream.add(Uri.parse('https://wishingwell.app/foo'));
-      await Future<void>.delayed(Duration.zero);
+        handler.dispose();
 
-      expect(navigatedTo, isNull);
-    });
-
-    test('dispose cancels stream subscription', () {
-      final handler = createHandler();
-      handler.init();
-
-      handler.dispose();
-
-      expect(stream.hasListener, isFalse);
+        expect(stream.hasListener, isFalse);
+      });
     });
   });
 }

@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_button.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_header.dart';
+import 'package:wishing_well/screens/forgot_password/components/forgot_password_button.dart';
+import 'package:wishing_well/screens/forgot_password/components/forgot_password_header.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {

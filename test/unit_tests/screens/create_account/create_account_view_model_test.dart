@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
-
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 void main() {
@@ -15,7 +15,7 @@ void main() {
     viewModel = CreateAccountViewModel(authRepository: authRepository);
   });
 
-  group('CreateAccountViewmodel - Initial State', () {
+  group(TestGroups.initialState, () {
     test('hasAlert returns false when no error', () {
       expect(viewModel.hasAlert, false);
     });
@@ -35,7 +35,7 @@ void main() {
     });
   });
 
-  group('CreateAccountViewmodel - Email Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updateEmailField with empty email sets noEmail error', () {
       viewModel.updatePasswordOneField('ValidPassword123!');
       viewModel.updatePasswordTwoField('ValidPassword123!');
@@ -71,7 +71,7 @@ void main() {
     });
   });
 
-  group('CreateAccountViewmodel - Password One Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updatePasswordOneField with short'
         'password does not meet length requirement', () {
       viewModel.updatePasswordOneField('short');
@@ -216,7 +216,7 @@ void main() {
     });
   });
 
-  group('CreateAccountViewmodel - Password Two Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test(
       'updatePasswordTwoField without matching does not meet requirement',
       () {
@@ -274,7 +274,7 @@ void main() {
     });
   });
 
-  group('CreateAccountViewmodel - Password Requirements Real-time Updates', () {
+  group(TestGroups.validation, () {
     test('all requirements are met with valid password', () {
       viewModel.updatePasswordOneField('ValidPassword123!');
       viewModel.updatePasswordTwoField('ValidPassword123!');
@@ -307,7 +307,7 @@ void main() {
     );
   });
 
-  group('CreateAccountViewmodel - Combined Error Handling', () {
+  group(TestGroups.errorHandling, () {
     test('shows email error when email is invalid and password is invalid', () {
       viewModel.updateEmailField('invalid-email');
       viewModel.updatePasswordOneField('short');
@@ -338,7 +338,7 @@ void main() {
     });
   });
 
-  group('CreateAccountViewmodel - Error Priority', () {
+  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         createAccountResult: Result.error(AuthApiException('API error')),
@@ -368,5 +368,9 @@ void main() {
         CreateAccountErrorType.noEmail,
       );
     });
+  });
+
+  tearDown(() {
+    viewModel.dispose();
   });
 }

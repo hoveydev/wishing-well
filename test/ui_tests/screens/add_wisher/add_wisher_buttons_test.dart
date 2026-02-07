@@ -1,129 +1,106 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_buttons.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/components/button/app_button.dart';
+import 'package:wishing_well/screens/add_wisher/components/add_wisher_buttons.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('AddWisherButtons', () {
-    testWidgets('renders both buttons correctly', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: AddWisherButtons(
-              onAddFromContacts: () {},
-              onAddManually: () {},
-            ),
+    group(TestGroups.rendering, () {
+      testWidgets('renders both buttons correctly', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherButtons(onAddFromContacts: () {}, onAddManually: () {}),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text('Add From Contacts'), findsOneWidget);
-      expect(find.text('Add Manually'), findsOneWidget);
+        TestHelpers.expectWidgetOnce(AddWisherButtons);
+        TestHelpers.expectTextOnce('Add From Contacts');
+        TestHelpers.expectTextOnce('Add Manually');
+
+        // Should contain two AppButton widgets
+        expect(find.byType(AppButton), findsNWidgets(2));
+      });
     });
 
-    testWidgets('calls onAddFromContacts when primary button is tapped', (
-      tester,
-    ) async {
-      var wasCalled = false;
+    group(TestGroups.interaction, () {
+      testWidgets('calls onAddFromContacts when primary button is tapped', (
+        WidgetTester tester,
+      ) async {
+        var wasCalled = false;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: AddWisherButtons(
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherButtons(
               onAddFromContacts: () => wasCalled = true,
               onAddManually: () {},
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      await tester.tap(find.text('Add From Contacts'));
-      await tester.pump();
+        await TestHelpers.tapAndSettle(tester, find.text('Add From Contacts'));
+        expect(wasCalled, isTrue);
+      });
 
-      expect(wasCalled, true);
-    });
+      testWidgets('calls onAddManually when secondary button is tapped', (
+        WidgetTester tester,
+      ) async {
+        var wasCalled = false;
 
-    testWidgets('calls onAddManually when secondary button is tapped', (
-      tester,
-    ) async {
-      var wasCalled = false;
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: AddWisherButtons(
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherButtons(
               onAddFromContacts: () {},
               onAddManually: () => wasCalled = true,
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      await tester.tap(find.text('Add Manually'));
-      await tester.pump();
-
-      expect(wasCalled, true);
+        await TestHelpers.tapAndSettle(tester, find.text('Add Manually'));
+        expect(wasCalled, isTrue);
+      });
     });
 
-    testWidgets('buttons are arranged vertically with spacing', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: AddWisherButtons(
-              onAddFromContacts: () {},
-              onAddManually: () {},
-            ),
+    group(TestGroups.behavior, () {
+      testWidgets('buttons are arranged vertically with spacing', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherButtons(onAddFromContacts: () {}, onAddManually: () {}),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Check that buttons are present
-      expect(find.text('Add From Contacts'), findsOneWidget);
-      expect(find.text('Add Manually'), findsOneWidget);
+        // Should have vertical layout with spacing
+        final columns = find.descendant(
+          of: find.byType(AddWisherButtons),
+          matching: find.byType(Column),
+        );
+        expect(columns, findsOneWidget);
 
-      // Check that there's spacing component
-      expect(find.byType(SizedBox), findsWidgets);
-    });
+        final sizedBoxes = find.descendant(
+          of: find.byType(AddWisherButtons),
+          matching: find.byType(SizedBox),
+        );
+        expect(sizedBoxes, findsWidgets);
+      });
 
-    testWidgets('required callback parameters are enforced', (tester) async {
-      expect(
-        () => AddWisherButtons(onAddFromContacts: () {}, onAddManually: () {}),
-        returnsNormally,
-      );
+      testWidgets('required callback parameters are enforced', (
+        WidgetTester tester,
+      ) async {
+        expect(
+          () =>
+              AddWisherButtons(onAddFromContacts: () {}, onAddManually: () {}),
+          returnsNormally,
+        );
+      });
     });
   });
 }

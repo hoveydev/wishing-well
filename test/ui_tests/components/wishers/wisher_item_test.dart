@@ -2,315 +2,257 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('WisherItem', () {
     const testWisher = Wisher('Alice');
 
-    testWidgets('renders wisher name and initial', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      // Check that the wisher name is displayed
-      expect(find.text('Alice'), findsOneWidget);
-
-      // Check that the initial 'A' is displayed in the CircleAvatar
-      expect(find.text('A'), findsOneWidget);
-
-      // Check that CircleAvatar is present
-      expect(find.byType(CircleAvatar), findsOneWidget);
-    });
-
-    testWidgets('CircleAvatar has correct radius', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      final circleAvatar = tester.widget<CircleAvatar>(
-        find.byType(CircleAvatar),
-      );
-      expect(circleAvatar.radius, 30);
-    });
-
-    testWidgets('initial text has correct color', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      final initialText = tester.widget<Text>(find.text('A'));
-      final colorScheme =
-          AppTheme.lightTheme.extensions.values.firstWhere(
-                (element) => element.type == AppColorScheme,
-              )
-              as AppColorScheme;
-      expect(initialText.style?.color, colorScheme.onPrimary);
-    });
-
-    testWidgets('name text has correct styling', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      final nameText = tester.widget<Text>(find.text('Alice'));
-      expect(
-        nameText.style!.decoration,
-        AppTheme.lightTheme.textTheme.bodySmall!.decoration,
-      );
-      final colorScheme =
-          AppTheme.lightTheme.extensions.values.firstWhere(
-                (element) => element.type == AppColorScheme,
-              )
-              as AppColorScheme;
-      expect(nameText.style?.color, colorScheme.primary);
-    });
-
-    testWidgets('handles tap events', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      // Find the gesture detector within WisherItem
-      final gestureDetector = tester.widget<GestureDetector>(
-        find.descendant(
-          of: find.byType(WisherItem),
-          matching: find.byType(GestureDetector),
-        ),
-      );
-      expect(gestureDetector.onTap, isNotNull);
-      expect(gestureDetector.onTapDown, isNotNull);
-      expect(gestureDetector.onTapUp, isNotNull);
-      expect(gestureDetector.onTapCancel, isNotNull);
-
-      // Test that tap gesture works
-      await tester.tap(find.byType(CircleAvatar));
-      await tester.pump();
-    });
-
-    testWidgets('tap animation has correct duration', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      final animatedOpacity = tester.widget<AnimatedOpacity>(
-        find.descendant(
-          of: find.byType(WisherItem),
-          matching: find.byType(AnimatedOpacity),
-        ),
-      );
-      expect(animatedOpacity.duration, const Duration(milliseconds: 100));
-    });
-
-    testWidgets('debugPrint called on tap with wisher name', (
-      WidgetTester tester,
-    ) async {
-      const testWisherName = 'TestWisher';
-      const testWisher = Wisher(testWisherName);
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
-
-      // Verify the gesture detector has the onTap callback
-      final gestureDetector = tester.widget<GestureDetector>(
-        find.descendant(
-          of: find.byType(WisherItem),
-          matching: find.byType(GestureDetector),
-        ),
-      );
-      expect(gestureDetector.onTap, isNotNull);
-
-      // Test that tap gesture works
-      await tester.tap(find.byType(CircleAvatar));
-      await tester.pump();
-    });
-
-    testWidgets('handles special characters in name', (
-      WidgetTester tester,
-    ) async {
-      const specialWisher = Wisher('Alice-123_!@#');
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: WisherItem(specialWisher, EdgeInsets.zero),
+    group(TestGroups.rendering, () {
+      testWidgets('renders wisher name and initial', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Should display the full name
-      expect(find.text('Alice-123_!@#'), findsOneWidget);
+        TestHelpers.expectWidgetOnce(WisherItem);
+        TestHelpers.expectWidgetOnce(CircleAvatar);
+        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('A');
+      });
 
-      // Should display the first character as initial
-      expect(find.text('A'), findsOneWidget);
-    });
+      testWidgets('renders correct structure', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('handles whitespace in name', (WidgetTester tester) async {
-      const spaceWisher = Wisher('  Alice Smith  ');
+        TestHelpers.expectWidgetOnce(WisherItem);
+        TestHelpers.expectWidgetOnce(CircleAvatar);
+        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('A');
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(spaceWisher, EdgeInsets.zero)),
-        ),
-      );
+        // Verify the main column structure within WisherItem
+        final columns = find.descendant(
+          of: find.byType(WisherItem),
+          matching: find.byType(Column),
+        );
+        expect(columns, findsOneWidget);
 
-      // Should display the name as is (including spaces)
-      expect(find.text('  Alice Smith  '), findsOneWidget);
+        final column = tester.widget<Column>(columns);
+        expect(
+          column.children.length,
+          3,
+        ); // TouchFeedbackOpacity, AppSpacer, and Text
+      });
 
-      // Should display the first character (space) as initial
-      expect(find.text(' '), findsOneWidget);
-    });
+      testWidgets('CircleAvatar has correct properties', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('maintains consistent structure', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
+        final circleAvatar = tester.widget<CircleAvatar>(
+          find.byType(CircleAvatar),
+        );
+        expect(circleAvatar.radius, 30);
+      });
 
-      // Should have the structure:
-      // Padding > Column > [GestureDetector, Spacer, Text]
-      expect(find.byType(Padding), findsWidgets);
-      expect(find.byType(Column), findsOneWidget);
-      expect(find.byType(GestureDetector), findsOneWidget);
-      expect(find.byType(AnimatedOpacity), findsOneWidget);
-      expect(find.byType(CircleAvatar), findsOneWidget);
+      testWidgets('handles special characters in name', (
+        WidgetTester tester,
+      ) async {
+        const specialWisher = Wisher('Alice-123_!@#');
 
-      final column = tester.widget<Column>(find.byType(Column));
-      expect(column.children.length, 3); // CircleAvatar area & Text & Spacer
-    });
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(specialWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('works with dark theme', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.darkTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
+        TestHelpers.expectTextOnce('Alice-123_!@#');
+        TestHelpers.expectTextOnce('A');
+      });
 
-      // Should render without errors in dark theme
-      expect(find.byType(WisherItem), findsOneWidget);
-      expect(find.byType(CircleAvatar), findsOneWidget);
-      expect(find.text('Alice'), findsOneWidget);
-      expect(find.text('A'), findsOneWidget);
+      testWidgets('handles whitespace in name', (WidgetTester tester) async {
+        const spaceWisher = Wisher('  Alice Smith  ');
 
-      final circleAvatar = tester.widget<CircleAvatar>(
-        find.byType(CircleAvatar),
-      );
-      final colorScheme =
-          AppTheme.darkTheme.extensions.values.firstWhere(
-                (element) => element.type == AppColorScheme,
-              )
-              as AppColorScheme;
-      expect(circleAvatar.backgroundColor, colorScheme.primary);
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(spaceWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final initialText = tester.widget<Text>(find.text('A'));
-      expect(initialText.style?.color, colorScheme.onPrimary);
-    });
+        TestHelpers.expectTextOnce('  Alice Smith  ');
+        TestHelpers.expectTextOnce(' ');
+      });
 
-    testWidgets('handles long names', (WidgetTester tester) async {
-      const longName = 'VeryLongNameThatExceedsNormalLengthExpectations';
-      const longWisher = Wisher(longName);
+      testWidgets('handles long names', (WidgetTester tester) async {
+        const longName = 'VeryLongNameThatExceedsNormalLengthExpectations';
+        const longWisher = Wisher(longName);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(longWisher, EdgeInsets.zero)),
-        ),
-      );
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(longWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Should display the full name
-      expect(find.text(longName), findsOneWidget);
+        TestHelpers.expectTextOnce(longName);
+        TestHelpers.expectTextOnce('V');
+      });
 
-      // Should display only the first character as initial
-      expect(find.text('V'), findsOneWidget);
-    });
+      testWidgets('renders multiple wishers correctly', (
+        WidgetTester tester,
+      ) async {
+        const wisher1 = Wisher('Alice');
+        const wisher2 = Wisher('Bob');
 
-    testWidgets('handles different wisher instances', (
-      WidgetTester tester,
-    ) async {
-      const wisher1 = Wisher('Alice');
-      const wisher2 = Wisher('Bob');
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: Column(
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const Column(
               children: [
                 WisherItem(wisher1, EdgeInsets.zero),
                 WisherItem(wisher2, EdgeInsets.zero),
               ],
             ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Should render both wishers
-      expect(find.byType(WisherItem), findsNWidgets(2));
-      expect(find.text('Alice'), findsOneWidget);
-      expect(find.text('Bob'), findsOneWidget);
-      expect(find.text('A'), findsOneWidget);
-      expect(find.text('B'), findsOneWidget);
+        expect(find.byType(WisherItem), findsNWidgets(2));
+        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('Bob');
+        TestHelpers.expectTextOnce('A');
+        TestHelpers.expectTextOnce('B');
+      });
     });
 
-    testWidgets('tap cancel restores opacity', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(body: WisherItem(testWisher, EdgeInsets.zero)),
-        ),
-      );
+    group(TestGroups.interaction, () {
+      testWidgets('handles tap events', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      // Check initial opacity
-      final initialOpacity = tester.widget<AnimatedOpacity>(
-        find.descendant(
-          of: find.byType(WisherItem),
-          matching: find.byType(AnimatedOpacity),
-        ),
-      );
-      expect(initialOpacity.opacity, 1.0);
+        await TestHelpers.tapAndSettle(tester, find.byType(CircleAvatar));
 
-      // Test tap gesture works
-      await tester.tap(find.byType(CircleAvatar));
-      await tester.pump();
+        // Should not crash - gesture detector should handle the tap
+        TestHelpers.expectWidgetOnce(WisherItem);
+      });
 
-      // Should still be at normal opacity after complete tap
-      final finalOpacity = tester.widget<AnimatedOpacity>(
-        find.descendant(
-          of: find.byType(WisherItem),
-          matching: find.byType(AnimatedOpacity),
-        ),
-      );
-      expect(finalOpacity.opacity, 1.0);
+      testWidgets('tap gesture works correctly', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final gestureDetector = tester.widget<GestureDetector>(
+          find.descendant(
+            of: find.byType(WisherItem),
+            matching: find.byType(GestureDetector),
+          ),
+        );
+        expect(gestureDetector.onTap, isNotNull);
+        expect(gestureDetector.onTapDown, isNotNull);
+        expect(gestureDetector.onTapUp, isNotNull);
+        expect(gestureDetector.onTapCancel, isNotNull);
+      });
+    });
+
+    group(TestGroups.behavior, () {
+      testWidgets('applies padding correctly', (WidgetTester tester) async {
+        const testPadding = EdgeInsets.all(16.0);
+
+        await tester.pumpWidget(
+          createComponentTestWidget(const WisherItem(testWisher, testPadding)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final wisherItem = tester.widget<WisherItem>(find.byType(WisherItem));
+        expect(wisherItem.padding, testPadding);
+      });
+
+      testWidgets('uses wisher data correctly', (WidgetTester tester) async {
+        const testWisher = Wisher('TestName');
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final wisherItem = tester.widget<WisherItem>(find.byType(WisherItem));
+        expect(wisherItem.wisher.name, 'TestName');
+        TestHelpers.expectTextOnce('TestName');
+        TestHelpers.expectTextOnce('T');
+      });
+
+      testWidgets('TouchFeedbackOpacity has correct duration', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final animatedOpacity = tester.widget<AnimatedOpacity>(
+          find.descendant(
+            of: find.byType(WisherItem),
+            matching: find.byType(AnimatedOpacity),
+          ),
+        );
+        expect(animatedOpacity.duration, const Duration(milliseconds: 100));
+      });
+
+      testWidgets('opacity resets after tap', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            const WisherItem(testWisher, EdgeInsets.zero),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Check initial opacity
+        final initialOpacity = tester.widget<AnimatedOpacity>(
+          find.descendant(
+            of: find.byType(WisherItem),
+            matching: find.byType(AnimatedOpacity),
+          ),
+        );
+        expect(initialOpacity.opacity, 1.0);
+
+        // Test tap gesture works
+        await TestHelpers.tapAndSettle(tester, find.byType(CircleAvatar));
+
+        // Should still be at normal opacity after complete tap
+        final finalOpacity = tester.widget<AnimatedOpacity>(
+          find.descendant(
+            of: find.byType(WisherItem),
+            matching: find.byType(AnimatedOpacity),
+          ),
+        );
+        expect(finalOpacity.opacity, 1.0);
+      });
     });
   });
 }

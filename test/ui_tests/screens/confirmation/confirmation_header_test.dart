@@ -1,109 +1,119 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/screens/confirmation/confirmation_header.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/screens/confirmation/components/confirmation_header.dart';
+import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('ConfirmationHeader', () {
-    testWidgets('renders header text', (tester) async {
-      const testHeaderText = 'Account Created';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
+    group(TestGroups.rendering, () {
+      testWidgets('renders account confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text(testHeaderText), findsOneWidget);
+        TestHelpers.expectTextOnce('Account Confirmed!');
+      });
+
+      testWidgets('renders create account confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
+              flavor: ConfirmationScreenFlavor.createAccount,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Account Successfully Created!');
+      });
+
+      testWidgets('renders forgot password confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
+              flavor: ConfirmationScreenFlavor.forgotPassword,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Reset Password Request Sent!');
+      });
+
+      testWidgets('renders reset password confirmation header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
+              flavor: ConfirmationScreenFlavor.resetPassword,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Password Successfully Reset!');
+      });
     });
 
-    testWidgets('uses headlineLarge text style', (tester) async {
-      const testHeaderText = 'Success';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
+    group(TestGroups.behavior, () {
+      testWidgets('uses headlineLarge text style for account confirmation', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text(testHeaderText);
-      final textWidget = tester.widget<Text>(textFinder);
+        final textFinder = find.text('Account Confirmed!');
+        final textWidget = tester.widget<Text>(textFinder);
 
-      expect(textWidget.style?.fontSize, isNotNull);
-      expect(textWidget.style?.fontWeight, isNotNull);
-    });
+        expect(textWidget.style?.fontSize, isNotNull);
+        expect(textWidget.style?.fontWeight, isNotNull);
+      });
 
-    testWidgets('centers text', (tester) async {
-      const testHeaderText = 'Centered';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
+      testWidgets('centers text correctly', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(
+              flavor: ConfirmationScreenFlavor.resetPassword,
+            ),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text(testHeaderText);
-      final textWidget = tester.widget<Text>(textFinder);
+        final textFinder = find.text('Password Successfully Reset!');
+        final textWidget = tester.widget<Text>(textFinder);
 
-      expect(textWidget.textAlign, TextAlign.center);
-    });
+        expect(textWidget.textAlign, TextAlign.center);
+      });
 
-    testWidgets('has correct semantics label', (tester) async {
-      const testHeaderText = 'Test Header';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
+      testWidgets('has correct semantics label', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            const ConfirmationHeader(flavor: ConfirmationScreenFlavor.account),
           ),
-        ),
-      );
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text(testHeaderText);
-      final textWidget = tester.widget<Text>(textFinder);
+        final textFinder = find.text('Account Confirmed!');
+        final textWidget = tester.widget<Text>(textFinder);
 
-      expect(textWidget.semanticsLabel, testHeaderText);
-    });
-
-    testWidgets('handles empty header text', (tester) async {
-      const testHeaderText = '';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
-          ),
-        ),
-      );
-
-      expect(find.text(''), findsOneWidget);
-    });
-
-    testWidgets('handles long header text', (tester) async {
-      const testHeaderText =
-          'This is a very long header text that should wrap to multiple lines';
-
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: ConfirmationHeader(headerText: testHeaderText),
-          ),
-        ),
-      );
-
-      expect(find.text(testHeaderText), findsOneWidget);
+        expect(textWidget.semanticsLabel, 'Account Confirmed!');
+      });
     });
   });
 }

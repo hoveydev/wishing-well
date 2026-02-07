@@ -1,6 +1,18 @@
 // ignore_for_file: type=lint
 import 'dart:io';
 
+// ===================================
+// PRE-COMMIT CONFIGURATION
+// ===================================
+
+// Enable test quality analysis during refactoring phase
+// - Set to 'true' to enforce test standards during refactoring
+// - Set to 'false' to skip for normal development
+const enableTestQualityAnalysis = true;
+
+// Coverage threshold percentage
+const coverageThreshold = 95.0;
+
 void main(List<String> arguments) async {
   // Check if this is being run as a pre-commit hook
   if (arguments.isNotEmpty && arguments[0] == 'pre-commit') {
@@ -60,6 +72,40 @@ exec env -i HOME="\$HOME" USER="\$USER" /bin/sh -c 'cd "\$GIT_ROOT" && dart run 
   }
 }
 
+Future<bool> _runTestQualityAnalysis() async {
+  // Check if test quality analysis is enabled (can be toggled during refactoring)
+  // Configuration is at the top of git_hooks.dart
+  if (!enableTestQualityAnalysis) {
+    print('⏭️  Test quality analysis disabled. Skipping...\n');
+    return true;
+  }
+
+  if (!enableTestQualityAnalysis) {
+    print('⏭️  Test quality analysis disabled. Skipping...\n');
+    return true;
+  }
+
+  print('📊 Running test quality analysis...');
+  final analysisResult = await Process.run(
+    './scripts/analyze_tests.sh',
+    [],
+    runInShell: true,
+  );
+
+  if (analysisResult.exitCode != 0) {
+    print('❌ Test quality analysis failed:');
+    print(analysisResult.stdout);
+    print(analysisResult.stderr);
+    print('\n💡 To fix these issues, see: docs/TESTING_STANDARDS.md');
+    print(
+      '💡 To disable this check temporarily, set enableTestAnalysis = false in git_hooks.dart:98\n',
+    );
+    return false;
+  }
+  print('✅ Test quality analysis passed\n');
+  return true;
+}
+
 Future<bool> _preCommit() async {
   print('🔍 Running pre-commit checks...\n');
 
@@ -94,11 +140,17 @@ Future<bool> _preCommit() async {
   }
   print('✅ No analysis issues found\n');
 
+  // Run test quality analysis (optional - enabled during refactoring)
+  final testAnalysisSuccess = await _runTestQualityAnalysis();
+  if (!testAnalysisSuccess) {
+    return false;
+  }
+
   // Run tests
   print('🧪 Running tests...');
   final coverageSuccess = await _checkCoverage(
-    threshold: 95.0,
-  ); // UPDATE COVERAGE THRESHOLD HERE
+    threshold: coverageThreshold,
+  ); // Uses configuration variable from top of file
   if (!coverageSuccess) {
     return false;
   }

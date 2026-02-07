@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
-
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 void main() {
@@ -19,7 +19,7 @@ void main() {
     );
   });
 
-  group('ResetPasswordViewmodel - Initial State', () {
+  group(TestGroups.initialState, () {
     test('hasAlert returns false when no error', () {
       expect(viewModel.hasAlert, false);
     });
@@ -40,7 +40,7 @@ void main() {
     });
   });
 
-  group('ResetPasswordViewmodel - Password One Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updatePasswordOneField with short password'
         'does not meet length requirement', () {
       viewModel.updatePasswordOneField('short');
@@ -187,7 +187,7 @@ void main() {
     });
   });
 
-  group('ResetPasswordViewmodel - Password Two Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test(
       'updatePasswordTwoField without matching does not meet requirement',
       () {
@@ -248,7 +248,7 @@ void main() {
     });
   });
 
-  group('ResetPasswordViewmodel - Password Requirements Real-time Updates', () {
+  group(TestGroups.validation, () {
     test('all requirements are met with valid password', () {
       viewModel.updatePasswordOneField('ValidPassword123!');
       viewModel.updatePasswordTwoField('ValidPassword123!');
@@ -281,7 +281,7 @@ void main() {
     );
   });
 
-  group('ResetPasswordViewmodel - Combined Error Handling', () {
+  group(TestGroups.errorHandling, () {
     test('clears all errors when clearError is called', () {
       viewModel.updatePasswordOneField('short');
       expect(viewModel.hasAlert, true);
@@ -292,7 +292,7 @@ void main() {
     });
   });
 
-  group('ResetPasswordViewmodel - Error Priority', () {
+  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         resetUserPasswordResult: Result.error(AuthApiException('API error')),
@@ -328,5 +328,9 @@ void main() {
         ResetPasswordErrorType.passwordRequirementsNotMet,
       );
     });
+  });
+
+  tearDown(() {
+    viewModel.dispose();
   });
 }

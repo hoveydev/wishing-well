@@ -1,88 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/screens/home/home_coming_up.dart';
-import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/screens/home/components/home_coming_up.dart';
+
+import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('HomeComingUp', () {
-    Widget createTestWidget(Widget child) => MaterialApp(
-      theme: AppTheme.lightTheme,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: child),
-    );
+    group(TestGroups.rendering, () {
+      testWidgets('renders Coming Up header with correct styling', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('renders Coming Up header', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
+        TestHelpers.expectTextOnce('Coming Up');
+        expect(find.byType(Card), findsOneWidget);
+      });
 
-      expect(find.text('Coming Up'), findsOneWidget);
+      testWidgets('renders placeholder text with correct styling', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Nothing yet :)');
+      });
+
+      testWidgets('has semantic header for accessibility', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(Semantics), findsWidgets);
+      });
     });
 
-    testWidgets('renders Card component', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
+    group(TestGroups.behavior, () {
+      testWidgets('renders as Column with correct layout', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.byType(Card), findsOneWidget);
-    });
+        expect(find.byType(Column), findsOneWidget);
+      });
 
-    testWidgets('renders placeholder text', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
+      testWidgets('Card widget has full width constraint', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.text('Nothing yet :)'), findsOneWidget);
-    });
+        final sizedBoxFinder = find.byType(SizedBox);
+        final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
+        expect(sizedBox.width, equals(double.infinity));
+      });
 
-    testWidgets('has header semantics', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
+      testWidgets('Card widget has no elevation', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      expect(find.byType(Semantics), findsWidgets);
-    });
+        final cardFinder = find.byType(Card);
+        final cardWidget = tester.widget<Card>(cardFinder);
+        expect(cardWidget.elevation, equals(0));
+      });
 
-    testWidgets('uses titleMedium for header text', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
+      testWidgets('uses titleMedium text style for header', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-      final textFinder = find.text('Coming Up');
-      final textWidget = tester.widget<Text>(textFinder);
+        final textFinder = find.text('Coming Up');
+        final textWidget = tester.widget<Text>(textFinder);
+        expect(textWidget.style?.fontSize, isNotNull);
+      });
 
-      expect(textWidget.style?.fontSize, isNotNull);
-    });
+      testWidgets('uses bodySmall text style for placeholder', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: const HomeComingUp()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    testWidgets('uses bodySmall for placeholder text', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
-
-      final textFinder = find.text('Nothing yet :)');
-      final textWidget = tester.widget<Text>(textFinder);
-
-      expect(textWidget.style?.fontSize, isNotNull);
-    });
-
-    testWidgets('renders as Column', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
-
-      expect(find.byType(Column), findsOneWidget);
-    });
-
-    testWidgets('Card has full width', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
-
-      final sizedBoxFinder = find.byType(SizedBox);
-      final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
-
-      expect(sizedBox.width, double.infinity);
-    });
-
-    testWidgets('Card has no elevation', (tester) async {
-      await tester.pumpWidget(createTestWidget(const HomeComingUp()));
-
-      final cardFinder = find.byType(Card);
-      final cardWidget = tester.widget<Card>(cardFinder);
-
-      expect(cardWidget.elevation, 0);
+        final textFinder = find.text('Nothing yet :)');
+        final textWidget = tester.widget<Text>(textFinder);
+        expect(textWidget.style?.fontSize, isNotNull);
+      });
     });
   });
 }

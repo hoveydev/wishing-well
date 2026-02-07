@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
-
+import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
 
 void main() {
@@ -15,7 +15,7 @@ void main() {
     viewModel = ForgotPasswordViewModel(authRepository: authRepository);
   });
 
-  group('ForgotPasswordViewModel - Initial State', () {
+  group(TestGroups.initialState, () {
     test('hasAlert returns false when no error', () {
       expect(viewModel.hasAlert, false);
     });
@@ -32,7 +32,7 @@ void main() {
     });
   });
 
-  group('ForgotPasswordViewModel - Email Field Real-time Validation', () {
+  group(TestGroups.validation, () {
     test('updateEmailField with empty email sets noEmail error', () {
       viewModel.updateEmailField('test@example.com');
       viewModel.updateEmailField('');
@@ -69,7 +69,7 @@ void main() {
     });
   });
 
-  group('ForgotPasswordViewModel - Combined Error Handling', () {
+  group(TestGroups.errorHandling, () {
     test('clears all errors when clearError is called', () {
       viewModel.updateEmailField('');
       expect(viewModel.hasAlert, true);
@@ -80,7 +80,7 @@ void main() {
     });
   });
 
-  group('ForgotPasswordViewModel - Error Priority', () {
+  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         sendPasswordResetRequestResult: Result.error(
@@ -108,5 +108,9 @@ void main() {
         ForgotPasswordErrorType.noEmail,
       );
     });
+  });
+
+  tearDown(() {
+    viewModel.dispose();
   });
 }

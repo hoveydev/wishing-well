@@ -10,7 +10,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
-import 'package:wishing_well/screens/loading/loading_overlay.dart';
+import 'package:wishing_well/screens/shared/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 Future<void> main() async {

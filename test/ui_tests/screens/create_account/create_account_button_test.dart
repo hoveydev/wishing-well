@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/screens/create_account/components/create_account_button.dart';
-import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
+import 'package:wishing_well/screens/auth/create_account/components/create_account_button.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';

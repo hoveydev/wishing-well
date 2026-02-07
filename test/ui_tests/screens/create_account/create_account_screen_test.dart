@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
-import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_screen.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';

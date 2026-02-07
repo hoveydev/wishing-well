@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
+import 'package:wishing_well/utils/auth_error.dart';
+
+class CreateAccountInlineError extends StatelessWidget {
+  const CreateAccountInlineError({required this.viewModel, super.key});
+  final CreateAccountViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (context, _) => Visibility(
+        visible: viewModel.hasAlert,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        child: AppInlineAlert(
+          message: _validationMessage(l10n),
+          type: AppInlineAlertType.error,
+        ),
+      ),
+    );
+  }
+
+  String _validationMessage(AppLocalizations l10n) =>
+      switch (viewModel.authError) {
+        UIAuthError(:final type) => switch (type) {
+          CreateAccountErrorType.noEmail => l10n.errorEmailRequired,
+          CreateAccountErrorType.badEmail => l10n.errorInvalidEmail,
+          CreateAccountErrorType.passwordRequirementsNotMet =>
+            l10n.errorPasswordRequirements,
+          CreateAccountErrorType.unknown => l10n.errorUnknown,
+          CreateAccountErrorType.none => '',
+        },
+        SupabaseAuthError(:final message) => message,
+      };
+}

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/screens/login/login_view_model.dart';
+import 'package:wishing_well/screens/auth/login/login_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/result.dart';
 import '../../../../testing_resources/helpers/test_helpers.dart';

@@ -1,15 +1,15 @@
 import 'package:go_router/go_router.dart';
-import 'package:wishing_well/screens/confirmation/confirmation_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/create_account/create_account_view_model.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_screen.dart';
-import 'package:wishing_well/screens/forgot_password/forgot_password_view_model.dart';
+import 'package:wishing_well/screens/shared/confirmation/confirmation_screen.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_screen.dart';
+import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
+import 'package:wishing_well/screens/auth/forgot_password/forgot_password_screen.dart';
+import 'package:wishing_well/screens/auth/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/screens/home/home_screen.dart';
 import 'package:wishing_well/screens/home/home_view_model.dart';
-import 'package:wishing_well/screens/login/login_screen.dart';
-import 'package:wishing_well/screens/login/login_view_model.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_screen.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
+import 'package:wishing_well/screens/auth/login/login_screen.dart';
+import 'package:wishing_well/screens/auth/login/login_view_model.dart';
+import 'package:wishing_well/screens/auth/reset_password/reset_password_screen.dart';
+import 'package:wishing_well/screens/auth/reset_password/reset_password_view_model.dart';
 
 import '../repositories/mock_auth_repository.dart';
 

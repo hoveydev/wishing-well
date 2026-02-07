@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/screens/reset_password/reset_password_view_model.dart';
-import 'package:wishing_well/screens/reset_password/components/reset_password_button.dart';
+import 'package:wishing_well/screens/auth/reset_password/reset_password_view_model.dart';
+import 'package:wishing_well/screens/auth/reset_password/components/reset_password_button.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../testing_resources/mocks/repositories/mock_auth_repository.dart';

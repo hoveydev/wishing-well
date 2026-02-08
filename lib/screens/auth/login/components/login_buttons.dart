@@ -27,13 +27,10 @@ class LoginButtons extends StatelessWidget {
           onPressed: () => viewModel.tapCreateAccountButton(context),
           type: AppButtonType.secondary,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: AppSpacerSize.small),
-          child: AppButton.label(
-            label: l10n.authForgotPassword,
-            onPressed: () => viewModel.tapForgotPasswordButton(context),
-            type: AppButtonType.tertiary,
-          ),
+        AppButton.label(
+          label: l10n.authForgotPassword,
+          onPressed: () => viewModel.tapForgotPasswordButton(context),
+          type: AppButtonType.tertiary,
         ),
       ],
     );

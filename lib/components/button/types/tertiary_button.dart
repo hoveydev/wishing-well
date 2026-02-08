@@ -71,6 +71,9 @@ class TertiaryButton extends StatelessWidget {
         padding: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
             ? const EdgeInsets.all(0)
             : const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        shape: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
+            ? const CircleBorder()
+            : null,
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

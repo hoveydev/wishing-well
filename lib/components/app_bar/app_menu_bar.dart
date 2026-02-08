@@ -68,10 +68,13 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context) => Semantics(
         label: l10n.appBarDismiss,
         button: true,
-        child: AppButton.icon(
-          icon: Icons.keyboard_arrow_down,
-          onPressed: action,
-          type: AppButtonType.tertiary,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+          child: AppButton.icon(
+            icon: Icons.keyboard_arrow_down,
+            onPressed: action,
+            type: AppButtonType.tertiary,
+          ),
         ),
       ),
     ),
@@ -86,10 +89,13 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         builder: (context) => Semantics(
           label: l10n.appBarProfile,
           button: true,
-          child: AppButton.icon(
-            icon: Icons.account_circle,
-            onPressed: action,
-            type: AppButtonType.tertiary,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+            child: AppButton.icon(
+              icon: Icons.account_circle,
+              onPressed: action,
+              type: AppButtonType.tertiary,
+            ),
           ),
         ),
       ),
@@ -99,10 +105,13 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         builder: (context) => Semantics(
           label: l10n.appBarClose,
           button: true,
-          child: AppButton.icon(
-            icon: Icons.close,
-            onPressed: action,
-            type: AppButtonType.tertiary,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+            child: AppButton.icon(
+              icon: Icons.close,
+              onPressed: action,
+              type: AppButtonType.tertiary,
+            ),
           ),
         ),
       ),

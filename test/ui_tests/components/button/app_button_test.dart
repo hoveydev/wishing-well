@@ -531,13 +531,38 @@ void main() {
       });
 
       group('Tertiary Button Properties', () {
-        testWidgets('has correct visual properties with no padding', (
+        testWidgets(
+          'has correct visual properties with circular shape and no padding',
+          (WidgetTester tester) async {
+            await tester.pumpWidget(
+              createComponentTestWidget(
+                AppButton.icon(
+                  icon: testIcon,
+                  onPressed: () {},
+                  type: AppButtonType.tertiary,
+                ),
+              ),
+            );
+            await TestHelpers.pumpAndSettle(tester);
+
+            final buttonWidget = tester.widget<TextButton>(
+              find.byType(TextButton),
+            );
+            expect(
+              buttonWidget.style!.shape!.resolve({}),
+              const CircleBorder(),
+            );
+            expect(buttonWidget.style!.padding!.resolve({}), EdgeInsets.zero);
+          },
+        );
+
+        testWidgets('tertiary label button has rounded rectangle shape', (
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(
             createComponentTestWidget(
-              AppButton.icon(
-                icon: testIcon,
+              AppButton.label(
+                label: testLabel,
                 onPressed: () {},
                 type: AppButtonType.tertiary,
               ),
@@ -549,8 +574,31 @@ void main() {
             find.byType(TextButton),
           );
           expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
-          expect(buttonWidget.style!.padding!.resolve({}), EdgeInsets.zero);
+          expect(buttonWidget.style!.padding!.resolve({}), primaryPadding);
         });
+
+        testWidgets(
+          'tertiary label with icon button has rounded rectangle shape',
+          (WidgetTester tester) async {
+            await tester.pumpWidget(
+              createComponentTestWidget(
+                AppButton.labelWithIcon(
+                  label: testLabel,
+                  icon: testIcon,
+                  onPressed: () {},
+                  type: AppButtonType.tertiary,
+                ),
+              ),
+            );
+            await TestHelpers.pumpAndSettle(tester);
+
+            final buttonWidget = tester.widget<TextButton>(
+              find.byType(TextButton),
+            );
+            expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
+            expect(buttonWidget.style!.padding!.resolve({}), primaryPadding);
+          },
+        );
 
         testWidgets('has proper text styling', (WidgetTester tester) async {
           await tester.pumpWidget(

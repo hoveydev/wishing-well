@@ -114,6 +114,7 @@ class ButtonFeedbackStyle {
     BorderRadius? borderRadius,
     BorderSide? side,
     WidgetStateProperty<Color>? foregroundColor,
+    OutlinedBorder? shape,
   }) {
     final durations = _getDurations(pressDuration, releaseDuration);
     final colorScheme = context.colorScheme;
@@ -140,10 +141,11 @@ class ButtonFeedbackStyle {
         padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       ),
       shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
-          borderRadius: borderRadius ?? BorderRadius.circular(14),
-          side: side ?? BorderSide.none,
-        ),
+        shape ??
+            RoundedRectangleBorder(
+              borderRadius: borderRadius ?? BorderRadius.circular(14),
+              side: side ?? BorderSide.none,
+            ),
       ),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),

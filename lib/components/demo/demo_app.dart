@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/demo/demo_home.dart';
+import 'package:wishing_well/components/demo/demo_home.dart';
 
 ///
 /// DEVELOPER DEMO APP - FOR TESTING COMPONENTS ONLY

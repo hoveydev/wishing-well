@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/demo/components/button_demo.dart';
-import 'package:wishing_well/demo/components/input_demo.dart';
-import 'package:wishing_well/demo/components/wishers_demo.dart';
-import 'package:wishing_well/demo/components/checklist_demo.dart';
-import 'package:wishing_well/demo/components/inline_alert_demo.dart';
-import 'package:wishing_well/demo/components/spacer_demo.dart';
-import 'package:wishing_well/demo/components/throbber_demo.dart';
-import 'package:wishing_well/demo/components/app_bar_demo.dart';
-import 'package:wishing_well/demo/components/logo_demo.dart';
-import 'package:wishing_well/demo/components/screen_demo.dart';
-import 'package:wishing_well/demo/components/touch_feedback_demo.dart';
+import 'package:wishing_well/components/demo/demos/button_demo.dart';
+import 'package:wishing_well/components/demo/demos/input_demo.dart';
+import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
+import 'package:wishing_well/components/demo/demos/checklist_demo.dart';
+import 'package:wishing_well/components/demo/demos/inline_alert_demo.dart';
+import 'package:wishing_well/components/demo/demos/spacer_demo.dart';
+import 'package:wishing_well/components/demo/demos/throbber_demo.dart';
+import 'package:wishing_well/components/demo/demos/app_bar_demo.dart';
+import 'package:wishing_well/components/demo/demos/logo_demo.dart';
+import 'package:wishing_well/components/demo/demos/screen_demo.dart';
+import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 
 class DemoHome extends StatelessWidget {
   const DemoHome({super.key});

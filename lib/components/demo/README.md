@@ -6,12 +6,21 @@ This demo app is for development and testing purposes only. It will never be inc
 
 ## How to Run
 
+### Option 1: Using the Script (Recommended)
+
 ```bash
-# Run the demo app
-flutter run --target lib/demo/main.dart
+# Run the component demo app
+./scripts/run_component_demo.sh
 
 # Run the production app
 flutter run --target lib/main.dart
+```
+
+### Option 2: Direct Flutter Command
+
+```bash
+# Run the component demo app
+flutter run --target lib/components/demo/main.dart
 ```
 
 ## Component Coverage
@@ -42,12 +51,36 @@ flutter run --target lib/main.dart
 ```
 lib/
 ├── main.dart (production app - unchanged)
-└── demo/ (entire demo folder - production-excluded)
-    ├── main.dart (demo entry point)
-    ├── demo_app.dart
-    ├── demo_home.dart
-    ├── components/ (individual component demos)
-    └── widgets/ (reusable demo widgets)
+└── components/ (component library)
+    ├── app_alert/
+    ├── app_bar/
+    ├── button/
+    ├── checklist/
+    ├── inline_alert/
+    ├── input/
+    ├── logo/
+    ├── screen/
+    ├── spacer/
+    ├── throbber/
+    ├── touch_feedback/
+    ├── wishers/
+    └── demo/ (component demo app - production-excluded)
+        ├── main.dart (demo entry point)
+        ├── demo_app.dart
+        ├── demo_home.dart
+        ├── README.md
+        └── demos/ (individual component demos)
+            ├── button_demo.dart
+            ├── input_demo.dart
+            ├── wishers_demo.dart
+            ├── checklist_demo.dart
+            ├── inline_alert_demo.dart
+            ├── spacer_demo.dart
+            ├── throbber_demo.dart
+            ├── app_bar_demo.dart
+            ├── logo_demo.dart
+            ├── screen_demo.dart
+            └── touch_feedback_demo.dart
 ```
 
 ## Safety Measures

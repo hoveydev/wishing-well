@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/components/demo/demos/button_demo.dart';
-import 'package:wishing_well/components/demo/demos/input_demo.dart';
-import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
-import 'package:wishing_well/components/demo/demos/checklist_demo.dart';
-import 'package:wishing_well/components/demo/demos/inline_alert_demo.dart';
-import 'package:wishing_well/components/demo/demos/spacer_demo.dart';
-import 'package:wishing_well/components/demo/demos/throbber_demo.dart';
-import 'package:wishing_well/components/demo/demos/app_bar_demo.dart';
-import 'package:wishing_well/components/demo/demos/logo_demo.dart';
-import 'package:wishing_well/components/demo/demos/screen_demo.dart';
-import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
+import 'package:wishing_well/components/demo/component_registrations.dart';
+import 'package:wishing_well/components/demo/component_registry.dart';
 
-class DemoHome extends StatelessWidget {
+class DemoHome extends StatefulWidget {
   const DemoHome({super.key});
+
+  @override
+  State<DemoHome> createState() => _DemoHomeState();
+}
+
+class _DemoHomeState extends State<DemoHome> {
+  late List<DemoMetadata> _demos;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDemos();
+  }
+
+  void _initializeDemos() {
+    // Register all demos and verify completeness
+    // This will throw if any component is missing a demo
+    registerAllDemos();
+
+    // Get all registered demos and create a modifiable copy
+    _demos = List<DemoMetadata>.from(ComponentDemoRegistry.getAllDemos());
+
+    // Sort demos alphabetically by title for consistent ordering
+    _demos.sort((a, b) => a.title.compareTo(b.title));
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -27,119 +43,73 @@ class DemoHome extends StatelessWidget {
     body: ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text(
-          '🚨 DEVELOPER DEMO ONLY 🚨',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          'This app is for component testing and development only.',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-          textAlign: TextAlign.center,
-        ),
+        _buildHeader(),
         const SizedBox(height: 24),
-
-        // Component Categories
-        _buildCategory(context, 'Buttons', Icons.touch_app, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ButtonDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Inputs', Icons.text_fields, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const InputDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Wishers', Icons.people, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const WishersDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Checklist', Icons.checklist, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ChecklistDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Inline Alerts', Icons.info_outline, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const InlineAlertDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Spacers', Icons.space_bar, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const SpacerDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Throbbers', Icons.hourglass_empty, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ThrobberDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'App Bar', Icons.menu, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AppBarDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Logo', Icons.image, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const LogoDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Screen', Icons.phone_android, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ScreenDemo()),
-          );
-        }),
-
-        _buildCategory(context, 'Touch Feedback', Icons.pan_tool, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const TouchFeedbackDemo()),
-          );
-        }),
+        ..._demos.map((demo) => _buildDemoTile(context, demo)),
       ],
     ),
   );
-}
 
-Widget _buildCategory(
-  BuildContext context,
-  String title,
-  IconData icon,
-  VoidCallback onTap,
-) => Card(
-  margin: const EdgeInsets.only(bottom: 8),
-  child: ListTile(
-    leading: Icon(icon, size: 32),
-    title: Text(
-      title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+  Widget _buildHeader() => Column(
+    children: [
+      const Text(
+        '🚨 DEVELOPER DEMO ONLY 🚨',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 8),
+      const Text(
+        'This app is for component testing and development only.',
+        style: TextStyle(fontSize: 16, color: Colors.grey),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 12),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.blue.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.check_circle, color: Colors.blue[700], size: 20),
+            const SizedBox(width: 8),
+            Text(
+              'All ${_demos.length} components have demos registered',
+              style: TextStyle(color: Colors.blue[700], fontSize: 14),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildDemoTile(BuildContext context, DemoMetadata demo) => Card(
+    margin: const EdgeInsets.only(bottom: 8),
+    child: ListTile(
+      leading: Icon(demo.icon, size: 32),
+      title: Text(
+        demo.title,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      ),
+      subtitle: demo.description != null
+          ? Text(
+              demo.description!,
+              style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+            )
+          : null,
+      trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: () => _navigateToDemo(context, demo),
     ),
-    trailing: const Icon(Icons.arrow_forward_ios),
-    onTap: onTap,
-  ),
-);
+  );
+
+  void _navigateToDemo(BuildContext context, DemoMetadata demo) {
+    Navigator.push(context, MaterialPageRoute(builder: demo.builder));
+  }
+}

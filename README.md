@@ -146,25 +146,22 @@ Install git hooks:
 $ dart run git_hooks.dart
 ```
 
-### Test Status
+### Adding New Components
 
-All tests are passing after the comprehensive code review changes! The test suite includes:
+Use the automated script to quickly scaffold new components, demos, and tests:
 
-- **Unit Tests**: 36 test files covering business logic, ViewModels, utilities, and repositories
-- **Widget Tests**: 23 test files covering UI components and screens
-- **Test Coverage**: 95%+ coverage maintained with comprehensive test suite
-- **Password Validator Tests**: New test file added for the shared `PasswordValidator<T>` utility
-
-**Fixes Applied**:
-- Added `AppConfig.initialize()` to test setup for `AuthRepositoryRemote` tests
-- Fixed directory rename from `respositories/` to `repositories/` across all imports
-
-These checks also run automatically on every commit via the pre-commit hook.
-
-Install git hooks:
 ```console
-$ dart run git_hooks.dart
+$ ./scripts/add_component.sh
 ```
+
+The script will:
+- ✅ Create component directory and files
+- ✅ Generate demo with interactive examples
+- ✅ Add registration to component registry
+- ✅ Create unit and UI tests (optional)
+- ✅ Update required components list
+
+For detailed documentation, see [docs/ADD_COMPONENT_SCRIPT.md](docs/ADD_COMPONENT_SCRIPT.md)
 
 ## Testing
 

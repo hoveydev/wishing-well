@@ -25,12 +25,25 @@ Guidelines for AI agents working on this Flutter/Dart codebase.
 - **Usage**: Reference for AI-assisted development
 - **Contents**: Build commands, code style, architecture patterns, testing
 
+### **[ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md)**
+Automated script documentation for creating new components.
+
+- **Purpose**: Component creation workflow and script usage
+- **Usage**: Scaffolding new components, demos, and tests
+- **Contents**: Script usage, prompts, naming conventions, examples, troubleshooting
+
 ## 🚀 Quick Start
 
 ### For New Team Members
 1. Read [AGENTS.md](./AGENTS.md) - Project overview and basic guidelines
 2. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
 3. Review [TEST_ANALYSIS_REPORT.md](./TEST_ANALYSIS_REPORT.md) - Current improvement efforts
+4. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+
+### For Adding Components
+1. Run: `./scripts/add_component.sh`
+2. Reference [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for detailed instructions
+3. Follow naming conventions and prompts provided by the script
 
 ### For Test Refactoring
 1. Run analysis: `./scripts/analyze_tests.sh`
@@ -40,18 +53,21 @@ Guidelines for AI agents working on this Flutter/Dart codebase.
 ### For AI Agents
 1. Start with [AGENTS.md](./AGENTS.md) for project context
 2. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
-3. Use provided patterns from analysis report for improvements
+3. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
+4. Use provided patterns from analysis report for improvements
 
 ## 📁 Updated Project Structure
 
 ```
 wishing_well/
-├── docs/                          # 📚 Documentation (NEW)
+├── docs/                          # 📚 Documentation
 │   ├── TESTING_STANDARDS.md        # Testing patterns and guidelines
 │   ├── TEST_ANALYSIS_REPORT.md      # Test suite analysis and roadmap
-│   └── AGENTS.md                 # AI agent development guidelines
+│   ├── AGENTS.md                 # AI agent development guidelines
+│   └── ADD_COMPONENT_SCRIPT.md      # Component creation script documentation
 ├── scripts/
-│   └── analyze_tests.sh           # Test quality analysis tool
+│   ├── analyze_tests.sh           # Test quality analysis tool
+│   └── add_component.sh            # Automated component creation script
 ├── test/
 │   ├── testing_resources/
 │   │   └── helpers/              # Test infrastructure

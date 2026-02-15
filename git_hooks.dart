@@ -215,6 +215,9 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
     '.g.dart',
     'main.dart',
     'app_config.dart',
+    'components/demo/demos', // Demo widgets don't need testing
+    'components/demo/demo_home.dart', // Demo app UI doesn't need testing
+    'components/demo/demo_app.dart', // Demo app UI doesn't need testing
   ];
 
   int totalLines = 0;

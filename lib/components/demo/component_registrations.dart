@@ -160,6 +160,8 @@ void registerAllDemos() {
     description: 'List of wishers with add/remove functionality',
   );
 
+  // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
+
   // ═══════════════════════════════════════════════════════════════════
   // COMPLETENESS VERIFICATION
   //

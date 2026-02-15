@@ -187,17 +187,17 @@ If a component is missing from the registry, you'll see a detailed error:
 
 ```
 ╔════════════════════════════════════════════════════════════════╗
-║  ⚠️  COMPONENT DEMO REGISTRY VALIDATION FAILED               ║
+║  ⚠️  COMPONENT DEMO REGISTRY VALIDATION FAILED                 ║
 ╠════════════════════════════════════════════════════════════════╣
-║  The following components are missing from the registry:      ║
+║  The following components are missing from the registry:       ║
 ║                                                                ║
-║    • your_component                                           ║
+║    • your_component                                            ║
 ║                                                                ║
 ║  Please register these components using:                       ║
 ║  ComponentDemoRegistry.register(                               ║
 ║    componentName: 'your_component',                            ║
-║    title: 'Display Title',                                    ║
-║    icon: Icons.some_icon,                                     ║
+║    title: 'Display Title',                                     ║
+║    icon: Icons.some_icon,                                      ║
 ║    demoBuilder: (_) => const YourComponentDemo(),              ║
 ║  );                                                            ║
 ╚════════════════════════════════════════════════════════════════╝

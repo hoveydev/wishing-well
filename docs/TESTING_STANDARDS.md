@@ -31,7 +31,7 @@ test/
 │       ├── create_account/
 │       ├── forgot_password/
 │       ├── home/
-│       ├── loading/
+│       ├── loading_overlay/
 │       ├── login/
 │       ├── profile_screen/
 │       └── reset_password/
@@ -39,7 +39,9 @@ test/
 └── ../testing_resources/        # Test utilities and helpers (outside test/ directory)
     ├── helpers/                  # Test helpers and base classes
     │   ├── test_helpers.dart
-    │   └── test_base.dart
+    │   ├── test_base.dart
+    │   ├── viewmodel_test_base.dart
+    │   └── create_test_widget.dart
     ├── mocks/                    # Mock implementations
     │   ├── repositories/
     │   ├── routing/

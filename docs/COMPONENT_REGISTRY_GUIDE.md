@@ -13,7 +13,6 @@ lib/components/demo/
 ├── demo_home.dart                  # Updated to use registry
 ├── demo_app.dart                   # Main demo app
 ├── main.dart                       # Demo entry point
-├── README.md                       # This file
 └── demos/                          # Individual component demos
     ├── app_alert_demo.dart          # ← NEW: Added
     ├── button_demo.dart

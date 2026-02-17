@@ -55,6 +55,7 @@ lib/
 │   ├── create_account/
 │   ├── forgot_password/
 │   └── ...
+├── theme/             # App theming (colors, spacing, typography)
 └── utils/             # Utility classes
     ├── app_config.dart       # Environment configuration
     ├── auth_error.dart      # Error sealed classes
@@ -62,13 +63,6 @@ lib/
     ├── password_validator.dart # Password validation
     ├── loading_controller.dart # Loading overlay controller
     └── result.dart         # Result sealed class
-
-test/
-├── ui_tests/          # Widget tests
-├── unit_tests/        # Unit tests
-└── testing_resources/ # Test helpers and mocks
-    ├── helpers/       # Test utility functions
-    └── mocks/         # Mock implementations
 ```
 
 ## Development Setup
@@ -96,6 +90,8 @@ test/
    ```
 
 ## Helpful Commands
+
+For detailed information on development commands, code style, and architecture patterns, see [AGENTS.md](docs/AGENTS.md).
 
 ### Localized Strings
 
@@ -125,7 +121,7 @@ This script automatically:
 - Generates an HTML coverage report
 - Opens the report in your default browser
 
-Coverage thresholds and exclusions can be configured in `git_hooks.dart`.
+For detailed testing standards and patterns, see [docs/TESTING_STANDARDS.md](docs/TESTING_STANDARDS.md).
 
 ### Code Quality
 
@@ -167,6 +163,8 @@ For detailed documentation, see [docs/ADD_COMPONENT_SCRIPT.md](docs/ADD_COMPONEN
 
 The project maintains **95%+ test coverage** with comprehensive unit and widget tests.
 
+For detailed testing standards, patterns, and organization, see [docs/TESTING_STANDARDS.md](docs/TESTING_STANDARDS.md).
+
 ### Test Organization
 - **Unit Tests**: Test business logic, ViewModels, and utilities in `test/unit_tests/`
 - **Widget Tests**: Test UI components and screens in `test/ui_tests/`
@@ -179,7 +177,8 @@ The project maintains **95%+ test coverage** with comprehensive unit and widget 
 
 ## Code Style
 
-The project enforces strict code style through:
+The project enforces strict code style through linting and formatting. See [AGENTS.md](docs/AGENTS.md) for the complete list of code style rules.
+
 - **lint**: `dart analyze --fatal-infos` (fails on warnings)
 - **format**: `dart format .` (auto-formats on commit)
 - **const constructors**: Used extensively for performance
@@ -194,7 +193,7 @@ See `analysis_options.yaml` for complete lint rules.
 2. Add tests for new features (maintain 95%+ coverage)
 3. Use package imports (never relative imports)
 4. Run pre-commit checks before pushing
-5. Follow the naming conventions outlined in AGENTS.md
+5. Follow the naming conventions outlined in [AGENTS.md](docs/AGENTS.md)
 
 ## Deployment
 

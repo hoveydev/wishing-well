@@ -18,7 +18,7 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 
 ### Coverage Reporting
 - `./scripts/test_coverage.sh` - Full coverage workflow (excludes l10n, main.dart, app_config.dart)
-- Pre-commit hook enforces 95% coverage threshold (see git_hooks.dart:100)
+- Pre-commit hook enforces 95% coverage threshold (see git_hooks.dart:14)
 
 ## Code Style Guidelines
 
@@ -108,5 +108,13 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 ### Git Hooks
 - Pre-commit hook runs format, analyze, and test with coverage
 - Install hooks by running `dart run git_hooks.dart`
-- Coverage threshold: 95% (git_hooks.dart:100)
-- Exclusions in git_hooks.dart:164-170 (l10n, generated, main.dart, app_config.dart)
+- Coverage threshold: 95% (git_hooks.dart:14)
+- Exclusions configured in git_hooks.dart (l10n, generated, main.dart, app_config.dart)
+
+## Detailed Documentation
+
+For more detailed information, see:
+
+- [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - Comprehensive component creation guide
+- [COMPONENT_REGISTRY_GUIDE.md](./COMPONENT_REGISTRY_GUIDE.md) - Component demo registry system
+- [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - Detailed testing patterns and standards

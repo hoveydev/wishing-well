@@ -11,13 +11,6 @@ Comprehensive testing guidelines and patterns for consistent test development ac
 - **Usage**: Reference when writing new tests, code review guidelines
 - **Contents**: Test structure, naming conventions, helper functions, best practices
 
-### **[TEST_ANALYSIS_REPORT.md](./TEST_ANALYSIS_REPORT.md)**
-Detailed analysis and roadmap for improving the test suite.
-
-- **Purpose**: Specific roadmap for test refactoring efforts
-- **Usage**: Implementation plan for test improvements
-- **Contents**: Current issues, priority recommendations, success metrics
-
 ### **[AGENTS.md](./AGENTS.md)**
 Guidelines for AI agents working on this Flutter/Dart codebase.
 
@@ -32,47 +25,54 @@ Automated script documentation for creating new components.
 - **Usage**: Scaffolding new components, demos, and tests
 - **Contents**: Script usage, prompts, naming conventions, examples, troubleshooting
 
+### **[COMPONENT_REGISTRY_GUIDE.md](./COMPONENT_REGISTRY_GUIDE.md)**
+Component demo registry system documentation.
+
+- **Purpose**: Understanding and working with the component registry
+- **Usage**: Adding component demos, registry validation
+- **Contents**: Registry architecture, registration process, testing
+
 ## 🚀 Quick Start
 
 ### For New Team Members
 1. Read [AGENTS.md](./AGENTS.md) - Project overview and basic guidelines
 2. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
-3. Review [TEST_ANALYSIS_REPORT.md](./TEST_ANALYSIS_REPORT.md) - Current improvement efforts
-4. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+3. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
 
 ### For Adding Components
 1. Run: `./scripts/add_component.sh`
 2. Reference [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for detailed instructions
-3. Follow naming conventions and prompts provided by the script
+3. See [COMPONENT_REGISTRY_GUIDE.md](./COMPONENT_REGISTRY_GUIDE.md) for registry system details
+4. Follow naming conventions and prompts provided by the script
 
 ### For Test Refactoring
 1. Run analysis: `./scripts/analyze_tests.sh`
 2. Reference [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for patterns
-3. Use [TEST_ANALYSIS_REPORT.md](./TEST_ANALYSIS_REPORT.md) for prioritization
 
 ### For AI Agents
 1. Start with [AGENTS.md](./AGENTS.md) for project context
 2. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
 3. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
-4. Use provided patterns from analysis report for improvements
 
 ## 📁 Updated Project Structure
 
 ```
 wishing_well/
 ├── docs/                          # 📚 Documentation
+│   ├── README.md                   # This file
 │   ├── TESTING_STANDARDS.md        # Testing patterns and guidelines
-│   ├── TEST_ANALYSIS_REPORT.md      # Test suite analysis and roadmap
 │   ├── AGENTS.md                 # AI agent development guidelines
-│   └── ADD_COMPONENT_SCRIPT.md      # Component creation script documentation
+│   ├── ADD_COMPONENT_SCRIPT.md      # Component creation script documentation
+│   └── COMPONENT_REGISTRY_GUIDE.md  # Component registry system
 ├── scripts/
 │   ├── analyze_tests.sh           # Test quality analysis tool
 │   └── add_component.sh            # Automated component creation script
 ├── test/
-│   ├── testing_resources/
-│   │   └── helpers/              # Test infrastructure
 │   ├── ui_tests/                 # Widget and integration tests
 │   └── unit_tests/               # Pure unit tests
+├── testing_resources/            # Test helpers and mocks (at project root)
+│   ├── helpers/                  # Test infrastructure
+│   └── mocks/                    # Mock implementations
 └── lib/                        # Application code
 ```
 

@@ -8,7 +8,7 @@ import 'dart:io';
 // Enable test quality analysis during refactoring phase
 // - Set to 'true' to enforce test standards during refactoring
 // - Set to 'false' to skip for normal development
-const enableTestQualityAnalysis = true;
+const enableTestQualityAnalysis = false;
 
 // Coverage threshold percentage
 const coverageThreshold = 95.0;
@@ -75,11 +75,6 @@ exec env -i HOME="\$HOME" USER="\$USER" /bin/sh -c 'cd "\$GIT_ROOT" && dart run 
 Future<bool> _runTestQualityAnalysis() async {
   // Check if test quality analysis is enabled (can be toggled during refactoring)
   // Configuration is at the top of git_hooks.dart
-  if (!enableTestQualityAnalysis) {
-    print('⏭️  Test quality analysis disabled. Skipping...\n');
-    return true;
-  }
-
   if (!enableTestQualityAnalysis) {
     print('⏭️  Test quality analysis disabled. Skipping...\n');
     return true;

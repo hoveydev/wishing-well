@@ -8,7 +8,7 @@ import 'dart:io';
 // Enable test quality analysis during refactoring phase
 // - Set to 'true' to enforce test standards during refactoring
 // - Set to 'false' to skip for normal development
-const enableTestQualityAnalysis = false;
+const enableTestQualityAnalysis = true;
 
 // Coverage threshold percentage
 const coverageThreshold = 95.0;

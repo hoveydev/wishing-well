@@ -14,7 +14,7 @@ Widget createComponentTestWidget(Widget child) => MaterialApp(
   home: Screen(children: [child]),
 );
 
-/// Standardized test wrapper for component tests
+/// Standardized test wrapper for component tests with localization
 Widget createScreenComponentTestWidget(Widget child) => MaterialApp(
   theme: AppTheme.lightTheme,
   darkTheme: AppTheme.darkTheme,
@@ -51,6 +51,22 @@ Widget createScreenTestWidget({
     ),
   );
 }
+
+/// Standardized test wrapper for widgets that need to be the direct home
+/// of MaterialApp (like AppBars inside Scaffold, or other widgets that
+/// provide their own Scaffold)
+Widget buildMaterialAppHome(Widget home) => MaterialApp(
+  theme: AppTheme.lightTheme,
+  darkTheme: AppTheme.darkTheme,
+  localizationsDelegates: const [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: home,
+);
 
 /// Common finder patterns for frequently used widgets
 class CommonFinders {

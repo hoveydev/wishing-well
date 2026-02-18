@@ -63,7 +63,7 @@ void main() {
             ),
           );
 
-          await tester.pumpAndSettle();
+          await TestHelpers.pumpAndSettle(tester);
 
           expect(supabase, isA<SupabaseClient>());
           expect(authRepository, isA<AuthRepositoryRemote>());

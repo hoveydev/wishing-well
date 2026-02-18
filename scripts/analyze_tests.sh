@@ -2,6 +2,10 @@
 
 # Test Refactoring Migration Helper
 # This script helps identify tests that need refactoring according to new standards
+# Exit codes: 0 = no issues found, 1 = issues found
+
+# Track total issues found
+TOTAL_ISSUES=0
 
 echo "🔍 Analyzing test suite for refactoring opportunities..."
 echo "========================================================"
@@ -16,7 +20,22 @@ check_pattern() {
         echo "⚠️  $description in $file"
         grep -n "$pattern" "$file" | head -3
         echo ""
+        ((TOTAL_ISSUES++))
     fi
+}
+
+# Check if file is a widget/UI test (needs widget helpers)
+is_widget_test() {
+    local file=$1
+    # Unit tests don't need widget helpers
+    if echo "$file" | grep -q "unit_tests/"; then
+        return 1
+    fi
+    # Files that don't use testWidgets or pumpWidget are not widget tests
+    if ! grep -q "testWidgets\|pumpWidget\|MaterialApp" "$file" 2>/dev/null; then
+        return 1
+    fi
+    return 0
 }
 
 # Function to analyze a test file
@@ -24,65 +43,71 @@ analyze_test_file() {
     local file=$1
     echo "📄 Analyzing: $file"
     
-    # Check for inconsistent setup patterns
-    check_pattern "MaterialApp(" "Inconsistent MaterialApp setup" "$file"
-    check_pattern "await tester.pumpWidget(" "Multiple pumpWidget calls" "$file"
-    
-    # Check for inconsistent naming
-    check_pattern "testWidgets('renders" "Generic test naming" "$file"
-    check_pattern "testWidgets('.*correctly" "Vague test descriptions" "$file"
-    
-    # Check for redundancy
-    local pump_count=$(grep -c "await tester.pumpAndSettle()" "$file" 2>/dev/null || echo 0)
-    if [ "$pump_count" -gt 5 ]; then
-        echo "⚠️  High pumpAndSettle usage ($pump_count times) - consider using TestHelpers"
+    # Only check for inconsistent MaterialApp setup in widget tests
+    # Flag files that define their own MaterialApp wrapper instead of using standard helpers
+    if is_widget_test "$file"; then
+        # Check for custom MaterialApp wrapper functions (not the standard helpers)
+        if grep -q "Widget create.*TestWidget.*=> MaterialApp(" "$file" 2>/dev/null; then
+            echo "⚠️  Custom MaterialApp wrapper found - use standard helpers from test_helpers.dart"
+            grep -n "Widget create.*TestWidget.*=> MaterialApp(" "$file" | head -3
+            echo ""
+            ((TOTAL_ISSUES++))
+        fi
+        
+        # Check for raw MaterialApp usage (not inside a helper)
+        # This is a heuristic - if we find MaterialApp( not preceded by createScreenTestWidget etc.
+        if grep -q "MaterialApp(" "$file" 2>/dev/null && \
+           ! grep -q "createComponentTestWidget\|createScreenTestWidget\|createTestWidget\|buildMaterialAppHome" "$file" 2>/dev/null; then
+            echo "⚠️  Raw MaterialApp usage - consider using createComponentTestWidget or createScreenTestWidget"
+            grep -n "MaterialApp(" "$file" | head -3
+            echo ""
+            ((TOTAL_ISSUES++))
+        fi
     fi
     
-    local text_finder_count=$(grep -c "find.text(" "$file" 2>/dev/null || echo 0)
-    if [ "$text_finder_count" -gt 3 ]; then
-        echo "⚠️  Multiple find.text() calls - consider using TestHelpers.expectTextOnce()"
-    fi
-    
-    # Check for missing group organization
-    local group_count=$(grep -c "group(" "$file" 2>/dev/null || echo 0)
-    if [ "$group_count" -lt 2 ]; then
-        echo "⚠️  Poor test organization - consider using TestGroups constants"
+    # Check for missing group organization (applies to all tests)
+    local group_count
+    group_count=$(grep -c "group(" "$file" 2>/dev/null || echo 0)
+    group_count=$(echo "$group_count" | tr -d '[:space:]')
+    if [ "$group_count" -lt 1 ]; then
+        echo "⚠️  No test groups found - consider using group() for organization"
+        ((TOTAL_ISSUES++))
     fi
     
     echo ""
 }
 
-# Function to suggest specific refactorings
+# Function to suggest specific refactorings (informational only, not counted as issues)
 suggest_refactoring() {
     local file=$1
-    echo "💡 Suggested refactorings for $file:"
     
-    # Check if file uses createTestWidget
-    if ! grep -q "createTestWidget\|createComponentTestWidget\|createScreenTestWidget" "$file" 2>/dev/null; then
-        echo "   - Replace MaterialApp setup with createTestWidget helper"
+    # Skip suggestions for unit tests - they don't need widget helpers
+    if ! is_widget_test "$file"; then
+        return
     fi
+    
+    # Check if file already uses a standard helper - if so, no suggestions needed
+    if grep -q "createTestWidget\|createComponentTestWidget\|createScreenTestWidget\|buildMaterialAppHome" "$file" 2>/dev/null; then
+        return
+    fi
+    
+    local suggestions=""
     
     # Check if file uses standard helpers
     if ! grep -q "TestHelpers\." "$file" 2>/dev/null; then
-        echo "   - Replace pumpAndSettle with TestHelpers.pumpAndSettle"
-        echo "   - Replace find.text() + expect with TestHelpers.expectTextOnce"
+        suggestions="${suggestions}   - Consider using TestHelpers for common operations\n"
     fi
     
     # Check if file uses TestGroups
     if ! grep -q "TestGroups\." "$file" 2>/dev/null; then
-        echo "   - Use TestGroups constants for consistent group naming"
+        suggestions="${suggestions}   - Consider using TestGroups constants for consistent group naming\n"
     fi
     
-    # Check for component vs screen classification
-    if echo "$file" | grep -q "components/" && grep -q "createScreenTestWidget\|MaterialApp.*localizations" "$file" 2>/dev/null; then
-        echo "   - Consider using createComponentTestWidget for component tests"
+    # Only print if there are actual suggestions
+    if [ -n "$suggestions" ]; then
+        echo "💡 Suggested refactorings for $file:"
+        echo -e "$suggestions"
     fi
-    
-    if echo "$file" | grep -q "screens/" && grep -q "createTestWidget" "$file" 2>/dev/null; then
-        echo "   - Consider using createScreenTestWidget for screen tests with localization"
-    fi
-    
-    echo ""
 }
 
 # Main analysis
@@ -153,4 +178,17 @@ echo "# To create consolidated test files:"
 echo "# See: test/ui_tests/screens/add_wisher/add_wisher_components_test.dart (example)"
 echo ""
 
-echo "✅ Analysis complete! Follow the docs/TESTING_STANDARDS.md guide for detailed patterns."
+# Report results and exit with appropriate code
+echo "========================================================"
+echo "📊 Analysis Summary"
+echo "========================================================"
+if [ "$TOTAL_ISSUES" -gt 0 ]; then
+    echo "❌ Found $TOTAL_ISSUES issue(s) requiring attention"
+    echo ""
+    echo "💡 See docs/TESTING_STANDARDS.md for guidance on fixing these issues"
+    echo "💡 To temporarily disable this check, set enableTestQualityAnalysis = false in git_hooks.dart"
+    exit 1
+else
+    echo "✅ No issues found! Test suite follows standards."
+    exit 0
+fi

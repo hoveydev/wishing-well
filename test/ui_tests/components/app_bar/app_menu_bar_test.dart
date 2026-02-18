@@ -1,34 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('AppMenuBar', () {
-    Widget createTestWidget(Widget child) => MaterialApp(
-      theme: AppTheme.lightTheme,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: child,
-    );
-
     group(TestGroups.rendering, () {
       group('Main Menu Bar', () {
         testWidgets('renders with title and account icon', (
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(type: AppMenuBarType.main, action: () {}),
               ),
@@ -44,7 +29,7 @@ void main() {
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(type: AppMenuBarType.main, action: () {}),
               ),
@@ -61,7 +46,7 @@ void main() {
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(type: AppMenuBarType.close, action: () {}),
               ),
@@ -79,7 +64,7 @@ void main() {
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(type: AppMenuBarType.dismiss, action: () {}),
               ),
@@ -101,7 +86,7 @@ void main() {
           bool actionCalled = false;
 
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(
                   type: AppMenuBarType.main,
@@ -130,7 +115,7 @@ void main() {
           bool actionCalled = false;
 
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(
                   type: AppMenuBarType.close,
@@ -156,7 +141,7 @@ void main() {
           bool actionCalled = false;
 
           await tester.pumpWidget(
-            createTestWidget(
+            buildMaterialAppHome(
               Scaffold(
                 appBar: AppMenuBar(
                   type: AppMenuBarType.dismiss,

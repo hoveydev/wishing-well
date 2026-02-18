@@ -206,7 +206,6 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
 
   const excludePatterns = [
     'l10n/app_localizations',
-    'generated',
     '.g.dart',
     'main.dart',
     'app_config.dart',

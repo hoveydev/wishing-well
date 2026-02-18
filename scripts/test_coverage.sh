@@ -5,16 +5,16 @@ echo "🧪 Running Flutter tests with coverage..."
 flutter test --coverage
 
 # -----------------------------------------------------------------------------
-# Coverage exclusions (add/remove patterns here)
+# Coverage exclusions (must match git_hooks.dart excludePatterns)
 # -----------------------------------------------------------------------------
 EXCLUDES=(
   "**/l10n/**"
-  "app_config.dart"
+  "**/*.g.dart"
   "main.dart"
-  # "*/lib/config/**"
-  # "*/lib/generated/**"
-  # "*/lib/**.g.dart"
-  # "*/lib/**.freezed.dart"
+  "app_config.dart"
+  "**/components/demo/demos/**"
+  "**/components/demo/demo_home.dart"
+  "**/components/demo/demo_app.dart"
 )
 
 echo "🧹 Removing excluded files from coverage..."
@@ -25,7 +25,8 @@ for pattern in "${EXCLUDES[@]}"; do
   LCOV_REMOVE_ARGS+=("$pattern")
 done
 
-lcov -r coverage/lcov.info --exclude "${LCOV_REMOVE_ARGS[@]}" -o coverage/lcov.info
+# --ignore-errors unused: skip patterns that don't match any files
+lcov --ignore-errors unused -r coverage/lcov.info --exclude "${LCOV_REMOVE_ARGS[@]}" -o coverage/lcov.info
 
 echo "📊 Generating HTML coverage report..."
 genhtml coverage/lcov.info -o coverage/html

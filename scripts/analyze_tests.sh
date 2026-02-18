@@ -31,6 +31,10 @@ is_widget_test() {
     if echo "$file" | grep -q "unit_tests/"; then
         return 1
     fi
+    # Files that don't use testWidgets or pumpWidget are not widget tests
+    if ! grep -q "testWidgets\|pumpWidget\|MaterialApp" "$file" 2>/dev/null; then
+        return 1
+    fi
     return 0
 }
 
@@ -82,44 +86,28 @@ suggest_refactoring() {
         return
     fi
     
-    echo "💡 Suggested refactorings for $file:"
-    local has_suggestions=0
-    
-    # Check if file uses createTestWidget
-    if ! grep -q "createTestWidget\|createComponentTestWidget\|createScreenTestWidget" "$file" 2>/dev/null; then
-        echo "   - Replace MaterialApp setup with createTestWidget helper"
-        has_suggestions=1
+    # Check if file already uses a standard helper - if so, no suggestions needed
+    if grep -q "createTestWidget\|createComponentTestWidget\|createScreenTestWidget\|buildMaterialAppHome" "$file" 2>/dev/null; then
+        return
     fi
+    
+    local suggestions=""
     
     # Check if file uses standard helpers
     if ! grep -q "TestHelpers\." "$file" 2>/dev/null; then
-        echo "   - Replace pumpAndSettle with TestHelpers.pumpAndSettle"
-        echo "   - Replace find.text() + expect with TestHelpers.expectTextOnce"
-        has_suggestions=1
+        suggestions="${suggestions}   - Consider using TestHelpers for common operations\n"
     fi
     
     # Check if file uses TestGroups
     if ! grep -q "TestGroups\." "$file" 2>/dev/null; then
-        echo "   - Use TestGroups constants for consistent group naming"
-        has_suggestions=1
+        suggestions="${suggestions}   - Consider using TestGroups constants for consistent group naming\n"
     fi
     
-    # Check for component vs screen classification
-    if echo "$file" | grep -q "components/" && grep -q "createScreenTestWidget\|MaterialApp.*localizations" "$file" 2>/dev/null; then
-        echo "   - Consider using createComponentTestWidget for component tests"
-        has_suggestions=1
+    # Only print if there are actual suggestions
+    if [ -n "$suggestions" ]; then
+        echo "💡 Suggested refactorings for $file:"
+        echo -e "$suggestions"
     fi
-    
-    if echo "$file" | grep -q "screens/" && grep -q "createTestWidget" "$file" 2>/dev/null; then
-        echo "   - Consider using createScreenTestWidget for screen tests with localization"
-        has_suggestions=1
-    fi
-    
-    if [ "$has_suggestions" -eq 0 ]; then
-        echo "   ✅ No refactoring suggestions - file follows standards"
-    fi
-    
-    echo ""
 }
 
 # Main analysis

@@ -96,7 +96,7 @@ Guide teams to maintain:
 - **Error Handling**: Test AuthError<T> sealed class implementations
 
 ### **Quality Metrics Integration**
-- **Coverage Analysis**: Parse lcov.info with project exclusions
+- **Coverage Analysis**: Parse lcov.info with project exclusions (l10n, generated code, main.dart, app_config.dart, app_logger.dart)
 - **Duplication Detection**: Identify repetitive pumpAndSettle() calls
 - **Consistency Checking**: Verify MaterialApp() vs helper usage
 - **Naming Compliance**: Enforce TestGroups constants and descriptive naming
@@ -113,6 +113,7 @@ Always incorporate these project-specific resources:
 
 ### **Documentation References**
 - `docs/TESTING_STANDARDS.md` - Primary testing patterns reference
+- `docs/LOGGING.md` - Logging patterns (infrastructure, excluded from coverage)
 - `docs/AGENTS.md` - General project development guidelines
 
 ### **Automated Tools**

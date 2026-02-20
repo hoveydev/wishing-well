@@ -1,7 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/app_config.dart';
-import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class AuthRepositoryRemote extends AuthRepository {
@@ -36,10 +35,6 @@ class AuthRepositoryRemote extends AuthRepository {
       final loginResult = await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
-      );
-      AppLogger.debug(
-        'User metadata: ${loginResult.user?.userMetadata}',
-        context: 'AuthRepository.login',
       );
       _isAuthenticated = loginResult.user?.aud == 'authenticated';
       if (_isAuthenticated) {

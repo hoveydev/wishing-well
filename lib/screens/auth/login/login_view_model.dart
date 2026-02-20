@@ -143,6 +143,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   void tapForgotPasswordButton(BuildContext context) {
     _emailInputController.clear();
     _passwordInputController.clear();
+    AppLogger.debug(
+      'Navigating to forgot password screen',
+      context: 'LoginViewModel.tapForgotPasswordButton',
+    );
     context.pushNamed(Routes.forgotPassword.name);
   }
 
@@ -151,7 +155,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     final loading = context.read<LoadingController>();
 
     if (!_isFormValid()) {
-      AppLogger.warning('Login failed: $_authError', context: 'LoginViewModel');
+      AppLogger.warning(
+        'Login validation failed: $_authError',
+        context: 'LoginViewModel.tapLoginButton',
+      );
       return;
     }
 
@@ -163,7 +170,15 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     );
     switch (response) {
       case Ok():
+        AppLogger.info(
+          'User logged in successfully',
+          context: 'LoginViewModel.tapLoginButton',
+        );
         if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to home screen',
+            context: 'LoginViewModel.tapLoginButton',
+          );
           unawaited(context.pushNamed(Routes.home.name));
         }
         loading.hide();
@@ -188,6 +203,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   void tapCreateAccountButton(BuildContext context) {
     _emailInputController.clear();
     _passwordInputController.clear();
+    AppLogger.debug(
+      'Navigating to create account screen',
+      context: 'LoginViewModel.tapCreateAccountButton',
+    );
     context.pushNamed(Routes.createAccount.name);
   }
 

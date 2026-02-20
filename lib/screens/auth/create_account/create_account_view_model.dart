@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
-import 'package:wishing_well/routing/routes.dart';
 
 abstract class CreateAccountViewModelContract {
   void updateEmailField(String email);
@@ -216,7 +216,10 @@ class CreateAccountViewModel extends ChangeNotifier
   Future<void> tapCreateAccountButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_isFormValid()) {
-      log('Sign up failed: $_authError');
+      AppLogger.warning(
+        'Account creation failed: $_authError',
+        context: 'CreateAccountViewModel.tapCreateAccountButton',
+      );
       return;
     }
 
@@ -229,12 +232,24 @@ class CreateAccountViewModel extends ChangeNotifier
 
     switch (response) {
       case Ok():
+        AppLogger.info(
+          'Account created successfully',
+          context: 'CreateAccountViewModel.tapCreateAccountButton',
+        );
         if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to confirmation screen',
+            context: 'CreateAccountViewModel.tapCreateAccountButton',
+          );
           unawaited(context.pushNamed(Routes.createAccountConfirm.name));
         }
         loading.hide();
       case Error(:final error):
-        log(error.toString());
+        AppLogger.error(
+          'Account creation failed',
+          context: 'CreateAccountViewModel.tapCreateAccountButton',
+          error: error,
+        );
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();

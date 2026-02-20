@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -151,7 +151,7 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     final loading = context.read<LoadingController>();
 
     if (!_isFormValid()) {
-      log('Login failed: $_authError');
+      AppLogger.warning('Login failed: $_authError', context: 'LoginViewModel');
       return;
     }
 
@@ -168,7 +168,11 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
         }
         loading.hide();
       case Error(:final Exception error):
-        log(error.toString());
+        AppLogger.error(
+          'Login failed',
+          context: 'LoginViewModel.tapLoginButton',
+          error: error,
+        );
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();

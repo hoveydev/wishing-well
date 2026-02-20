@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 
 typedef NavigateFn =
@@ -24,7 +24,12 @@ class DeepLinkHandler {
       final uri = await source.initial();
       if (uri != null) _navigateFromUri(uri);
     } catch (e, stackTrace) {
-      log('Error handling initial URI: $e', stackTrace: stackTrace);
+      AppLogger.error(
+        'Error handling initial URI',
+        context: 'DeepLinkHandler',
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -39,9 +44,10 @@ class DeepLinkHandler {
         if (uri.queryParameters['type'] == 'signup') {
           navigate(Routes.accountConfirm.name, null);
         } else {
-          log(
-            'unrecognized type parameter (or it may not exist) '
-            '- routed to unknown route',
+          AppLogger.warning(
+            'Unrecognized type parameter (or it may not exist) - '
+            'routed to unknown route',
+            context: 'DeepLinkHandler._navigateFromUri',
           );
           navigate('unknown', null);
         }

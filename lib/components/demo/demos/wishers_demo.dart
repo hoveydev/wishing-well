@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class WishersDemo extends StatelessWidget {
   const WishersDemo({super.key});
@@ -133,7 +134,7 @@ class WishersDemo extends StatelessWidget {
 }
 
 void _handleAddWisher() {
-  debugPrint('Add Wisher tapped!');
+  AppLogger.debug('Add Wisher tapped!', context: 'WishersDemo');
 }
 
 class FeatureBulletPoint extends StatelessWidget {

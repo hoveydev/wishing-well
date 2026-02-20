@@ -5,6 +5,7 @@ import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class WishersList extends StatelessWidget {
   const WishersList({required this.onAddWisherTap, super.key});
@@ -54,7 +55,8 @@ class WishersList extends StatelessWidget {
             children: [
               Text(l10n.wishers, style: textTheme.titleLarge),
               GestureDetector(
-                onTap: () => debugPrint('View All tapped'),
+                onTap: () =>
+                    AppLogger.debug('View All tapped', context: 'WishersList'),
                 child: Text(l10n.viewAll, style: textTheme.bodySmall),
               ),
             ],

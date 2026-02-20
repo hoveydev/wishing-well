@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class InputDemo extends StatefulWidget {
   const InputDemo({super.key});
@@ -125,25 +126,29 @@ class _InputDemoState extends State<InputDemo> {
             AppInput(
               placeholder: 'Full Name',
               type: AppInputType.text,
-              onChanged: (value) => debugPrint('Name: $value'),
+              onChanged: (value) =>
+                  AppLogger.debug('Name: $value', context: 'InputDemo'),
             ),
             const SizedBox(height: 16),
             AppInput(
               placeholder: 'Email Address',
               type: AppInputType.email,
-              onChanged: (value) => debugPrint('Email: $value'),
+              onChanged: (value) =>
+                  AppLogger.safe('Email: $value', context: 'InputDemo'),
             ),
             const SizedBox(height: 16),
             AppInput(
               placeholder: 'Password',
               type: AppInputType.password,
-              onChanged: (value) => debugPrint('Password: $value'),
+              onChanged: (value) =>
+                  AppLogger.safe('Password: $value', context: 'InputDemo'),
             ),
             const SizedBox(height: 16),
             AppInput(
               placeholder: 'Phone Number',
               type: AppInputType.phone,
-              onChanged: (value) => debugPrint('Phone: $value'),
+              onChanged: (value) =>
+                  AppLogger.safe('Phone: $value', context: 'InputDemo'),
             ),
           ]),
         ],

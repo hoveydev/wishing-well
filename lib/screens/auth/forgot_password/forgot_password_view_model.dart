@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
-import 'package:wishing_well/routing/routes.dart';
 
 abstract class ForgotViewModelContract {
   void updateEmailField(String email);
@@ -105,7 +105,10 @@ class ForgotPasswordViewModel extends ChangeNotifier
   Future<void> tapSendResetLinkButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_isEmailValid()) {
-      log('Email validation failed: $_authError');
+      AppLogger.warning(
+        'Email validation failed: $_authError',
+        context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+      );
       return;
     }
 
@@ -117,12 +120,24 @@ class ForgotPasswordViewModel extends ChangeNotifier
 
     switch (response) {
       case Ok():
+        AppLogger.info(
+          'Password reset email sent',
+          context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+        );
         if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to confirmation screen',
+            context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+          );
           unawaited(context.pushNamed(Routes.forgotPasswordConfirm.name));
         }
         loading.hide();
       case Error(:final error):
-        log(error.toString());
+        AppLogger.error(
+          'Failed to send password reset email',
+          context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+          error: error,
+        );
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();

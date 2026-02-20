@@ -209,6 +209,7 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
     '.g.dart',
     'main.dart',
     'app_config.dart',
+    'app_logger.dart', // Logging utility - infrastructure, not business logic
     'components/demo/demos', // Demo widgets don't need testing
     'components/demo/demo_home.dart', // Demo app UI doesn't need testing
     'components/demo/demo_app.dart', // Demo app UI doesn't need testing

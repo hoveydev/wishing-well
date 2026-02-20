@@ -109,12 +109,21 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 - Pre-commit hook runs format, analyze, and test with coverage
 - Install hooks by running `dart run git_hooks.dart`
 - Coverage threshold: 95% (git_hooks.dart:14)
-- Exclusions configured in git_hooks.dart (l10n, generated, main.dart, app_config.dart)
+- Exclusions configured in git_hooks.dart (l10n, generated, main.dart, app_config.dart, app_logger.dart)
+
+### Logging
+- Use `AppLogger` for all logging (import `package:wishing_well/utils/app_logger.dart`)
+- Always include context: `AppLogger.info('Message', context: 'ClassName.method')`
+- Use appropriate levels: `debug()`, `info()`, `warning()`, `error()`
+- For sensitive/external data, use `AppLogger.safe('Message with $data')`
+- Logger is excluded from coverage as infrastructure code
+- See [LOGGING.md](./LOGGING.md) for detailed patterns and best practices
 
 ## Detailed Documentation
 
 For more detailed information, see:
 
+- [LOGGING.md](./LOGGING.md) - Logging system, patterns, and best practices
 - [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - Comprehensive component creation guide
 - [COMPONENT_REGISTRY_GUIDE.md](./COMPONENT_REGISTRY_GUIDE.md) - Component demo registry system
 - [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - Detailed testing patterns and standards

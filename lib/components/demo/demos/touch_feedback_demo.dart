@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class TouchFeedbackDemo extends StatelessWidget {
   const TouchFeedbackDemo({super.key});
@@ -211,7 +212,10 @@ class TouchFeedbackDemo extends StatelessWidget {
             children: [
               TouchFeedbackOpacity(
                 pressedOpacity: pressedOpacity,
-                onTap: () => debugPrint('$label tapped'),
+                onTap: () => AppLogger.debug(
+                  '$label tapped',
+                  context: 'TouchFeedbackDemo',
+                ),
                 child: Container(
                   width: 60,
                   height: 60,
@@ -294,7 +298,7 @@ class TouchFeedbackDemo extends StatelessWidget {
   ) => TouchFeedbackOpacity(
     pressDuration: pressDuration,
     releaseDuration: releaseDuration,
-    onTap: () => debugPrint('$label tapped'),
+    onTap: () => AppLogger.debug('$label tapped', context: 'TouchFeedbackDemo'),
     child: Container(
       height: 80,
       decoration: BoxDecoration(

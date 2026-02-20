@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -186,6 +186,10 @@ class ResetPasswordViewModel extends ChangeNotifier
 
   @override
   void tapCloseButton(BuildContext context) {
+    AppLogger.debug(
+      'Navigating to login screen',
+      context: 'ResetPasswordViewModel.tapCloseButton',
+    );
     // TODO: open modal
     // might not be on context
     context.goNamed(Routes.login.name);
@@ -195,7 +199,10 @@ class ResetPasswordViewModel extends ChangeNotifier
   Future<void> tapResetPasswordButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
     if (!_isFormValid()) {
-      log('Sign up failed: $_authError');
+      AppLogger.warning(
+        'Password reset failed: $_authError',
+        context: 'ResetPasswordViewModel.tapResetPasswordButton',
+      );
       return;
     }
 
@@ -209,12 +216,24 @@ class ResetPasswordViewModel extends ChangeNotifier
 
     switch (response) {
       case Ok():
+        AppLogger.info(
+          'Password reset successful',
+          context: 'ResetPasswordViewModel.tapResetPasswordButton',
+        );
         if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to confirmation screen',
+            context: 'ResetPasswordViewModel.tapResetPasswordButton',
+          );
           unawaited(context.pushNamed(Routes.resetPasswordConfirmation.name));
         }
         loading.hide();
       case Error(:final Exception error):
-        log(error.toString());
+        AppLogger.error(
+          'Password reset failed',
+          context: 'ResetPasswordViewModel.tapResetPasswordButton',
+          error: error,
+        );
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();

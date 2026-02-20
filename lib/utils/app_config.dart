@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 enum Environment { test, development, production }
 
@@ -62,6 +61,9 @@ class AppConfig {
     accountConfirmUrl;
     passwordResetUrl;
 
-    log('✅ All environment variables are present for ${_environment.name}');
+    AppLogger.info(
+      'All environment variables are present for ${_environment.name}',
+      context: 'AppConfig.validate',
+    );
   }
 }

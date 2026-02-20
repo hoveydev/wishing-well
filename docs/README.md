@@ -4,6 +4,13 @@ This directory contains project documentation for developers and AI agents.
 
 ## 📚 Documentation Files
 
+### **[LOGGING.md](./LOGGING.md)**
+Comprehensive logging system documentation with features, usage patterns, and best practices.
+
+- **Purpose**: Team's living documentation for logging standards
+- **Usage**: Reference when adding logs, understanding log output, debugging
+- **Contents**: Log levels, context-aware logging, security sanitization, best practices
+
 ### **[TESTING_STANDARDS.md](./TESTING_STANDARDS.md)**
 Comprehensive testing guidelines and patterns for consistent test development across the Flutter app.
 
@@ -36,8 +43,15 @@ Component demo registry system documentation.
 
 ### For New Team Members
 1. Read [AGENTS.md](./AGENTS.md) - Project overview and basic guidelines
-2. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
-3. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+2. Read [LOGGING.md](./LOGGING.md) - How to use the logging system
+3. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
+4. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+
+### For Adding Logs
+1. Reference [LOGGING.md](./LOGGING.md) for usage patterns
+2. Use appropriate log level (DEBUG, INFO, WARN, ERROR)
+3. Include context for easier debugging
+4. Use `safe()` for external/sensitive data
 
 ### For Adding Components
 1. Run: `./scripts/add_component.sh`
@@ -51,8 +65,9 @@ Component demo registry system documentation.
 
 ### For AI Agents
 1. Start with [AGENTS.md](./AGENTS.md) for project context
-2. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
-3. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
+2. Follow [LOGGING.md](./LOGGING.md) for logging patterns
+3. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
+4. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
 
 ## 📁 Updated Project Structure
 
@@ -60,20 +75,24 @@ Component demo registry system documentation.
 wishing_well/
 ├── docs/                          # 📚 Documentation
 │   ├── README.md                   # This file
+│   ├── LOGGING.md                  # Logging standards and guidelines
 │   ├── TESTING_STANDARDS.md        # Testing patterns and guidelines
-│   ├── AGENTS.md                 # AI agent development guidelines
-│   ├── ADD_COMPONENT_SCRIPT.md      # Component creation script documentation
-│   └── COMPONENT_REGISTRY_GUIDE.md  # Component registry system
+│   ├── AGENTS.md                   # AI agent development guidelines
+│   ├── ADD_COMPONENT_SCRIPT.md     # Component creation script documentation
+│   └── COMPONENT_REGISTRY_GUIDE.md # Component registry system
 ├── scripts/
-│   ├── analyze_tests.sh           # Test quality analysis tool
+│   ├── analyze_tests.sh            # Test quality analysis tool
+│   ├── test_coverage.sh            # Coverage reporting script
 │   └── add_component.sh            # Automated component creation script
 ├── test/
-│   ├── ui_tests/                 # Widget and integration tests
-│   └── unit_tests/               # Pure unit tests
-├── testing_resources/            # Test helpers and mocks (at project root)
-│   ├── helpers/                  # Test infrastructure
-│   └── mocks/                    # Mock implementations
-└── lib/                        # Application code
+│   ├── ui_tests/                   # Widget and integration tests
+│   └── unit_tests/                 # Pure unit tests
+├── testing_resources/              # Test helpers and mocks (at project root)
+│   ├── helpers/                    # Test infrastructure
+│   └── mocks/                      # Mock implementations
+└── lib/                            # Application code
+    └── utils/
+        └── app_logger.dart         # Logging utility
 ```
 
 ## 🔄 Maintenance

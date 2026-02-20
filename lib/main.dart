@@ -12,6 +12,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/screens/shared/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 Future<void> main() async {
   final goRouter = router();
@@ -24,6 +25,7 @@ Future<void> main() async {
     source: deepLinkSource,
   );
   WidgetsFlutterBinding.ensureInitialized();
+  AppLogger.init();
   await AppConfig.initialize();
   await Supabase.initialize(
     url: AppConfig.supabaseUrl,

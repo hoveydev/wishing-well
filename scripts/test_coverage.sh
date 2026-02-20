@@ -12,6 +12,7 @@ EXCLUDES=(
   "**/*.g.dart"
   "main.dart"
   "app_config.dart"
+  "app_logger.dart"
   "**/components/demo/demos/**"
   "**/components/demo/demo_home.dart"
   "**/components/demo/demo_app.dart"

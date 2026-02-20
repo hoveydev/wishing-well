@@ -3,6 +3,7 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class WisherItem extends StatelessWidget {
   const WisherItem(this.wisher, this.padding, {super.key});
@@ -18,7 +19,8 @@ class WisherItem extends StatelessWidget {
       child: Column(
         children: [
           TouchFeedbackOpacity(
-            onTap: () => debugPrint('${wisher.name} tapped'),
+            onTap: () =>
+                AppLogger.debug('${wisher.name} tapped', context: 'WisherItem'),
             child: CircleAvatar(
               radius: 30,
               backgroundColor: colorScheme.primary,

@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -143,6 +143,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   void tapForgotPasswordButton(BuildContext context) {
     _emailInputController.clear();
     _passwordInputController.clear();
+    AppLogger.debug(
+      'Navigating to forgot password screen',
+      context: 'LoginViewModel.tapForgotPasswordButton',
+    );
     context.pushNamed(Routes.forgotPassword.name);
   }
 
@@ -151,7 +155,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     final loading = context.read<LoadingController>();
 
     if (!_isFormValid()) {
-      log('Login failed: $_authError');
+      AppLogger.warning(
+        'Login validation failed: $_authError',
+        context: 'LoginViewModel.tapLoginButton',
+      );
       return;
     }
 
@@ -163,12 +170,24 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
     );
     switch (response) {
       case Ok():
+        AppLogger.info(
+          'User logged in successfully',
+          context: 'LoginViewModel.tapLoginButton',
+        );
         if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to home screen',
+            context: 'LoginViewModel.tapLoginButton',
+          );
           unawaited(context.pushNamed(Routes.home.name));
         }
         loading.hide();
       case Error(:final Exception error):
-        log(error.toString());
+        AppLogger.error(
+          'Login failed',
+          context: 'LoginViewModel.tapLoginButton',
+          error: error,
+        );
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();
@@ -184,6 +203,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   void tapCreateAccountButton(BuildContext context) {
     _emailInputController.clear();
     _passwordInputController.clear();
+    AppLogger.debug(
+      'Navigating to create account screen',
+      context: 'LoginViewModel.tapCreateAccountButton',
+    );
     context.pushNamed(Routes.createAccount.name);
   }
 

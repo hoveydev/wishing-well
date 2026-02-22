@@ -14,6 +14,18 @@ import 'package:wishing_well/screens/shared/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 
+/// Current environment for the app.
+///
+/// Switch between environments by changing this value:
+/// - [Environment.local] →  Local Supabase (run `supabase start` first)
+/// - [Environment.development] →  Remote Supabase (default)
+/// - [Environment.production] →  Production Supabase
+///
+/// NOTE: This is set to [Environment.local] for local development.
+/// Change to [Environment.development] or [Environment.production]
+/// before deploying or merging to main for release builds.
+const Environment _environment = Environment.development;
+
 Future<void> main() async {
   final goRouter = router();
   final deepLinkSource = DeepLinkSource.platform();
@@ -26,7 +38,7 @@ Future<void> main() async {
   );
   WidgetsFlutterBinding.ensureInitialized();
   AppLogger.init();
-  await AppConfig.initialize();
+  await AppConfig.initialize(environment: _environment);
   await Supabase.initialize(
     url: AppConfig.supabaseUrl,
     anonKey: AppConfig.supabaseSecret,

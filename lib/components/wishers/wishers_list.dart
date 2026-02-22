@@ -8,19 +8,16 @@ import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 
 class WishersList extends StatelessWidget {
-  const WishersList({required this.onAddWisherTap, super.key});
-  final void Function() onAddWisherTap;
+  const WishersList({
+    required this.onAddWisherTap,
+    required this.wishers,
+    this.isLoading = false,
+    super.key,
+  });
 
-  static const List<Wisher> _wishers = [
-    Wisher('Alice'),
-    Wisher('Bob'),
-    Wisher('Charlie'),
-    Wisher('Diana'),
-    Wisher('Alice'),
-    Wisher('Bob'),
-    Wisher('Charlie'),
-    Wisher('Diana'),
-  ];
+  final void Function() onAddWisherTap;
+  final List<Wisher> wishers;
+  final bool isLoading;
 
   Widget _buildItem(BuildContext context, int index) {
     // First item is the Add button
@@ -33,8 +30,8 @@ class WishersList extends StatelessWidget {
 
     // Regular wisher items
     final wisherIndex = index - 1; // Adjust for Add button
-    final wisher = _wishers[wisherIndex];
-    final padding = wisherIndex == _wishers.length - 1
+    final wisher = wishers[wisherIndex];
+    final padding = wisherIndex == wishers.length - 1
         ? EdgeInsets.zero
         : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
     return WisherItem(wisher, padding);
@@ -72,14 +69,18 @@ class WishersList extends StatelessWidget {
                   right: -AppSpacing.screenPaddingStandard,
                   child: SizedBox(
                     height: 80,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPaddingStandard,
-                      ),
-                      itemCount: _wishers.length + 1, // +1 for Add button
-                      itemBuilder: _buildItem,
-                    ),
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          ) // TODO: should change to skeleton
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.screenPaddingStandard,
+                            ),
+                            itemCount: wishers.length + 1, // +1 for Add button
+                            itemBuilder: _buildItem,
+                          ),
                   ),
                 ),
               ],

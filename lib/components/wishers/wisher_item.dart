@@ -24,16 +24,21 @@ class WisherItem extends StatelessWidget {
             child: CircleAvatar(
               radius: 30,
               backgroundColor: colorScheme.primary,
-              child: Text(
-                wisher.name[0],
-                style: textTheme.titleMedium?.copyWith(
-                  color: colorScheme.onPrimary,
-                ),
-              ),
+              backgroundImage: wisher.profilePicture != null
+                  ? NetworkImage(wisher.profilePicture!)
+                  : null,
+              child: wisher.profilePicture == null
+                  ? Text(
+                      wisher.initial,
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                    )
+                  : null,
             ),
           ),
           const AppSpacer.xsmall(),
-          Text(wisher.name, style: textTheme.bodySmall),
+          Text(wisher.firstName, style: textTheme.bodySmall),
         ],
       ),
     );

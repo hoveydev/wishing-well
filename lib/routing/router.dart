@@ -224,7 +224,10 @@ GoRouter router() => GoRouter(
       name: Routes.home.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: HomeScreen(
-          viewModel: HomeViewModel(authRepository: context.read()),
+          viewModel: HomeViewModel(
+            authRepository: context.read(),
+            wisherRepository: context.read(),
+          ),
         ),
         transitionsBuilder: (_, _, _, child) => child,
       ),

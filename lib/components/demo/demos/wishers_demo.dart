@@ -6,6 +6,42 @@ import 'package:wishing_well/utils/app_logger.dart';
 class WishersDemo extends StatelessWidget {
   const WishersDemo({super.key});
 
+  // Sample wishers for demo
+  static final List<Wisher> _demoWishers = [
+    Wisher(
+      id: '1',
+      userId: 'demo-user',
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    Wisher(
+      id: '2',
+      userId: 'demo-user',
+      firstName: 'Bob',
+      lastName: 'Smith',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    Wisher(
+      id: '3',
+      userId: 'demo-user',
+      firstName: 'Charlie',
+      lastName: 'Brown',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    Wisher(
+      id: '4',
+      userId: 'demo-user',
+      firstName: 'Diana',
+      lastName: 'Ross',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -26,7 +62,10 @@ class WishersDemo extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               ),
-              child: const WishersList(onAddWisherTap: _handleAddWisher),
+              child: WishersList(
+                wishers: _demoWishers,
+                onAddWisherTap: _handleAddWisher,
+              ),
             ),
           ]),
 
@@ -72,7 +111,7 @@ class WishersDemo extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
-            _buildWisherItemExample(const Wisher('John')),
+            _buildWisherItemExample(_demoWishers.first),
           ]),
 
           // Interactive Example
@@ -89,7 +128,10 @@ class WishersDemo extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               ),
-              child: const WishersList(onAddWisherTap: _handleAddWisher),
+              child: WishersList(
+                wishers: _demoWishers,
+                onAddWisherTap: _handleAddWisher,
+              ),
             ),
           ]),
         ],
@@ -122,12 +164,12 @@ class WishersDemo extends StatelessWidget {
           radius: 30,
           backgroundColor: Colors.blue,
           child: Text(
-            wisher.name[0],
+            wisher.initial,
             style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
         const SizedBox(width: 12),
-        Text(wisher.name, style: const TextStyle(fontSize: 16)),
+        Text(wisher.firstName, style: const TextStyle(fontSize: 16)),
       ],
     ),
   );

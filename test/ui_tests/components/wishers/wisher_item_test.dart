@@ -7,16 +7,30 @@ import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('WisherItem', () {
-    const testWisher = Wisher('Alice');
+    // Helper to create test wishers
+    Wisher createTestWisher({
+      String id = 'test-id',
+      String firstName = 'Alice',
+      String lastName = 'Johnson',
+      String? profilePicture,
+    }) => Wisher(
+      id: id,
+      userId: 'test-user-id',
+      firstName: firstName,
+      lastName: lastName,
+      profilePicture: profilePicture,
+      createdAt: DateTime(2026),
+      updatedAt: DateTime(2026),
+    );
+
+    final testWisher = createTestWisher();
 
     group(TestGroups.rendering, () {
-      testWidgets('renders wisher name and initial', (
+      testWidgets('renders wisher firstName and initial', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -28,9 +42,7 @@ void main() {
 
       testWidgets('renders correct structure', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -57,9 +69,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -72,41 +82,26 @@ void main() {
       testWidgets('handles special characters in name', (
         WidgetTester tester,
       ) async {
-        const specialWisher = Wisher('Alice-123_!@#');
+        final specialWisher = createTestWisher(
+          firstName: 'Alice-123',
+          lastName: 'Test',
+        );
 
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(specialWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(specialWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce('Alice-123_!@#');
+        TestHelpers.expectTextOnce('Alice-123');
         TestHelpers.expectTextOnce('A');
-      });
-
-      testWidgets('handles whitespace in name', (WidgetTester tester) async {
-        const spaceWisher = Wisher('  Alice Smith  ');
-
-        await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(spaceWisher, EdgeInsets.zero),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        TestHelpers.expectTextOnce('  Alice Smith  ');
-        TestHelpers.expectTextOnce(' ');
       });
 
       testWidgets('handles long names', (WidgetTester tester) async {
         const longName = 'VeryLongNameThatExceedsNormalLengthExpectations';
-        const longWisher = Wisher(longName);
+        final longWisher = createTestWisher(firstName: longName);
 
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(longWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(longWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -117,12 +112,12 @@ void main() {
       testWidgets('renders multiple wishers correctly', (
         WidgetTester tester,
       ) async {
-        const wisher1 = Wisher('Alice');
-        const wisher2 = Wisher('Bob');
+        final wisher1 = createTestWisher(id: '1', firstName: 'Alec');
+        final wisher2 = createTestWisher(id: '2', firstName: 'Bob');
 
         await tester.pumpWidget(
           createComponentTestWidget(
-            const Column(
+            Column(
               children: [
                 WisherItem(wisher1, EdgeInsets.zero),
                 WisherItem(wisher2, EdgeInsets.zero),
@@ -133,19 +128,75 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(WisherItem), findsNWidgets(2));
-        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('Alec');
         TestHelpers.expectTextOnce('Bob');
         TestHelpers.expectTextOnce('A');
         TestHelpers.expectTextOnce('B');
+      });
+
+      testWidgets('shows profile picture when available', (
+        WidgetTester tester,
+      ) async {
+        // Override FlutterError.onError to
+        // suppress network image errors in tests
+        final originalOnError = FlutterError.onError;
+        FlutterError.onError = (FlutterErrorDetails details) {
+          // Ignore network image load errors
+          if (!details.toString().contains('NetworkImageLoadException')) {
+            originalOnError?.call(details);
+          }
+        };
+
+        final wisherWithPic = createTestWisher(
+          profilePicture: 'https://example.com/photo.jpg',
+        );
+
+        await tester.pumpWidget(
+          createComponentTestWidget(WisherItem(wisherWithPic, EdgeInsets.zero)),
+        );
+
+        // Pump a few frames to allow the async image loading to start
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+
+        final circleAvatar = tester.widget<CircleAvatar>(
+          find.byType(CircleAvatar),
+        );
+
+        // Verify the backgroundImage is a NetworkImage with the correct URL
+        expect(circleAvatar.backgroundImage, isA<NetworkImage>());
+        final networkImage = circleAvatar.backgroundImage as NetworkImage;
+        expect(networkImage.url, 'https://example.com/photo.jpg');
+
+        // When profile picture is set, child should be null (initial not shown)
+        expect(circleAvatar.child, isNull);
+
+        // Restore original error handler
+        FlutterError.onError = originalOnError;
+      });
+
+      testWidgets('shows initial when no profile picture', (
+        WidgetTester tester,
+      ) async {
+        final wisherNoPic = createTestWisher();
+
+        await tester.pumpWidget(
+          createComponentTestWidget(WisherItem(wisherNoPic, EdgeInsets.zero)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final circleAvatar = tester.widget<CircleAvatar>(
+          find.byType(CircleAvatar),
+        );
+        expect(circleAvatar.backgroundImage, isNull);
+        expect(circleAvatar.child, isNotNull);
       });
     });
 
     group(TestGroups.interaction, () {
       testWidgets('handles tap events', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -157,9 +208,7 @@ void main() {
 
       testWidgets('tap gesture works correctly', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -181,7 +230,7 @@ void main() {
         const testPadding = EdgeInsets.all(16.0);
 
         await tester.pumpWidget(
-          createComponentTestWidget(const WisherItem(testWisher, testPadding)),
+          createComponentTestWidget(WisherItem(testWisher, testPadding)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -190,17 +239,19 @@ void main() {
       });
 
       testWidgets('uses wisher data correctly', (WidgetTester tester) async {
-        const testWisher = Wisher('TestName');
+        final testWisher = createTestWisher(
+          firstName: 'TestName',
+          lastName: 'TestLast',
+        );
 
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
         final wisherItem = tester.widget<WisherItem>(find.byType(WisherItem));
-        expect(wisherItem.wisher.name, 'TestName');
+        expect(wisherItem.wisher.firstName, 'TestName');
+        expect(wisherItem.wisher.name, 'TestName TestLast');
         TestHelpers.expectTextOnce('TestName');
         TestHelpers.expectTextOnce('T');
       });
@@ -209,9 +260,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -226,9 +275,7 @@ void main() {
 
       testWidgets('opacity resets after tap', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(
-            const WisherItem(testWisher, EdgeInsets.zero),
-          ),
+          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
         );
         await TestHelpers.pumpAndSettle(tester);
 

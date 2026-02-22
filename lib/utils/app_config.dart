@@ -1,21 +1,22 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 
-enum Environment { test, development, production }
+enum Environment { test, local, development, production }
 
 class AppConfig {
   AppConfig._();
 
   static Environment _environment = Environment.development;
 
-  static Future<void> initialize({
-    Environment environment = Environment.development,
-  }) async {
+  static Future<void> initialize({required Environment environment}) async {
     _environment = environment;
 
     switch (environment) {
       case Environment.test:
         await dotenv.load(fileName: '.env.test');
+        break;
+      case Environment.local:
+        await dotenv.load(fileName: '.env.local');
         break;
       case Environment.development:
         await dotenv.load(fileName: '.env.development');
@@ -35,6 +36,7 @@ class AppConfig {
 
   static Environment get environment => _environment;
   static bool get isTest => _environment == Environment.test;
+  static bool get isLocal => _environment == Environment.local;
   static bool get isDevelopment => _environment == Environment.development;
   static bool get isProduction => _environment == Environment.production;
 

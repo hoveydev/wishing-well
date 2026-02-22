@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -19,10 +20,14 @@ import 'package:wishing_well/theme/app_theme.dart';
 
 import '../../../testing_resources/helpers/test_helpers.dart';
 import '../../../testing_resources/mocks/repositories/mock_auth_repository.dart';
+import '../../../testing_resources/mocks/repositories/mock_wisher_repository.dart';
 
 Widget startAppWithRouter(GoRouter router) => MultiProvider(
   providers: [
     ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
+    ChangeNotifierProvider<WisherRepository>(
+      create: (_) => MockWisherRepository(),
+    ),
   ],
   child: MaterialApp.router(
     theme: AppTheme.lightTheme,

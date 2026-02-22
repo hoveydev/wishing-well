@@ -3,19 +3,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
+import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
 void main() {
   group('WisherList', () {
+    // Helper to create test wishers
+    List<Wisher> createTestWishers(int count) => List.generate(
+      count,
+      (i) => Wisher(
+        id: 'wisher-$i',
+        userId: 'test-user',
+        firstName: ['Alice', 'Bob', 'Charlie', 'Diana'][i % 4],
+        lastName: 'Test',
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
+      ),
+    );
+
+    // Default test wishers (8 items, like the original static list)
+    final defaultTestWishers = createTestWishers(8);
+
+    Widget createWishersList({
+      List<Wisher> wishers = const [],
+      bool isLoading = false,
+      VoidCallback? onAddWisherTap,
+    }) => WishersList(
+      wishers: wishers,
+      isLoading: isLoading,
+      onAddWisherTap: onAddWisherTap ?? () => {},
+    );
+
     group(TestGroups.rendering, () {
       testWidgets('renders wishers section with header', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -32,7 +59,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -42,18 +69,18 @@ void main() {
         expect(find.byType(WisherItem), findsNWidgets(8));
       });
 
-      testWidgets('renders specific wisher names and initials', (
+      testWidgets('renders specific wisher first names', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
         // Check for specific wisher names
-        // from the static list (each appears twice)
+        // (each appears twice in the 8-item list)
         TestHelpers.expectTextTimes('Alice', 2);
         TestHelpers.expectTextTimes('Bob', 2);
         TestHelpers.expectTextTimes('Charlie', 2);
@@ -71,7 +98,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -88,7 +115,7 @@ void main() {
       testWidgets('has correct layout structure', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -114,13 +141,44 @@ void main() {
         final listView = tester.widget<ListView>(listViews);
         expect(listView.scrollDirection, Axis.horizontal);
       });
+
+      testWidgets('shows only add button when no wishers', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(createWishersList(wishers: [])),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should NOT show any wisher items
+        expect(find.byType(WisherItem), findsNothing);
+        // Should still show Add button
+        TestHelpers.expectWidgetOnce(AddWisherItem);
+      });
+
+      testWidgets('shows loading indicator when loading', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(wishers: [], isLoading: true),
+          ),
+        );
+        // Use pump() instead of pumpAndSettle() because
+        // CircularProgressIndicator
+        // has an infinite animation that never settles
+        await tester.pump();
+
+        // Should show loading indicator
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      });
     });
 
     group(TestGroups.interaction, () {
       testWidgets('handles View All button tap', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -138,7 +196,10 @@ void main() {
 
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => wasTapped = true),
+            WishersList(
+              wishers: defaultTestWishers,
+              onAddWisherTap: () => wasTapped = true,
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -150,7 +211,7 @@ void main() {
       testWidgets('View All button is clickable', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -165,7 +226,7 @@ void main() {
       testWidgets('supports horizontal scrolling', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -186,7 +247,7 @@ void main() {
       testWidgets('applies correct list padding', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -210,7 +271,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -231,7 +292,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -248,7 +309,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            WishersList(onAddWisherTap: () => {}),
+            createWishersList(wishers: defaultTestWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -268,6 +329,32 @@ void main() {
 
         TestHelpers.expectWidgetOnce(AddWisherItem);
         expect(find.byType(WisherItem), findsNWidgets(8));
+      });
+
+      testWidgets('renders single wisher correctly', (
+        WidgetTester tester,
+      ) async {
+        final singleWisher = [
+          Wisher(
+            id: 'single',
+            userId: 'test-user',
+            firstName: 'Only',
+            lastName: 'One',
+            createdAt: DateTime(2026),
+            updatedAt: DateTime(2026),
+          ),
+        ];
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(wishers: singleWisher),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(WisherItem), findsOneWidget);
+        TestHelpers.expectTextOnce('Only');
+        TestHelpers.expectTextOnce('O');
       });
     });
   });

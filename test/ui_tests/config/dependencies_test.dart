@@ -6,14 +6,16 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository_remote.dart';
+import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/data/repositories/wisher/wisher_repository_remote.dart';
 import '../../../testing_resources/helpers/test_helpers.dart';
 import '../../../testing_resources/services/mock_supabase_client.dart';
 
 void main() {
   group('Dependencies', () {
     group(TestGroups.initialState, () {
-      test('providersRemote contains exactly 2 providers', () {
-        expect(providersRemote.length, 2);
+      test('providersRemote contains exactly 3 providers', () {
+        expect(providersRemote.length, 3);
       });
 
       test('providersRemote has correct provider types', () {
@@ -22,6 +24,10 @@ void main() {
           providersRemote[1],
           isA<ChangeNotifierProvider<AuthRepository>>(),
         );
+        expect(
+          providersRemote[2],
+          isA<ChangeNotifierProvider<WisherRepository>>(),
+        );
       });
 
       test('providersRemote maintains correct order', () {
@@ -29,6 +35,10 @@ void main() {
         expect(
           providersRemote[1],
           isA<ChangeNotifierProvider<AuthRepository>>(),
+        );
+        expect(
+          providersRemote[2],
+          isA<ChangeNotifierProvider<WisherRepository>>(),
         );
       });
     });
@@ -39,6 +49,7 @@ void main() {
         (WidgetTester tester) async {
           late SupabaseClient supabase;
           late AuthRepository authRepository;
+          late WisherRepository wisherRepository;
 
           // Override the SupabaseClient in providersRemote to use mock
           final providers = providersRemote.map((provider) {
@@ -57,6 +68,7 @@ void main() {
                 builder: (context) {
                   supabase = context.read<SupabaseClient>();
                   authRepository = context.read<AuthRepository>();
+                  wisherRepository = context.read<WisherRepository>();
                   return const SizedBox.shrink();
                 },
               ),
@@ -67,6 +79,7 @@ void main() {
 
           expect(supabase, isA<SupabaseClient>());
           expect(authRepository, isA<AuthRepositoryRemote>());
+          expect(wisherRepository, isA<WisherRepositoryRemote>());
         },
       );
     });

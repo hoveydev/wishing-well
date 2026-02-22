@@ -12,6 +12,7 @@ import 'package:wishing_well/screens/auth/reset_password/reset_password_screen.d
 import 'package:wishing_well/screens/auth/reset_password/reset_password_view_model.dart';
 
 import '../repositories/mock_auth_repository.dart';
+import '../repositories/mock_wisher_repository.dart';
 
 GoRouter createMockRouter() => GoRouter(
   initialLocation: '/login',
@@ -82,7 +83,10 @@ GoRouter createMockRouter() => GoRouter(
       path: '/home',
       name: 'home',
       builder: (context, state) => HomeScreen(
-        viewModel: HomeViewModel(authRepository: MockAuthRepository()),
+        viewModel: HomeViewModel(
+          authRepository: MockAuthRepository(),
+          wisherRepository: MockWisherRepository(),
+        ),
       ),
     ),
   ],

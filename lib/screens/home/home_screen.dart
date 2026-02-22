@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
@@ -19,19 +20,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Fetch wishers after the current build frame completes
+    // to avoid calling notifyListeners during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.viewModel.fetchWishers();
+    });
   }
 
   @override
-  Widget build(BuildContext context) => Screen(
-    appBar: AppMenuBar(
-      action: () => context.push(Routes.profile.path),
-      type: AppMenuBarType.main,
-    ),
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      WishersList(
-        onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+  Widget build(BuildContext context) => ChangeNotifierProvider.value(
+    value: widget.viewModel,
+    child: Consumer<HomeViewModel>(
+      builder: (context, viewModel, child) => Screen(
+        appBar: AppMenuBar(
+          action: () => context.push(Routes.profile.path),
+          type: AppMenuBarType.main,
+        ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          WishersList(
+            wishers: viewModel.wishers,
+            isLoading: viewModel.isLoadingWishers,
+            onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+          ),
+        ],
       ),
-    ],
+    ),
   );
 }

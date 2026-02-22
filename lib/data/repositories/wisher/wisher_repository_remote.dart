@@ -64,7 +64,7 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return Result.error(_error!);
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       _isLoading = false;
       _error = e;
       notifyListeners();
@@ -72,6 +72,8 @@ class WisherRepositoryRemote extends WisherRepository {
       AppLogger.error(
         'Failed to fetch wishers: $e',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(e);
     }
@@ -110,16 +112,20 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return Result.ok(newWisher);
-    } on PostgrestException catch (e) {
+    } on PostgrestException catch (e, stackTrace) {
       AppLogger.error(
         'Failed to create wisher: ${e.message}',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(Exception(e.message));
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to create wisher: $e',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(e);
     }
@@ -157,16 +163,20 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return Result.ok(updatedWisher);
-    } on PostgrestException catch (e) {
+    } on PostgrestException catch (e, stackTrace) {
       AppLogger.error(
         'Failed to update wisher: ${e.message}',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(Exception(e.message));
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to update wisher: $e',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(e);
     }
@@ -184,16 +194,20 @@ class WisherRepositoryRemote extends WisherRepository {
 
       AppLogger.info('Deleted wisher: $wisherId', context: 'WisherRepository');
       return const Result.ok(null);
-    } on PostgrestException catch (e) {
+    } on PostgrestException catch (e, stackTrace) {
       AppLogger.error(
         'Failed to delete wisher: ${e.message}',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(Exception(e.message));
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to delete wisher: $e',
         context: 'WisherRepository',
+        error: e,
+        stackTrace: stackTrace,
       );
       return Result.error(e);
     }

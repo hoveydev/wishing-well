@@ -8,9 +8,7 @@ class AppConfig {
 
   static Environment _environment = Environment.development;
 
-  static Future<void> initialize({
-    Environment environment = Environment.development,
-  }) async {
+  static Future<void> initialize({required Environment environment}) async {
     _environment = environment;
 
     switch (environment) {

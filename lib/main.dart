@@ -20,7 +20,11 @@ import 'package:wishing_well/utils/app_logger.dart';
 /// - [Environment.local] →  Local Supabase (run `supabase start` first)
 /// - [Environment.development] →  Remote Supabase (default)
 /// - [Environment.production] →  Production Supabase
-const Environment _environment = Environment.local;
+///
+/// NOTE: This is set to [Environment.local] for local development.
+/// Change to [Environment.development] or [Environment.production]
+/// before deploying or merging to main for release builds.
+const Environment _environment = Environment.development;
 
 Future<void> main() async {
   final goRouter = router();

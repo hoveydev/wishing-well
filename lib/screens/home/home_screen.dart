@@ -7,6 +7,8 @@ import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/home/home_view_model.dart';
+import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/utils/result.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({required this.viewModel, super.key});
@@ -22,8 +24,15 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // Fetch wishers after the current build frame completes
     // to avoid calling notifyListeners during build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.viewModel.fetchWishers();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final result = await widget.viewModel.fetchWishers();
+      if (result case Error(:final error)) {
+        AppLogger.error(
+          'Failed to fetch wishers on home screen init',
+          context: 'HomeScreen',
+          error: error,
+        );
+      }
     });
   }
 

@@ -93,13 +93,14 @@ echo -e "${GREEN}✓ Worktree created successfully${NC}"
 echo ""
 
 # Copy .env files
-if [ -f ".env.development" ] && [ -f ".env.test" ]; then
+if [ -f ".env.development" ] && [ -f ".env.test" ] && [ -f ".env.local" ]; then
     echo "Copying .env files to worktree..."
     cp ".env.development" "$WORKTREE_PATH/.env.development"
     cp ".env.test" "$WORKTREE_PATH/.env.test"
+    cp ".env.local" "$WORKTREE_PATH/.env.local"
     echo -e "${GREEN}✓ .env files copied successfully${NC}"
 else
-    echo -e "${YELLOW}Warning: .env.development or .env.test not found in current directory${NC}"
+    echo -e "${YELLOW}Warning: .env.development, .env.test, or .env.local not found in current directory${NC}"
 fi
 
 echo ""

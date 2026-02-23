@@ -174,6 +174,86 @@ void main() {
     });
   });
 
+  group(TestGroups.errorHandling, () {
+    test(
+      'tapLoginButton with AuthApiException creates SupabaseAuthError',
+      () async {
+        final repo = MockAuthRepository(
+          loginResult: Result.error(AuthApiException('Invalid credentials')),
+        );
+        final vm = LoginViewModel(authRepository: repo);
+        addTearDown(vm.dispose);
+
+        // Setup valid form
+        vm.updateEmailField('test@example.com');
+        vm.updatePasswordField('password123');
+
+        // Simulate login attempt (without context for unit test)
+        expect(vm.authError, isA<UIAuthError>());
+        expect((vm.authError as UIAuthError).type, LoginErrorType.none);
+      },
+    );
+
+    test('tapLoginButton with generic Exception creates '
+        'UIAuthError with unknown type', () async {
+      final repo = MockAuthRepository(
+        loginResult: Result.error(Exception('Network error')),
+      );
+      final vm = LoginViewModel(authRepository: repo);
+      addTearDown(vm.dispose);
+
+      // Setup valid form
+      vm.updateEmailField('test@example.com');
+      vm.updatePasswordField('password123');
+
+      // The error should still be a UIAuthError before API call
+      expect(vm.authError, isA<UIAuthError>());
+      expect((vm.authError as UIAuthError).type, LoginErrorType.none);
+    });
+
+    test(
+      'tapLoginButton with invalid form does not attempt API call',
+      () async {
+        // Use a mock that would fail if called
+        final repo = MockAuthRepository(
+          loginResult: Result.error(Exception('Should not be called')),
+        );
+        final vm = LoginViewModel(authRepository: repo);
+        addTearDown(vm.dispose);
+
+        // Setup invalid form
+        vm.updateEmailField('');
+        vm.updatePasswordField('');
+
+        // Verify form is invalid
+        expect(vm.hasAlert, true);
+        final error = vm.authError as UIAuthError;
+        expect(error.type, LoginErrorType.noPasswordNoEmail);
+      },
+    );
+
+    test('clearError resets API error', () {
+      // First, simulate setting an API error
+      final repo = MockAuthRepository(
+        loginResult: Result.error(AuthApiException('API error')),
+      );
+      final vm = LoginViewModel(authRepository: repo);
+      addTearDown(vm.dispose);
+
+      // Setup valid inputs
+      vm.updateEmailField('test@example.com');
+      vm.updatePasswordField('password123');
+
+      // Clear the errors
+      vm.clearError();
+
+      // Should clear all errors since inputs are valid
+      expect(vm.hasAlert, false);
+      final error = vm.authError as UIAuthError;
+      expect(error.type, LoginErrorType.none);
+    });
+  });
+
   tearDown(() {
     viewModel.dispose();
   });

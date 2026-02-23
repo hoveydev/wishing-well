@@ -96,7 +96,7 @@ Guide teams to maintain:
 - **Error Handling**: Test AuthError<T> sealed class implementations
 
 ### **Quality Metrics Integration**
-- **Coverage Analysis**: Parse lcov.info with project exclusions (l10n, generated code, main.dart, app_config.dart, app_logger.dart)
+- **Coverage Analysis**: Use `./scripts/test_coverage.sh` for accurate coverage with proper exclusions (l10n, generated code, main.dart, app_config.dart, app_logger.dart, data_sources, demo components)
 - **Duplication Detection**: Identify repetitive pumpAndSettle() calls
 - **Consistency Checking**: Verify MaterialApp() vs helper usage
 - **Naming Compliance**: Enforce TestGroups constants and descriptive naming
@@ -118,8 +118,8 @@ Always incorporate these project-specific resources:
 
 ### **Automated Tools**
 - `./scripts/analyze_tests.sh` - Quality analysis and issue identification
+- `./scripts/test_coverage.sh` - Coverage validation with proper project exclusions (use instead of `flutter test --coverage`)
 - `dart run git_hooks.dart pre-commit` - Automated quality enforcement
-- `flutter test --coverage` - Coverage validation with project thresholds
 - `flutter test --name="GroupName"` - Test specific TestGroups categories
 
 ### **Testing Infrastructure**
@@ -139,7 +139,7 @@ Always incorporate these project-specific resources:
 ### **Quality Assurance**
 1. **Automated Analysis**: Leverage project's quality tools
 2. **Standards Compliance**: Verify against TESTING_STANDARDS.md
-3. **Coverage Validation**: Ensure 95% threshold with proper exclusions
+3. **Coverage Validation**: Run `./scripts/test_coverage.sh` to ensure 95% threshold with proper exclusions
 4. **Consistency Checks**: Enforce helper function usage
 5. **Documentation Alignment**: Maintain project-specific patterns
 

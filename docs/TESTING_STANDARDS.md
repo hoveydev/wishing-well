@@ -551,10 +551,127 @@ dart run git_hooks.dart pre-commit  # Run pre-commit quality checks
 ## Coverage Requirements
 
 - **Target**: 95% coverage threshold
-- **Exclusions**: l10n files, generated files, main.dart, app_config.dart
+- **Exclusions**: l10n files, generated files, main.dart, app_config.dart, app_logger.dart, data_sources/
 - **Focus**: Business logic, ViewModels, and critical UI components
 - **Enforcement**: Pre-commit git hook enforces 95% threshold automatically
 - **Analysis**: Use `./scripts/test_coverage.sh` for comprehensive coverage workflow
+
+## Repository and DataSource Architecture
+
+### Overview
+The project uses a **DataSource + Repository** pattern to separate Supabase API calls from business logic:
+
+```
+lib/data/
+├── repositories/
+│   ├── wisher/
+│   │   ├── wisher_repository.dart          # Abstract contract
+│   │   └── wisher_repository_impl.dart     # Business logic (TESTED)
+│   └── auth/
+│       ├── auth_repository.dart            # Abstract contract
+│       └── auth_repository_impl.dart       # Business logic (TESTED)
+│
+└── data_sources/                           # Supabase wrappers (EXCLUDED)
+    ├── wisher/
+    │   ├── wisher_data_source.dart         # Abstract contract
+    │   └── wisher_data_source_supabase.dart # Supabase calls (EXCLUDED)
+    └── auth/
+        ├── auth_data_source.dart           # Abstract contract
+        └── auth_data_source_supabase.dart  # Supabase calls (EXCLUDED)
+```
+
+### What Gets Tested
+
+| Layer | Coverage | Reason |
+|-------|----------|--------|
+| `*_repository.dart` (abstract) | Excluded | Interface definitions only |
+| `*_repository_impl.dart` | **Tested** | Business logic, state management, error handling |
+| `*_data_source.dart` (abstract) | Excluded | Interface definitions only |
+| `*_data_source_supabase.dart` | **Excluded** | Thin Supabase wrapper - tested by Supabase |
+
+### DataSource Pattern
+
+DataSources return simple `Map<String, dynamic>` or `List<Map<String, dynamic>>` instead of complex Supabase types, making them trivial to mock:
+
+```dart
+// Abstract DataSource
+abstract class WisherDataSource {
+  Future<List<Map<String, dynamic>>> fetchWishers();
+  Future<Map<String, dynamic>> createWisher({...});
+  Future<Map<String, dynamic>> updateWisher({...});
+  Future<void> deleteWisher(String wisherId);
+}
+
+// Mock for testing (in testing_resources/mocks/data_sources/)
+class MockWisherDataSource implements WisherDataSource {
+  List<Map<String, dynamic>>? fetchWishersResult;
+  Exception? fetchWishersError;
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchWishers() async {
+    if (fetchWishersError != null) throw fetchWishersError!;
+    return fetchWishersResult ?? [];
+  }
+  // ... other mock methods
+}
+```
+
+### Repository Implementation Test Pattern
+
+```dart
+void main() {
+  group('WisherRepositoryImpl', () {
+    late MockWisherDataSource mockDataSource;
+    late WisherRepositoryImpl repository;
+
+    setUp(() {
+      mockDataSource = MockWisherDataSource();
+      repository = WisherRepositoryImpl(dataSource: mockDataSource);
+    });
+
+    tearDown(() {
+      repository.dispose();
+    });
+
+    group(TestGroups.initialState, () {
+      test('wishers returns empty list initially', () {
+        expect(repository.wishers, isEmpty);
+      });
+    });
+
+    group('FetchWishers', () {
+      test('returns Ok and populates wishers on success', () async {
+        mockDataSource.fetchWishersResult = [
+          {'id': '1', 'first_name': 'Alice', ...},
+        ];
+
+        final result = await repository.fetchWishers();
+
+        expect(result, isA<Ok>());
+        expect(repository.wishers.length, 1);
+      });
+
+      test('returns Error on data source exception', () async {
+        mockDataSource.fetchWishersError = Exception('Network error');
+
+        final result = await repository.fetchWishers();
+
+        expect(result, isA<Error>());
+      });
+    });
+  });
+}
+```
+
+### When to Create a New Repository
+
+1. **Create the abstract Repository** (`lib/data/repositories/{feature}/{feature}_repository.dart`)
+2. **Create the abstract DataSource** (`lib/data/data_sources/{feature}/{feature}_data_source.dart`)
+3. **Create the Supabase DataSource** (`lib/data/data_sources/{feature}/{feature}_data_source_supabase.dart`)
+4. **Create the Repository Implementation** (`lib/data/repositories/{feature}/{feature}_repository_impl.dart`)
+5. **Create the Mock DataSource** (`testing_resources/mocks/data_sources/mock_{feature}_data_source.dart`)
+6. **Create Repository Implementation Tests** (`test/unit_tests/data/repositories/{feature}/{feature}_repository_impl_test.dart`)
+7. **Update dependencies.dart** to wire up the new providers
 
 ## Mock Repository Patterns
 

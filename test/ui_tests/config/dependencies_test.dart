@@ -5,11 +5,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
-import 'package:wishing_well/data/repositories/auth/auth_repository_remote.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
-import 'package:wishing_well/data/repositories/wisher/wisher_repository_remote.dart';
+import 'package:wishing_well/data/repositories/wisher/wisher_repository_impl.dart';
 import '../../../testing_resources/helpers/test_helpers.dart';
-import '../../../testing_resources/services/mock_supabase_client.dart';
+import '../../../testing_resources/mocks/data_sources/mock_auth_data_source.dart';
+import '../../../testing_resources/mocks/data_sources/mock_wisher_data_source.dart';
+import '../../../testing_resources/mocks/mock_supabase_client_for_deps.dart';
 
 void main() {
   group('Dependencies', () {
@@ -18,19 +20,7 @@ void main() {
         expect(providersRemote.length, 3);
       });
 
-      test('providersRemote has correct provider types', () {
-        expect(providersRemote[0], isA<Provider<SupabaseClient>>());
-        expect(
-          providersRemote[1],
-          isA<ChangeNotifierProvider<AuthRepository>>(),
-        );
-        expect(
-          providersRemote[2],
-          isA<ChangeNotifierProvider<WisherRepository>>(),
-        );
-      });
-
-      test('providersRemote maintains correct order', () {
+      test('providersRemote has correct provider types in order', () {
         expect(providersRemote[0], isA<Provider<SupabaseClient>>());
         expect(
           providersRemote[1],
@@ -45,21 +35,30 @@ void main() {
 
     group(TestGroups.behavior, () {
       testWidgets(
-        'providersRemote creates dependencies correctly when initialized',
+        'providersRemote creates dependencies correctly with mock data sources',
         (WidgetTester tester) async {
           late SupabaseClient supabase;
           late AuthRepository authRepository;
           late WisherRepository wisherRepository;
 
-          // Override the SupabaseClient in providersRemote to use mock
-          final providers = providersRemote.map((provider) {
-            if (provider is Provider<SupabaseClient>) {
-              return Provider<SupabaseClient>(
-                create: (_) => MockSupabaseClient(),
-              );
-            }
-            return provider;
-          }).toList();
+          // Create mock data sources
+          final mockAuthDataSource = MockAuthDataSource();
+          final mockWisherDataSource = MockWisherDataSource();
+
+          // Build providers with mock data sources injected directly
+          final providers = [
+            Provider<SupabaseClient>(
+              create: (_) => MockSupabaseClientForDeps(),
+            ),
+            ChangeNotifierProvider<AuthRepository>(
+              create: (context) =>
+                  AuthRepositoryImpl(dataSource: mockAuthDataSource),
+            ),
+            ChangeNotifierProvider<WisherRepository>(
+              create: (context) =>
+                  WisherRepositoryImpl(dataSource: mockWisherDataSource),
+            ),
+          ];
 
           await tester.pumpWidget(
             MultiProvider(
@@ -78,10 +77,51 @@ void main() {
           await TestHelpers.pumpAndSettle(tester);
 
           expect(supabase, isA<SupabaseClient>());
-          expect(authRepository, isA<AuthRepositoryRemote>());
-          expect(wisherRepository, isA<WisherRepositoryRemote>());
+          expect(authRepository, isA<AuthRepositoryImpl>());
+          expect(wisherRepository, isA<WisherRepositoryImpl>());
         },
       );
+
+      testWidgets('repositories are ChangeNotifiers', (
+        WidgetTester tester,
+      ) async {
+        late AuthRepository authRepository;
+        late WisherRepository wisherRepository;
+
+        final mockAuthDataSource = MockAuthDataSource();
+        final mockWisherDataSource = MockWisherDataSource();
+
+        final providers = [
+          Provider<SupabaseClient>(create: (_) => MockSupabaseClientForDeps()),
+          ChangeNotifierProvider<AuthRepository>(
+            create: (context) =>
+                AuthRepositoryImpl(dataSource: mockAuthDataSource),
+          ),
+          ChangeNotifierProvider<WisherRepository>(
+            create: (context) =>
+                WisherRepositoryImpl(dataSource: mockWisherDataSource),
+          ),
+        ];
+
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: providers,
+            child: Builder(
+              builder: (context) {
+                authRepository = context.read<AuthRepository>();
+                wisherRepository = context.read<WisherRepository>();
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        );
+
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify repositories are ChangeNotifiers
+        expect(authRepository, isA<AuthRepositoryImpl>());
+        expect(wisherRepository, isA<WisherRepositoryImpl>());
+      });
     });
   });
 }

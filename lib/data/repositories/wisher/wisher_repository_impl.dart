@@ -1,19 +1,19 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishing_well/data/data_sources/wisher/wisher_data_source.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/result.dart';
 
-/// Remote implementation of [WisherRepository] using Supabase.
+/// Implementation of [WisherRepository] using a [WisherDataSource].
 ///
-/// This implementation uses Supabase's PostgREST client to perform
-/// CRUD operations on the wishers table. Row Level Security (RLS)
-/// ensures users can only access their own data.
-class WisherRepositoryRemote extends WisherRepository {
-  WisherRepositoryRemote({required SupabaseClient supabase})
-    : _supabase = supabase;
+/// This class contains the business logic for wisher management,
+/// including state management, error handling, and `Result<T>` transformations.
+/// The actual Supabase calls are delegated to the [WisherDataSource].
+class WisherRepositoryImpl extends WisherRepository {
+  WisherRepositoryImpl({required WisherDataSource dataSource})
+    : _dataSource = dataSource;
 
-  final SupabaseClient _supabase;
+  final WisherDataSource _dataSource;
 
   List<Wisher> _wishers = [];
   bool _isLoading = false;
@@ -37,14 +37,9 @@ class WisherRepositoryRemote extends WisherRepository {
     notifyListeners();
 
     try {
-      final response = await _supabase
-          .from('wishers')
-          .select()
-          .order('created_at', ascending: false);
+      final response = await _dataSource.fetchWishers();
 
-      _wishers = (response as List)
-          .map((json) => Wisher.fromJson(json as Map<String, dynamic>))
-          .toList();
+      _wishers = response.map((json) => Wisher.fromJson(json)).toList();
 
       _isLoading = false;
       notifyListeners();
@@ -54,16 +49,6 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return const Result.ok(null);
-    } on PostgrestException catch (e) {
-      _isLoading = false;
-      _error = Exception(e.message);
-      notifyListeners();
-
-      AppLogger.error(
-        'Failed to fetch wishers: ${e.message}',
-        context: 'WisherRepository',
-      );
-      return Result.error(_error!);
     } on Exception catch (e, stackTrace) {
       _isLoading = false;
       _error = e;
@@ -92,16 +77,12 @@ class WisherRepositoryRemote extends WisherRepository {
     );
 
     try {
-      final response = await _supabase
-          .from('wishers')
-          .insert({
-            'user_id': userId,
-            'first_name': firstName,
-            'last_name': lastName,
-            'profile_picture': profilePicture,
-          })
-          .select()
-          .single();
+      final response = await _dataSource.createWisher(
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        profilePicture: profilePicture,
+      );
 
       final newWisher = Wisher.fromJson(response);
       _wishers.insert(0, newWisher);
@@ -112,14 +93,6 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return Result.ok(newWisher);
-    } on PostgrestException catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to create wisher: ${e.message}',
-        context: 'WisherRepository',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      return Result.error(Exception(e.message));
     } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to create wisher: $e',
@@ -139,16 +112,12 @@ class WisherRepositoryRemote extends WisherRepository {
     );
 
     try {
-      final response = await _supabase
-          .from('wishers')
-          .update({
-            'first_name': wisher.firstName,
-            'last_name': wisher.lastName,
-            'profile_picture': wisher.profilePicture,
-          })
-          .eq('id', wisher.id)
-          .select()
-          .single();
+      final response = await _dataSource.updateWisher(
+        wisherId: wisher.id,
+        firstName: wisher.firstName,
+        lastName: wisher.lastName,
+        profilePicture: wisher.profilePicture,
+      );
 
       final updatedWisher = Wisher.fromJson(response);
 
@@ -163,14 +132,6 @@ class WisherRepositoryRemote extends WisherRepository {
         context: 'WisherRepository',
       );
       return Result.ok(updatedWisher);
-    } on PostgrestException catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to update wisher: ${e.message}',
-        context: 'WisherRepository',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      return Result.error(Exception(e.message));
     } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to update wisher: $e',
@@ -187,21 +148,13 @@ class WisherRepositoryRemote extends WisherRepository {
     AppLogger.debug('Deleting wisher: $wisherId', context: 'WisherRepository');
 
     try {
-      await _supabase.from('wishers').delete().eq('id', wisherId);
+      await _dataSource.deleteWisher(wisherId);
 
       _wishers.removeWhere((w) => w.id == wisherId);
       notifyListeners();
 
       AppLogger.info('Deleted wisher: $wisherId', context: 'WisherRepository');
       return const Result.ok(null);
-    } on PostgrestException catch (e, stackTrace) {
-      AppLogger.error(
-        'Failed to delete wisher: ${e.message}',
-        context: 'WisherRepository',
-        error: e,
-        stackTrace: stackTrace,
-      );
-      return Result.error(Exception(e.message));
     } on Exception catch (e, stackTrace) {
       AppLogger.error(
         'Failed to delete wisher: $e',

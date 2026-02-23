@@ -11,8 +11,7 @@ import 'dart:io';
 const enableTestQualityAnalysis = true;
 
 // Coverage threshold percentage
-const coverageThreshold = 90.0;
-// TODO: change back to 95 once testing changes are set
+const coverageThreshold = 95.0;
 
 void main(List<String> arguments) async {
   // Check if this is being run as a pre-commit hook
@@ -205,6 +204,8 @@ Future<bool> _checkCoverage({required double threshold}) async {
 Future<double> _parseLcovCoverage(File lcovFile) async {
   final lines = await lcovFile.readAsLines();
 
+  // Coverage exclusions - must be kept in sync with scripts/test_coverage.sh
+  // Note: These use substring matching (not glob patterns like lcov requires)
   const excludePatterns = [
     'l10n/app_localizations',
     '.g.dart',
@@ -214,6 +215,7 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
     'components/demo/demos', // Demo widgets don't need testing
     'components/demo/demo_home.dart', // Demo app UI doesn't need testing
     'components/demo/demo_app.dart', // Demo app UI doesn't need testing
+    'data/data_sources/', // Supabase wrappers - tested by Supabase itself
   ];
 
   int totalLines = 0;

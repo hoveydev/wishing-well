@@ -3,44 +3,65 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class MockWisherRepository extends WisherRepository {
-  MockWisherRepository() {
-    _wishers = [
-      Wisher(
-        id: '1',
-        userId: 'test-user',
-        firstName: 'Alice',
-        lastName: 'Test',
-        createdAt: DateTime(2024),
-        updatedAt: DateTime(2024),
-      ),
-      Wisher(
-        id: '2',
-        userId: 'test-user',
-        firstName: 'Bob',
-        lastName: 'Test',
-        createdAt: DateTime(2024, 1, 2),
-        updatedAt: DateTime(2024, 1, 2),
-      ),
-      Wisher(
-        id: '3',
-        userId: 'test-user',
-        firstName: 'Charlie',
-        lastName: 'Test',
-        createdAt: DateTime(2024, 1, 3),
-        updatedAt: DateTime(2024, 1, 3),
-      ),
-      Wisher(
-        id: '4',
-        userId: 'test-user',
-        firstName: 'Diana',
-        lastName: 'Test',
-        createdAt: DateTime(2024, 1, 4),
-        updatedAt: DateTime(2024, 1, 4),
-      ),
-    ];
+  MockWisherRepository({
+    Result<Wisher>? createWisherResult,
+    Result<void>? deleteWisherResult,
+    List<Wisher>? initialWishers,
+  }) : createWisherResult = createWisherResult ?? _defaultCreateWisherResult,
+       deleteWisherResult = deleteWisherResult ?? const Result.ok(null),
+       _wishers = initialWishers ?? _defaultWishers;
+
+  static Result<Wisher> get _defaultCreateWisherResult {
+    final wisher = Wisher(
+      id: '1',
+      userId: 'test-user',
+      firstName: 'Test',
+      lastName: 'Wisher',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    return Result.ok(wisher);
   }
 
-  List<Wisher> _wishers = [];
+  static List<Wisher> get _defaultWishers => [
+    Wisher(
+      id: '1',
+      userId: 'test-user',
+      firstName: 'Alice',
+      lastName: 'Test',
+      createdAt: DateTime(2024),
+      updatedAt: DateTime(2024),
+    ),
+    Wisher(
+      id: '2',
+      userId: 'test-user',
+      firstName: 'Bob',
+      lastName: 'Test',
+      createdAt: DateTime(2024, 1, 2),
+      updatedAt: DateTime(2024, 1, 2),
+    ),
+    Wisher(
+      id: '3',
+      userId: 'test-user',
+      firstName: 'Charlie',
+      lastName: 'Test',
+      createdAt: DateTime(2024, 1, 3),
+      updatedAt: DateTime(2024, 1, 3),
+    ),
+    Wisher(
+      id: '4',
+      userId: 'test-user',
+      firstName: 'Diana',
+      lastName: 'Test',
+      createdAt: DateTime(2024, 1, 4),
+      updatedAt: DateTime(2024, 1, 4),
+    ),
+  ];
+
+  final Result<Wisher> createWisherResult;
+  final Result<void> deleteWisherResult;
+
+  final List<Wisher> _wishers;
   bool _isLoading = false;
   Exception? _error;
 
@@ -74,18 +95,25 @@ class MockWisherRepository extends WisherRepository {
     required String lastName,
     String? profilePicture,
   }) async {
-    final wisher = Wisher(
-      id: '${_wishers.length + 1}',
-      userId: userId,
-      firstName: firstName,
-      lastName: lastName,
-      profilePicture: profilePicture,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-    _wishers.insert(0, wisher);
-    notifyListeners();
-    return Result.ok(wisher);
+    // Return the configured result (success or error)
+    final result = createWisherResult;
+
+    if (result is Ok<Wisher>) {
+      // Only add to wishers list on success
+      final wisher = Wisher(
+        id: '${_wishers.length + 1}',
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        profilePicture: profilePicture,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+      _wishers.insert(0, wisher);
+      notifyListeners();
+    }
+
+    return result;
   }
 
   @override
@@ -100,8 +128,13 @@ class MockWisherRepository extends WisherRepository {
 
   @override
   Future<Result<void>> deleteWisher(String wisherId) async {
-    _wishers.removeWhere((w) => w.id == wisherId);
-    notifyListeners();
-    return const Result.ok(null);
+    final result = deleteWisherResult;
+
+    if (result is Ok<void>) {
+      _wishers.removeWhere((w) => w.id == wisherId);
+      notifyListeners();
+    }
+
+    return result;
   }
 }

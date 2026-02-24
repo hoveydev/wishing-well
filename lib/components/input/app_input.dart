@@ -10,6 +10,7 @@ class AppInput extends StatelessWidget {
     required this.onChanged,
     this.controller,
     this.focusNode,
+    this.showIcon = true,
     super.key,
   });
   final String placeholder;
@@ -17,6 +18,7 @@ class AppInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,8 @@ class AppInput extends StatelessWidget {
     }
   }
 
-  Icon _getIcon() {
+  Icon? _getIcon() {
+    if (!showIcon) return null;
     switch (type) {
       case AppInputType.text:
         return const Icon(Icons.input);

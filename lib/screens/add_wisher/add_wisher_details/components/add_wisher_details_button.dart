@@ -3,11 +3,11 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 
-class AddWisherLandingButtons extends StatelessWidget {
-  const AddWisherLandingButtons({required this.onAddManually, super.key});
-
-  final VoidCallback onAddManually;
+class AddWisherDetailsButton extends StatelessWidget {
+  const AddWisherDetailsButton({required this.viewModel, super.key});
+  final AddWisherDetailsViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +15,12 @@ class AddWisherLandingButtons extends StatelessWidget {
 
     return Column(
       spacing: AppSpacerSize.small,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // TODO: Implement contacts picker integration
-        // Currently disabled - will be enabled when contacts feature is added
         AppButton.label(
-          label: l10n.addFromContacts,
-          onPressed: () {},
+          label: l10n.save,
+          onPressed: () => viewModel.tapSaveButton(context),
           type: AppButtonType.primary,
-          isLoading: true,
-        ),
-        AppButton.label(
-          label: l10n.addManually,
-          onPressed: onAddManually,
-          type: AppButtonType.secondary,
         ),
       ],
     );

@@ -78,6 +78,20 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     ),
+    AppMenuBarType.back => Builder(
+      builder: (context) => Semantics(
+        label: l10n.appBarDismiss,
+        button: true,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+          child: AppButton.icon(
+            icon: Icons.keyboard_arrow_left,
+            onPressed: action,
+            type: AppButtonType.tertiary,
+          ),
+        ),
+      ),
+    ),
   };
 
   List<Widget>? _menuBarActions(
@@ -117,5 +131,6 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     ],
     AppMenuBarType.dismiss => null,
+    AppMenuBarType.back => null,
   };
 }

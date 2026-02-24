@@ -6,8 +6,8 @@ import '../../../testing_resources/helpers/test_helpers.dart';
 void main() {
   group('AppMenuBarType', () {
     group(TestGroups.initialState, () {
-      test('has three enum values', () {
-        expect(AppMenuBarType.values.length, 3);
+      test('has four enum values', () {
+        expect(AppMenuBarType.values.length, 4);
       });
 
       test('contains main value', () {
@@ -21,6 +21,10 @@ void main() {
       test('contains dismiss value', () {
         expect(AppMenuBarType.values.contains(AppMenuBarType.dismiss), isTrue);
       });
+
+      test('contains back value', () {
+        expect(AppMenuBarType.values.contains(AppMenuBarType.back), isTrue);
+      });
     });
 
     group(TestGroups.validation, () {
@@ -28,6 +32,7 @@ void main() {
         expect(AppMenuBarType.main.toString(), 'AppMenuBarType.main');
         expect(AppMenuBarType.close.toString(), 'AppMenuBarType.close');
         expect(AppMenuBarType.dismiss.toString(), 'AppMenuBarType.dismiss');
+        expect(AppMenuBarType.back.toString(), 'AppMenuBarType.back');
       });
 
       test('enum values are unique', () {
@@ -40,8 +45,8 @@ void main() {
         expect(AppMenuBarType.values.first, AppMenuBarType.main);
       });
 
-      test('dismiss is last value', () {
-        expect(AppMenuBarType.values.last, AppMenuBarType.dismiss);
+      test('back is last value', () {
+        expect(AppMenuBarType.values.last, AppMenuBarType.back);
       });
 
       test('has expected order for menu bar types', () {
@@ -49,6 +54,7 @@ void main() {
           AppMenuBarType.main,
           AppMenuBarType.close,
           AppMenuBarType.dismiss,
+          AppMenuBarType.back,
         ];
         expect(AppMenuBarType.values, expectedOrder);
       });

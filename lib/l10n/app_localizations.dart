@@ -435,6 +435,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Manually'**
   String get addManually;
+
+  /// Header for manual add wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Wisher Details'**
+  String get manualAddWisherScreenHeader;
+
+  /// Subtext for manual add wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'The more we know now, the more meaningful the gifts can be later.'**
+  String get manualAddWisherScreenSubtext;
+
+  /// Label for first name input field
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// Label for last name input field
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// Save button text on Add Wisher Details screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save Wisher'**
+  String get save;
 }
 
 class _AppLocalizationsDelegate

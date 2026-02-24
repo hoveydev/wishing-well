@@ -108,6 +108,24 @@ When starting a review, ask the user which depth they prefer if not specified.
    - New screen → Check routes, dependencies
    - New strings → Check localization files
 
+5. **⚠️ VERIFY PATTERNS BEFORE FLAGGING ISSUES**
+   - When you think you've found an issue with architecture, dependency injection, or patterns:
+     - **Search the existing codebase** for similar implementations
+     - Compare the new code to established patterns (e.g., LoginViewModel, HomeViewModel)
+     - If the code matches existing patterns exactly, it is NOT an issue
+   - Common mistakes to avoid:
+     - Flagging ViewModel dependency patterns without checking if they match LoginViewModel
+     - Suggesting LoadingController injection when existing ViewModels use `context.read()`
+     - Questioning repository patterns without verifying against existing repositories
+   - Example check:
+     ```dart
+     // Before flagging: "ViewModel should be registered in dependencies"
+     // Verify first: Does LoginViewModel follow the same pattern?
+     // - LoginViewModel gets repository via context.read() in router
+     // - New ViewModel gets repository via context.read() in router
+     // → Same pattern = not an issue
+     ```
+
 ## 🎯 Core Review Philosophy
 
 ### **Constructive & Realistic**
@@ -400,25 +418,31 @@ Future<void> handleSubmit() async {
 
 ### **LoadingController Pattern**
 ```dart
-// ✅ Correct Pattern - Using LoadingController for async operations
+// ✅ Correct Pattern - LoadingController accessed via context.read()
+// ViewModels get the LoadingController from context, not via constructor injection
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
-  final LoadingController _loadingController;
-  
-  LoginViewModel({required LoadingController loadingController})
-      : _loadingController = loadingController;
-  
+  LoginViewModel({required AuthRepository authRepository})
+      : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
   Future<void> submit() async {
-    _loadingController.show();
+    // Get LoadingController from context (global provider)
+    final loading = context.read<LoadingController>();
+    
+    loading.show();
     try {
       final result = await _authRepository.login(email: _email, password: _password);
       // Handle result...
     } finally {
-      _loadingController.hide();
+      loading.hide();
     }
     notifyListeners();
   }
 }
 ```
+
+**Important**: The LoadingController is a global provider accessed via `context.read<LoadingController>()`, NOT via constructor injection. This is the established pattern used throughout the codebase.
 
 ### **Async/Await Best Practices**
 ```dart

@@ -188,4 +188,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addManually => 'Add Manually';
+
+  @override
+  String get manualAddWisherScreenHeader => 'Enter Wisher Details';
+
+  @override
+  String get manualAddWisherScreenSubtext =>
+      'The more we know now, the more meaningful the gifts can be later.';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get save => 'Save Wisher';
 }

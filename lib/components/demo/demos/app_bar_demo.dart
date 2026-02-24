@@ -174,6 +174,8 @@ IconData _getIconForType(AppMenuBarType type) {
       return Icons.close;
     case AppMenuBarType.dismiss:
       return Icons.keyboard_arrow_down;
+    case AppMenuBarType.back:
+      return Icons.keyboard_arrow_left;
   }
 }
 
@@ -243,6 +245,8 @@ String _getTypeName(AppMenuBarType type) {
       return 'Close';
     case AppMenuBarType.dismiss:
       return 'Dismiss';
+    case AppMenuBarType.back:
+      return 'Back';
   }
 }
 

@@ -16,6 +16,8 @@ class AddWisherLandingButtons extends StatelessWidget {
     return Column(
       spacing: AppSpacerSize.small,
       children: [
+        // TODO: Implement contacts picker integration
+        // Currently disabled - will be enabled when contacts feature is added
         AppButton.label(
           label: l10n.addFromContacts,
           onPressed: () {},

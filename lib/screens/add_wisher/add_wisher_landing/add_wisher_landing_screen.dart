@@ -23,7 +23,7 @@ class _AddWisherLandingScreenState extends State<AddWisherLandingScreen> {
   }
 
   void _handleAddManually() {
-    context.pushNamed(Routes.manualAddWisher.name);
+    context.pushNamed(Routes.addWisherDetails.name);
   }
 
   @override

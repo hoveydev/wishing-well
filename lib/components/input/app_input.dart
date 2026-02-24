@@ -10,6 +10,7 @@ class AppInput extends StatelessWidget {
     required this.onChanged,
     this.controller,
     this.focusNode,
+    this.showIcon = true,
     super.key,
   });
   final String placeholder;
@@ -17,6 +18,7 @@ class AppInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +79,17 @@ class AppInput extends StatelessWidget {
     }
   }
 
-  Icon? _getIcon() =>
-      // Icons disabled - uncomment to re-enable
-      // switch (type) {
-      //   case AppInputType.text:
-      //     return const Icon(Icons.input);
-      //   case AppInputType.email:
-      //     return const Icon(Icons.email_outlined);
-      //   case AppInputType.password:
-      //     return const Icon(Icons.lock_outline);
-      //   default:
-      //     return const Icon(Icons.input);
-      // }
-      null;
+  Icon? _getIcon() {
+    if (!showIcon) return null;
+    switch (type) {
+      case AppInputType.text:
+        return const Icon(Icons.input);
+      case AppInputType.email:
+        return const Icon(Icons.email_outlined);
+      case AppInputType.password:
+        return const Icon(Icons.lock_outline);
+      default:
+        return const Icon(Icons.input);
+    }
+  }
 }

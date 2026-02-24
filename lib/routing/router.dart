@@ -292,8 +292,8 @@ GoRouter router() => GoRouter(
       ),
       routes: [
         GoRoute(
-          path: Routes.manualAddWisher.path,
-          name: Routes.manualAddWisher.name,
+          path: Routes.addWisherDetails.path,
+          name: Routes.addWisherDetails.name,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: AddWisherDetailsScreen(
               viewModel: AddWisherDetailsViewModel(

@@ -52,6 +52,7 @@ class _AddWisherDetailsInputsState extends State<AddWisherDetailsInputs> {
           type: AppInputType.text,
           controller: firstNameController,
           focusNode: firstNameFocusNode,
+          showIcon: false,
           onChanged: (String firstName) =>
               widget.viewModel.updateFirstName(firstName),
         ),
@@ -60,6 +61,7 @@ class _AddWisherDetailsInputsState extends State<AddWisherDetailsInputs> {
           type: AppInputType.text,
           controller: lastNameController,
           focusNode: lastNameFocusNode,
+          showIcon: false,
           onChanged: (String lastName) =>
               widget.viewModel.updateLastName(lastName),
         ),

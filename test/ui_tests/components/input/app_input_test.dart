@@ -49,7 +49,7 @@ void main() {
         expect(find.byType(DecoratedBox), findsOneWidget);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Email Input');
-        // Icons are disabled in AppInput - prefixIcon returns null
+        expect(find.byIcon(Icons.email_outlined), findsOneWidget);
       });
 
       testWidgets('renders password input with correct styling', (
@@ -69,7 +69,7 @@ void main() {
         expect(find.byType(DecoratedBox), findsOneWidget);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Password Input');
-        // Icons are disabled in AppInput - prefixIcon returns null
+        expect(find.byIcon(Icons.lock_outline), findsOneWidget);
       });
 
       testWidgets('renders default input with correct styling', (
@@ -90,7 +90,7 @@ void main() {
         expect(find.byType(DecoratedBox), findsOneWidget);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Default Input');
-        // Icons are disabled in AppInput - prefixIcon returns null
+        expect(find.byIcon(Icons.input), findsOneWidget);
       });
     });
 

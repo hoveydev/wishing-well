@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_landing/components/add_wisher_landing_buttons.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_landing/components/add_wisher_landing_header.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
@@ -21,12 +22,8 @@ class _AddWisherLandingScreenState extends State<AddWisherLandingScreen> {
     super.initState();
   }
 
-  void _handleAddFromContacts() {
-    // TODO: Navigate to contacts selection
-  }
-
   void _handleAddManually() {
-    // TODO: Navigate to manual wisher creation
+    context.pushNamed(Routes.manualAddWisher.name);
   }
 
   @override
@@ -36,10 +33,7 @@ class _AddWisherLandingScreenState extends State<AddWisherLandingScreen> {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       const AddWisherLandingHeader(),
-      AddWisherLandingButtons(
-        onAddFromContacts: _handleAddFromContacts,
-        onAddManually: _handleAddManually,
-      ),
+      AddWisherLandingButtons(onAddManually: _handleAddManually),
     ],
   );
 }

@@ -11,7 +11,8 @@ enum Routes {
   createAccount('/create-account'),
   createAccountConfirm('confirm'), // create-account/confirm
   accountConfirm('account-confirm'), // create-account/account-confirm
-  addWisher('/add-wisher'); // add-wisher
+  addWisher('/add-wisher'), // add-wisher
+  manualAddWisher('manual'); // add-wisher/manual
 
   const Routes(this.path);
   final String path;

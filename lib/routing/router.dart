@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/screens/shared/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/screens/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
@@ -259,22 +261,76 @@ GoRouter router() => GoRouter(
       name: Routes.addWisher.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AddWisherLandingScreen(viewModel: AddWisherLandingViewModel()),
-        transitionsBuilder: (_, animation, _, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
+        transitionsBuilder: (_, animation, secondaryAnimation, child) {
+          // Entrance animation: slide up from bottom
+          const slideBegin = Offset(0.0, 1.0);
+          const slideEnd = Offset.zero;
           const curve = Curves.easeInOut;
 
-          final tween = Tween(
-            begin: begin,
-            end: end,
+          final slideTween = Tween(
+            begin: slideBegin,
+            end: slideEnd,
+          ).chain(CurveTween(curve: curve));
+
+          // Parallax animation: shift left when covered by another route
+          const parallaxBegin = Offset.zero;
+          const parallaxEnd = Offset(-0.15, 0.0);
+
+          final parallaxTween = Tween(
+            begin: parallaxBegin,
+            end: parallaxEnd,
           ).chain(CurveTween(curve: curve));
 
           return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
+            position: animation.drive(slideTween),
+            child: SlideTransition(
+              position: secondaryAnimation.drive(parallaxTween),
+              child: child,
+            ),
           );
         },
       ),
+      routes: [
+        GoRoute(
+          path: Routes.manualAddWisher.path,
+          name: Routes.manualAddWisher.name,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: AddWisherDetailsScreen(
+              viewModel: AddWisherDetailsViewModel(
+                wisherRepository: context.read(),
+              ),
+            ),
+            transitionsBuilder: (_, animation, secondaryAnimation, child) {
+              // Entrance animation: slide in from right (iOS-style)
+              const slideBegin = Offset(1.0, 0.0);
+              const slideEnd = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              final slideTween = Tween(
+                begin: slideBegin,
+                end: slideEnd,
+              ).chain(CurveTween(curve: curve));
+
+              // Parallax animation: shift left when covered by another route
+              const parallaxBegin = Offset.zero;
+              const parallaxEnd = Offset(-0.15, 0.0);
+
+              final parallaxTween = Tween(
+                begin: parallaxBegin,
+                end: parallaxEnd,
+              ).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(slideTween),
+                child: SlideTransition(
+                  position: secondaryAnimation.drive(parallaxTween),
+                  child: child,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     ),
   ],
 );

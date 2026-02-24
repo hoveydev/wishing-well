@@ -233,5 +233,25 @@
     "addManually": "Add Manually",
     "@addManually": {
         "description": "Button text for adding wisher manually"
+    },
+    "manualAddWisherScreenHeader": "Enter Wisher Details",
+    "@manualAddWisherScreenHeader": {
+        "description": "Header for manual add wisher screen"
+    },
+    "manualAddWisherScreenSubtext": "The more we know now, the more meaningful the gifts can be later.",
+    "@manualAddWisherScreenSubtext": {
+        "description": "Subtext for manual add wisher screen"
+    },
+    "firstName": "First Name",
+    "@firstName": {
+        "description": "Label for first name input field"
+    },
+    "lastName": "Last Name",
+    "@lastName": {
+        "description": "Label for last name input field"
+    },
+    "save": "Save Wisher",
+    "@save": {
+        "description": "Save button text on Add Wisher Details screen"
     }
 }

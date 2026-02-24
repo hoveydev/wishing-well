@@ -1,1 +1,1 @@
-enum AppMenuBarType { main, close, dismiss }
+enum AppMenuBarType { main, close, dismiss, back }

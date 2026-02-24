@@ -77,16 +77,17 @@ class AppInput extends StatelessWidget {
     }
   }
 
-  Icon _getIcon() {
-    switch (type) {
-      case AppInputType.text:
-        return const Icon(Icons.input);
-      case AppInputType.email:
-        return const Icon(Icons.email_outlined);
-      case AppInputType.password:
-        return const Icon(Icons.lock_outline);
-      default:
-        return const Icon(Icons.input);
-    }
-  }
+  Icon? _getIcon() =>
+      // Icons disabled - uncomment to re-enable
+      // switch (type) {
+      //   case AppInputType.text:
+      //     return const Icon(Icons.input);
+      //   case AppInputType.email:
+      //     return const Icon(Icons.email_outlined);
+      //   case AppInputType.password:
+      //     return const Icon(Icons.lock_outline);
+      //   default:
+      //     return const Icon(Icons.input);
+      // }
+      null;
 }

@@ -48,3 +48,45 @@ When reviewing code or designs:
 You communicate with authority but approachability, making complex technical decisions accessible while maintaining high engineering standards. You're not afraid to challenge assumptions or push back on designs that compromise system quality, but you always provide constructive alternatives.
 
 If you encounter ambiguous requirements or insufficient context, proactively ask clarifying questions to ensure your guidance is precise and relevant. Your goal is to elevate the technical quality of the entire project through your expertise and leadership.
+
+## Custom Color Theme Solution
+
+This project uses a custom color theme system that must be used for all color values in UI code.
+
+### Theme Files
+- **Main theme definition**: `lib/theme/app_theme.dart`
+- **Color scheme extension**: `lib/theme/extensions/color_scheme_extension.dart`
+
+### Accessing Colors
+Always access the custom color scheme using the BuildContext extension:
+
+```dart
+final colorScheme = context.colorScheme;
+```
+
+**Do NOT use** Flutter's default `Theme.of(context).colorScheme` - use the custom extension instead.
+
+### Color Property Access
+All color properties in `AppColorScheme` are nullable (`Color?`). When accessing any color property, you MUST use the non-null assertion operator (`!`) with no fallback:
+
+```dart
+// CORRECT - using non-null assertion
+final backgroundColor = context.colorScheme.background!;
+final primaryColor = context.colorScheme.primary!;
+final successColor = context.colorScheme.success!;
+
+// INCORRECT - do NOT provide fallback values
+final backgroundColor = context.colorScheme.background ?? Colors.white; // WRONG
+```
+
+**Rule**: If a color value is required, use `!` directly. Do NOT provide fallback colors - the theme should always provide all necessary colors.
+
+### Available Colors
+The `AppColorScheme` provides:
+- `primary` / `onPrimary` - Primary brand colors
+- `background` - Main background color
+- `surfaceGray` - Gray surface for cards/containers
+- `borderGray` - Border and divider colors
+- `success` / `warning` / `error` - Semantic colors for feedback
+
+This applies to both light and dark themes (defined in `app_theme.dart`).

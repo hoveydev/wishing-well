@@ -88,6 +88,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icons.keyboard_arrow_left,
             onPressed: action,
             type: AppButtonType.tertiary,
+            iconSize: 28.0,
           ),
         ),
       ),

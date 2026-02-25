@@ -471,6 +471,27 @@ void main() {
           final iconWidget = tester.widget<Icon>(find.byType(Icon));
           expect(iconWidget.size, 24.0);
         });
+
+        testWidgets('uses custom iconSize when provided', (
+          WidgetTester tester,
+        ) async {
+          const customIconSize = 28.0;
+
+          await tester.pumpWidget(
+            createComponentTestWidget(
+              AppButton.icon(
+                icon: testIcon,
+                onPressed: () {},
+                type: AppButtonType.primary,
+                iconSize: customIconSize,
+              ),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, customIconSize);
+        });
       });
 
       group('Secondary Button Properties', () {
@@ -527,6 +548,27 @@ void main() {
 
           final iconWidget = tester.widget<Icon>(find.byType(Icon));
           expect(iconWidget.size, 24.0);
+        });
+
+        testWidgets('uses custom iconSize when provided', (
+          WidgetTester tester,
+        ) async {
+          const customIconSize = 28.0;
+
+          await tester.pumpWidget(
+            createComponentTestWidget(
+              AppButton.icon(
+                icon: testIcon,
+                onPressed: () {},
+                type: AppButtonType.secondary,
+                iconSize: customIconSize,
+              ),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, customIconSize);
         });
       });
 
@@ -630,6 +672,27 @@ void main() {
 
           final iconWidget = tester.widget<Icon>(find.byType(Icon));
           expect(iconWidget.size, 24.0);
+        });
+
+        testWidgets('uses custom iconSize when provided', (
+          WidgetTester tester,
+        ) async {
+          const customIconSize = 28.0;
+
+          await tester.pumpWidget(
+            createComponentTestWidget(
+              AppButton.icon(
+                icon: testIcon,
+                onPressed: () {},
+                type: AppButtonType.tertiary,
+                iconSize: customIconSize,
+              ),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, customIconSize);
         });
       });
 

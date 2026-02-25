@@ -13,6 +13,7 @@ class SecondaryButton extends StatelessWidget {
     this.icon,
     this.label,
     this.isLoading = false,
+    this.iconSize,
   }) : _secondaryButtonContentType = secondaryButtonContentType;
 
   const SecondaryButton.icon({
@@ -20,12 +21,14 @@ class SecondaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    double? iconSize,
   }) : this._(
          key: key,
          icon: icon,
          onPressed: onPressed,
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.icon,
+         iconSize: iconSize,
        );
 
   const SecondaryButton.label({
@@ -60,6 +63,7 @@ class SecondaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final _SecondaryButtonContentType _secondaryButtonContentType;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +86,7 @@ class SecondaryButton extends StatelessWidget {
           icon: icon!,
           buttonType: AppButtonType.secondary,
           isLoading: isLoading,
+          iconSize: iconSize,
         );
       case _SecondaryButtonContentType.label:
         return AppButtonContent.label(

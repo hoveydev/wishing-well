@@ -15,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
     this.icon,
     this.label,
     this.semanticLabel,
+    this.iconSize,
   }) : _primaryButtonContentType = primaryButtonContentType;
 
   const PrimaryButton.icon({
@@ -24,6 +25,7 @@ class PrimaryButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     String? semanticLabel,
+    double? iconSize,
   }) : this._(
          key: key,
          icon: icon,
@@ -32,6 +34,7 @@ class PrimaryButton extends StatelessWidget {
          alignment: alignment,
          semanticLabel: semanticLabel,
          primaryButtonContentType: _PrimaryButtonContentType.icon,
+         iconSize: iconSize,
        );
 
   const PrimaryButton.label({
@@ -72,6 +75,7 @@ class PrimaryButton extends StatelessWidget {
   final bool isLoading;
   final MainAxisAlignment alignment;
   final _PrimaryButtonContentType _primaryButtonContentType;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +103,7 @@ class PrimaryButton extends StatelessWidget {
           buttonType: AppButtonType.primary,
           isLoading: isLoading,
           alignment: alignment,
+          iconSize: iconSize,
         );
       case _PrimaryButtonContentType.label:
         return AppButtonContent.label(

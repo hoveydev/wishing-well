@@ -16,6 +16,7 @@ class AppButton extends StatelessWidget {
     super.key,
     this.label,
     this.icon,
+    this.iconSize,
   }) : _appButtonContentType = appButtonContentType;
 
   const AppButton.icon({
@@ -25,6 +26,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    double? iconSize,
   }) : this._(
          key: key,
          icon: icon,
@@ -33,6 +35,7 @@ class AppButton extends StatelessWidget {
          alignment: alignment,
          type: type,
          appButtonContentType: _AppButtonContentType.icon,
+         iconSize: iconSize,
        );
 
   const AppButton.label({
@@ -77,6 +80,7 @@ class AppButton extends StatelessWidget {
   final MainAxisAlignment alignment;
   final AppButtonType type;
   final _AppButtonContentType _appButtonContentType;
+  final double? iconSize;
 
   Widget _button(void Function()? onPressHandler) {
     switch (type) {
@@ -87,6 +91,7 @@ class AppButton extends StatelessWidget {
               icon: icon!,
               onPressed: onPressed,
               alignment: alignment,
+              iconSize: iconSize,
             );
           case _AppButtonContentType.label:
             return PrimaryButton.label(
@@ -105,7 +110,11 @@ class AppButton extends StatelessWidget {
       case AppButtonType.secondary:
         switch (_appButtonContentType) {
           case _AppButtonContentType.icon:
-            return SecondaryButton.icon(icon: icon!, onPressed: onPressed);
+            return SecondaryButton.icon(
+              icon: icon!,
+              onPressed: onPressed,
+              iconSize: iconSize,
+            );
           case _AppButtonContentType.label:
             return SecondaryButton.label(label: label!, onPressed: onPressed);
           case _AppButtonContentType.labelWithIcon:
@@ -118,7 +127,11 @@ class AppButton extends StatelessWidget {
       case AppButtonType.tertiary:
         switch (_appButtonContentType) {
           case _AppButtonContentType.icon:
-            return TertiaryButton.icon(icon: icon!, onPressed: onPressed);
+            return TertiaryButton.icon(
+              icon: icon!,
+              onPressed: onPressed,
+              iconSize: iconSize,
+            );
           case _AppButtonContentType.label:
             return TertiaryButton.label(label: label!, onPressed: onPressed);
           case _AppButtonContentType.labelWithIcon:

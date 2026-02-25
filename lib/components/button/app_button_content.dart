@@ -13,6 +13,7 @@ class AppButtonContent extends StatelessWidget {
     super.key,
     this.label,
     this.icon,
+    this.iconSize,
   }) : _appButtonContentType = appButtonContentType;
 
   const AppButtonContent.icon({
@@ -21,6 +22,7 @@ class AppButtonContent extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    double? iconSize,
   }) : this._(
          key: key,
          icon: icon,
@@ -28,6 +30,7 @@ class AppButtonContent extends StatelessWidget {
          isLoading: isLoading,
          alignment: alignment,
          appButtonContentType: _AppButtonContentType.icon,
+         iconSize: iconSize,
        );
 
   const AppButtonContent.label({
@@ -67,6 +70,7 @@ class AppButtonContent extends StatelessWidget {
   final MainAxisAlignment alignment;
   final AppButtonType buttonType;
   final _AppButtonContentType _appButtonContentType;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +93,7 @@ class AppButtonContent extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context, TextTheme textTheme) {
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
-        return [Icon(icon!, size: const AppIconSize().large)];
+        return [Icon(icon!, size: iconSize ?? const AppIconSize().large)];
       case _AppButtonContentType.label:
         return [
           Flexible(

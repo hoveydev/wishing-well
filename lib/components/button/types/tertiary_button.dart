@@ -13,6 +13,7 @@ class TertiaryButton extends StatelessWidget {
     this.icon,
     this.label,
     this.isLoading = false,
+    this.iconSize,
   }) : _tertiaryButtonContentType = tertiaryButtonContentType;
 
   const TertiaryButton.icon({
@@ -20,12 +21,14 @@ class TertiaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    double? iconSize,
   }) : this._(
          key: key,
          icon: icon,
          onPressed: onPressed,
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.icon,
+         iconSize: iconSize,
        );
 
   const TertiaryButton.label({
@@ -60,6 +63,7 @@ class TertiaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final _TertiaryButtonContentType _tertiaryButtonContentType;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +91,7 @@ class TertiaryButton extends StatelessWidget {
           icon: icon!,
           buttonType: AppButtonType.tertiary,
           isLoading: isLoading,
+          iconSize: iconSize,
         );
       case _TertiaryButtonContentType.label:
         return AppButtonContent.label(

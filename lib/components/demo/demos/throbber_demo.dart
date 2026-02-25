@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/throbber/app_throbber_size.dart';
+import 'package:wishing_well/components/throbber/skeleton_loader.dart';
 
 class ThrobberDemo extends StatelessWidget {
   const ThrobberDemo({super.key});
@@ -55,6 +56,110 @@ class ThrobberDemo extends StatelessWidget {
             const FeatureBulletPoint(text: 'Lightweight custom painting'),
             const FeatureBulletPoint(
               text: 'Accessibility-friendly loading indicator',
+            ),
+          ]),
+
+          // Skeleton Loader Section
+          _buildSection('Skeleton Loader', [
+            const Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Circle Shape',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        SkeletonLoader(
+                          shape: SkeletonShape.circle,
+                          width: 60,
+                          height: 60,
+                        ),
+                        SizedBox(width: 16),
+                        SkeletonLoader(
+                          shape: SkeletonShape.circle,
+                          width: 40,
+                          height: 40,
+                        ),
+                        SizedBox(width: 16),
+                        SkeletonLoader(
+                          shape: SkeletonShape.circle,
+                          width: 24,
+                          height: 24,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Rounded Rectangle Shape',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        SkeletonLoader(
+                          shape: SkeletonShape.roundedRectangle,
+                          width: 120,
+                          height: 20,
+                          borderRadius: 4,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        SkeletonLoader(
+                          shape: SkeletonShape.roundedRectangle,
+                          width: 80,
+                          height: 16,
+                          borderRadius: 8,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        SkeletonLoader(
+                          shape: SkeletonShape.roundedRectangle,
+                          width: 60,
+                          height: 12,
+                          borderRadius: 6,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const FeatureBulletPoint(
+              text: 'Shimmer animation with customizable duration',
+            ),
+            const FeatureBulletPoint(
+              text: 'Supports circle and rounded rectangle shapes',
+            ),
+            const FeatureBulletPoint(
+              text: 'Uses theme colors for base and highlight',
             ),
           ]),
 

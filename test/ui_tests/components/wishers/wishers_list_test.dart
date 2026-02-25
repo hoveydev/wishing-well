@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
+import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 
@@ -156,21 +157,18 @@ void main() {
         TestHelpers.expectWidgetOnce(AddWisherItem);
       });
 
-      testWidgets('shows loading indicator when loading', (
+      testWidgets('shows skeleton loader when loading', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            createWishersList(wishers: [], isLoading: true),
-          ),
+          createScreenComponentTestWidget(createWishersList(isLoading: true)),
         );
         // Use pump() instead of pumpAndSettle() because
-        // CircularProgressIndicator
-        // has an infinite animation that never settles
+        // skeleton has an infinite animation that never settles
         await tester.pump();
 
-        // Should show loading indicator
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        // Should show skeleton loader
+        TestHelpers.expectWidgetOnce(WishersListSkeleton);
       });
     });
 

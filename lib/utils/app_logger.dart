@@ -4,6 +4,22 @@ import 'package:logging/logging.dart' as logging;
 /// Log levels for safe logging.
 enum LogLevel { debug, info, warning, error }
 
+/// Extension to convert LogLevel to logging.Level
+extension LogLevelExtension on LogLevel {
+  logging.Level get toLoggingLevel {
+    switch (this) {
+      case LogLevel.debug:
+        return logging.Level.ALL;
+      case LogLevel.info:
+        return logging.Level.INFO;
+      case LogLevel.warning:
+        return logging.Level.WARNING;
+      case LogLevel.error:
+        return logging.Level.SEVERE;
+    }
+  }
+}
+
 /// Log level styling configuration.
 class _LogStyle {
   const _LogStyle({required this.emoji, required this.label});
@@ -21,8 +37,9 @@ class _LogStyle {
 ///
 /// This logger provides structured logging with:
 /// - Different log levels (debug, info, warning, error)
+/// - **Configurable log level at runtime** via [setLogLevel]
 /// - Context-aware logging for better traceability
-/// - Automatic suppression in release builds
+/// - Automatic suppression in release builds by default
 /// - Formatted output with timestamps and source context
 /// - Error and stack trace support for error logging
 /// - Emoji indicators for easy visual scanning
@@ -31,6 +48,10 @@ class _LogStyle {
 /// ```dart
 /// // Initialize in main.dart before runApp()
 /// AppLogger.init();
+///
+/// // Change log level at runtime (e.g., from settings screen)
+/// AppLogger.setLogLevel(LogLevel.debug); // Show all logs
+/// AppLogger.setLogLevel(LogLevel.warning); // Only warnings and errors
 ///
 /// // Log with context
 /// AppLogger.info('User logged in', context: 'AuthRepository.login');
@@ -51,18 +72,58 @@ class AppLogger {
   static final logging.Logger _logger = logging.Logger('WishingWell');
   static bool _initialized = false;
 
+  /// Current log level setting (can be changed at runtime).
+  ///
+  /// Defaults to:
+  /// - [LogLevel.debug] in debug mode (shows all logs)
+  /// - [LogLevel.warning] in release mode (shows warnings and above)
+  ///
+  /// Use [setLogLevel] to change this at runtime.
+  static LogLevel _currentLogLevel = LogLevel.warning;
+
+  /// Get the current log level.
+  static LogLevel get logLevel => _currentLogLevel;
+
+  /// Set the log level at runtime.
+  ///
+  /// This allows dynamically adjusting verbosity without rebuilding.
+  /// Useful for:
+  /// - Debug screens in production
+  /// - Remote config integration
+  /// - User preference settings
+  ///
+  /// Example:
+  /// ```dart
+  /// // Enable debug logging
+  /// AppLogger.setLogLevel(LogLevel.debug);
+  ///
+  /// // Silence all logs in production
+  /// AppLogger.setLogLevel(LogLevel.error);
+  /// ```
+  static void setLogLevel(LogLevel level) {
+    _currentLogLevel = level;
+    _logger.level = level.toLoggingLevel;
+    // Also update root level to filter at the root level
+    logging.Logger.root.level = level.toLoggingLevel;
+  }
+
   /// Initialize the logging system.
   ///
   /// Should be called once in main.dart before runApp().
   /// Configures log levels and output handlers based on build mode.
+  ///
+  /// To change the log level at runtime, use [setLogLevel].
   static void init() {
     if (_initialized) return;
     _initialized = true;
 
-    // Set log level based on build mode
-    logging.Logger.root.level = kDebugMode
-        ? logging.Level.ALL
-        : logging.Level.WARNING;
+    // Enable hierarchical logging to allow setting level on our logger
+    logging.hierarchicalLoggingEnabled = true;
+
+    // Set default log level based on build mode
+    // This can be overridden at runtime via setLogLevel()
+    _currentLogLevel = kDebugMode ? LogLevel.debug : LogLevel.warning;
+    _logger.level = _currentLogLevel.toLoggingLevel;
 
     // Configure log output handler
     logging.Logger.root.onRecord.listen((record) {

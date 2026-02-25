@@ -31,7 +31,7 @@ flutter run --target lib/components/demo/main.dart
 ✅ **Checklist** - Interactive checklist with satisfied/unsatisfied states
 ✅ **Inline Alerts** - All types (Info, Success, Warning, Error) for inline messaging
 ✅ **Spacers** - All sizes (XSmall, Small, Medium, Large, XLarge) with visual comparison
-✅ **Throbbers** - All sizes (XSmall, Small, Medium, Large, XLarge) with smooth animation
+✅ **Throbbers** - All sizes (XSmall, Small, Medium, Large, XLarge) with smooth animation, plus skeleton loaders for loading states
 ✅ **App Bar** - All types (Main, Close, Dismiss) with interactive examples
 ✅ **Logo** - All sizes with visual comparison and use cases
 ✅ **Screen** - Full screen component with app bar integration and layout variations
@@ -291,10 +291,8 @@ If a component is missing a demo, you'll see an error like:
 - Reduces magic numbers
 
 ### Throbbers
-- Five predefined sizes
-- Smooth continuous animation
-- Theme colors
-- Lightweight custom painting
+- **Throbber (Circular)**: Five predefined sizes with smooth continuous animation, theme colors, lightweight custom painting
+- **Skeleton Loader**: Shimmer animation for loading states, circle and rounded rectangle shapes, configurable dimensions and border radius, gradient-based highlight effect
 
 ### App Bar
 - Main, Close, and Dismiss types

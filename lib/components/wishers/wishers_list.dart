@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
+import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
@@ -70,9 +71,7 @@ class WishersList extends StatelessWidget {
                   child: SizedBox(
                     height: 80,
                     child: isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          ) // TODO: should change to skeleton
+                        ? const WishersListSkeleton()
                         : ListView.builder(
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.symmetric(

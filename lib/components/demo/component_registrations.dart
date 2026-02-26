@@ -44,6 +44,7 @@ import 'package:wishing_well/components/demo/demos/throbber_demo.dart';
 import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
+import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
 
 /// Registers all component demos with the registry.
 ///
@@ -169,6 +170,15 @@ void registerAllDemos() {
     description: 'Generic circular image picker with local/remote support',
   );
 
+  ComponentDemoRegistry.register(
+    componentName: 'image_source_menu',
+    title: 'Image Source Menu',
+    icon: Icons.photo_library,
+    demoBuilder: (_) => const ImageSourceMenuDemo(),
+    description:
+        'Modal bottom sheet for selecting image source (photo or file)',
+  );
+
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -194,6 +204,7 @@ void registerAllDemos() {
     'touch_feedback', // Touch feedback component
     'wishers', // Wisher list component
     'image_picker_circle', // Image picker component
+    'image_source_menu', // Image source menu component
   ];
 
   // Verify that all required components have been registered

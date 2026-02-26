@@ -265,5 +265,17 @@
     "errorBothNamesRequired": "First and last name cannot be empty",
     "@errorBothNamesRequired": {
         "description": "Error message when both first and last name are required"
+    },
+    "selectImageSource": "Select Image Source",
+    "@selectImageSource": {
+        "description": "Title for image source selection menu"
+    },
+    "chooseAPhoto": "Choose a Photo",
+    "@chooseAPhoto": {
+        "description": "Option to choose a photo from gallery"
+    },
+    "chooseAFile": "Choose a File",
+    "@chooseAFile": {
+        "description": "Option to choose a file from device"
     }
 }

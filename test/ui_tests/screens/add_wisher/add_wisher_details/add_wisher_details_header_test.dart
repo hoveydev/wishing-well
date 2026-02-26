@@ -232,5 +232,149 @@ void main() {
         expect(find.byType(Semantics), findsWidgets);
       });
     });
+
+    group('Image Source Menu Interaction', () {
+      testWidgets('tapping CircleImagePicker opens ImageSourceMenu', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify the menu is displayed
+        TestHelpers.expectTextOnce('Select Image Source');
+      });
+
+      testWidgets('ImageSourceMenu shows Choose a Photo option', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify both options are displayed
+        TestHelpers.expectTextOnce('Choose a Photo');
+        TestHelpers.expectTextOnce('Choose a File');
+      });
+
+      testWidgets('ImageSourceMenu shows Choose a File option', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify file option is displayed
+        TestHelpers.expectTextOnce('Choose a File');
+      });
+
+      testWidgets('selecting photo option triggers callback', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on "Choose a Photo"
+        await tester.tap(find.text('Choose a Photo'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Menu should be closed
+        expect(find.text('Select Image Source'), findsNothing);
+      });
+
+      testWidgets('selecting file option triggers callback', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on "Choose a File"
+        await tester.tap(find.text('Choose a File'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Menu should be closed
+        expect(find.text('Select Image Source'), findsNothing);
+      });
+
+      testWidgets('menu displays correct icons', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify icons are displayed
+        expect(find.byIcon(Icons.photo_library), findsOneWidget);
+        expect(find.byIcon(Icons.folder_open), findsOneWidget);
+      });
+
+      testWidgets('can reopen menu after selecting an option', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap on the CircleImagePicker
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Select an option
+        await tester.tap(find.text('Choose a Photo'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Tap again to reopen
+        await tester.tap(find.byType(CircleImagePicker));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify menu is open again
+        TestHelpers.expectTextOnce('Select Image Source');
+      });
+    });
   });
 }

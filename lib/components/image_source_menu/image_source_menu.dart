@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -34,6 +35,7 @@ class ImageSourceMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
 
     return SafeArea(
@@ -50,20 +52,17 @@ class ImageSourceMenu extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(height: 8),
+          const AppSpacer.small(),
           // Title
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
               l10n.selectImageSource,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              style: textTheme.titleMedium?.copyWith(
                 color: colorScheme.primary,
               ),
             ),
           ),
-          Divider(height: 1, color: colorScheme.borderGray),
           // Options
           _buildOption(
             context: context,
@@ -77,7 +76,7 @@ class ImageSourceMenu extends StatelessWidget {
             title: l10n.chooseAFile,
             onTap: () => _handleSelection(context, ImageSourceOption.file),
           ),
-          const SizedBox(height: 8),
+          const AppSpacer.small(),
         ],
       ),
     );
@@ -90,15 +89,13 @@ class ImageSourceMenu extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final colorScheme = context.colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return ListTile(
       leading: Icon(icon, color: colorScheme.primary),
       title: Text(
         title,
-        style: TextStyle(
-          color: colorScheme.primary,
-          fontWeight: FontWeight.w500,
-        ),
+        style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary),
       ),
       onTap: onTap,
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
+import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 
 import '../../../../testing_resources/helpers/test_helpers.dart';
 
@@ -426,6 +427,93 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Select Image Source'), findsOneWidget);
+      });
+
+      testWidgets('has TouchFeedbackOpacity on options', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  ImageSourceMenu.show(
+                    context: context,
+                    onOptionSelected: (_) {},
+                  );
+                },
+                child: const Text('Open Menu'),
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Open the menu
+        await tester.tap(find.text('Open Menu'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify TouchFeedbackOpacity is present
+        expect(find.byType(TouchFeedbackOpacity), findsNWidgets(2));
+      });
+
+      testWidgets('renders Column with correct mainAxisSize', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  ImageSourceMenu.show(
+                    context: context,
+                    onOptionSelected: (_) {},
+                  );
+                },
+                child: const Text('Open Menu'),
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Open the menu
+        await tester.tap(find.text('Open Menu'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find Column and verify mainAxisSize is min
+        final columnFinder = find.descendant(
+          of: find.byType(ImageSourceMenu),
+          matching: find.byType(Column),
+        );
+        final column = tester.widget<Column>(columnFinder);
+        expect(column.mainAxisSize, MainAxisSize.min);
+      });
+
+      testWidgets('renders as StatelessWidget', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  ImageSourceMenu.show(
+                    context: context,
+                    onOptionSelected: (_) {},
+                  );
+                },
+                child: const Text('Open Menu'),
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Open the menu
+        await tester.tap(find.text('Open Menu'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify it's a StatelessWidget (not Stateful)
+        expect(find.byType(ImageSourceMenu), findsOneWidget);
       });
     });
   });

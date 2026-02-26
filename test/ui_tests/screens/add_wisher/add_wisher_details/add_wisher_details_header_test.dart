@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_details/components/add_wisher_details_header.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_details/components/add_wisher_details_inputs.dart';
 
@@ -22,6 +23,19 @@ void main() {
     });
 
     group(TestGroups.rendering, () {
+      testWidgets('renders CircleImagePicker component', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(CircleImagePicker), findsOneWidget);
+      });
+
       testWidgets('renders header text correctly', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
@@ -61,6 +75,26 @@ void main() {
     });
 
     group(TestGroups.behavior, () {
+      testWidgets('CircleImagePicker receives imageFile from viewModel', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final imagePickerFinder = find.byType(CircleImagePicker);
+        final imagePickerWidget = tester.widget<CircleImagePicker>(
+          imagePickerFinder,
+        );
+
+        // Initially should be null
+        expect(imagePickerWidget.imageFile, isNull);
+        expect(imagePickerWidget.imageUrl, isNull);
+      });
+
       testWidgets('has correct column layout', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
@@ -90,6 +124,96 @@ void main() {
           inputsFinder,
         );
         expect(inputsWidget.viewModel, viewModel);
+      });
+
+      testWidgets('CircleImagePicker has onTap callback', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final imagePickerFinder = find.byType(CircleImagePicker);
+        final imagePickerWidget = tester.widget<CircleImagePicker>(
+          imagePickerFinder,
+        );
+
+        // Should have an onTap callback
+        expect(imagePickerWidget.onTap, isNotNull);
+      });
+    });
+
+    group('Image Picker Display', () {
+      testWidgets('CircleImagePicker displays with default radius', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final imagePickerFinder = find.byType(CircleImagePicker);
+        final imagePickerWidget = tester.widget<CircleImagePicker>(
+          imagePickerFinder,
+        );
+
+        // Default radius is 50
+        expect(imagePickerWidget.radius, equals(50));
+      });
+
+      testWidgets('CircleImagePicker shows edit icon by default', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final imagePickerFinder = find.byType(CircleImagePicker);
+        final imagePickerWidget = tester.widget<CircleImagePicker>(
+          imagePickerFinder,
+        );
+
+        expect(imagePickerWidget.showEditIcon, isTrue);
+      });
+
+      testWidgets('CircleImagePicker has no label by default', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final imagePickerFinder = find.byType(CircleImagePicker);
+        final imagePickerWidget = tester.widget<CircleImagePicker>(
+          imagePickerFinder,
+        );
+
+        expect(imagePickerWidget.label, isNull);
+      });
+
+      testWidgets('CircleImagePicker shows placeholder when no image', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsHeader(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should show placeholder with camera icon when no image
+        expect(find.byIcon(Icons.camera_alt_outlined), findsOneWidget);
       });
     });
 

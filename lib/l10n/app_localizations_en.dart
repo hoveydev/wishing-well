@@ -204,4 +204,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get save => 'Save Wisher';
+
+  @override
+  String get errorFirstNameRequired => 'First name cannot be empty';
+
+  @override
+  String get errorLastNameRequired => 'Last name cannot be empty';
+
+  @override
+  String get errorBothNamesRequired => 'First and last name cannot be empty';
 }

@@ -90,3 +90,31 @@ The `AppColorScheme` provides:
 - `success` / `warning` / `error` - Semantic colors for feedback
 
 This applies to both light and dark themes (defined in `app_theme.dart`).
+
+## Localization System
+
+This project uses Flutter's localization system with ARB (Application Resource Bundle) files as the source of truth.
+
+### Localization Files
+- **Source file**: `lib/l10n/app_en.arb` - Always edit this file to add/modify strings
+- **Generated files** (DO NOT edit manually):
+  - `lib/l10n/app_localizations.dart` - Main localization class (auto-generated)
+  - `lib/l10n/app_localizations_en.dart` - English translations (auto-generated)
+
+### Adding New Localization Strings
+
+**Always edit the ARB file first**, then run the code generator:
+
+1. Add new string to `lib/l10n/app_en.arb` following the existing pattern:
+   ```json
+   "errorFirstNameRequired": "First name cannot be empty",
+   "@errorFirstNameRequired": {
+       "description": "Error message when first name is required"
+   }
+   ```
+
+2. Run `flutter gen-l10n` to regenerate the Dart localization files
+
+3. The generated files will be automatically updated - do NOT manually edit them
+
+**Common mistake to avoid**: Never directly edit `app_localizations.dart` or `app_localizations_en.dart`. These are generated files and changes will be overwritten on the next `flutter gen-l10n` run.

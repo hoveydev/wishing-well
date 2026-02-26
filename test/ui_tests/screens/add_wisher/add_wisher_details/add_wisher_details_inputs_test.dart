@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_details/components/add_wisher_details_inputs.dart';
+import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 
 import '../../../../../testing_resources/helpers/test_helpers.dart';
 import '../../../../../testing_resources/mocks/repositories/mock_wisher_repository.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 
 void main() {
   group('AddWisherDetailsInputs', () {
@@ -152,6 +154,227 @@ void main() {
           find.byType(AddWisherDetailsInputs),
         );
         expect(inputsWidget.viewModel, viewModel);
+      });
+    });
+
+    group(TestGroups.errorHandling, () {
+      testWidgets('does not show inline alert initially', (
+        WidgetTester tester,
+      ) async {
+        // Verify initial state before rendering
+        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // After rendering, still no error should be shown
+        expect(viewModel.hasAlert, isFalse);
+        expect(find.byType(AppInlineAlert), findsNothing);
+      });
+
+      testWidgets('shows inline alert when first name is empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Enter last name only (first name empty)
+        final textFields = find.byType(TextField);
+        await tester.enterText(textFields.last, 'Doe');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(viewModel.hasAlert, isTrue);
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+      });
+
+      testWidgets('shows inline alert when last name is empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Enter first name only (last name empty)
+        final textFields = find.byType(TextField);
+        await tester.enterText(textFields.first, 'John');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(viewModel.hasAlert, isTrue);
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+      });
+
+      testWidgets('shows inline alert when both names are empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Trigger validation by updating with empty strings
+        viewModel.updateFirstName('');
+        viewModel.updateLastName('');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(viewModel.hasAlert, isTrue);
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.bothNamesRequired,
+        );
+      });
+
+      testWidgets('hides inline alert when both names are valid', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // First trigger an error
+        final textFields = find.byType(TextField);
+        await tester.enterText(textFields.first, 'John');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(viewModel.hasAlert, isTrue);
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+
+        // Now enter last name to make form valid
+        await tester.enterText(textFields.last, 'Doe');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.isFormValid, isTrue);
+        expect(find.byType(AppInlineAlert), findsNothing);
+      });
+
+      testWidgets('displays correct error message for firstNameRequired', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Enter last name only - triggers firstNameRequired error
+        final textFields = find.byType(TextField);
+        await tester.enterText(textFields.last, 'Doe');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.firstNameRequired,
+        );
+
+        final alertFinder = find.byType(AppInlineAlert);
+        expect(alertFinder, findsOneWidget);
+
+        final alert = tester.widget<AppInlineAlert>(alertFinder);
+        expect(alert.message, 'First name cannot be empty');
+        expect(alert.type, AppInlineAlertType.error);
+      });
+
+      testWidgets('displays correct error message for lastNameRequired', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Enter first name only - triggers lastNameRequired error
+        final textFields = find.byType(TextField);
+        await tester.enterText(textFields.first, 'John');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.lastNameRequired,
+        );
+
+        final alertFinder = find.byType(AppInlineAlert);
+        expect(alertFinder, findsOneWidget);
+
+        final alert = tester.widget<AppInlineAlert>(alertFinder);
+        expect(alert.message, 'Last name cannot be empty');
+        expect(alert.type, AppInlineAlertType.error);
+      });
+
+      testWidgets('displays correct error message for bothNamesRequired', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Trigger bothNamesRequired error
+        viewModel.updateFirstName('');
+        viewModel.updateLastName('');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.bothNamesRequired,
+        );
+
+        final alertFinder = find.byType(AppInlineAlert);
+        expect(alertFinder, findsOneWidget);
+
+        final alert = tester.widget<AppInlineAlert>(alertFinder);
+        expect(alert.message, 'First and last name cannot be empty');
+        expect(alert.type, AppInlineAlertType.error);
+      });
+
+      testWidgets('inline alert uses ListenableBuilder for reactivity', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            AddWisherDetailsInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Initially no alert
+        expect(find.byType(AppInlineAlert), findsNothing);
+
+        // Trigger error
+        viewModel.updateLastName('Doe');
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Alert should appear
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+
+        // Fix error
+        viewModel.updateFirstName('John');
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Alert should disappear
+        expect(find.byType(AppInlineAlert), findsNothing);
       });
     });
   });

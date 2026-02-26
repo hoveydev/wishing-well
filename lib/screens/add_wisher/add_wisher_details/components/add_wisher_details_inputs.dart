@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert_spacing.dart';
+import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
@@ -65,7 +68,30 @@ class _AddWisherDetailsInputsState extends State<AddWisherDetailsInputs> {
           onChanged: (String lastName) =>
               widget.viewModel.updateLastName(lastName),
         ),
+        ListenableBuilder(
+          listenable: widget.viewModel,
+          builder: (context, _) {
+            if (!widget.viewModel.hasAlert) return const SizedBox.shrink();
+            return Padding(
+              padding: AppInlineAlertSpacing.inputPadding,
+              child: AppInlineAlert(
+                message: _validationMessage(l10n),
+                type: AppInlineAlertType.error,
+              ),
+            );
+          },
+        ),
       ],
     );
   }
+
+  String _validationMessage(
+    AppLocalizations l10n,
+  ) => switch (widget.viewModel.error.type) {
+    AddWisherDetailsErrorType.firstNameRequired => l10n.errorFirstNameRequired,
+    AddWisherDetailsErrorType.lastNameRequired => l10n.errorLastNameRequired,
+    AddWisherDetailsErrorType.bothNamesRequired => l10n.errorBothNamesRequired,
+    AddWisherDetailsErrorType.unknown => l10n.errorUnknown,
+    _ => '',
+  };
 }

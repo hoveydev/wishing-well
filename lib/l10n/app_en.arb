@@ -253,5 +253,17 @@
     "save": "Save Wisher",
     "@save": {
         "description": "Save button text on Add Wisher Details screen"
+    },
+    "errorFirstNameRequired": "First name cannot be empty",
+    "@errorFirstNameRequired": {
+        "description": "Error message when first name is required"
+    },
+    "errorLastNameRequired": "Last name cannot be empty",
+    "@errorLastNameRequired": {
+        "description": "Error message when last name is required"
+    },
+    "errorBothNamesRequired": "First and last name cannot be empty",
+    "@errorBothNamesRequired": {
+        "description": "Error message when both first and last name are required"
     }
 }

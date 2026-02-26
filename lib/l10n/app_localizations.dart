@@ -465,6 +465,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Wisher'**
   String get save;
+
+  /// Error message when first name is required
+  ///
+  /// In en, this message translates to:
+  /// **'First name cannot be empty'**
+  String get errorFirstNameRequired;
+
+  /// Error message when last name is required
+  ///
+  /// In en, this message translates to:
+  /// **'Last name cannot be empty'**
+  String get errorLastNameRequired;
+
+  /// Error message when both first and last name are required
+  ///
+  /// In en, this message translates to:
+  /// **'First and last name cannot be empty'**
+  String get errorBothNamesRequired;
 }
 
 class _AppLocalizationsDelegate

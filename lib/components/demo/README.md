@@ -36,6 +36,7 @@ flutter run --target lib/components/demo/main.dart
 ✅ **Logo** - All sizes with visual comparison and use cases
 ✅ **Screen** - Full screen component with app bar integration and layout variations
 ✅ **Touch Feedback** - Opacity-based feedback with customizable animations
+✅ **Image Picker Circle** - Generic circular image picker with local/remote support, configurable size, and optional edit overlay
 
 ## Features
 
@@ -64,6 +65,7 @@ lib/
     ├── throbber/
     ├── touch_feedback/
     ├── wishers/
+    ├── image_picker_circle/
     └── demo/ (component demo app - production-excluded)
         ├── main.dart (demo entry point)
         ├── demo_app.dart
@@ -83,7 +85,8 @@ lib/
             ├── app_bar_demo.dart
             ├── logo_demo.dart
             ├── screen_demo.dart
-            └── touch_feedback_demo.dart
+            ├── touch_feedback_demo.dart
+            └── image_picker_circle_demo.dart
 ```
 
 ## 📝 Adding a New Component Demo
@@ -320,3 +323,13 @@ If a component is missing a demo, you'll see an error like:
 - Adjustable opacity values
 - Works with any widget
 - Accessibility-friendly
+
+### Image Picker Circle
+- Generic circular image picker component
+- Supports local file (File) or remote URL (String)
+- Configurable radius for different sizes
+- Optional edit icon overlay
+- Optional label text
+- Placeholder with camera icon when empty
+- Dotted border styling matching app theme
+- Integrates with TouchFeedbackOpacity for tap interactions

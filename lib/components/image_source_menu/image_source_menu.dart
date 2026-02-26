@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -86,10 +87,12 @@ class ImageSourceMenu extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return ListTile(
-      leading: Icon(icon, color: colorScheme.primary),
-      title: Text(title, style: textTheme.bodyLarge),
+    return TouchFeedbackOpacity(
       onTap: onTap,
+      child: ListTile(
+        leading: Icon(icon, color: colorScheme.primary),
+        title: Text(title, style: textTheme.bodyLarge),
+      ),
     );
   }
 

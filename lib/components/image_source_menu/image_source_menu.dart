@@ -56,12 +56,7 @@ class ImageSourceMenu extends StatelessWidget {
           // Title
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              l10n.selectImageSource,
-              style: textTheme.titleMedium?.copyWith(
-                color: colorScheme.primary,
-              ),
-            ),
+            child: Text(l10n.selectImageSource, style: textTheme.titleMedium),
           ),
           // Options
           _buildOption(

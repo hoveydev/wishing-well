@@ -88,10 +88,7 @@ class ImageSourceMenu extends StatelessWidget {
 
     return ListTile(
       leading: Icon(icon, color: colorScheme.primary),
-      title: Text(
-        title,
-        style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary),
-      ),
+      title: Text(title, style: textTheme.bodyLarge),
       onTap: onTap,
     );
   }

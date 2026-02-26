@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,8 @@ import 'package:wishing_well/utils/result.dart';
 abstract class AddWisherDetailsViewModelContract {
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
+  void updateImage(File? imageFile);
+  File? get imageFile;
   bool get hasAlert;
   AddWisherDetailsError? get error;
   void clearError();
@@ -41,6 +44,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   String _firstName = '';
   String _lastName = '';
+  File? _imageFile;
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
@@ -69,6 +73,16 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     _lastName = lastName.trim();
     _validateForm();
   }
+
+  @override
+  void updateImage(File? imageFile) {
+    _imageFile = imageFile;
+    notifyListeners();
+  }
+
+  /// Getter for the selected image file
+  @override
+  File? get imageFile => _imageFile;
 
   void _validateForm() {
     final previousError = _error;

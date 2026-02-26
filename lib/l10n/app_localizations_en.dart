@@ -213,4 +213,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorBothNamesRequired => 'First and last name cannot be empty';
+
+  @override
+  String get selectImageSource => 'Select Image Source';
+
+  @override
+  String get chooseAPhoto => 'Choose a Photo';
+
+  @override
+  String get chooseAFile => 'Choose a File';
 }

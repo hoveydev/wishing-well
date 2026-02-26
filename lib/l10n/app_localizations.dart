@@ -483,6 +483,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'First and last name cannot be empty'**
   String get errorBothNamesRequired;
+
+  /// Title for image source selection menu
+  ///
+  /// In en, this message translates to:
+  /// **'Select Image Source'**
+  String get selectImageSource;
+
+  /// Option to choose a photo from gallery
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a Photo'**
+  String get chooseAPhoto;
+
+  /// Option to choose a file from device
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a File'**
+  String get chooseAFile;
 }
 
 class _AppLocalizationsDelegate

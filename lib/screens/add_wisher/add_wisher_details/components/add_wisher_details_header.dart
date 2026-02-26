@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
+import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_details/components/add_wisher_details_inputs.dart';
 import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 class AddWisherDetailsHeader extends StatelessWidget {
   const AddWisherDetailsHeader({required this.viewModel, super.key});
@@ -52,7 +54,26 @@ class AddWisherDetailsHeader extends StatelessWidget {
   }
 
   void _showImagePicker(BuildContext context) {
-    // TODO: Implement image picker - handled by parent or service
-    // Placeholder - connect to image picker service
+    ImageSourceMenu.show(
+      context: context,
+      onOptionSelected: (option) {
+        switch (option) {
+          case ImageSourceOption.photo:
+            AppLogger.info(
+              'User selected: Choose a Photo (gallery)',
+              context: 'AddWisherDetailsHeader._showImagePicker',
+            );
+            // TODO: Implement photo picker
+            break;
+          case ImageSourceOption.file:
+            AppLogger.info(
+              'User selected: Choose a File',
+              context: 'AddWisherDetailsHeader._showImagePicker',
+            );
+            // TODO: Implement file picker
+            break;
+        }
+      },
+    );
   }
 }

@@ -43,6 +43,7 @@ import 'package:wishing_well/components/demo/demos/spacer_demo.dart';
 import 'package:wishing_well/components/demo/demos/throbber_demo.dart';
 import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
+import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
 
 /// Registers all component demos with the registry.
 ///
@@ -160,6 +161,14 @@ void registerAllDemos() {
     description: 'List of wishers with add/remove functionality',
   );
 
+  ComponentDemoRegistry.register(
+    componentName: 'image_picker_circle',
+    title: 'Image Picker Circle',
+    icon: Icons.add_a_photo,
+    demoBuilder: (_) => const CircleImagePickerDemo(),
+    description: 'Generic circular image picker with local/remote support',
+  );
+
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -184,6 +193,7 @@ void registerAllDemos() {
     'throbber', // Loading indicators
     'touch_feedback', // Touch feedback component
     'wishers', // Wisher list component
+    'image_picker_circle', // Image picker component
   ];
 
   // Verify that all required components have been registered

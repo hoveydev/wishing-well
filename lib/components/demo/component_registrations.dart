@@ -44,6 +44,7 @@ import 'package:wishing_well/components/demo/demos/throbber_demo.dart';
 import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
+import 'package:wishing_well/components/demo/demos/image_picker_overlay_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
 
 /// Registers all component demos with the registry.
@@ -179,6 +180,16 @@ void registerAllDemos() {
         'Modal bottom sheet for selecting image source (photo or file)',
   );
 
+  ComponentDemoRegistry.register(
+    componentName: 'image_picker_overlay',
+    title: 'Image Picker Overlay',
+    icon: Icons.photo_library_outlined,
+    demoBuilder: (_) => const ImagePickerOverlayDemo(),
+    description:
+        'Animated loading overlay with pulsing icon for image '
+        'picker operations',
+  );
+
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -204,6 +215,7 @@ void registerAllDemos() {
     'touch_feedback', // Touch feedback component
     'wishers', // Wisher list component
     'image_picker_circle', // Image picker component
+    'image_picker_overlay', // Image picker overlay component
     'image_source_menu', // Image source menu component
   ];
 

@@ -45,6 +45,10 @@
 	<string>Wishing Well needs access to your camera to take profile pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wishing Well needs access to your photo library to select profile pictures.</string>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -41,6 +41,10 @@
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Wishing Well needs access to your camera to take profile pictures.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Wishing Well needs access to your photo library to select profile pictures.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -37,7 +37,7 @@ flutter run --target lib/components/demo/main.dart
 ✅ **Screen** - Full screen component with app bar integration and layout variations
 ✅ **Touch Feedback** - Opacity-based feedback with customizable animations
 ✅ **Image Picker Circle** - Generic circular image picker with local/remote support, configurable size, and optional edit overlay
-✅ **Image Picker Overlay** - Animated loading overlay with pulsing icon for image picker operations
+✅ **Image Source Menu** - Modal bottom sheet for selecting image source (photo or file)
 
 ## Features
 
@@ -67,7 +67,6 @@ lib/
     ├── touch_feedback/
     ├── wishers/
     ├── image_picker_circle/
-    ├── image_picker_overlay/
     └── demo/ (component demo app - production-excluded)
         ├── main.dart (demo entry point)
         ├── demo_app.dart
@@ -89,7 +88,7 @@ lib/
             ├── screen_demo.dart
             ├── touch_feedback_demo.dart
             ├── image_picker_circle_demo.dart
-            └── image_picker_overlay_demo.dart
+            └── image_source_menu_demo.dart
 ```
 
 ## 📝 Adding a New Component Demo
@@ -336,17 +335,3 @@ If a component is missing a demo, you'll see an error like:
 - Placeholder with camera icon when empty
 - Dotted border styling matching app theme
 - Integrates with TouchFeedbackOpacity for tap interactions
-
-### Image Picker Overlay
-- Animated loading overlay for image picker operations
-- Smooth pulsing icon animation with fade-in effect
-- Semi-transparent backdrop for focus
-- Customizable messages (gallery/camera)
-- Cross-fades with dismissing bottom sheets
-- Configurable via constants:
-  - `ImagePickerOverlaySize` - icon container and icon sizes
-  - `ImagePickerOverlayAnimation` - animation durations and intervals
-  - `ImagePickerOverlayVisuals` - colors, opacities, text styling
-  - `ImagePickerOverlayMessage` - default messages
-  - `ImagePickerOverlayIcon` - icon constant
-- Fully themed using app color scheme

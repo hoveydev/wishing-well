@@ -1,10 +1,9 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
-import 'package:wishing_well/components/image_picker_overlay/image_picker_overlay.dart';
-import 'package:wishing_well/components/image_picker_overlay/image_picker_overlay_constants.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
@@ -82,64 +81,56 @@ class _AddWisherDetailsHeaderState extends State<AddWisherDetailsHeader> {
   void _showImagePicker(BuildContext context) {
     ImageSourceMenu.show(
       context: context,
-      onOptionSelected: (option) {
-        // Show overlay on next frame to avoid overlap with bottom sheet
-        // dismiss animation
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _showLoadingOverlay(context, option);
-        });
-      },
+      onOptionSelected: (option) => _pickImage(option),
     );
   }
 
-  void _showLoadingOverlay(BuildContext context, ImageSourceOption option) {
-    final overlayEntry = OverlayEntry(
-      builder: (context) => ImagePickerOverlay(
-        message: option == ImageSourceOption.photo
-            ? ImagePickerOverlayMessage.gallery
-            : ImagePickerOverlayMessage.camera,
-      ),
-    );
-    Overlay.of(context).insert(overlayEntry);
-
-    _pickImage(context, option, overlayEntry);
-  }
-
-  Future<void> _pickImage(
-    BuildContext context,
-    ImageSourceOption option,
-    OverlayEntry overlayEntry,
-  ) async {
-    try {
-      switch (option) {
-        case ImageSourceOption.photo:
-          AppLogger.info(
-            'User selected: Choose a Photo (gallery)',
-            context: 'AddWisherDetailsHeader._showImagePicker',
+  Future<void> _pickImage(ImageSourceOption option) async {
+    switch (option) {
+      case ImageSourceOption.photo:
+        AppLogger.info(
+          'User selected: Choose a Photo (gallery)',
+          context: 'AddWisherDetailsHeader._showImagePicker',
+        );
+        final XFile? image = await _imagePicker.pickImage(
+          source: ImageSource.gallery,
+        );
+        if (image != null) {
+          widget.viewModel.updateImage(File(image.path));
+        }
+      case ImageSourceOption.file:
+        AppLogger.info(
+          'User selected: Choose a File',
+          context: 'AddWisherDetailsHeader._showImagePicker',
+        );
+        try {
+          // Use FileType.custom with image extensions to open Files app on iOS
+          // (FileType.image would open the photo library instead)
+          final FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.custom,
+            allowedExtensions: const [
+              'jpg',
+              'jpeg',
+              'png',
+              'gif',
+              'heic',
+              'heif',
+              'webp',
+            ],
           );
-          final XFile? image = await _imagePicker.pickImage(
-            source: ImageSource.gallery,
-          );
-          if (image != null) {
-            widget.viewModel.updateImage(File(image.path));
+          if (result != null && result.files.isNotEmpty) {
+            final file = result.files.first;
+            if (file.path != null) {
+              widget.viewModel.updateImage(File(file.path!));
+            }
           }
-          break;
-        case ImageSourceOption.file:
-          AppLogger.info(
-            'User selected: Take a Photo',
-            context: 'AddWisherDetailsHeader._showImagePicker',
+        } catch (e) {
+          // Handle case where file picker platform isn't available (tests)
+          AppLogger.warning(
+            'File picker not available: $e',
+            context: 'AddWisherDetailsHeader._pickImage',
           );
-          final XFile? image = await _imagePicker.pickImage(
-            source: ImageSource.camera,
-          );
-          if (image != null) {
-            widget.viewModel.updateImage(File(image.path));
-          }
-          break;
-      }
-    } finally {
-      // Dismiss loading indicator
-      overlayEntry.remove();
+        }
     }
   }
 }

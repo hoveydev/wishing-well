@@ -172,10 +172,10 @@ echo "flutter test --name=\"Interaction\""
 echo "flutter test --name=\"Validation\""
 echo ""
 echo "# To run coverage on specific files:"
-echo "flutter test --coverage test/ui_tests/components/button/app_button_test.dart"
+echo "flutter test --coverage lib/testing/ui_tests/components/button/app_button_test.dart"
 echo ""
 echo "# To create consolidated test files:"
-echo "# See: test/ui_tests/screens/add_wisher/add_wisher_components_test.dart (example)"
+echo "# See: lib/testing/ui_tests/screens/add_wisher/add_wisher_components_test.dart (example)"
 echo ""
 
 # Report results and exit with appropriate code

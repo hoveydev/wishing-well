@@ -82,8 +82,8 @@ Continue? (y/n): y
 ℹ️  Created files:
   📁 lib/components/search_filter/search_filter.dart
   📁 lib/components/demo/demos/search_filter_demo.dart
-  📁 test/unit_tests/components/search_filter/search_filter_test.dart
-  📁 test/ui_tests/components/search_filter/search_filter_test.dart
+  📁 lib/testing/unit_tests/components/search_filter/search_filter_test.dart
+  📁 lib/testing/ui_tests/components/search_filter/search_filter_test.dart
 
 ℹ️  Registry updates:
   ✓ Import added to component_registrations.dart
@@ -161,7 +161,7 @@ Template includes:
 
 ### Unit Tests (Optional)
 ```
-test/unit_tests/components/{component_name}/{component_name}_test.dart
+lib/testing/unit_tests/components/{component_name}/{component_name}_test.dart
 ```
 
 Template includes:
@@ -171,7 +171,7 @@ Template includes:
 
 ### UI Tests (Optional)
 ```
-test/ui_tests/components/{component_name}/{component_name}_test.dart
+lib/testing/ui_tests/components/{component_name}/{component_name}_test.dart
 ```
 
 Template includes:
@@ -297,7 +297,7 @@ If you prefer to add components manually, see:
 - `lib/components/demo/component_registry.dart` - Core registry
 - `lib/components/demo/component_registrations.dart` - All registrations
 - `lib/components/demo/demo_home.dart` - Demo app home
-- `test/component_registry_test.dart` - Registry tests
+- `lib/testing/component_registry_test.dart` - Registry tests
 
 ## Examples
 

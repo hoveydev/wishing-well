@@ -10,23 +10,42 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
-import 'package:wishing_well/screens/shared/loading/loading_overlay.dart';
+import 'package:wishing_well/features/shared/loading/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo.dart'
+    as add_wisher_demo;
+import 'package:wishing_well/features/home/demo/home_demo.dart' as home_demo;
 
-/// Current environment for the app.
-///
-/// Switch between environments by changing this value:
-/// - [Environment.local] →  Local Supabase (run `supabase start` first)
-/// - [Environment.development] →  Remote Supabase (default)
-/// - [Environment.production] →  Production Supabase
-///
-/// NOTE: This is set to [Environment.local] for local development.
-/// Change to [Environment.development] or [Environment.production]
-/// before deploying or merging to main for release builds.
+/// Run configuration - switch between app and demos
+enum AppRunConfig {
+  /// Run the full production app
+  production,
+
+  /// Run the add_wisher feature demo
+  addWisherDemo,
+
+  /// Run the home feature demo
+  homeDemo,
+}
+
+/// Current run configuration - change this to run different demos
+const AppRunConfig _runConfig = AppRunConfig.homeDemo;
+
 const Environment _environment = Environment.development;
 
 Future<void> main() async {
+  switch (_runConfig) {
+    case AppRunConfig.production:
+      await _runProduction();
+    case AppRunConfig.addWisherDemo:
+      await add_wisher_demo.main();
+    case AppRunConfig.homeDemo:
+      await home_demo.main();
+  }
+}
+
+Future<void> _runProduction() async {
   final goRouter = router();
   final deepLinkSource = DeepLinkSource.platform();
   final deepLinkHandler = DeepLinkHandler(

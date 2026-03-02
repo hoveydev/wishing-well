@@ -6,7 +6,7 @@ This document outlines the standardized testing patterns and conventions to ensu
 
 ### Directory Structure
 ```
-test/
+lib/testing/
 ├── unit_tests/                    # Pure unit tests (no widgets)
 │   ├── app/                      # App-level utilities and singletons
 │   ├── config/                   # Configuration and dependency injection
@@ -36,7 +36,7 @@ test/
 │       ├── profile_screen/
 │       └── reset_password/
 ├── init_test.dart               # Coverage include file
-└── ../testing_resources/        # Test utilities and helpers (outside test/ directory)
+└── ../lib/test_helpers/        # Test utilities and helpers (outside lib/testing/ directory)
     ├── helpers/                  # Test helpers and base classes
     │   ├── test_helpers.dart
     │   ├── test_base.dart
@@ -63,11 +63,11 @@ test/
 
 ### 1. Standard Test Imports
 ```dart
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_lib/testing/flutter_test.dart';
 import 'package:flutter/material.dart'; // For UI tests
 import 'package:wishing_well/...'; // Feature-specific imports
-import '../../../testing_resources/helpers/test_helpers.dart'; // Standard helpers
-import '../../../testing_resources/mocks/...'; // Required mocks
+import '../../../lib/test_helpers/helpers/test_helpers.dart'; // Standard helpers
+import '../../../lib/test_helpers/mocks/...'; // Required mocks
 ```
 
 ### 2. Test Group Organization
@@ -96,7 +96,7 @@ void main() {
 
 ### Available TestGroups Constants
 ```dart
-// From testing_resources/helpers/test_helpers.dart
+// From lib/test_helpers/helpers/test_helpers.dart
 abstract class TestGroups {
   static const String component = 'Component';
   static const String rendering = 'Rendering';
@@ -327,7 +327,7 @@ void main() {
 
 ### Standard Test Helpers
 ```dart
-// In testing_resources/helpers/test_helpers.dart
+// In lib/test_helpers/helpers/test_helpers.dart
 class TestHelpers {
   static Future<void> pumpAndSettle(WidgetTester tester) async {
     await tester.pumpAndSettle();
@@ -375,7 +375,7 @@ class CommonFinders {
 
 ### Standard Widget Creation
 ```dart
-// From testing_resources/helpers/test_helpers.dart
+// From lib/test_helpers/helpers/test_helpers.dart
 
 // For simple components
 Widget createComponentTestWidget(Widget child) => MaterialApp(
@@ -509,7 +509,7 @@ flutter test --coverage
 
 ### Run Specific Test File
 ```bash
-flutter test test/path/to/test_file.dart
+flutter test lib/testing/path/to/test_file.dart
 ```
 
 ### Run Tests by Name
@@ -534,19 +534,19 @@ dart run git_hooks.dart pre-commit  # Run pre-commit quality checks
 ### Base Test Classes
 - **ComponentTestBase**: Standardized base for component tests with rendering test
 - **ScreenTestBase**: Standardized base for screen tests with rendering and interaction patterns
-- Located in `testing_resources/helpers/test_base.dart`
+- Located in `lib/test_helpers/helpers/test_base.dart`
 
 ### Mock Repository Services
 - **MockAuthRepository**: Complete auth repository mock with Result<T> pattern
 - **MockRouter**: Navigation mock for testing routing behavior
 - **MockDeepLinkSource**: Deep linking functionality mock
-- Located in `testing_resources/mocks/`
+- Located in `lib/test_helpers/mocks/`
 
 ### Test Utilities
 - **TestHelpers**: Common testing operations (pumpAndSettle, tapAndSettle, etc.)
 - **CommonFinders**: Standardized finder patterns
 - **TestGroups**: Centralized test group naming constants
-- Located in `testing_resources/helpers/test_helpers.dart`
+- Located in `lib/test_helpers/helpers/test_helpers.dart`
 
 ## Coverage Requirements
 
@@ -602,7 +602,7 @@ abstract class WisherDataSource {
   Future<void> deleteWisher(String wisherId);
 }
 
-// Mock for testing (in testing_resources/mocks/data_sources/)
+// Mock for testing (in lib/test_helpers/mocks/data_sources/)
 class MockWisherDataSource implements WisherDataSource {
   List<Map<String, dynamic>>? fetchWishersResult;
   Exception? fetchWishersError;
@@ -669,15 +669,15 @@ void main() {
 2. **Create the abstract DataSource** (`lib/data/data_sources/{feature}/{feature}_data_source.dart`)
 3. **Create the Supabase DataSource** (`lib/data/data_sources/{feature}/{feature}_data_source_supabase.dart`)
 4. **Create the Repository Implementation** (`lib/data/repositories/{feature}/{feature}_repository_impl.dart`)
-5. **Create the Mock DataSource** (`testing_resources/mocks/data_sources/mock_{feature}_data_source.dart`)
-6. **Create Repository Implementation Tests** (`test/unit_tests/data/repositories/{feature}/{feature}_repository_impl_test.dart`)
+5. **Create the Mock DataSource** (`lib/test_helpers/mocks/data_sources/mock_{feature}_data_source.dart`)
+6. **Create Repository Implementation Tests** (`lib/testing/unit_tests/data/repositories/{feature}/{feature}_repository_impl_test.dart`)
 7. **Update dependencies.dart** to wire up the new providers
 
 ## Mock Repository Patterns
 
 ### AuthRepository Mock Pattern
 ```dart
-// From testing_resources/mocks/repositories/mock_auth_repository.dart
+// From lib/test_helpers/mocks/repositories/mock_auth_repository.dart
 class MockAuthRepository extends AuthRepository {
   MockAuthRepository({
     Result<void>? logoutResult,

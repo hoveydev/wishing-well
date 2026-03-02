@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
-import 'package:wishing_well/screens/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
-import 'package:wishing_well/screens/shared/confirmation/confirmation_screen.dart';
-import 'package:wishing_well/screens/auth/create_account/create_account_screen.dart';
-import 'package:wishing_well/screens/auth/create_account/create_account_view_model.dart';
-import 'package:wishing_well/screens/auth/forgot_password/forgot_password_screen.dart';
-import 'package:wishing_well/screens/auth/forgot_password/forgot_password_view_model.dart';
-import 'package:wishing_well/screens/home/home_screen.dart';
-import 'package:wishing_well/screens/home/home_view_model.dart';
-import 'package:wishing_well/screens/profile_screen/profile_screen.dart';
-import 'package:wishing_well/screens/auth/login/login_screen.dart';
-import 'package:wishing_well/screens/auth/login/login_view_model.dart';
-import 'package:wishing_well/screens/auth/reset_password/reset_password_screen.dart';
-import 'package:wishing_well/screens/auth/reset_password/reset_password_view_model.dart';
+import 'package:wishing_well/routing/transitions.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/features/shared/confirmation/confirmation_screen.dart';
+import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
+import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
+import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
+import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
+import 'package:wishing_well/features/home/home_screen.dart';
+import 'package:wishing_well/features/home/home_view_model.dart';
+import 'package:wishing_well/features/profile/profile_screen.dart';
+import 'package:wishing_well/features/auth/login/login_screen.dart';
+import 'package:wishing_well/features/auth/login/login_view_model.dart';
+import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
+import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login',
@@ -29,21 +29,7 @@ GoRouter router() => GoRouter(
         child: LoginScreen(
           viewModel: LoginViewModel(authRepository: context.read()),
         ),
-        transitionsBuilder: (_, _, secondaryAnimation, child) {
-          const begin = Offset.zero;
-          const end = Offset(0.0, -0.15);
-          const curve = Curves.easeInOut;
-
-          final tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: secondaryAnimation.drive(tween),
-            child: child,
-          );
-        },
+        transitionsBuilder: slideDownTransition,
       ),
     ),
     GoRoute(
@@ -53,44 +39,16 @@ GoRouter router() => GoRouter(
         child: ForgotPasswordScreen(
           viewModel: ForgotPasswordViewModel(authRepository: context.read()),
         ),
-        transitionsBuilder: (_, animation, _, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-
-          final tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
+        transitionsBuilder: slideUpTransition,
       ),
       routes: [
         GoRoute(
           path: Routes.forgotPasswordConfirm.path,
           name: Routes.forgotPasswordConfirm.name,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ConfirmationScreen.forgotPassword(),
+          pageBuilder: (context, state) => const CustomTransitionPage(
+            child: ConfirmationScreen.forgotPassword(),
             transitionDuration: Duration.zero,
-            transitionsBuilder: (_, animation, _, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-
-              final tween = Tween(
-                begin: begin,
-                end: end,
-              ).chain(CurveTween(curve: curve));
-
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child,
-              );
-            },
+            transitionsBuilder: slideUpTransition,
           ),
         ),
         GoRoute(
@@ -105,44 +63,16 @@ GoRouter router() => GoRouter(
               ),
             ),
             transitionDuration: Duration.zero,
-            transitionsBuilder: (_, animation, _, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-
-              final tween = Tween(
-                begin: begin,
-                end: end,
-              ).chain(CurveTween(curve: curve));
-
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child,
-              );
-            },
+            transitionsBuilder: slideUpTransition,
           ),
           routes: [
             GoRoute(
               path: Routes.resetPasswordConfirmation.path,
               name: Routes.resetPasswordConfirmation.name,
-              pageBuilder: (context, state) => CustomTransitionPage(
-                child: const ConfirmationScreen.resetPassword(),
+              pageBuilder: (context, state) => const CustomTransitionPage(
+                child: ConfirmationScreen.resetPassword(),
                 transitionDuration: Duration.zero,
-                transitionsBuilder: (_, animation, _, child) {
-                  const begin = Offset(0.0, 1.0);
-                  const end = Offset.zero;
-                  const curve = Curves.easeInOut;
-
-                  final tween = Tween(
-                    begin: begin,
-                    end: end,
-                  ).chain(CurveTween(curve: curve));
-
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
+                transitionsBuilder: slideUpTransition,
               ),
             ),
           ],
@@ -156,67 +86,25 @@ GoRouter router() => GoRouter(
         child: CreateAccountScreen(
           viewModel: CreateAccountViewModel(authRepository: context.read()),
         ),
-        transitionsBuilder: (_, animation, _, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-
-          final tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
+        transitionsBuilder: slideUpTransition,
       ),
       routes: [
         GoRoute(
           path: Routes.createAccountConfirm.path,
           name: Routes.createAccountConfirm.name,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ConfirmationScreen.createAccount(),
+          pageBuilder: (context, state) => const CustomTransitionPage(
+            child: ConfirmationScreen.createAccount(),
             transitionDuration: Duration.zero,
-            transitionsBuilder: (_, animation, _, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-
-              final tween = Tween(
-                begin: begin,
-                end: end,
-              ).chain(CurveTween(curve: curve));
-
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child,
-              );
-            },
+            transitionsBuilder: slideUpTransition,
           ),
         ),
         GoRoute(
           path: Routes.accountConfirm.path,
           name: Routes.accountConfirm.name,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ConfirmationScreen.account(),
+          pageBuilder: (context, state) => const CustomTransitionPage(
+            child: ConfirmationScreen.account(),
             transitionDuration: Duration.zero,
-            transitionsBuilder: (_, animation, _, child) {
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
-
-              final tween = Tween(
-                begin: begin,
-                end: end,
-              ).chain(CurveTween(curve: curve));
-
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child,
-              );
-            },
+            transitionsBuilder: slideUpTransition,
           ),
         ),
       ],
@@ -231,29 +119,15 @@ GoRouter router() => GoRouter(
             wisherRepository: context.read(),
           ),
         ),
-        transitionsBuilder: (_, _, _, child) => child,
+        transitionsBuilder: noTransition,
       ),
     ),
     GoRoute(
       path: Routes.profile.path,
       name: Routes.profile.name,
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: const ProfileScreen(),
-        transitionsBuilder: (_, animation, _, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-
-          final tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
+      pageBuilder: (context, state) => const CustomTransitionPage(
+        child: ProfileScreen(),
+        transitionsBuilder: slideUpTransition,
       ),
     ),
     GoRoute(
@@ -261,34 +135,7 @@ GoRouter router() => GoRouter(
       name: Routes.addWisher.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AddWisherLandingScreen(viewModel: AddWisherLandingViewModel()),
-        transitionsBuilder: (_, animation, secondaryAnimation, child) {
-          // Entrance animation: slide up from bottom
-          const slideBegin = Offset(0.0, 1.0);
-          const slideEnd = Offset.zero;
-          const curve = Curves.easeInOut;
-
-          final slideTween = Tween(
-            begin: slideBegin,
-            end: slideEnd,
-          ).chain(CurveTween(curve: curve));
-
-          // Parallax animation: shift left when covered by another route
-          const parallaxBegin = Offset.zero;
-          const parallaxEnd = Offset(-0.15, 0.0);
-
-          final parallaxTween = Tween(
-            begin: parallaxBegin,
-            end: parallaxEnd,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(slideTween),
-            child: SlideTransition(
-              position: secondaryAnimation.drive(parallaxTween),
-              child: child,
-            ),
-          );
-        },
+        transitionsBuilder: slideUpWithParallaxTransition,
       ),
       routes: [
         GoRoute(
@@ -300,34 +147,7 @@ GoRouter router() => GoRouter(
                 wisherRepository: context.read(),
               ),
             ),
-            transitionsBuilder: (_, animation, secondaryAnimation, child) {
-              // Entrance animation: slide in from right (iOS-style)
-              const slideBegin = Offset(1.0, 0.0);
-              const slideEnd = Offset.zero;
-              const curve = Curves.easeInOut;
-
-              final slideTween = Tween(
-                begin: slideBegin,
-                end: slideEnd,
-              ).chain(CurveTween(curve: curve));
-
-              // Parallax animation: shift left when covered by another route
-              const parallaxBegin = Offset.zero;
-              const parallaxEnd = Offset(-0.15, 0.0);
-
-              final parallaxTween = Tween(
-                begin: parallaxBegin,
-                end: parallaxEnd,
-              ).chain(CurveTween(curve: curve));
-
-              return SlideTransition(
-                position: animation.drive(slideTween),
-                child: SlideTransition(
-                  position: secondaryAnimation.drive(parallaxTween),
-                  child: child,
-                ),
-              );
-            },
+            transitionsBuilder: slideInRightTransition,
           ),
         ),
       ],

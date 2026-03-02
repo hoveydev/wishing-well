@@ -84,10 +84,10 @@ wishing_well/
 │   ├── analyze_tests.sh            # Test quality analysis tool
 │   ├── test_coverage.sh            # Coverage reporting script
 │   └── add_component.sh            # Automated component creation script
-├── test/
+├── lib/testing/
 │   ├── ui_tests/                   # Widget and integration tests
 │   └── unit_tests/                 # Pure unit tests
-├── testing_resources/              # Test helpers and mocks (at project root)
+├── lib/test_helpers/              # Test helpers and mocks (at project root)
 │   ├── helpers/                    # Test infrastructure
 │   └── mocks/                      # Mock implementations
 └── lib/                            # Application code

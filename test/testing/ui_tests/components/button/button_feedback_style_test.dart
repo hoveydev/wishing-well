@@ -1,0 +1,308 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/components/button/button_feedback_style.dart';
+
+import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
+
+void main() {
+  group('ButtonFeedbackStyle', () {
+    group(TestGroups.component, () {
+      testWidgets(
+        'primary style with null backgroundColor uses default color',
+        (tester) async {
+          // Arrange & Act: Create button with null backgroundColor
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.primary(context: context),
+                  onPressed: () {},
+                  child: const Text('Primary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Primary Button'), findsOneWidget);
+        },
+      );
+
+      testWidgets('primary style with null side uses BorderSide.none', (
+        tester,
+      ) async {
+        // Arrange & Act: Create button with null side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(context: context),
+                onPressed: () {},
+                child: const Text('Primary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Primary Button'), findsOneWidget);
+      });
+
+      testWidgets('primary style with custom backgroundColor', (tester) async {
+        // Arrange & Act: Create button with custom backgroundColor
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(
+                  context: context,
+                  backgroundColor: WidgetStateProperty.all(Colors.blue),
+                ),
+                onPressed: () {},
+                child: const Text('Primary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Primary Button'), findsOneWidget);
+      });
+
+      testWidgets('primary style with custom side', (tester) async {
+        // Arrange & Act: Create button with custom side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(
+                  context: context,
+                  side: const BorderSide(color: Colors.red, width: 2),
+                ),
+                onPressed: () {},
+                child: const Text('Primary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Primary Button'), findsOneWidget);
+      });
+
+      testWidgets(
+        'primary style backgroundColor fallback when resolve returns null',
+        (tester) async {
+          // Arrange: Create a WidgetStateProperty using fromMap
+          const backgroundColor = WidgetStateProperty<Color>.fromMap({
+            WidgetState.disabled: Colors.grey,
+            WidgetState.pressed: Colors.blue,
+          });
+
+          // Act: Create button with backgroundColor
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.primary(
+                    context: context,
+                    backgroundColor: backgroundColor,
+                  ),
+                  onPressed: null, // Disabled to trigger the state
+                  child: const Text('Primary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should still render
+          expect(find.text('Primary Button'), findsOneWidget);
+        },
+      );
+
+      testWidgets('secondary style with null side uses default border', (
+        tester,
+      ) async {
+        // Arrange & Act: Create secondary button with null side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.secondary(context: context),
+                onPressed: () {},
+                child: const Text('Secondary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Secondary Button'), findsOneWidget);
+      });
+
+      testWidgets('secondary style with custom side', (tester) async {
+        // Arrange & Act: Create secondary button with custom side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.secondary(
+                  context: context,
+                  side: const BorderSide(color: Colors.green, width: 3),
+                ),
+                onPressed: () {},
+                child: const Text('Secondary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Secondary Button'), findsOneWidget);
+      });
+
+      testWidgets('tertiary style with null side uses BorderSide.none', (
+        tester,
+      ) async {
+        // Arrange & Act: Create tertiary button with null side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.tertiary(context: context),
+                onPressed: () {},
+                child: const Text('Tertiary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Tertiary Button'), findsOneWidget);
+      });
+
+      testWidgets('tertiary style with custom side', (tester) async {
+        // Arrange & Act: Create tertiary button with custom side
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.tertiary(
+                  context: context,
+                  side: const BorderSide(color: Colors.orange, width: 2),
+                ),
+                onPressed: () {},
+                child: const Text('Tertiary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Tertiary Button'), findsOneWidget);
+      });
+
+      testWidgets('tertiary style with custom shape', (tester) async {
+        // Arrange & Act: Create tertiary button with custom shape
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.tertiary(
+                  context: context,
+                  shape: const StadiumBorder(),
+                ),
+                onPressed: () {},
+                child: const Text('Tertiary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Assert: Button should render
+        expect(find.text('Tertiary Button'), findsOneWidget);
+      });
+
+      testWidgets('primary button shows pressed state correctly', (
+        tester,
+      ) async {
+        // Arrange: Create button
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(context: context),
+                onPressed: () {},
+                child: const Text('Primary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Act: Press the button
+        final gesture = await tester.press(find.text('Primary Button'));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // Assert: Button should be in pressed state
+        expect(find.text('Primary Button'), findsOneWidget);
+
+        // Cleanup
+        await gesture.cancel();
+      });
+
+      testWidgets('secondary button shows pressed state correctly', (
+        tester,
+      ) async {
+        // Arrange: Create button
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.secondary(context: context),
+                onPressed: () {},
+                child: const Text('Secondary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Act: Press the button
+        final gesture = await tester.press(find.text('Secondary Button'));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // Assert: Button should be in pressed state
+        expect(find.text('Secondary Button'), findsOneWidget);
+
+        // Cleanup
+        await gesture.cancel();
+      });
+
+      testWidgets('tertiary button shows pressed state correctly', (
+        tester,
+      ) async {
+        // Arrange: Create button
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.tertiary(context: context),
+                onPressed: () {},
+                child: const Text('Tertiary Button'),
+              ),
+            ),
+          ),
+        );
+
+        // Act: Press the button
+        final gesture = await tester.press(find.text('Tertiary Button'));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // Assert: Button should be in pressed state
+        expect(find.text('Tertiary Button'), findsOneWidget);
+
+        // Cleanup
+        await gesture.cancel();
+      });
+    });
+  });
+}

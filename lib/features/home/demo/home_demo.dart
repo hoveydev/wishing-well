@@ -14,7 +14,8 @@ import 'package:wishing_well/utils/loading_controller.dart';
 // Available scenarios:
 // - noWishers: Empty wishers list
 // - fewWishers: 2 wishers
-// - manyWishers: 50 wishers (default)
+// - defaultWishers: 5 wishers
+// - manyWishers: 50 wishers
 // - failure: Empty with error handling
 const HomeDemoScenario _scenario = HomeDemoScenario.manyWishers;
 

@@ -6,7 +6,13 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 
-enum HomeDemoScenario { noWishers, fewWishers, manyWishers, failure }
+enum HomeDemoScenario {
+  noWishers,
+  fewWishers,
+  defaultWishers,
+  manyWishers,
+  failure,
+}
 
 List<SingleChildWidget> getHomeDemoProviders({
   required HomeDemoScenario scenario,
@@ -34,6 +40,50 @@ List<SingleChildWidget> getHomeDemoProviders({
           lastName: 'Test',
           createdAt: DateTime(2024, 1, 2),
           updatedAt: DateTime(2024, 1, 2),
+        ),
+      ];
+      break;
+    case HomeDemoScenario.defaultWishers:
+      initialWishers = [
+        Wisher(
+          id: '1',
+          userId: 'test-user',
+          firstName: 'Alice',
+          lastName: 'Test',
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024),
+        ),
+        Wisher(
+          id: '2',
+          userId: 'test-user',
+          firstName: 'Bob',
+          lastName: 'Test',
+          createdAt: DateTime(2024, 1, 2),
+          updatedAt: DateTime(2024, 1, 2),
+        ),
+        Wisher(
+          id: '3',
+          userId: 'test-user',
+          firstName: 'Charlie',
+          lastName: 'Test',
+          createdAt: DateTime(2024, 1, 3),
+          updatedAt: DateTime(2024, 1, 3),
+        ),
+        Wisher(
+          id: '4',
+          userId: 'test-user',
+          firstName: 'Diana',
+          lastName: 'Test',
+          createdAt: DateTime(2024, 1, 4),
+          updatedAt: DateTime(2024, 1, 4),
+        ),
+        Wisher(
+          id: '5',
+          userId: 'test-user',
+          firstName: 'Eve',
+          lastName: 'Test',
+          createdAt: DateTime(2024, 1, 5),
+          updatedAt: DateTime(2024, 1, 5),
         ),
       ];
       break;

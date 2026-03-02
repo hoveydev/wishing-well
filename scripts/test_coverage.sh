@@ -24,6 +24,8 @@ EXCLUDES=(
   "*/components/demo/demo_home.dart"
   "*/components/demo/demo_app.dart"
   "*/data/data_sources/*"
+  "*/test_helpers/*"
+  "*/test/testing/*"
 )
 
 echo "🧹 Removing excluded files from coverage..."

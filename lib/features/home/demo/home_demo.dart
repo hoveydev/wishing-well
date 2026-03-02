@@ -11,7 +11,12 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
-const HomeDemoScenario _scenario = HomeDemoScenario.success;
+// Available scenarios:
+// - noWishers: Empty wishers list
+// - fewWishers: 2 wishers
+// - manyWishers: 50 wishers (default)
+// - failure: Empty with error handling
+const HomeDemoScenario _scenario = HomeDemoScenario.manyWishers;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

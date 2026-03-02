@@ -334,12 +334,12 @@ print_success "Added to required components list."
 # Create unit tests if requested
 if [[ "$CREATE_TESTS" =~ ^[Yy]$ ]]; then
     print_info "Creating unit tests..."
-    TEST_DIR="test/unit_tests/components/$COMPONENT_NAME"
+    TEST_DIR="lib/testing/unit_tests/components/$COMPONENT_NAME"
     mkdir -p "$TEST_DIR"
 
     cat > "$TEST_DIR/${COMPONENT_NAME}_test.dart" << UNITTESTEOF
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_lib/testing/flutter_test.dart';
 import 'package:wishing_well/components/$COMPONENT_NAME/${COMPONENT_NAME}.dart';
 
 void main() {
@@ -372,12 +372,12 @@ fi
 # Create UI tests if requested
 if [[ "$CREATE_UI_TESTS" =~ ^[Yy]$ ]]; then
     print_info "Creating UI tests..."
-    UI_TEST_DIR="test/ui_tests/components/$COMPONENT_NAME"
+    UI_TEST_DIR="lib/testing/ui_tests/components/$COMPONENT_NAME"
     mkdir -p "$UI_TEST_DIR"
 
     cat > "$UI_TEST_DIR/${COMPONENT_NAME}_test.dart" << UITESTEOF
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_lib/testing/flutter_test.dart';
 import 'package:wishing_well/components/$COMPONENT_NAME/${COMPONENT_NAME}.dart';
 
 void main() {
@@ -428,10 +428,10 @@ print_info "Created files:"
 echo "  📁 $COMPONENT_DIR/${COMPONENT_NAME}.dart"
 echo "  📁 $DEMO_DIR/${COMPONENT_NAME}_demo.dart"
 if [[ "$CREATE_TESTS" =~ ^[Yy]$ ]]; then
-    echo "  📁 test/unit_tests/components/$COMPONENT_NAME/${COMPONENT_NAME}_test.dart"
+    echo "  📁 lib/testing/unit_tests/components/$COMPONENT_NAME/${COMPONENT_NAME}_test.dart"
 fi
 if [[ "$CREATE_UI_TESTS" =~ ^[Yy]$ ]]; then
-    echo "  📁 test/ui_tests/components/$COMPONENT_NAME/${COMPONENT_NAME}_test.dart"
+    echo "  📁 lib/testing/ui_tests/components/$COMPONENT_NAME/${COMPONENT_NAME}_test.dart"
 fi
 echo ""
 print_info "Registry updates:"

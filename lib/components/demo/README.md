@@ -200,7 +200,7 @@ Your new component should appear in the demo list!
 
 Ensure all tests pass:
 ```bash
-flutter test test/component_registry_test.dart
+flutter test lib/testing/component_registry_test.dart
 ```
 
 ## ⚠️ Registry System

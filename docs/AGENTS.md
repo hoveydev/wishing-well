@@ -9,8 +9,8 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 
 ### Essential Commands
 - `flutter test` - Run entire test suite
-- `flutter test test/path/to/test_file.dart` - Run a single test file
-- `flutter test test/path/to/test_file.dart --name="test name"` - Run specific test by name
+- `flutter test lib/testing/path/to/test_file.dart` - Run a single test file
+- `flutter test lib/testing/path/to/test_file.dart --name="test name"` - Run specific test by name
 - `flutter test --coverage` - Run tests with coverage report
 - `dart format .` - Format all Dart files
 - `dart analyze --fatal-infos` - Run static analysis (fails on warnings)
@@ -79,13 +79,13 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 - Controllers (TextEditingController, FocusNode) disposed in viewModel/screen dispose
 
 ### Testing
-- Unit tests in test/unit_tests/ using standard flutter_test
-- UI widget tests in test/ui_tests/
+- Unit tests in lib/testing/unit_tests/ using standard flutter_test
+- UI widget tests in lib/testing/ui_tests/
 - Organize tests with group() blocks
 - Use descriptive test names: `test('description', () {...})`
 - Use testWidgets for widget testing with WidgetTester
-- Mock repositories from testing_resources/mocks/
-- Helpers in testing_resources/helpers/ (e.g., createTestWidget())
+- Mock repositories from lib/test_helpers/mocks/
+- Helpers in lib/test_helpers/helpers/ (e.g., createTestWidget())
 - Tear down viewModels in tearDown() blocks
 
 ### Routing

@@ -166,9 +166,9 @@ The project maintains **95%+ test coverage** with comprehensive unit and widget 
 For detailed testing standards, patterns, and organization, see [docs/TESTING_STANDARDS.md](docs/TESTING_STANDARDS.md).
 
 ### Test Organization
-- **Unit Tests**: Test business logic, ViewModels, and utilities in `test/unit_tests/`
-- **Widget Tests**: Test UI components and screens in `test/ui_tests/`
-- **Test Helpers**: Reusable test utilities in `testing_resources/`
+- **Unit Tests**: Test business logic, ViewModels, and utilities in `lib/testing/unit_tests/`
+- **Widget Tests**: Test UI components and screens in `lib/testing/ui_tests/`
+- **Test Helpers**: Reusable test utilities in `lib/test_helpers/`
 
 ### Mocking
 - Use `MockAuthRepository` for repository testing

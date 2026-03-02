@@ -715,10 +715,10 @@ lib/components/demo/
     ├── ComponentDemoRegistry.register(...);
     └── requiredComponents: ['my_component']
 
-test/unit_tests/components/my_component/
+lib/testing/unit_tests/components/my_component/
 └── my_component_test.dart          # Unit tests
 
-test/ui_tests/components/my_component/
+lib/testing/ui_tests/components/my_component/
 └── my_component_test.dart          # UI tests
 ```
 
@@ -735,10 +735,10 @@ lib/routing/
 lib/config/
 └── dependencies.dart           # Register ViewModel provider
 
-test/unit_tests/screens/my_screen/
+lib/testing/unit_tests/screens/my_screen/
 └── my_screen_view_model_test.dart
 
-test/ui_tests/screens/my_screen/
+lib/testing/ui_tests/screens/my_screen/
 └── my_screen_test.dart
 ```
 
@@ -751,10 +751,10 @@ lib/data/repositories/my_repo/
 lib/config/
 └── dependencies.dart           # Register repository
 
-testing_resources/mocks/repositories/
+lib/test_helpers/mocks/repositories/
 └── mock_my_repository.dart     # Mock for testing
 
-test/unit_tests/data/repositories/
+lib/testing/unit_tests/data/repositories/
 └── my_repository_test.dart
 ```
 
@@ -820,7 +820,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 ```
 ❌ "Add a test."
 ✅ "This ViewModel needs tests following our TESTING_STANDARDS.md. I can add tests 
-   in test/unit_tests/screens/login_view_model_test.dart using the TestGroups 
+   in lib/testing/unit_tests/screens/login_view_model_test.dart using the TestGroups 
    pattern. Would you like me to create these tests?"
 ```
 
@@ -989,10 +989,10 @@ flutter test
 ./scripts/test_coverage.sh
 
 # Run specific test file
-flutter test test/path/to/test_file.dart
+flutter test lib/testing/path/to/test_file.dart
 
 # Run specific test by name
-flutter test test/path/to/test_file.dart --name="test name"
+flutter test lib/testing/path/to/test_file.dart --name="test name"
 
 # Generate localizations after string changes
 flutter gen-l10n

@@ -217,6 +217,7 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
     'components/demo/demo_home.dart', // Demo app UI doesn't need testing
     'components/demo/demo_app.dart', // Demo app UI doesn't need testing
     'data/data_sources/', // Supabase wrappers - tested by Supabase itself
+    '/demo/', // Feature demos - isolated demo code, not production
   ];
 
   int totalLines = 0;

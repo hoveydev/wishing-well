@@ -21,6 +21,9 @@ class AuthRepositoryImpl extends AuthRepository {
   String? get userFirstName => _dataSource.userFirstName;
 
   @override
+  String? get currentUserId => _dataSource.currentUserId;
+
+  @override
   Future<Result<void>> login({
     required String email,
     required String password,

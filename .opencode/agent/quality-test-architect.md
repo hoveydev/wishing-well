@@ -123,9 +123,9 @@ Always incorporate these project-specific resources:
 - `flutter test --name="GroupName"` - Test specific TestGroups categories
 
 ### **Testing Infrastructure**
-- `testing_resources/helpers/test_helpers.dart` - Standard helper functions
-- `testing_resources/helpers/test_base.dart` - Base test classes
-- `testing_resources/mocks/` - Project-specific mock implementations
+- `lib/test_helpers/helpers/test_helpers.dart` - Standard helper functions
+- `lib/test_helpers/helpers/test_base.dart` - Base test classes
+- `lib/test_helpers/mocks/` - Project-specific mock implementations
 
 ## 💪 Responsibilities
 

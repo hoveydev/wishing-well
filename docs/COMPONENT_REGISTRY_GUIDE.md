@@ -160,7 +160,7 @@ const requiredComponents = [
 flutter run --target lib/components/demo/main.dart
 
 # Run tests
-flutter test test/component_registry_test.dart
+flutter test lib/testing/component_registry_test.dart
 ```
 
 ## 🧪 Testing
@@ -170,7 +170,7 @@ flutter test test/component_registry_test.dart
 Comprehensive tests ensure the registry works correctly:
 
 ```bash
-flutter test test/component_registry_test.dart
+flutter test lib/testing/component_registry_test.dart
 ```
 
 **Test Coverage:**
@@ -260,7 +260,7 @@ Potential improvements to consider:
 For questions or issues:
 
 1. Check this README for setup instructions
-2. Review test cases in `test/component_registry_test.dart`
+2. Review test cases in `lib/testing/component_registry_test.dart`
 3. Examine existing demo implementations in `lib/components/demo/demos/`
 4. Consult the component registry code in `component_registry.dart`
 
@@ -269,4 +269,4 @@ For questions or issues:
 - `lib/components/demo/README.md` - Full demo app documentation
 - `lib/components/demo/component_registry.dart` - Registry implementation
 - `lib/components/demo/component_registrations.dart` - All registrations
-- `test/component_registry_test.dart` - Registry tests
+- `lib/testing/component_registry_test.dart` - Registry tests

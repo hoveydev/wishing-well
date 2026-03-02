@@ -1,5 +1,10 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    - lib/testing/**
+    - lib/test_helpers/**
+
 linter:
   rules:
     # Style

@@ -8,13 +8,17 @@ class MockAuthRepository extends AuthRepository {
     Result<void>? createAccountResult,
     Result<void>? sendPasswordResetRequestResult,
     Result<void>? resetUserPasswordResult,
+    String? userId,
   }) : logoutResult = logoutResult ?? const Result.ok(null),
        loginResult = loginResult ?? const Result.ok(null),
        createAccountResult = createAccountResult ?? const Result.ok(null),
        sendPasswordResetRequestResult =
            sendPasswordResetRequestResult ?? const Result.ok(null),
        resetUserPasswordResult =
-           resetUserPasswordResult ?? const Result.ok(null);
+           resetUserPasswordResult ?? const Result.ok(null),
+       _userId = userId;
+
+  final String? _userId;
 
   final Result<void> logoutResult;
   final Result<void> loginResult;
@@ -31,21 +35,29 @@ class MockAuthRepository extends AuthRepository {
   String? get userFirstName => 'TestUser';
 
   @override
+  String? get currentUserId => _authenticatedUserId;
+
+  @override
   Future<Result<void>> login({
     required String email,
     required String password,
   }) async {
     if (loginResult is Ok) {
       _isAuthenticated = true;
+      _authenticatedUserId =
+          _userId ?? 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
     }
     notifyListeners();
     return loginResult;
   }
 
+  String? _authenticatedUserId;
+
   @override
   Future<Result<void>> logout() async {
     if (loginResult is Ok) {
       _isAuthenticated = false;
+      _authenticatedUserId = null;
     }
     notifyListeners();
     return logoutResult;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_providers.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_router.dart';
@@ -19,8 +20,9 @@ Future<void> main() async {
       providers: getAddWisherDemoProviders(scenario: _scenario),
       child: Builder(
         builder: (context) {
+          final authRepo = context.read<AuthRepository>();
           final wisherRepo = context.read<WisherRepository>();
-          final router = addWisherDemoRouter(wisherRepo);
+          final router = addWisherDemoRouter(authRepo, wisherRepo);
           return _DemoApp(router: router);
         },
       ),

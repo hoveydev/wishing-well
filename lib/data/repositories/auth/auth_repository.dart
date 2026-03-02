@@ -6,6 +6,9 @@ abstract class AuthRepository extends ChangeNotifier {
   bool get isAuthenticated;
   String? get userFirstName;
 
+  /// Returns the current user's ID, or null if not authenticated
+  String? get currentUserId;
+
   /// Login
   Future<Result<void>> login({required String email, required String password});
 

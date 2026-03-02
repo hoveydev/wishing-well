@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -39,12 +40,12 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     implements AddWisherDetailsViewModelContract {
   AddWisherDetailsViewModel({
     required WisherRepository wisherRepository,
-    String? userId,
+    required AuthRepository authRepository,
   }) : _wisherRepository = wisherRepository,
-       _userId = userId;
+       _authRepository = authRepository;
 
   final WisherRepository _wisherRepository;
-  final String? _userId;
+  final AuthRepository _authRepository;
 
   String _firstName = '';
   String _lastName = '';
@@ -130,7 +131,10 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
     loading.show();
 
-    final userId = _userId ?? Supabase.instance.client.auth.currentUser?.id;
+    // Try auth repository first, then fall back to Supabase
+    final userId =
+        _authRepository.currentUserId ??
+        Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) {
       AppLogger.error(
         'Wisher creation failed: No authenticated user',

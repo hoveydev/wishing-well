@@ -5,9 +5,13 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 
-GoRouter addWisherDemoRouter(WisherRepository wisherRepository) => GoRouter(
+GoRouter addWisherDemoRouter(
+  AuthRepository authRepository,
+  WisherRepository wisherRepository,
+) => GoRouter(
   initialLocation: Routes.addWisher.path,
   routes: [
     GoRoute(
@@ -25,7 +29,7 @@ GoRouter addWisherDemoRouter(WisherRepository wisherRepository) => GoRouter(
             child: AddWisherDetailsScreen(
               viewModel: AddWisherDetailsViewModel(
                 wisherRepository: wisherRepository,
-                userId: 'demo-user',
+                authRepository: authRepository,
               ),
             ),
             transitionsBuilder: slideInRightTransition,

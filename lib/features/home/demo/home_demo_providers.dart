@@ -9,14 +9,13 @@ enum HomeDemoScenario { success, failure }
 
 List<SingleChildWidget> getHomeDemoProviders({
   required HomeDemoScenario scenario,
-}) {
-  return [
-    ChangeNotifierProvider<AuthRepository>(
-      create: (_) =>
-          MockAuthRepository()..login(email: 'demo@test.com', password: 'demo'),
-    ),
-    ChangeNotifierProvider<WisherRepository>(
-      create: (_) => MockWisherRepository(),
-    ),
-  ];
-}
+}) => [
+  ChangeNotifierProvider<AuthRepository>(
+    create: (_) =>
+        MockAuthRepository(userId: 'demo-user')
+          ..login(email: 'demo@test.com', password: 'demo'),
+  ),
+  ChangeNotifierProvider<WisherRepository>(
+    create: (_) => MockWisherRepository(),
+  ),
+];

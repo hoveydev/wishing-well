@@ -4,6 +4,7 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/components/add_wisher_details_button.dart';
 
 import '../../../../../test_helpers/helpers/test_helpers.dart';
+import '../../../../../test_helpers/mocks/repositories/mock_auth_repository.dart';
 import '../../../../../test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 
@@ -14,6 +15,7 @@ void main() {
     setUp(() {
       viewModel = AddWisherDetailsViewModel(
         wisherRepository: MockWisherRepository(),
+        authRepository: MockAuthRepository(),
       );
     });
 

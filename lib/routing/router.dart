@@ -145,6 +145,7 @@ GoRouter router() => GoRouter(
             child: AddWisherDetailsScreen(
               viewModel: AddWisherDetailsViewModel(
                 wisherRepository: context.read(),
+                authRepository: context.read(),
               ),
             ),
             transitionsBuilder: slideInRightTransition,

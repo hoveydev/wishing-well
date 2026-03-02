@@ -30,8 +30,18 @@ enum AppRunConfig {
 }
 
 /// Current run configuration - change this to run different demos
-const AppRunConfig _runConfig = AppRunConfig.homeDemo;
+const AppRunConfig _runConfig = AppRunConfig.production;
 
+/// Current environment for the app.
+///
+/// Switch between environments by changing this value:
+/// - [Environment.local] →  Local Supabase (run `supabase start` first)
+/// - [Environment.development] →  Remote Supabase (default)
+/// - [Environment.production] →  Production Supabase
+///
+/// NOTE: This is set to [Environment.local] for local development.
+/// Change to [Environment.development] or [Environment.production]
+/// before deploying or merging to main for release builds.
 const Environment _environment = Environment.development;
 
 Future<void> main() async {

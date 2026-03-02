@@ -35,7 +35,8 @@ List<SingleChildWidget> getAddWisherDemoProviders({
   return [
     ChangeNotifierProvider<AuthRepository>(
       create: (_) =>
-          MockAuthRepository()..login(email: 'demo@test.com', password: 'demo'),
+          MockAuthRepository(userId: 'demo-user')
+            ..login(email: 'demo@test.com', password: 'demo'),
     ),
     ChangeNotifierProvider<WisherRepository>(
       create: (_) => MockWisherRepository(createWisherResult: createResult),

@@ -4,6 +4,7 @@ import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_d
 import 'package:wishing_well/utils/result.dart';
 
 import '../../../../../test_helpers/helpers/test_helpers.dart';
+import '../../../../../test_helpers/mocks/repositories/mock_auth_repository.dart';
 import '../../../../../test_helpers/mocks/repositories/mock_wisher_repository.dart';
 
 void main() {
@@ -13,7 +14,10 @@ void main() {
 
     setUp(() {
       mockRepository = MockWisherRepository();
-      viewModel = AddWisherDetailsViewModel(wisherRepository: mockRepository);
+      viewModel = AddWisherDetailsViewModel(
+        wisherRepository: mockRepository,
+        authRepository: MockAuthRepository(),
+      );
     });
 
     tearDown(() {
@@ -325,7 +329,10 @@ void main() {
             ),
           ),
         );
-        final vm = AddWisherDetailsViewModel(wisherRepository: successRepo);
+        final vm = AddWisherDetailsViewModel(
+          wisherRepository: successRepo,
+          authRepository: MockAuthRepository(),
+        );
         addTearDown(vm.dispose);
 
         // The repository result is handled in tapSaveButton
@@ -337,7 +344,10 @@ void main() {
         final errorRepo = MockWisherRepository(
           createWisherResult: Result.error(Exception('Database error')),
         );
-        final vm = AddWisherDetailsViewModel(wisherRepository: errorRepo);
+        final vm = AddWisherDetailsViewModel(
+          wisherRepository: errorRepo,
+          authRepository: MockAuthRepository(),
+        );
         addTearDown(vm.dispose);
 
         // The repository result is handled in tapSaveButton
@@ -356,7 +366,10 @@ void main() {
           ),
         ];
         final repo = MockWisherRepository(initialWishers: initialWishers);
-        final vm = AddWisherDetailsViewModel(wisherRepository: repo);
+        final vm = AddWisherDetailsViewModel(
+          wisherRepository: repo,
+          authRepository: MockAuthRepository(),
+        );
         addTearDown(vm.dispose);
 
         expect(repo.wishers.length, 1);

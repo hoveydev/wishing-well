@@ -25,6 +25,8 @@ flutter run --target lib/components/demo/main.dart
 
 ## Component Coverage
 
+✅ **App Alert** - Dialog alerts with error, warning, success, and info types
+✅ **App Error Card** - Error card with customizable retry button, icons, and styling options
 ✅ **Buttons** - All variants (Primary, Secondary, Tertiary) with states, icons, and loading indicators
 ✅ **Inputs** - All types (text, email, password, phone) with icons and autofill
 ✅ **Wishers** - Full wishers list with add functionality and touch feedback
@@ -55,6 +57,7 @@ lib/
 ├── main.dart (production app - unchanged)
 └── components/ (component library)
     ├── app_alert/
+    ├── app_error_card/
     ├── app_bar/
     ├── button/
     ├── checklist/
@@ -76,6 +79,7 @@ lib/
         ├── README.md
         └── demos/ (individual component demos)
             ├── app_alert_demo.dart
+            ├── app_error_card_demo.dart
             ├── button_demo.dart
             ├── input_demo.dart
             ├── wishers_demo.dart
@@ -254,6 +258,14 @@ If a component is missing a demo, you'll see an error like:
 - Separate entry point prevents accidental production usage
 
 ## Component Details
+
+### App Error Card
+- Card-based error display with retry button
+- 36x36 touch target for retry button
+- Customizable icon (refresh by default)
+- Configurable font sizes
+- Adjustable padding for different layouts
+- Compact, card-based design
 
 ### Buttons
 - Primary, Secondary, and Tertiary variants

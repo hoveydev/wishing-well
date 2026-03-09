@@ -220,6 +220,7 @@ As of this implementation, the following components are registered:
 | Component | Demo File | Title | Icon |
 |-----------|-----------|-------|------|
 | app_alert | app_alert_demo.dart | App Alert | Icons.error_outline |
+| app_error_card | app_error_card_demo.dart | Error Card | Icons.error |
 | app_bar | app_bar_demo.dart | App Bar | Icons.menu |
 | button | button_demo.dart | Buttons | Icons.touch_app |
 | checklist | checklist_demo.dart | Checklist | Icons.checklist |

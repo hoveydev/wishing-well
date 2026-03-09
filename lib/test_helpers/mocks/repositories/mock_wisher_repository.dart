@@ -6,9 +6,11 @@ class MockWisherRepository extends WisherRepository {
   MockWisherRepository({
     Result<Wisher>? createWisherResult,
     Result<void>? deleteWisherResult,
+    Result<void>? fetchWishersResult,
     List<Wisher>? initialWishers,
   }) : createWisherResult = createWisherResult ?? _defaultCreateWisherResult,
        deleteWisherResult = deleteWisherResult ?? const Result.ok(null),
+       fetchWishersResult = fetchWishersResult ?? const Result.ok(null),
        _wishers = initialWishers ?? _defaultWishers;
 
   static Result<Wisher> get _defaultCreateWisherResult {
@@ -60,6 +62,7 @@ class MockWisherRepository extends WisherRepository {
 
   final Result<Wisher> createWisherResult;
   final Result<void> deleteWisherResult;
+  final Result<void> fetchWishersResult;
 
   final List<Wisher> _wishers;
   bool _isLoading = false;
@@ -83,9 +86,15 @@ class MockWisherRepository extends WisherRepository {
     await Future.delayed(const Duration(milliseconds: 10));
 
     _isLoading = false;
+
+    // Set error if result is an error
+    if (fetchWishersResult is Error) {
+      _error = (fetchWishersResult as Error<void>).error;
+    }
+
     notifyListeners();
 
-    return const Result.ok(null);
+    return fetchWishersResult;
   }
 
   @override

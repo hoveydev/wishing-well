@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
+import 'package:wishing_well/utils/result.dart';
 
 void main() {
   group('HomeViewModel', () {
@@ -105,6 +106,96 @@ void main() {
 
       // Assert - Should have received at least 2 notifications (loading start/end)
       expect(notificationCount, greaterThanOrEqualTo(2));
+    });
+
+    group('error state', () {
+      test('should have no error initially', () {
+        expect(viewModel.hasWisherError, isFalse);
+        expect(viewModel.wisherError, isNull);
+      });
+
+      test('should set error when fetchWishers fails', () async {
+        // Arrange - Create mock with error result
+        final errorException = Exception('Failed to fetch wishers');
+        final failingMockWisherRepository = MockWisherRepository(
+          fetchWishersResult: Result.error(errorException),
+        );
+        final failingViewModel = HomeViewModel(
+          authRepository: mockAuthRepository,
+          wisherRepository: failingMockWisherRepository,
+        );
+
+        // Act
+        await failingViewModel.fetchWishers();
+
+        // Assert
+        expect(failingViewModel.hasWisherError, isTrue);
+        expect(failingViewModel.wisherError, equals(errorException));
+
+        // Cleanup
+        failingViewModel.dispose();
+      });
+
+      test('should clear error before fetching', () async {
+        // Arrange - First fetch fails
+        final failingMockWisherRepository = MockWisherRepository(
+          fetchWishersResult: Result.error(Exception('Failed')),
+        );
+        final failingViewModel = HomeViewModel(
+          authRepository: mockAuthRepository,
+          wisherRepository: failingMockWisherRepository,
+        );
+        await failingViewModel.fetchWishers();
+        expect(failingViewModel.hasWisherError, isTrue);
+
+        // Create new view model with successful mock for second fetch
+        final successMockWisherRepository = MockWisherRepository(
+          fetchWishersResult: const Result.ok(null),
+        );
+        final successViewModel = HomeViewModel(
+          authRepository: mockAuthRepository,
+          wisherRepository: successMockWisherRepository,
+        );
+
+        // Act - Fetch succeeds
+        await successViewModel.fetchWishers();
+
+        // Assert - Error should be cleared
+        expect(successViewModel.hasWisherError, isFalse);
+        expect(successViewModel.wisherError, isNull);
+
+        // Cleanup
+        failingViewModel.dispose();
+        successViewModel.dispose();
+      });
+
+      test('should notify listeners when error occurs', () async {
+        // Arrange
+        final failingMockWisherRepository = MockWisherRepository(
+          fetchWishersResult: Result.error(Exception('Failed')),
+        );
+        final failingViewModel = HomeViewModel(
+          authRepository: mockAuthRepository,
+          wisherRepository: failingMockWisherRepository,
+        );
+
+        var notificationCount = 0;
+        failingViewModel.addListener(() {
+          notificationCount++;
+        });
+
+        // Act
+        await failingViewModel.fetchWishers();
+
+        // Allow async operations to complete
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        // Assert - Should have received notifications
+        expect(notificationCount, greaterThanOrEqualTo(1));
+
+        // Cleanup
+        failingViewModel.dispose();
+      });
     });
   });
 }

@@ -501,6 +501,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a File'**
   String get chooseAFile;
+
+  /// Error title when wishers fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Wishers'**
+  String get wishersErrorTitle;
+
+  /// Error message when wishers fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while loading your wishers. Please try again.'**
+  String get wishersErrorMessage;
+
+  /// Button text to retry an action
+  ///
+  /// In en, this message translates to:
+  /// **'retry'**
+  String get tryAgain;
 }
 
 class _AppLocalizationsDelegate

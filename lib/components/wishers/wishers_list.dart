@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/app_error_card/app_error_card.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
@@ -13,12 +14,16 @@ class WishersList extends StatelessWidget {
     required this.onAddWisherTap,
     required this.wishers,
     this.isLoading = false,
+    this.hasError = false,
+    this.onRetry,
     super.key,
   });
 
   final void Function() onAddWisherTap;
   final List<Wisher> wishers;
   final bool isLoading;
+  final bool hasError;
+  final VoidCallback? onRetry;
 
   Widget _buildItem(BuildContext context, int index) {
     // First item is the Add button
@@ -72,6 +77,13 @@ class WishersList extends StatelessWidget {
                     height: 80,
                     child: isLoading
                         ? const WishersListSkeleton()
+                        : hasError
+                        ? AppErrorCard(
+                            onRetry: onRetry,
+                            title: l10n.wishersErrorTitle,
+                            message: l10n.wishersErrorMessage,
+                            retryText: l10n.tryAgain,
+                          )
                         : ListView.builder(
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.symmetric(

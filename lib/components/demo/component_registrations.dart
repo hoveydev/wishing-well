@@ -33,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/demo/component_registry.dart';
 import 'package:wishing_well/components/demo/demos/app_alert_demo.dart';
 import 'package:wishing_well/components/demo/demos/app_bar_demo.dart';
+import 'package:wishing_well/components/demo/demos/app_error_card_demo.dart';
 import 'package:wishing_well/components/demo/demos/button_demo.dart';
 import 'package:wishing_well/components/demo/demos/checklist_demo.dart';
 import 'package:wishing_well/components/demo/demos/input_demo.dart';
@@ -72,6 +73,14 @@ void registerAllDemos() {
     icon: Icons.error_outline,
     demoBuilder: (_) => const AppAlertDialog(),
     description: 'Dialog alerts with error, warning, success, and info types',
+  );
+
+  ComponentDemoRegistry.register(
+    componentName: 'app_error_card',
+    title: 'Error Card',
+    icon: Icons.error,
+    demoBuilder: (_) => const AppErrorCardDemo(),
+    description: 'Error card with retry button',
   );
 
   ComponentDemoRegistry.register(
@@ -193,6 +202,7 @@ void registerAllDemos() {
   const requiredComponents = [
     'app_alert', // Alert component
     'app_bar', // App bar component
+    'app_error_card', // Error card component
     'button', // Button components
     'checklist', // Checklist component
     'inline_alert', // Inline alert component

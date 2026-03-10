@@ -222,4 +222,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chooseAFile => 'Choose a File';
+
+  @override
+  String get wishersErrorTitle => 'Error Loading Wishers';
+
+  @override
+  String get wishersErrorMessage =>
+      'Something went wrong while loading your wishers. Please try again.';
+
+  @override
+  String get tryAgain => 'retry';
 }

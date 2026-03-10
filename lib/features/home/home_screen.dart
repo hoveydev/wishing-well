@@ -50,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
           WishersList(
             wishers: viewModel.wishers,
             isLoading: viewModel.isLoadingWishers,
+            hasError: viewModel.hasWisherError,
             onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+            onRetry: viewModel.fetchWishers,
           ),
         ],
       ),

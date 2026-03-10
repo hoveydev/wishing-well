@@ -8,6 +8,8 @@ abstract class HomeViewModelContract {
   String? get firstName;
   List<Wisher> get wishers;
   bool get isLoadingWishers;
+  Object? get wisherError;
+  bool get hasWisherError;
 }
 
 class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
@@ -22,6 +24,7 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
 
   final AuthRepository _authRepository;
   final WisherRepository _wisherRepository;
+  Object? _wisherError;
 
   @override
   String? get firstName => _authRepository.userFirstName;
@@ -32,6 +35,12 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
   @override
   bool get isLoadingWishers => _wisherRepository.isLoading;
 
+  @override
+  Object? get wisherError => _wisherError;
+
+  @override
+  bool get hasWisherError => _wisherError != null;
+
   /// Forward repository notifications to our listeners
   void _onRepositoryChanged() {
     notifyListeners();
@@ -39,7 +48,18 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
 
   /// Fetches wishers from the repository.
   /// Should be called when the home screen initializes.
-  Future<Result<void>> fetchWishers() => _wisherRepository.fetchWishers();
+  Future<Result<void>> fetchWishers() async {
+    // Clear any previous error
+    _wisherError = null;
+    notifyListeners();
+
+    final result = await _wisherRepository.fetchWishers();
+    if (result case Error(:final error)) {
+      _wisherError = error;
+      notifyListeners();
+    }
+    return result;
+  }
 
   @override
   void dispose() {

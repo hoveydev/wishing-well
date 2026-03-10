@@ -277,5 +277,17 @@
     "chooseAFile": "Choose a File",
     "@chooseAFile": {
         "description": "Option to choose a file from device"
+    },
+    "wishersErrorTitle": "Error Loading Wishers",
+    "@wishersErrorTitle": {
+        "description": "Error title when wishers fail to load"
+    },
+    "wishersErrorMessage": "Something went wrong while loading your wishers. Please try again.",
+    "@wishersErrorMessage": {
+        "description": "Error message when wishers fail to load"
+    },
+    "tryAgain": "retry",
+    "@tryAgain": {
+        "description": "Button text to retry an action"
     }
 }

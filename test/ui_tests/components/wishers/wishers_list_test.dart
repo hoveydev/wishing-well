@@ -30,11 +30,15 @@ void main() {
     Widget createWishersList({
       List<Wisher> wishers = const [],
       bool isLoading = false,
+      bool hasError = false,
       VoidCallback? onAddWisherTap,
+      VoidCallback? onRetry,
     }) => WishersList(
       wishers: wishers,
       isLoading: isLoading,
+      hasError: hasError,
       onAddWisherTap: onAddWisherTap ?? () => {},
+      onRetry: onRetry,
     );
 
     group(TestGroups.rendering, () {
@@ -170,6 +174,56 @@ void main() {
         // Should show skeleton loader
         TestHelpers.expectWidgetOnce(WishersListSkeleton);
       });
+
+      testWidgets('shows error card when hasError is true', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(hasError: true, onRetry: () {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should show error title
+        TestHelpers.expectTextOnce('Error Loading Wishers');
+        // Should show error message
+        TestHelpers.expectTextOnce(
+          'Something went wrong while loading your wishers. Please try again.',
+        );
+        // Should show retry button
+        TestHelpers.expectTextOnce('retry');
+      });
+
+      testWidgets('does not show error card when hasError is false', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(createWishersList()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Should NOT show error title
+        expect(find.text('Error Loading Wishers'), findsNothing);
+        // Should show wishers instead
+        TestHelpers.expectWidgetOnce(ListView);
+      });
+
+      testWidgets('shows skeleton when loading even if hasError is true', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(isLoading: true, hasError: true),
+          ),
+        );
+        await tester.pump();
+
+        // Should show skeleton loader, not error card
+        TestHelpers.expectWidgetOnce(WishersListSkeleton);
+        // Should NOT show error card
+        expect(find.text('Error Loading Wishers'), findsNothing);
+      });
     });
 
     group(TestGroups.interaction, () {
@@ -239,6 +293,46 @@ void main() {
         // Should still find all items after scrolling
         expect(find.byType(WisherItem), findsNWidgets(8));
       });
+
+      testWidgets('calls onRetry when retry button is tapped', (
+        WidgetTester tester,
+      ) async {
+        var retryTapped = false;
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(
+              hasError: true,
+              onRetry: () => retryTapped = true,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find and tap the retry button (the refresh icon)
+        final retryButton = find.byIcon(Icons.refresh);
+        expect(retryButton, findsOneWidget);
+
+        await tester.tap(retryButton);
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(retryTapped, isTrue);
+      });
+
+      testWidgets(
+        'retry button is visible when hasError is true and onRetry is provided',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              createWishersList(hasError: true, onRetry: () {}),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          // Should show the refresh icon
+          expect(find.byIcon(Icons.refresh), findsOneWidget);
+        },
+      );
     });
 
     group(TestGroups.behavior, () {

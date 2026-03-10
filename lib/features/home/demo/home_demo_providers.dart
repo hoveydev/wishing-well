@@ -5,6 +5,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
+import 'package:wishing_well/utils/result.dart';
 
 enum HomeDemoScenario {
   noWishers,
@@ -19,9 +20,12 @@ List<SingleChildWidget> getHomeDemoProviders({
 }) {
   // Configure mock repositories based on scenario
   final List<Wisher> initialWishers;
+  final Result<void>? fetchWishersResult;
+
   switch (scenario) {
     case HomeDemoScenario.noWishers:
       initialWishers = [];
+      fetchWishersResult = null;
       break;
     case HomeDemoScenario.fewWishers:
       initialWishers = [
@@ -42,6 +46,7 @@ List<SingleChildWidget> getHomeDemoProviders({
           updatedAt: DateTime(2024, 1, 2),
         ),
       ];
+      fetchWishersResult = null;
       break;
     case HomeDemoScenario.defaultWishers:
       initialWishers = [
@@ -86,6 +91,7 @@ List<SingleChildWidget> getHomeDemoProviders({
           updatedAt: DateTime(2024, 1, 5),
         ),
       ];
+      fetchWishersResult = null;
       break;
     case HomeDemoScenario.manyWishers:
       // Generate 50 wishers for scroll testing
@@ -100,9 +106,11 @@ List<SingleChildWidget> getHomeDemoProviders({
           updatedAt: DateTime(2024, 1, (i % 28) + 1),
         ),
       );
+      fetchWishersResult = null;
       break;
     case HomeDemoScenario.failure:
       initialWishers = [];
+      fetchWishersResult = Result.error(Exception('Failed to fetch wishers'));
       break;
   }
 
@@ -113,7 +121,10 @@ List<SingleChildWidget> getHomeDemoProviders({
             ..login(email: 'demo@test.com', password: 'demo'),
     ),
     ChangeNotifierProvider<WisherRepository>(
-      create: (_) => MockWisherRepository(initialWishers: initialWishers),
+      create: (_) => MockWisherRepository(
+        initialWishers: initialWishers,
+        fetchWishersResult: fetchWishersResult,
+      ),
     ),
   ];
 }

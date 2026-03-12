@@ -14,6 +14,7 @@ class TertiaryButton extends StatelessWidget {
     this.label,
     this.isLoading = false,
     this.iconSize,
+    this.color,
   }) : _tertiaryButtonContentType = tertiaryButtonContentType;
 
   const TertiaryButton.icon({
@@ -22,6 +23,7 @@ class TertiaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     double? iconSize,
+    Color? color,
   }) : this._(
          key: key,
          icon: icon,
@@ -29,6 +31,7 @@ class TertiaryButton extends StatelessWidget {
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.icon,
          iconSize: iconSize,
+         color: color,
        );
 
   const TertiaryButton.label({
@@ -36,12 +39,14 @@ class TertiaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    Color? color,
   }) : this._(
          key: key,
          label: label,
          onPressed: onPressed,
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.label,
+         color: color,
        );
 
   const TertiaryButton.labelWithIcon({
@@ -50,6 +55,7 @@ class TertiaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    Color? color,
   }) : this._(
          key: key,
          label: label,
@@ -57,6 +63,7 @@ class TertiaryButton extends StatelessWidget {
          onPressed: onPressed,
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.labelWithIcon,
+         color: color,
        );
   final IconData? icon;
   final String? label;
@@ -64,6 +71,7 @@ class TertiaryButton extends StatelessWidget {
   final bool isLoading;
   final _TertiaryButtonContentType _tertiaryButtonContentType;
   final double? iconSize;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +86,7 @@ class TertiaryButton extends StatelessWidget {
         shape: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
             ? const CircleBorder()
             : null,
+        color: color,
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

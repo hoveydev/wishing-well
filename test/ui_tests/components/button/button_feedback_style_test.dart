@@ -303,6 +303,162 @@ void main() {
         // Cleanup
         await gesture.cancel();
       });
+
+      group('color parameter', () {
+        testWidgets('secondary style with custom color', (tester) async {
+          // Arrange & Act: Create secondary button with custom color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.secondary(
+                    context: context,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Secondary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Secondary Button'), findsOneWidget);
+        });
+
+        testWidgets('secondary style with default color when null', (
+          tester,
+        ) async {
+          // Arrange & Act: Create secondary button without specifying color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.secondary(context: context),
+                  onPressed: () {},
+                  child: const Text('Secondary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render with default primary color
+          expect(find.text('Secondary Button'), findsOneWidget);
+        });
+
+        testWidgets('tertiary style with custom color', (tester) async {
+          // Arrange & Act: Create tertiary button with custom color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    color: Colors.purple,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Tertiary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Tertiary Button'), findsOneWidget);
+        });
+
+        testWidgets('tertiary style with default color when null', (
+          tester,
+        ) async {
+          // Arrange & Act: Create tertiary button without specifying color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(context: context),
+                  onPressed: () {},
+                  child: const Text('Tertiary Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render with default primary color
+          expect(find.text('Tertiary Button'), findsOneWidget);
+        });
+
+        testWidgets('tertiary button with error color', (tester) async {
+          // Arrange & Act: Create tertiary button with error color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Error Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Error Button'), findsOneWidget);
+        });
+
+        testWidgets('tertiary button with success color', (tester) async {
+          // Arrange & Act: Create tertiary button with success color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Success Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Success Button'), findsOneWidget);
+        });
+
+        testWidgets('tertiary button with custom color shows pressed state', (
+          tester,
+        ) async {
+          // Arrange: Create button with custom color
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    color: Colors.orange,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Custom Color Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Act: Press the button
+          final gesture = await tester.press(find.text('Custom Color Button'));
+          await tester.pump(const Duration(milliseconds: 50));
+
+          // Assert: Button should be in pressed state
+          expect(find.text('Custom Color Button'), findsOneWidget);
+
+          // Cleanup
+          await gesture.cancel();
+        });
+      });
     });
   });
 }

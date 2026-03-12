@@ -5,6 +5,7 @@ import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -108,6 +109,7 @@ class LoadingOverlay extends StatelessWidget {
     final buttonColor = controller.isError
         ? colorScheme?.error
         : colorScheme?.success;
+    final textTheme = Theme.of(context).textTheme;
 
     return Center(
       child: Padding(
@@ -122,15 +124,17 @@ class LoadingOverlay extends StatelessWidget {
             Semantics(
               label: message,
               liveRegion: true,
-              child: Icon(icon, size: 64, color: iconColor),
+              child: Icon(
+                icon,
+                size: const AppIconSize().xxlarge,
+                color: iconColor,
+              ),
             ),
             const AppSpacer.large(),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
+              style: textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),

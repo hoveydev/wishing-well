@@ -134,9 +134,7 @@ class LoadingOverlay extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: textTheme.titleMedium?.copyWith(
-                color: colorScheme?.primary,
-              ),
+              style: textTheme.titleMedium,
             ),
             const AppSpacer.large(),
             AppButton.label(

@@ -61,18 +61,21 @@ When styling UI elements, always use the established theme system instead of har
 **Fonts/Text:**
 - Use `Theme.of(context).textTheme` for text styles
 - Available styles: `titleLarge`, `titleMedium`, `titleSmall`, `bodyLarge`, `bodyMedium`, `bodySmall`, `labelLarge`, etc.
+- Note: The primary color is the default for text, so you typically don't need to specify it
 - Example:
   ```dart
-  // ❌ WRONG: Hardcoded text styles
-  final style = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
-  
-  // ✅ CORRECT: Use textTheme
+  // ✅ CORRECT: Use textTheme directly (primary is default)
   final textTheme = Theme.of(context).textTheme;
   final style = textTheme.titleMedium;
   
-  // With color from colorScheme:
+  // Only use copyWith when you need to override the primary color:
+  final styleWithColor = textTheme.titleMedium?.copyWith(
+    color: colorScheme?.error,  // Override with different color
+  );
+  
+  // ❌ WRONG: Unnecessarily specifying primary (it's the default)
   final style = textTheme.titleMedium?.copyWith(
-    color: colorScheme?.primary,
+    color: colorScheme?.primary,  // Not needed - primary is default
   );
   ```
 

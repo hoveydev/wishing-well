@@ -385,10 +385,17 @@ final color = Colors.red;
 
 **Fonts/Text - Use textTheme:**
 ```dart
-// ✅ Correct Pattern - textTheme
+// ✅ Correct Pattern - textTheme directly (primary is default)
 final textTheme = Theme.of(context).textTheme;
 final style = textTheme.titleMedium;
+
+// Only override color when needed:
 final styleWithColor = textTheme.titleMedium?.copyWith(
+  color: colorScheme?.error,  // Override with different color
+);
+
+// ❌ Wrong - Unnecessarily specifying primary (it's the default)
+final style = textTheme.titleMedium?.copyWith(
   color: colorScheme?.primary,
 );
 

@@ -19,27 +19,23 @@ void main() {
     });
 
     group(TestGroups.initialState, () {
-      testWidgets(
-        'renders child content and hidden throbber when not loading',
-        (WidgetTester tester) async {
-          await tester.pumpWidget(
-            createScreenTestWidget(
-              loadingController: loadingController,
-              child: const LoadingOverlay(
-                child: Screen(children: [Text('Test Content')]),
-              ),
+      testWidgets('renders child content when not loading', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: const LoadingOverlay(
+              child: Screen(children: [Text('Test Content')]),
             ),
-          );
-          await tester.pump();
+          ),
+        );
+        await tester.pump();
 
-          // Child content should be visible
-          TestHelpers.expectTextOnce('Test Content');
-          TestHelpers.expectWidgetOnce(Screen);
-
-          // Loading overlay should be present but hidden
-          TestHelpers.expectWidgetOnce(AppThrobber);
-        },
-      );
+        // Child content should be visible
+        TestHelpers.expectTextOnce('Test Content');
+        TestHelpers.expectWidgetOnce(Screen);
+      });
 
       testWidgets(
         'AnimatedOpacity has 0.0 opacity when loading controller is initial',
@@ -206,8 +202,7 @@ void main() {
         expect(semanticsFinder, findsOneWidget);
       });
 
-      testWidgets('renders exactly one AppThrobber.xlarge '
-          'component regardless of visibility state', (
+      testWidgets('renders AppThrobber when loading is visible', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
@@ -218,16 +213,61 @@ void main() {
         );
         await tester.pump();
 
-        // Verify the AppThrobber component exists
-        expect(find.byType(AppThrobber), findsOneWidget);
-
         // Show loading to make it visible
         loadingController.show();
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 250));
 
-        // Should still be exactly one AppThrobber
+        // Should show AppThrobber when loading
         expect(find.byType(AppThrobber), findsOneWidget);
+      });
+    });
+
+    group('success state', () {
+      testWidgets('shows success content when showSuccess is called', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: const LoadingOverlay(child: Screen(children: [])),
+          ),
+        );
+        await tester.pump();
+
+        loadingController.showSuccess('Operation completed!');
+        await tester.pump();
+        await tester.pumpAndSettle();
+
+        // Should show success icon
+        expect(find.byIcon(Icons.check_circle), findsOneWidget);
+
+        // Should show message
+        expect(find.text('Operation completed!'), findsOneWidget);
+      });
+    });
+
+    group('error state', () {
+      testWidgets('shows error content when showError is called', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: const LoadingOverlay(child: Screen(children: [])),
+          ),
+        );
+        await tester.pump();
+
+        loadingController.showError('Something went wrong');
+        await tester.pump();
+        await tester.pumpAndSettle();
+
+        // Should show error icon
+        expect(find.byIcon(Icons.error), findsOneWidget);
+
+        // Should show message
+        expect(find.text('Something went wrong'), findsOneWidget);
       });
     });
   });

@@ -63,15 +63,15 @@ class ButtonFeedbackStyle {
     BorderRadius? borderRadius,
     BorderSide? side,
     WidgetStateProperty<Color>? foregroundColor,
+    Color? color,
   }) {
     final durations = _getDurations(pressDuration, releaseDuration);
     final colorScheme = context.colorScheme;
+    final buttonColor = color ?? colorScheme.primary!;
 
     final WidgetStateProperty<BorderSide?> sideProperty = side != null
         ? WidgetStatePropertyAll<BorderSide>(side)
-        : WidgetStatePropertyAll<BorderSide>(
-            BorderSide(color: colorScheme.primary!),
-          );
+        : WidgetStatePropertyAll<BorderSide>(BorderSide(color: buttonColor));
 
     return ButtonStyle(
       backgroundBuilder: (context, states, child) => AnimatedContainer(
@@ -80,15 +80,14 @@ class ButtonFeedbackStyle {
             : durations.release,
         decoration: BoxDecoration(
           color: states.contains(WidgetState.pressed)
-              ? colorScheme.primary!.withValues(alpha: 0.15)
+              ? buttonColor.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: borderRadius ?? BorderRadius.circular(14),
           border: side != null ? Border.fromBorderSide(side) : null,
         ),
         child: child,
       ),
-      foregroundColor:
-          foregroundColor ?? WidgetStatePropertyAll(colorScheme.primary),
+      foregroundColor: foregroundColor ?? WidgetStatePropertyAll(buttonColor),
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       padding: WidgetStateProperty.all(
         padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -115,9 +114,11 @@ class ButtonFeedbackStyle {
     BorderSide? side,
     WidgetStateProperty<Color>? foregroundColor,
     OutlinedBorder? shape,
+    Color? color,
   }) {
     final durations = _getDurations(pressDuration, releaseDuration);
     final colorScheme = context.colorScheme;
+    final buttonColor = color ?? colorScheme.primary!;
 
     return ButtonStyle(
       backgroundBuilder: (context, states, child) => AnimatedContainer(
@@ -126,15 +127,14 @@ class ButtonFeedbackStyle {
             : durations.release,
         decoration: BoxDecoration(
           color: states.contains(WidgetState.pressed)
-              ? colorScheme.primary!.withValues(alpha: 0.1)
+              ? buttonColor.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: borderRadius ?? BorderRadius.circular(14),
           border: side != null ? Border.fromBorderSide(side) : null,
         ),
         child: child,
       ),
-      foregroundColor:
-          foregroundColor ?? WidgetStatePropertyAll(colorScheme.primary),
+      foregroundColor: foregroundColor ?? WidgetStatePropertyAll(buttonColor),
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
       padding: WidgetStateProperty.all(

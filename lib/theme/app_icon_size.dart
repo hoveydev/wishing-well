@@ -7,6 +7,7 @@ class AppIconSize {
   static const double _medium = 18.0;
   static const double _large = 24.0;
   static const double _xlarge = 60.0;
+  static const double _xxlarge = 64.0;
   static const double _headerLargeRatio = 0.12;
 
   double get xsmall => _xsmall;
@@ -18,4 +19,6 @@ class AppIconSize {
     if (sectionHeight == null) return _xlarge;
     return sectionHeight! * _headerLargeRatio;
   }
+
+  double get xxlarge => _xxlarge;
 }

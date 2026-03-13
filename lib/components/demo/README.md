@@ -273,6 +273,7 @@ If a component is missing a demo, you'll see an error like:
 - Icon support
 - Disabled states
 - Touch feedback
+- **Color variations**: Use the optional `color` parameter on tertiary or secondary buttons to create custom colored variants (e.g., success green, error red, warning yellow)
 
 ### Inputs
 - Text, Email, Password, and Phone types

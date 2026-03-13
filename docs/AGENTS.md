@@ -40,6 +40,57 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 - Use SizedBox for whitespace instead of Container (`sized_box_for_whitespace`)
 - Prefer `const` widget constructors
 
+### Colors and Fonts
+When styling UI elements, always use the established theme system instead of hardcoded values:
+
+**Colors:**
+- Use `AppColorScheme` extension for semantic colors: `Theme.of(context).extension<AppColorScheme>()`
+- Available colors: `primary`, `success`, `warning`, `error`, `background`, `surfaceGray`, `borderGray`
+- Example:
+  ```dart
+  // ❌ WRONG: Hardcoded colors
+  final color = Colors.red;
+  final backgroundColor = const Color(0xFFEEEEEE);
+  
+  // ✅ CORRECT: Use AppColorScheme extension
+  final colorScheme = Theme.of(context).extension<AppColorScheme>();
+  final color = colorScheme?.error;
+  final backgroundColor = colorScheme?.background;
+  ```
+
+**Fonts/Text:**
+- Use `Theme.of(context).textTheme` for text styles
+- Available styles: `titleLarge`, `titleMedium`, `titleSmall`, `bodyLarge`, `bodyMedium`, `bodySmall`, `labelLarge`, etc.
+- Note: The primary color is the default for text, so you typically don't need to specify it
+- Example:
+  ```dart
+  // ✅ CORRECT: Use textTheme directly (primary is default)
+  final textTheme = Theme.of(context).textTheme;
+  final style = textTheme.titleMedium;
+  
+  // Only use copyWith when you need to override the primary color:
+  final styleWithColor = textTheme.titleMedium?.copyWith(
+    color: colorScheme?.error,  // Override with different color
+  );
+  
+  // ❌ WRONG: Unnecessarily specifying primary (it's the default)
+  final style = textTheme.titleMedium?.copyWith(
+    color: colorScheme?.primary,  // Not needed - primary is default
+  );
+  ```
+
+**Icons:**
+- Use `AppIconSize` class for icon sizes: `const AppIconSize().large`, `.medium`, `.xlarge`, etc.
+- Available sizes: `xsmall` (10), `small` (14), `medium` (18), `large` (24), `xlarge` (60), `xxlarge` (64)
+- Example:
+  ```dart
+  // ❌ WRONG: Hardcoded icon size
+  const Icon(Icons.error, size: 64);
+  
+  // ✅ CORRECT: Use AppIconSize
+  const Icon(Icons.error, size: const AppIconSize().xxlarge);
+  ```
+
 ### Naming Conventions
 - Classes/Enums: PascalCase (e.g., `LoginViewModel`, `LoginErrorType`)
 - Methods/Variables: camelCase (e.g., `updateEmailField`, `_authRepository`)

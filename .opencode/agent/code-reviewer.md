@@ -368,6 +368,49 @@ const SizedBox(height: 16)  // NOT Container(height: 16)
 const AppButton.primary(label: 'Submit', onTap: _handleSubmit)
 ```
 
+### **Colors and Fonts Pattern**
+Always use the established theme system instead of hardcoded values:
+
+**Colors - Use AppColorScheme extension:**
+```dart
+// ✅ Correct Pattern - AppColorScheme extension
+final colorScheme = Theme.of(context).extension<AppColorScheme>();
+final errorColor = colorScheme?.error;
+final successColor = colorScheme?.success;
+final backgroundColor = colorScheme?.background;
+
+// ❌ Wrong - Hardcoded colors
+final color = Colors.red;
+```
+
+**Fonts/Text - Use textTheme:**
+```dart
+// ✅ Correct Pattern - textTheme
+final textTheme = Theme.of(context).textTheme;
+final style = textTheme.titleMedium;
+final styleWithColor = textTheme.titleMedium?.copyWith(
+  color: colorScheme?.primary,
+);
+
+// ❌ Wrong - Hardcoded text styles
+final style = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
+```
+
+**Icons - Use AppIconSize:**
+```dart
+// ✅ Correct Pattern - AppIconSize
+const Icon(Icons.error, size: const AppIconSize().xxlarge);
+
+// ❌ Wrong - Hardcoded size
+const Icon(Icons.error, size: 64);
+```
+
+**Why this matters:**
+- Consistent styling across the app
+- Easy to implement dark mode
+- Colors/sizes can be updated in one place
+- Better accessibility support
+
 ### **Error Sealed Class Pattern**
 The project uses `AuthError<T>` sealed class for type-safe error handling:
 ```dart
@@ -481,6 +524,9 @@ unawaited(analyticsService.trackEvent('view_loaded'));
 - Long methods (>50 lines)
 - Deeply nested conditionals
 - Magic numbers/strings without constants
+- **Hardcoded colors** (use `AppColorScheme` extension)
+- **Hardcoded text styles** (use `textTheme`)
+- **Hardcoded icon sizes** (use `AppIconSize`)
 
 ### **Testing Gaps**
 - No tests for new ViewModels

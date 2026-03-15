@@ -160,6 +160,9 @@ class _OverlayContent extends StatelessWidget {
     final buttonColor = controller.isError
         ? colorScheme?.error
         : colorScheme?.success;
+    final textStyle = Theme.of(
+      context,
+    ).textTheme.titleMedium?.copyWith(color: buttonColor);
 
     return Center(
       child: Padding(
@@ -171,7 +174,7 @@ class _OverlayContent extends StatelessWidget {
             if (controller.isSuccess &&
                 (imageUrl != null || localImageFile != null))
               CircleAvatar(
-                radius: const AppIconSize().successAvatar / 2,
+                radius: const AppIconSize().overlayIcon / 2,
                 backgroundImage: imageUrl != null
                     ? NetworkImage(imageUrl)
                     : FileImage(localImageFile!),
@@ -179,13 +182,13 @@ class _OverlayContent extends StatelessWidget {
             else if (controller.isSuccess)
               Icon(
                 icon,
-                size: const AppIconSize().successAvatar,
+                size: const AppIconSize().overlayIcon,
                 color: iconColor,
               )
             else
               Icon(
                 icon,
-                size: const AppIconSize().successAvatar,
+                size: const AppIconSize().overlayIcon,
                 color: iconColor,
               ),
             const AppSpacer.large(),
@@ -196,9 +199,7 @@ class _OverlayContent extends StatelessWidget {
                 ? RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: buttonColor),
+                      style: textStyle,
                       children: [
                         TextSpan(
                           text: name,
@@ -208,13 +209,7 @@ class _OverlayContent extends StatelessWidget {
                       ],
                     ),
                   )
-                : Text(
-                    message,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium?.copyWith(color: buttonColor),
-                  ),
+                : Text(message, textAlign: TextAlign.center, style: textStyle),
             const AppSpacer.medium(),
             AppButton.label(
               label: l10n.ok,

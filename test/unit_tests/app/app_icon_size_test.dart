@@ -21,9 +21,9 @@ void main() {
           expect(iconSize.medium, 18.0);
         });
 
-        test('successAvatar returns correct value', () {
+        test('overlayIcon returns correct value', () {
           const iconSize = AppIconSize();
-          expect(iconSize.successAvatar, 120.0);
+          expect(iconSize.overlayIcon, 120.0);
         });
       });
 
@@ -73,30 +73,30 @@ void main() {
           expect(iconSize.medium, 18.0);
         });
 
-        test('successAvatar does not change with sectionHeight', () {
+        test('overlayIcon does not change with sectionHeight', () {
           const iconSize = AppIconSize(sectionHeight: 1000);
-          expect(iconSize.successAvatar, 120.0);
+          expect(iconSize.overlayIcon, 120.0);
         });
       });
 
-      group('successAvatar behavior', () {
-        test('successAvatar is independent of sectionHeight', () {
+      group('overlayIcon behavior', () {
+        test('overlayIcon is independent of sectionHeight', () {
           const iconSizeSmall = AppIconSize(sectionHeight: 100);
           const iconSizeLarge = AppIconSize(sectionHeight: 5000);
 
-          expect(iconSizeSmall.successAvatar, 120.0);
-          expect(iconSizeLarge.successAvatar, 120.0);
+          expect(iconSizeSmall.overlayIcon, 120.0);
+          expect(iconSizeLarge.overlayIcon, 120.0);
         });
 
-        test('successAvatar is larger than xlarge', () {
+        test('overlayIcon is larger than xlarge', () {
           const iconSize = AppIconSize();
-          expect(iconSize.successAvatar, greaterThan(iconSize.xlarge));
+          expect(iconSize.overlayIcon, greaterThan(iconSize.xlarge));
         });
 
-        test('successAvatar is appropriate size for avatar display', () {
+        test('overlayIcon is appropriate size for overlay dialogs', () {
           const iconSize = AppIconSize();
-          // 120 diameter = 60 radius, which is appropriate for a profile avatar
-          expect(iconSize.successAvatar, 120.0);
+          // 120 diameter = 60 radius, appropriate for profile avatar or icon
+          expect(iconSize.overlayIcon, 120.0);
         });
       });
     });

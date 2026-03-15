@@ -19,7 +19,7 @@ class AppIconSize {
   static const double _large = 24.0;
   static const double _xlarge = 60.0;
   static const double _xxlarge = 64.0;
-  static const double _successAvatar = 120.0;
+  static const double _overlayIcon = 120.0;
   static const double _headerLargeRatio = 0.12;
 
   double get xsmall => _xsmall;
@@ -34,10 +34,9 @@ class AppIconSize {
 
   double get xxlarge => _xxlarge;
 
-  /// Icon size for success/confirm overlay avatars (120.0).
+  /// Icon size for overlay dialogs (success/error icons and avatars).
   ///
-  /// Used in loading overlay to display user avatars after successful
-  /// operations (e.g., "John has been added!").
+  /// Used in loading overlay for both success and error states.
   /// This size is independent of [sectionHeight].
-  double get successAvatar => _successAvatar;
+  double get overlayIcon => _overlayIcon;
 }

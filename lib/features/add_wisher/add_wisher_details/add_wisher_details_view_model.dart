@@ -165,7 +165,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
           name: value.name,
           localImageFile: _imageFile,
           onOk: () {
-            // Navigate back to home after success is acknowledged
+            // Navigate back on success acknowledgment
             if (context.mounted) {
               context.pop();
             }

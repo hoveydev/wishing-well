@@ -14,6 +14,7 @@ class SecondaryButton extends StatelessWidget {
     this.label,
     this.isLoading = false,
     this.iconSize,
+    this.fontWeight,
   }) : _secondaryButtonContentType = secondaryButtonContentType;
 
   const SecondaryButton.icon({
@@ -22,6 +23,7 @@ class SecondaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     double? iconSize,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -29,6 +31,7 @@ class SecondaryButton extends StatelessWidget {
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.icon,
          iconSize: iconSize,
+         fontWeight: fontWeight,
        );
 
   const SecondaryButton.label({
@@ -36,12 +39,14 @@ class SecondaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
          onPressed: onPressed,
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.label,
+         fontWeight: fontWeight,
        );
 
   const SecondaryButton.labelWithIcon({
@@ -50,6 +55,7 @@ class SecondaryButton extends StatelessWidget {
     required VoidCallback onPressed,
     Key? key,
     bool isLoading = false,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -57,6 +63,7 @@ class SecondaryButton extends StatelessWidget {
          onPressed: onPressed,
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.labelWithIcon,
+         fontWeight: fontWeight,
        );
   final IconData? icon;
   final String? label;
@@ -64,6 +71,7 @@ class SecondaryButton extends StatelessWidget {
   final bool isLoading;
   final _SecondaryButtonContentType _secondaryButtonContentType;
   final double? iconSize;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +95,14 @@ class SecondaryButton extends StatelessWidget {
           buttonType: AppButtonType.secondary,
           isLoading: isLoading,
           iconSize: iconSize,
+          fontWeight: fontWeight,
         );
       case _SecondaryButtonContentType.label:
         return AppButtonContent.label(
           label: label!,
           buttonType: AppButtonType.secondary,
           isLoading: isLoading,
+          fontWeight: fontWeight,
         );
       case _SecondaryButtonContentType.labelWithIcon:
         return AppButtonContent.labelWithIcon(
@@ -100,6 +110,7 @@ class SecondaryButton extends StatelessWidget {
           label: label!,
           buttonType: AppButtonType.secondary,
           isLoading: isLoading,
+          fontWeight: fontWeight,
         );
     }
   }

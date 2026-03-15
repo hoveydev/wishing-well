@@ -16,6 +16,7 @@ class PrimaryButton extends StatelessWidget {
     this.label,
     this.semanticLabel,
     this.iconSize,
+    this.fontWeight,
   }) : _primaryButtonContentType = primaryButtonContentType;
 
   const PrimaryButton.icon({
@@ -26,6 +27,7 @@ class PrimaryButton extends StatelessWidget {
     MainAxisAlignment alignment = MainAxisAlignment.center,
     String? semanticLabel,
     double? iconSize,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -35,6 +37,7 @@ class PrimaryButton extends StatelessWidget {
          semanticLabel: semanticLabel,
          primaryButtonContentType: _PrimaryButtonContentType.icon,
          iconSize: iconSize,
+         fontWeight: fontWeight,
        );
 
   const PrimaryButton.label({
@@ -43,6 +46,7 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -50,6 +54,7 @@ class PrimaryButton extends StatelessWidget {
          isLoading: isLoading,
          alignment: alignment,
          primaryButtonContentType: _PrimaryButtonContentType.label,
+         fontWeight: fontWeight,
        );
 
   const PrimaryButton.labelWithIcon({
@@ -59,6 +64,7 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -67,6 +73,7 @@ class PrimaryButton extends StatelessWidget {
          isLoading: isLoading,
          alignment: alignment,
          primaryButtonContentType: _PrimaryButtonContentType.labelWithIcon,
+         fontWeight: fontWeight,
        );
   final IconData? icon;
   final String? label;
@@ -76,6 +83,7 @@ class PrimaryButton extends StatelessWidget {
   final MainAxisAlignment alignment;
   final _PrimaryButtonContentType _primaryButtonContentType;
   final double? iconSize;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +112,7 @@ class PrimaryButton extends StatelessWidget {
           isLoading: isLoading,
           alignment: alignment,
           iconSize: iconSize,
+          fontWeight: fontWeight,
         );
       case _PrimaryButtonContentType.label:
         return AppButtonContent.label(
@@ -111,6 +120,7 @@ class PrimaryButton extends StatelessWidget {
           buttonType: AppButtonType.primary,
           isLoading: isLoading,
           alignment: alignment,
+          fontWeight: fontWeight,
         );
       case _PrimaryButtonContentType.labelWithIcon:
         return AppButtonContent.labelWithIcon(
@@ -119,6 +129,7 @@ class PrimaryButton extends StatelessWidget {
           buttonType: AppButtonType.primary,
           isLoading: isLoading,
           alignment: alignment,
+          fontWeight: fontWeight,
         );
     }
   }

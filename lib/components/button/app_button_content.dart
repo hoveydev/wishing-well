@@ -14,6 +14,7 @@ class AppButtonContent extends StatelessWidget {
     this.label,
     this.icon,
     this.iconSize,
+    this.fontWeight,
   }) : _appButtonContentType = appButtonContentType;
 
   const AppButtonContent.icon({
@@ -23,6 +24,7 @@ class AppButtonContent extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     double? iconSize,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -31,6 +33,7 @@ class AppButtonContent extends StatelessWidget {
          alignment: alignment,
          appButtonContentType: _AppButtonContentType.icon,
          iconSize: iconSize,
+         fontWeight: fontWeight,
        );
 
   const AppButtonContent.label({
@@ -39,6 +42,7 @@ class AppButtonContent extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -46,6 +50,7 @@ class AppButtonContent extends StatelessWidget {
          isLoading: isLoading,
          alignment: alignment,
          appButtonContentType: _AppButtonContentType.label,
+         fontWeight: fontWeight,
        );
 
   const AppButtonContent.labelWithIcon({
@@ -55,6 +60,7 @@ class AppButtonContent extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -63,6 +69,7 @@ class AppButtonContent extends StatelessWidget {
          isLoading: isLoading,
          alignment: alignment,
          appButtonContentType: _AppButtonContentType.labelWithIcon,
+         fontWeight: fontWeight,
        );
   final String? label;
   final IconData? icon;
@@ -71,6 +78,7 @@ class AppButtonContent extends StatelessWidget {
   final AppButtonType buttonType;
   final _AppButtonContentType _appButtonContentType;
   final double? iconSize;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -91,29 +99,25 @@ class AppButtonContent extends StatelessWidget {
   }
 
   List<Widget> _buildContent(BuildContext context, TextTheme textTheme) {
+    final textStyle = TextStyle(
+      fontSize: textTheme.bodyLarge!.fontSize,
+      fontWeight: fontWeight,
+    );
+
     switch (_appButtonContentType) {
       case _AppButtonContentType.icon:
         return [Icon(icon!, size: iconSize ?? const AppIconSize().large)];
       case _AppButtonContentType.label:
         return [
           Flexible(
-            child: Text(
-              label!,
-              style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
-              textAlign: TextAlign.center,
-            ),
+            child: Text(label!, style: textStyle, textAlign: TextAlign.center),
           ),
         ];
       case _AppButtonContentType.labelWithIcon:
         return [
           Icon(icon!, size: const AppIconSize().large),
           const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              label!,
-              style: TextStyle(fontSize: textTheme.bodyLarge!.fontSize),
-            ),
-          ),
+          Flexible(child: Text(label!, style: textStyle)),
         ];
     }
   }

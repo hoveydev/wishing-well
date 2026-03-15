@@ -232,4 +232,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tryAgain => 'retry';
+
+  @override
+  String wisherCreatedSuccess(String name) {
+    return '$name has been added!';
+  }
 }

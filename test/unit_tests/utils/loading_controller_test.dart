@@ -187,8 +187,8 @@ void main() {
       });
     });
 
-    group('handleOkPressed', () {
-      test('handleOkPressed calls callback and hides overlay', () {
+    group('acknowledgeAndClear', () {
+      test('acknowledgeAndClear calls callback and hides overlay', () {
         final controller = LoadingController();
         bool callbackCalled = false;
         controller.showSuccess(
@@ -198,25 +198,25 @@ void main() {
           },
         );
 
-        controller.handleOkPressed();
+        controller.acknowledgeAndClear();
 
         expect(callbackCalled, true);
         expect(controller.isIdle, true);
         expect(controller.hasOverlay, false);
       });
 
-      test('handleOkPressed works without callback', () {
+      test('acknowledgeAndClear works without callback', () {
         final controller = LoadingController();
         controller.showSuccess('Success!');
 
         // Should not throw
-        controller.handleOkPressed();
+        controller.acknowledgeAndClear();
 
         expect(controller.isIdle, true);
         expect(controller.hasOverlay, false);
       });
 
-      test('handleOkPressed works for error state', () {
+      test('acknowledgeAndClear works for error state', () {
         final controller = LoadingController();
         bool callbackCalled = false;
         controller.showError(
@@ -226,7 +226,7 @@ void main() {
           },
         );
 
-        controller.handleOkPressed();
+        controller.acknowledgeAndClear();
 
         expect(callbackCalled, true);
         expect(controller.isIdle, true);

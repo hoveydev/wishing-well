@@ -15,6 +15,7 @@ class TertiaryButton extends StatelessWidget {
     this.isLoading = false,
     this.iconSize,
     this.color,
+    this.fontWeight,
   }) : _tertiaryButtonContentType = tertiaryButtonContentType;
 
   const TertiaryButton.icon({
@@ -24,6 +25,7 @@ class TertiaryButton extends StatelessWidget {
     bool isLoading = false,
     double? iconSize,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -32,6 +34,7 @@ class TertiaryButton extends StatelessWidget {
          tertiaryButtonContentType: _TertiaryButtonContentType.icon,
          iconSize: iconSize,
          color: color,
+         fontWeight: fontWeight,
        );
 
   const TertiaryButton.label({
@@ -40,6 +43,7 @@ class TertiaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -47,6 +51,7 @@ class TertiaryButton extends StatelessWidget {
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.label,
          color: color,
+         fontWeight: fontWeight,
        );
 
   const TertiaryButton.labelWithIcon({
@@ -56,6 +61,7 @@ class TertiaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -64,6 +70,7 @@ class TertiaryButton extends StatelessWidget {
          isLoading: isLoading,
          tertiaryButtonContentType: _TertiaryButtonContentType.labelWithIcon,
          color: color,
+         fontWeight: fontWeight,
        );
   final IconData? icon;
   final String? label;
@@ -72,6 +79,7 @@ class TertiaryButton extends StatelessWidget {
   final _TertiaryButtonContentType _tertiaryButtonContentType;
   final double? iconSize;
   final Color? color;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +109,14 @@ class TertiaryButton extends StatelessWidget {
           buttonType: AppButtonType.tertiary,
           isLoading: isLoading,
           iconSize: iconSize,
+          fontWeight: fontWeight,
         );
       case _TertiaryButtonContentType.label:
         return AppButtonContent.label(
           label: label!,
           buttonType: AppButtonType.tertiary,
           isLoading: isLoading,
+          fontWeight: fontWeight,
         );
       case _TertiaryButtonContentType.labelWithIcon:
         return AppButtonContent.labelWithIcon(
@@ -114,6 +124,7 @@ class TertiaryButton extends StatelessWidget {
           label: label!,
           buttonType: AppButtonType.tertiary,
           isLoading: isLoading,
+          fontWeight: fontWeight,
         );
     }
   }

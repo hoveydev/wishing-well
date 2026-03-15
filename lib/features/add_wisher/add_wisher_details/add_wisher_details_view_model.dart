@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -118,6 +119,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   @override
   Future<void> tapSaveButton(BuildContext context) async {
     final loading = context.read<LoadingController>();
+    final l10n = AppLocalizations.of(context)!;
 
     // Validate form before proceeding
     _validateForm();
@@ -141,8 +143,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         context: 'AddWisherDetailsViewModel.tapSaveButton',
       );
       _error = const AddWisherDetailsError(AddWisherDetailsErrorType.unknown);
-      notifyListeners();
-      loading.hide();
+      loading.showError(l10n.errorUnknown, onOk: clearError);
       return;
     }
 
@@ -158,14 +159,18 @@ class AddWisherDetailsViewModel extends ChangeNotifier
           'Wisher created successfully: ${value.id}',
           context: 'AddWisherDetailsViewModel.tapSaveButton',
         );
-        if (context.mounted) {
-          AppLogger.debug(
-            'Navigating back to home',
-            context: 'AddWisherDetailsViewModel.tapSaveButton',
-          );
-          context.pop();
-        }
-        loading.hide();
+        // Show success message with wisher's name and optional photo
+        loading.showSuccess(
+          l10n.wisherCreatedSuccess(value.name),
+          name: value.name,
+          localImageFile: _imageFile,
+          onOk: () {
+            // Navigate back on success acknowledgment
+            if (context.mounted) {
+              context.pop();
+            }
+          },
+        );
       case Error(:final error):
         AppLogger.error(
           'Wisher creation failed',
@@ -173,8 +178,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
           error: error,
         );
         _error = const AddWisherDetailsError(AddWisherDetailsErrorType.unknown);
-        notifyListeners();
-        loading.hide();
+        loading.showError(l10n.errorUnknown, onOk: clearError);
     }
   }
 }

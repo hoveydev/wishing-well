@@ -8,10 +8,14 @@ class MockWisherRepository extends WisherRepository {
     Result<void>? deleteWisherResult,
     Result<void>? fetchWishersResult,
     List<Wisher>? initialWishers,
+    this.delay = Duration.zero,
   }) : createWisherResult = createWisherResult ?? _defaultCreateWisherResult,
        deleteWisherResult = deleteWisherResult ?? const Result.ok(null),
        fetchWishersResult = fetchWishersResult ?? const Result.ok(null),
        _wishers = initialWishers ?? _defaultWishers;
+
+  /// Optional delay to simulate network latency
+  final Duration delay;
 
   static Result<Wisher> get _defaultCreateWisherResult {
     final wisher = Wisher(
@@ -104,6 +108,9 @@ class MockWisherRepository extends WisherRepository {
     required String lastName,
     String? profilePicture,
   }) async {
+    // Simulate network delay
+    await Future.delayed(delay);
+
     // Return the configured result (success or error)
     final result = createWisherResult;
 
@@ -120,6 +127,7 @@ class MockWisherRepository extends WisherRepository {
       );
       _wishers.insert(0, wisher);
       notifyListeners();
+      return Result.ok(wisher);
     }
 
     return result;

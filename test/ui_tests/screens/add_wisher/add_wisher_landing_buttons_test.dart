@@ -79,11 +79,12 @@ void main() {
         );
         expect(columns, findsOneWidget);
 
-        final sizedBoxes = find.descendant(
+        // Verify there are AppButton widgets (SizedBox wrapper was removed)
+        final buttons = find.descendant(
           of: find.byType(AddWisherLandingButtons),
-          matching: find.byType(SizedBox),
+          matching: find.byType(AppButton),
         );
-        expect(sizedBoxes, findsWidgets);
+        expect(buttons, findsNWidgets(2));
       });
 
       testWidgets('required callback parameters are enforced', (

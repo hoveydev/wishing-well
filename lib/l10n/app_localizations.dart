@@ -519,6 +519,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'retry'**
   String get tryAgain;
+
+  /// Success message when a wisher is created
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has been added!'**
+  String wisherCreatedSuccess(String name);
 }
 
 class _AppLocalizationsDelegate

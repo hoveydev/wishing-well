@@ -18,8 +18,19 @@ class AppButton extends StatelessWidget {
     this.icon,
     this.iconSize,
     this.color,
+    this.fontWeight,
   }) : _appButtonContentType = appButtonContentType;
 
+  /// Creates an icon-only button.
+  ///
+  /// [icon] - The icon to display.
+  /// [onPressed] - Callback when button is tapped.
+  /// [type] - The button style (primary, secondary, tertiary).
+  /// [isLoading] - Shows a loading indicator instead of the icon.
+  /// [alignment] - Alignment of content within the button.
+  /// [iconSize] - Custom size for the icon.
+  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [fontWeight] - Custom font weight for text (label buttons only).
   const AppButton.icon({
     required IconData icon,
     required VoidCallback onPressed,
@@ -29,6 +40,7 @@ class AppButton extends StatelessWidget {
     MainAxisAlignment alignment = MainAxisAlignment.center,
     double? iconSize,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -39,8 +51,18 @@ class AppButton extends StatelessWidget {
          appButtonContentType: _AppButtonContentType.icon,
          iconSize: iconSize,
          color: color,
+         fontWeight: fontWeight,
        );
 
+  /// Creates a label-only button.
+  ///
+  /// [label] - The text to display.
+  /// [onPressed] - Callback when button is tapped.
+  /// [type] - The button style (primary, secondary, tertiary).
+  /// [isLoading] - Shows a loading indicator instead of the label.
+  /// [alignment] - Alignment of content within the button.
+  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [fontWeight] - Custom font weight for the label text.
   const AppButton.label({
     required String label,
     required VoidCallback onPressed,
@@ -49,6 +71,7 @@ class AppButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          label: label,
@@ -58,8 +81,19 @@ class AppButton extends StatelessWidget {
          type: type,
          appButtonContentType: _AppButtonContentType.label,
          color: color,
+         fontWeight: fontWeight,
        );
 
+  /// Creates a button with both an icon and label.
+  ///
+  /// [icon] - The icon to display.
+  /// [label] - The text to display.
+  /// [onPressed] - Callback when button is tapped.
+  /// [type] - The button style (primary, secondary, tertiary).
+  /// [isLoading] - Shows a loading indicator instead of content.
+  /// [alignment] - Alignment of content within the button.
+  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [fontWeight] - Custom font weight for the label text.
   const AppButton.labelWithIcon({
     required IconData icon,
     required String label,
@@ -69,6 +103,7 @@ class AppButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     Color? color,
+    FontWeight? fontWeight,
   }) : this._(
          key: key,
          icon: icon,
@@ -79,6 +114,7 @@ class AppButton extends StatelessWidget {
          type: type,
          appButtonContentType: _AppButtonContentType.labelWithIcon,
          color: color,
+         fontWeight: fontWeight,
        );
   final String? label;
   final IconData? icon;
@@ -90,6 +126,12 @@ class AppButton extends StatelessWidget {
   final double? iconSize;
   final Color? color;
 
+  /// Custom font weight for button text.
+  ///
+  /// Only applies to buttons with labels (label and labelWithIcon types).
+  /// Supported on all button types: primary, secondary, and tertiary.
+  final FontWeight? fontWeight;
+
   Widget _button(void Function()? onPressHandler) {
     switch (type) {
       case AppButtonType.primary:
@@ -100,12 +142,14 @@ class AppButton extends StatelessWidget {
               onPressed: onPressed,
               alignment: alignment,
               iconSize: iconSize,
+              fontWeight: fontWeight,
             );
           case _AppButtonContentType.label:
             return PrimaryButton.label(
               label: label!,
               onPressed: onPressed,
               alignment: alignment,
+              fontWeight: fontWeight,
             );
           case _AppButtonContentType.labelWithIcon:
             return PrimaryButton.labelWithIcon(
@@ -113,6 +157,7 @@ class AppButton extends StatelessWidget {
               label: label!,
               onPressed: onPressed,
               alignment: alignment,
+              fontWeight: fontWeight,
             );
         }
       case AppButtonType.secondary:
@@ -140,12 +185,14 @@ class AppButton extends StatelessWidget {
               onPressed: onPressed,
               iconSize: iconSize,
               color: color,
+              fontWeight: fontWeight,
             );
           case _AppButtonContentType.label:
             return TertiaryButton.label(
               label: label!,
               onPressed: onPressed,
               color: color,
+              fontWeight: fontWeight,
             );
           case _AppButtonContentType.labelWithIcon:
             return TertiaryButton.labelWithIcon(
@@ -153,6 +200,7 @@ class AppButton extends StatelessWidget {
               label: label!,
               onPressed: onPressed,
               color: color,
+              fontWeight: fontWeight,
             );
         }
     }
@@ -162,6 +210,6 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
 
-    return SizedBox(child: _button(onPressHandler));
+    return _button(onPressHandler);
   }
 }

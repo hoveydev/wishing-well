@@ -289,5 +289,15 @@
     "tryAgain": "retry",
     "@tryAgain": {
         "description": "Button text to retry an action"
+    },
+    "wisherCreatedSuccess": "{name} has been added!",
+    "@wisherCreatedSuccess": {
+        "description": "Success message when a wisher is created",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "John Smith"
+            }
+        }
     }
 }

@@ -10,17 +10,21 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/routing/router.dart';
-import 'package:wishing_well/features/shared/loading/loading_overlay.dart';
+import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo.dart'
     as add_wisher_demo;
 import 'package:wishing_well/features/home/demo/home_demo.dart' as home_demo;
+import 'package:wishing_well/components/demo/main.dart' as components_demo;
 
 /// Run configuration - switch between app and demos
 enum AppRunConfig {
   /// Run the full production app
   production,
+
+  /// Run the components demo
+  componentsDemo,
 
   /// Run the add_wisher feature demo
   addWisherDemo,
@@ -52,6 +56,9 @@ Future<void> main() async {
       await add_wisher_demo.main();
     case AppRunConfig.homeDemo:
       await home_demo.main();
+    case AppRunConfig.componentsDemo:
+      components_demo.main();
+      return;
   }
 }
 

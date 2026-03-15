@@ -6,7 +6,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_providers.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_router.dart';
-import 'package:wishing_well/features/shared/loading/loading_overlay.dart';
+import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';

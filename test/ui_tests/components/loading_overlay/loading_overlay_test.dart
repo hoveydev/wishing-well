@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/features/shared/loading/loading_overlay.dart';
+import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 

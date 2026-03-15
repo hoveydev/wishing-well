@@ -40,6 +40,7 @@ flutter run --target lib/components/demo/main.dart
 ✅ **Touch Feedback** - Opacity-based feedback with customizable animations
 ✅ **Image Picker Circle** - Generic circular image picker with local/remote support, configurable size, and optional edit overlay
 ✅ **Image Source Menu** - Modal bottom sheet for selecting image source (photo or file)
+✅ **Loading Overlay** - Full-screen overlay with loading, success, and error states
 
 ## Features
 
@@ -70,6 +71,8 @@ lib/
     ├── touch_feedback/
     ├── wishers/
     ├── image_picker_circle/
+    ├── image_source_menu/
+    ├── loading_overlay/
     └── demo/ (component demo app - production-excluded)
         ├── main.dart (demo entry point)
         ├── demo_app.dart
@@ -92,7 +95,8 @@ lib/
             ├── screen_demo.dart
             ├── touch_feedback_demo.dart
             ├── image_picker_circle_demo.dart
-            └── image_source_menu_demo.dart
+            ├── image_source_menu_demo.dart
+            └── loading_overlay_demo.dart
 ```
 
 ## 📝 Adding a New Component Demo
@@ -348,3 +352,16 @@ If a component is missing a demo, you'll see an error like:
 - Placeholder with camera icon when empty
 - Dotted border styling matching app theme
 - Integrates with TouchFeedbackOpacity for tap interactions
+
+### Loading Overlay
+- Full-screen overlay wrapper component
+- Three states: loading, success, error
+- Smooth fade animations for show/hide transitions
+- Animated content switching between states
+- Optional name parameter for personalized success messages
+- Optional image support for success state (URL or local file)
+- OK button with callback for user acknowledgment
+- Blocks interaction with underlying content when visible
+- Uses LoadingController for state management
+- Integrates with AppThrobber for loading indicator
+- Semantic labels for accessibility

@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
@@ -125,13 +124,18 @@ class ForgotPasswordViewModel extends ChangeNotifier
           context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
         );
         if (context.mounted) {
-          AppLogger.debug(
-            'Navigating to confirmation screen',
-            context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+          final l10n = AppLocalizations.of(context)!;
+          loading.showSuccess(
+            l10n.forgotPasswordConfirmationMessage,
+            onOk: () {
+              AppLogger.debug(
+                'Navigating to login screen',
+                context: 'ForgotPasswordViewModel.tapSendResetLinkButton',
+              );
+              context.goNamed(Routes.login.name);
+            },
           );
-          unawaited(context.pushNamed(Routes.forgotPasswordConfirm.name));
         }
-        loading.hide();
       case Error(:final error):
         AppLogger.error(
           'Failed to send password reset email',

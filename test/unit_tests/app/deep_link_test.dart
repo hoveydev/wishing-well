@@ -31,18 +31,22 @@ void main() {
 
   group('DeepLinkHandler', () {
     group(TestGroups.initialState, () {
-      test('navigates to create-account/confirm for signup', () async {
-        final handler = createHandler(
-          initialUri: Uri.parse(
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
-          ),
-        );
+      test(
+        'navigates to login with accountConfirmed param for signup',
+        () async {
+          final handler = createHandler(
+            initialUri: Uri.parse(
+              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+              '?type=signup',
+            ),
+          );
 
-        handler.init();
-        await Future<void>.delayed(Duration.zero);
+          handler.init();
+          await Future<void>.delayed(Duration.zero);
 
-        expect(navigatedTo, 'account-confirm');
-      });
+          expect(navigatedTo, 'login');
+        },
+      );
 
       test('navigates to unknown for non-signup', () async {
         final handler = createHandler(

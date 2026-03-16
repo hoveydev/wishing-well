@@ -8,7 +8,6 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -18,11 +17,6 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 
 // Helper functions for GoRouter routes
-Widget _resetPasswordConfirmationScreenBuilder(
-  BuildContext context,
-  GoRouterState state,
-) => const Scaffold(body: Text('Reset Password Confirmation Screen'));
-
 Widget _resetPasswordScreenBuilder(BuildContext context, GoRouterState state) =>
     ResetPasswordScreen(
       viewModel: ResetPasswordViewModel(
@@ -69,14 +63,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         routerConfig: GoRouter(
-          routes: [
-            GoRoute(path: '/', builder: _resetPasswordScreenBuilder),
-            GoRoute(
-              path: '/reset-password-confirmation',
-              name: Routes.resetPasswordConfirmation.name,
-              builder: _resetPasswordConfirmationScreenBuilder,
-            ),
-          ],
+          routes: [GoRoute(path: '/', builder: _resetPasswordScreenBuilder)],
         ),
       ),
     );

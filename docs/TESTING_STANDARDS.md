@@ -27,7 +27,6 @@ lib/testing/
 │   │   └── wishers/
 │   └── screens/                  # Full screen tests
 │       ├── add_wisher/
-│       ├── confirmation/
 │       ├── create_account/
 │       ├── forgot_password/
 │       ├── home/

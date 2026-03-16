@@ -6,7 +6,6 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
-import 'package:wishing_well/features/shared/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
@@ -43,15 +42,6 @@ GoRouter router() => GoRouter(
       ),
       routes: [
         GoRoute(
-          path: Routes.forgotPasswordConfirm.path,
-          name: Routes.forgotPasswordConfirm.name,
-          pageBuilder: (context, state) => const CustomTransitionPage(
-            child: ConfirmationScreen.forgotPassword(),
-            transitionDuration: Duration.zero,
-            transitionsBuilder: slideUpTransition,
-          ),
-        ),
-        GoRoute(
           path: Routes.resetPassword.path,
           name: Routes.resetPassword.name,
           pageBuilder: (context, state) => CustomTransitionPage(
@@ -65,17 +55,6 @@ GoRouter router() => GoRouter(
             transitionDuration: Duration.zero,
             transitionsBuilder: slideUpTransition,
           ),
-          routes: [
-            GoRoute(
-              path: Routes.resetPasswordConfirmation.path,
-              name: Routes.resetPasswordConfirmation.name,
-              pageBuilder: (context, state) => const CustomTransitionPage(
-                child: ConfirmationScreen.resetPassword(),
-                transitionDuration: Duration.zero,
-                transitionsBuilder: slideUpTransition,
-              ),
-            ),
-          ],
         ),
       ],
     ),
@@ -88,26 +67,6 @@ GoRouter router() => GoRouter(
         ),
         transitionsBuilder: slideUpTransition,
       ),
-      routes: [
-        GoRoute(
-          path: Routes.createAccountConfirm.path,
-          name: Routes.createAccountConfirm.name,
-          pageBuilder: (context, state) => const CustomTransitionPage(
-            child: ConfirmationScreen.createAccount(),
-            transitionDuration: Duration.zero,
-            transitionsBuilder: slideUpTransition,
-          ),
-        ),
-        GoRoute(
-          path: Routes.accountConfirm.path,
-          name: Routes.accountConfirm.name,
-          pageBuilder: (context, state) => const CustomTransitionPage(
-            child: ConfirmationScreen.account(),
-            transitionDuration: Duration.zero,
-            transitionsBuilder: slideUpTransition,
-          ),
-        ),
-      ],
     ),
     GoRoute(
       path: Routes.home.path,

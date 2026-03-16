@@ -42,7 +42,7 @@ class DeepLinkHandler {
     switch (subPath) {
       case 'account-confirm':
         if (uri.queryParameters['type'] == 'signup') {
-          navigate(Routes.accountConfirm.name, null);
+          navigate(Routes.login.name, {'accountConfirmed': 'true'});
         } else {
           AppLogger.warning(
             'Unrecognized type parameter (or it may not exist) - '

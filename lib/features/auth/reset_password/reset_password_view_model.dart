@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
@@ -221,13 +220,18 @@ class ResetPasswordViewModel extends ChangeNotifier
           context: 'ResetPasswordViewModel.tapResetPasswordButton',
         );
         if (context.mounted) {
-          AppLogger.debug(
-            'Navigating to confirmation screen',
-            context: 'ResetPasswordViewModel.tapResetPasswordButton',
+          final l10n = AppLocalizations.of(context)!;
+          loading.showSuccess(
+            l10n.resetPasswordConfirmationMessage,
+            onOk: () {
+              AppLogger.debug(
+                'Navigating to login screen',
+                context: 'ResetPasswordViewModel.tapResetPasswordButton',
+              );
+              context.goNamed(Routes.login.name);
+            },
           );
-          unawaited(context.pushNamed(Routes.resetPasswordConfirmation.name));
         }
-        loading.hide();
       case Error(:final Exception error):
         AppLogger.error(
           'Password reset failed',

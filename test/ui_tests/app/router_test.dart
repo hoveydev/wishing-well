@@ -9,7 +9,8 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/features/shared/confirmation/confirmation_screen.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
+import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/features/home/home_screen.dart';
@@ -64,20 +65,6 @@ void main() {
         expect(find.byType(ForgotPasswordScreen), findsOneWidget);
       });
 
-      testWidgets('navigates to forgot password confirm', (
-        WidgetTester tester,
-      ) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
-        await TestHelpers.pumpAndSettle(tester);
-        goRouter.goNamed(Routes.forgotPassword.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(ForgotPasswordScreen), findsOneWidget);
-        goRouter.goNamed(Routes.forgotPasswordConfirm.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(ConfirmationScreen), findsOneWidget);
-      });
-
       testWidgets('navigates to sign up', (WidgetTester tester) async {
         final goRouter = router();
         await tester.pumpWidget(startAppWithRouter(goRouter));
@@ -85,18 +72,6 @@ void main() {
         goRouter.goNamed(Routes.createAccount.name);
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(CreateAccountScreen), findsOneWidget);
-      });
-
-      testWidgets('navigates to sign up confirm', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
-        await TestHelpers.pumpAndSettle(tester);
-        goRouter.goNamed(Routes.createAccount.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(CreateAccountScreen), findsOneWidget);
-        goRouter.goNamed(Routes.createAccountConfirm.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(ConfirmationScreen), findsOneWidget);
       });
 
       testWidgets('navigates to home', (WidgetTester tester) async {
@@ -108,35 +83,16 @@ void main() {
         expect(find.byType(HomeScreen), findsOneWidget);
       });
 
-      testWidgets('navigates to account confirmation', (
-        WidgetTester tester,
-      ) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
-        await TestHelpers.pumpAndSettle(tester);
-        goRouter.goNamed(Routes.accountConfirm.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(ConfirmationScreen), findsOneWidget);
-      });
-
       testWidgets('navigates to reset password', (WidgetTester tester) async {
         final goRouter = router();
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
-        goRouter.goNamed(Routes.resetPassword.name);
+        goRouter.goNamed(
+          Routes.resetPassword.name,
+          queryParameters: {'email': 'test@example.com', 'token': 'abc123'},
+        );
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(ResetPasswordScreen), findsOneWidget);
-      });
-
-      testWidgets('navigates to reset password confirmation', (
-        WidgetTester tester,
-      ) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
-        await TestHelpers.pumpAndSettle(tester);
-        goRouter.goNamed(Routes.resetPasswordConfirmation.name);
-        await TestHelpers.pumpAndSettle(tester);
-        expect(find.byType(ConfirmationScreen), findsOneWidget);
       });
 
       testWidgets('navigates to profile', (WidgetTester tester) async {
@@ -146,6 +102,26 @@ void main() {
         goRouter.goNamed(Routes.profile.name);
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(ProfileScreen), findsOneWidget);
+      });
+
+      testWidgets('navigates to add wisher', (WidgetTester tester) async {
+        final goRouter = router();
+        await tester.pumpWidget(startAppWithRouter(goRouter));
+        await TestHelpers.pumpAndSettle(tester);
+        goRouter.goNamed(Routes.addWisher.name);
+        await TestHelpers.pumpAndSettle(tester);
+        expect(find.byType(AddWisherLandingScreen), findsOneWidget);
+      });
+
+      testWidgets('navigates to add wisher details', (
+        WidgetTester tester,
+      ) async {
+        final goRouter = router();
+        await tester.pumpWidget(startAppWithRouter(goRouter));
+        await TestHelpers.pumpAndSettle(tester);
+        goRouter.goNamed(Routes.addWisherDetails.name);
+        await TestHelpers.pumpAndSettle(tester);
+        expect(find.byType(AddWisherDetailsScreen), findsOneWidget);
       });
     });
   });

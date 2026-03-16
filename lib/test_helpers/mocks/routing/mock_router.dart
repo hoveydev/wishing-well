@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:wishing_well/features/shared/confirmation/confirmation_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
@@ -34,12 +33,6 @@ GoRouter createMockRouter() => GoRouter(
       ),
       routes: [
         GoRoute(
-          path: 'confirm',
-          name: 'forgot-password-confirm',
-          builder: (context, state) =>
-              const ConfirmationScreen.forgotPassword(),
-        ),
-        GoRoute(
           path: 'reset',
           name: 'reset-password',
           builder: (context, state) => ResetPasswordScreen(
@@ -49,14 +42,6 @@ GoRouter createMockRouter() => GoRouter(
               token: 'valid-token',
             ),
           ),
-          routes: [
-            GoRoute(
-              path: 'confirm',
-              name: 'reset-password-confirmation',
-              builder: (context, state) =>
-                  const ConfirmationScreen.resetPassword(),
-            ),
-          ],
         ),
       ],
     ),
@@ -66,18 +51,6 @@ GoRouter createMockRouter() => GoRouter(
       builder: (context, state) => CreateAccountScreen(
         viewModel: CreateAccountViewModel(authRepository: MockAuthRepository()),
       ),
-      routes: [
-        GoRoute(
-          path: 'confirm',
-          name: 'create-account-confirm',
-          builder: (context, state) => const ConfirmationScreen.createAccount(),
-        ),
-        GoRoute(
-          path: 'account-confirm',
-          name: 'account-confirm',
-          builder: (context, state) => const ConfirmationScreen.account(),
-        ),
-      ],
     ),
     GoRoute(
       path: '/home',

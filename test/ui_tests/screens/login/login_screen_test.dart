@@ -304,6 +304,118 @@ void main() {
         // Clean up
         testViewModel.dispose();
       });
+
+      testWidgets('LoadingController showSuccess works correctly', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+
+        // Verify initial state
+        expect(loadingController.isSuccess, false);
+        expect(loadingController.state.name, 'idle');
+
+        // Show success overlay
+        loadingController.showSuccess(
+          'Account Confirmed!',
+          name: 'TestUser',
+          onOk: () {},
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify success state
+        expect(loadingController.isSuccess, true);
+        expect(loadingController.message, 'Account Confirmed!');
+        expect(loadingController.name, 'TestUser');
+
+        // Acknowledge and clear
+        loadingController.acknowledgeAndClear();
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify back to idle
+        expect(loadingController.isSuccess, false);
+        expect(loadingController.state.name, 'idle');
+      });
+
+      testWidgets('LoadingController showError works correctly', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+
+        // Verify initial state
+        expect(loadingController.isError, false);
+
+        // Show error overlay
+        loadingController.showError('Something went wrong', onOk: () {});
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify error state
+        expect(loadingController.isError, true);
+        expect(loadingController.message, 'Something went wrong');
+
+        // Acknowledge and clear
+        loadingController.acknowledgeAndClear();
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify back to idle
+        expect(loadingController.isError, false);
+      });
+
+      testWidgets('LoadingController show with imageUrl works', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+
+        // Show success with image
+        loadingController.showSuccess(
+          'Wisher created!',
+          name: 'John',
+          imageUrl: 'https://example.com/avatar.jpg',
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify success state with image
+        expect(loadingController.isSuccess, true);
+        expect(loadingController.name, 'John');
+        expect(loadingController.imageUrl, 'https://example.com/avatar.jpg');
+
+        // Clean up
+        loadingController.dispose();
+      });
+
+      testWidgets('LoadingController hide works correctly', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+
+        // Show and then hide
+        loadingController.show();
+        await TestHelpers.pumpAndSettle(tester);
+        expect(loadingController.isLoading, true);
+
+        loadingController.hide();
+        await TestHelpers.pumpAndSettle(tester);
+        expect(loadingController.isIdle, true);
+      });
+
+      testWidgets('LoadingController onOk callback is called on acknowledge', (
+        WidgetTester tester,
+      ) async {
+        final loadingController = LoadingController();
+        bool callbackCalled = false;
+
+        loadingController.showSuccess(
+          'Test message',
+          onOk: () {
+            callbackCalled = true;
+          },
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        loadingController.acknowledgeAndClear();
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(callbackCalled, true);
+      });
     });
   });
 }

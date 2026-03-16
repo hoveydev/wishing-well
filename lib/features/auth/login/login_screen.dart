@@ -21,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  bool _accountConfirmationChecked = false;
 
   @override
   void didChangeDependencies() {
@@ -29,10 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _checkForAccountConfirmation() {
+    // Prevent multiple checks - only run once per screen instance
+    if (_accountConfirmationChecked) return;
+    _accountConfirmationChecked = true;
+
     try {
       final state = GoRouterState.of(context);
       if (state.uri.queryParameters['accountConfirmed'] == 'true') {
-        // Show success overlay and clear the parameter so it doesn't show again
+        // Show success overlay after the first frame renders
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           final loading = context.read<LoadingController>();

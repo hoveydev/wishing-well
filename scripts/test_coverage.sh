@@ -26,6 +26,7 @@ EXCLUDES=(
   "*/data/data_sources/*"
   "*/test_helpers/*"
   "*/test/testing/*"
+  "*/features/*/demo/*"
 )
 
 echo "🧹 Removing excluded files from coverage..."

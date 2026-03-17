@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
+import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/components/forgot_password_button.dart';
 import 'package:wishing_well/features/auth/forgot_password/components/forgot_password_header.dart';
@@ -17,23 +18,19 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  // init
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) => Screen(
-    appBar: AppMenuBar(
-      action: () => context.pop(),
-      type: AppMenuBarType.dismiss,
+  Widget build(BuildContext context) => LoadingOverlay(
+    child: Screen(
+      appBar: AppMenuBar(
+        action: () => context.pop(),
+        type: AppMenuBarType.dismiss,
+      ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ForgotPasswordHeader(viewModel: widget.viewModel),
+        ForgotPasswordButton(viewModel: widget.viewModel),
+      ],
     ),
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      ForgotPasswordHeader(viewModel: widget.viewModel),
-      ForgotPasswordButton(viewModel: widget.viewModel),
-    ],
   );
 }

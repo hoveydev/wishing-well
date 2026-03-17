@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
@@ -188,14 +189,17 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
           context: 'LoginViewModel.tapLoginButton',
           error: error,
         );
+        if (!context.mounted) return;
+        final l10n = AppLocalizations.of(context)!;
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();
+          loading.showError(error.message);
         } else {
           _apiError = const UIAuthError(LoginErrorType.unknown);
           _updateCombinedError();
+          loading.showError(l10n.errorUnknown);
         }
-        loading.hide();
     }
   }
 

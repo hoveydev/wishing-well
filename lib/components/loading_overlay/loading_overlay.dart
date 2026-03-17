@@ -15,6 +15,43 @@ import 'package:wishing_well/utils/loading_controller.dart';
 /// Used for both the fade animation and content switcher transitions.
 const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 
+/// A widget that wraps its child with a loading overlay.
+///
+/// The overlay responds to [LoadingController] state changes and displays
+/// different content based on the current state:
+/// - [LoadingState.idle]: No overlay (child is fully visible)
+/// - [LoadingState.loading]: Loading spinner with optional message
+/// - [LoadingState.success]: Success message with checkmark icon
+/// - [LoadingState.error]: Error message with error icon and OK button
+///
+/// The overlay is animated with a fade transition and automatically handles
+/// user acknowledgment for success/error states.
+///
+/// ## Usage
+///
+/// Wrap any screen or widget that needs to show loading states:
+///
+/// ```dart
+/// LoadingOverlay(
+///   child: MyScreen(),
+/// )
+/// ```
+///
+/// Then use the [LoadingController] to control the overlay:
+///
+/// ```dart
+/// final loading = context.read<LoadingController>();
+/// loading.show();           // Show loading spinner
+/// loading.showSuccess('Operation complete!');
+/// loading.showError('Something went wrong');
+/// ```
+///
+/// ## Requirements
+///
+/// - A [LoadingController] must be provided via a [ChangeNotifierProvider]
+///   ancestor (typically at the app level)
+/// - The overlay displays over the child widget, blocking interaction
+///   when visible
 class LoadingOverlay extends StatefulWidget {
   const LoadingOverlay({required this.child, super.key});
   final Widget child;
@@ -97,6 +134,13 @@ class _LoadingOverlayState extends State<LoadingOverlay>
     ],
   );
 
+  /// Builds the appropriate overlay content based on loading state.
+  ///
+  /// Returns different widgets for each [LoadingState]:
+  /// - [LoadingState.loading]: Shows a centered throbber/spinner
+  /// - [LoadingState.success]: Shows success icon with message
+  /// - [LoadingState.error]: Shows error icon with message and OK button
+  /// - [LoadingState.idle]: Returns an empty SizedBox
   Widget _buildContent(
     LoadingController controller,
     AppColorScheme? colorScheme,
@@ -137,6 +181,11 @@ class _LoadingOverlayState extends State<LoadingOverlay>
   }
 }
 
+/// Internal widget that displays success or error overlay content.
+///
+/// Shows an icon (success checkmark or error), a message, and optionally
+/// an image or name for success states. Includes an OK button that calls
+/// [LoadingController.acknowledgeAndClear] to dismiss the overlay.
 class _OverlayContent extends StatelessWidget {
   const _OverlayContent({
     required super.key,

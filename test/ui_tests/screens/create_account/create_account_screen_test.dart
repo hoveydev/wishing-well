@@ -322,6 +322,154 @@ void main() {
     });
 
     group(TestGroups.errorHandling, () {
+      testWidgets(
+        'shows error overlay when account creation fails with API error',
+        (WidgetTester tester) async {
+          final errorRepository = MockAuthRepository(
+            createAccountResult: Result.error(
+              Exception('Email already registered'),
+            ),
+          );
+          final errorViewModel = CreateAccountViewModel(
+            authRepository: errorRepository,
+          );
+
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              child: CreateAccountScreen(viewModel: errorViewModel),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          final emailFinder = find.byWidgetPredicate(
+            (widget) => widget is AppInput && widget.type == AppInputType.email,
+          );
+          final passwordFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is AppInput &&
+                widget.type == AppInputType.password &&
+                widget.placeholder == 'Password',
+          );
+          final confirmPasswordFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is AppInput &&
+                widget.type == AppInputType.password &&
+                widget.placeholder == 'Confirm Password',
+          );
+
+          await TestHelpers.enterTextAndSettle(
+            tester,
+            emailFinder,
+            'test@example.com',
+          );
+          await TestHelpers.enterTextAndSettle(
+            tester,
+            passwordFinder,
+            'ValidPass123!',
+          );
+          await TestHelpers.enterTextAndSettle(
+            tester,
+            confirmPasswordFinder,
+            'ValidPass123!',
+          );
+
+          // Scroll to make button visible
+          await tester.ensureVisible(find.text('Create Account'));
+          await tester.pumpAndSettle();
+
+          await TestHelpers.tapAndSettle(tester, find.text('Create Account'));
+          await tester.pumpAndSettle();
+
+          // Should show error overlay with the error message
+          // Note: There may be also an inline error, so we check for at least
+          // one error icon
+          expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
+          // Generic exception shows generic error message - appears in both
+          // inline and overlay
+          expect(
+            find.text('An unknown error occured. Please try again'),
+            findsNWidgets(2),
+          );
+
+          // OK button should be present - note: localized as 'Ok'
+          expect(find.text('Ok'), findsOneWidget);
+
+          errorViewModel.dispose();
+        },
+      );
+
+      testWidgets('error overlay OK button dismisses the error', (
+        WidgetTester tester,
+      ) async {
+        final errorRepository = MockAuthRepository(
+          createAccountResult: Result.error(
+            Exception('Account creation failed'),
+          ),
+        );
+        final errorViewModel = CreateAccountViewModel(
+          authRepository: errorRepository,
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: CreateAccountScreen(viewModel: errorViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final emailFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+        final passwordFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Password',
+        );
+        final confirmPasswordFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Confirm Password',
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailFinder,
+          'test@example.com',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordFinder,
+          'ValidPass123!',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          confirmPasswordFinder,
+          'ValidPass123!',
+        );
+
+        await tester.ensureVisible(find.text('Create Account'));
+        await tester.pumpAndSettle();
+
+        await TestHelpers.tapAndSettle(tester, find.text('Create Account'));
+        await tester.pumpAndSettle();
+
+        // Verify error overlay is showing (both inline and overlay)
+        expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
+
+        // Tap Ok to dismiss - note: localized as 'Ok'
+        await TestHelpers.tapAndSettle(tester, find.text('Ok'));
+
+        // The overlay should be dismissed but inline error may still show
+        // We check that the overlay error icon (the larger one) is gone
+        // The inline error icon might still be visible
+        final errorIcons = find.byIcon(Icons.error);
+        expect(errorIcons, findsOneWidget); // Only inline error remains
+
+        errorViewModel.dispose();
+      });
+
       testWidgets('handles supabase auth error gracefully', (
         WidgetTester tester,
       ) async {
@@ -381,8 +529,10 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         // Should show appropriate error message
-        TestHelpers.expectTextOnce(
-          'An unknown error occured. Please try again',
+        // Note: Now shows in both inline and overlay
+        expect(
+          find.text('An unknown error occured. Please try again'),
+          findsNWidgets(2),
         );
 
         errorViewModel.dispose();
@@ -444,8 +594,11 @@ void main() {
         await TestHelpers.tapAndSettle(tester, find.text('Create Account'));
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce(
-          'An unknown error occured. Please try again',
+        // Should show appropriate error message
+        // Note: Now shows in both inline and overlay
+        expect(
+          find.text('An unknown error occured. Please try again'),
+          findsNWidgets(2),
         );
 
         errorViewModel.dispose();

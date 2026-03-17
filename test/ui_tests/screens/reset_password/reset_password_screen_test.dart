@@ -12,6 +12,7 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_screen.
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
@@ -404,119 +405,121 @@ void main() {
       });
     });
 
-    // group(TestGroups.errorHandling, () {
-    //   testWidgets('displays Supabase error when API call fails', (
-    //     WidgetTester tester,
-    //   ) async {
-    //     final errorRepository = MockAuthRepository(
-    //       resetUserPasswordResult: Result.error(
-    //         AuthApiException('Invalid or expired reset token'),
-    //       ),
-    //     );
+    group(TestGroups.errorHandling, () {
+      testWidgets(
+        'shows error overlay when password reset fails with API error',
+        (WidgetTester tester) async {
+          final errorRepository = MockAuthRepository(
+            resetUserPasswordResult: Result.error(
+              Exception('Invalid or expired token'),
+            ),
+          );
 
-    //     await tester.pumpWidget(
-    //       createResetPasswordTestWidget(
-    //         token: 'invalid-token',
-    //         authRepository: errorRepository,
-    //       ),
-    //     );
-    //     await TestHelpers.pumpAndSettle(tester);
+          await tester.pumpWidget(
+            createResetPasswordTestWidget(
+              token: 'test-token',
+              authRepository: errorRepository,
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
 
-    //     final passwordFieldFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //           widget is AppInput &&
-    //           widget.type == AppInputType.password &&
-    //           widget.placeholder == 'Password',
-    //     );
+          final passwordFieldFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is AppInput &&
+                widget.type == AppInputType.password &&
+                widget.placeholder == 'Password',
+          );
 
-    //     final confirmPasswordFieldFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //           widget is AppInput &&
-    //           widget.type == AppInputType.password &&
-    //           widget.placeholder == 'Confirm Password',
-    //     );
+          final confirmPasswordFieldFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is AppInput &&
+                widget.type == AppInputType.password &&
+                widget.placeholder == 'Confirm Password',
+          );
 
-    //     await TestHelpers.enterTextAndSettle(
-    //       tester,
-    //       passwordFieldFinder,
-    //       'Password123!',
-    //     );
-    //     await TestHelpers.enterTextAndSettle(
-    //       tester,
-    //       confirmPasswordFieldFinder,
-    //       'Password123!',
-    //     );
+          await TestHelpers.enterTextAndSettle(
+            tester,
+            passwordFieldFinder,
+            'Password123!',
+          );
+          await TestHelpers.enterTextAndSettle(
+            tester,
+            confirmPasswordFieldFinder,
+            'Password123!',
+          );
 
-    //     final resetButtonFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //widget is AppButton && widget.label == 'Reset Password',
-    //     );
+          final resetButtonFinder = find.byWidgetPredicate(
+            (widget) => widget is AppButton && widget.label == 'Reset Password',
+          );
 
-    //     await tester.ensureVisible(resetButtonFinder);
-    //     await TestHelpers.tapAndSettle(tester, resetButtonFinder);
+          await tester.ensureVisible(resetButtonFinder);
+          await TestHelpers.tapAndSettle(tester, resetButtonFinder);
+          await tester.pumpAndSettle();
 
-    //     // Allow error dialog to appear
-    //     await tester.pump();
+          // Should show error overlay with an error icon
+          // Note: There may be also an inline error, so we check for at
+          // least one error icon
+          expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
 
-    //     // Verify some error message appears (error messages may vary)
-    //     expect(find.byType(AlertDialog), findsOneWidget);
-    //   });
+          // OK button should be present - note: localized as 'Ok'
+          expect(find.text('Ok'), findsOneWidget);
+        },
+      );
 
-    //   testWidgets('displays generic error for unknown exceptions', (
-    //     WidgetTester tester,
-    //   ) async {
-    //     final errorRepository = MockAuthRepository(
-    //       resetUserPasswordResult: Result.error(Exception('Network error')),
-    //     );
+      testWidgets('displays generic error for unknown exceptions', (
+        WidgetTester tester,
+      ) async {
+        final errorRepository = MockAuthRepository(
+          resetUserPasswordResult: Result.error(Exception('Network error')),
+        );
 
-    //     await tester.pumpWidget(
-    //       createResetPasswordTestWidget(
-    //         token: 'test-token',
-    //         authRepository: errorRepository,
-    //       ),
-    //     );
-    //     await TestHelpers.pumpAndSettle(tester);
+        await tester.pumpWidget(
+          createResetPasswordTestWidget(
+            token: 'test-token',
+            authRepository: errorRepository,
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
 
-    //     final passwordFieldFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //           widget is AppInput &&
-    //           widget.type == AppInputType.password &&
-    //           widget.placeholder == 'Password',
-    //     );
+        final passwordFieldFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Password',
+        );
 
-    //     final confirmPasswordFieldFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //           widget is AppInput &&
-    //           widget.type == AppInputType.password &&
-    //           widget.placeholder == 'Confirm Password',
-    //     );
+        final confirmPasswordFieldFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput &&
+              widget.type == AppInputType.password &&
+              widget.placeholder == 'Confirm Password',
+        );
 
-    //     await TestHelpers.enterTextAndSettle(
-    //       tester,
-    //       passwordFieldFinder,
-    //       'Password123!',
-    //     );
-    //     await TestHelpers.enterTextAndSettle(
-    //       tester,
-    //       confirmPasswordFieldFinder,
-    //       'Password123!',
-    //     );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordFieldFinder,
+          'Password123!',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          confirmPasswordFieldFinder,
+          'Password123!',
+        );
 
-    //     final resetButtonFinder = find.byWidgetPredicate(
-    //       (widget) =>
-    //widget is AppButton && widget.label == 'Reset Password',
-    //     );
+        final resetButtonFinder = find.byWidgetPredicate(
+          (widget) => widget is AppButton && widget.label == 'Reset Password',
+        );
 
-    //     await tester.ensureVisible(resetButtonFinder);
-    //     await TestHelpers.tapAndSettle(tester, resetButtonFinder);
+        await tester.ensureVisible(resetButtonFinder);
+        await TestHelpers.tapAndSettle(tester, resetButtonFinder);
+        await tester.pumpAndSettle();
 
-    //     // Verify error message appears
-    //     expect(
-    //       find.text('An unknown error occured. Please try again'),
-    //       findsOneWidget,
-    //     );
-    //   });
-    // });
+        // Should show error overlay with error icon
+        // Note: There may be also an inline error, so we check for at least
+        // one error icon
+        expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
+      });
+    });
 
     group(TestGroups.behavior, () {
       testWidgets('maintains proper component structure and layout', (

@@ -4,7 +4,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
-enum AuthDemoScenario { success, failure, loading }
+enum AuthDemoScenario { success, error, loading }
 
 List<SingleChildWidget> getAuthDemoProviders({
   required AuthDemoScenario scenario,
@@ -22,7 +22,7 @@ List<SingleChildWidget> getAuthDemoProviders({
       // Add 2 second delay to show loading spinner
       loginDelay = const Duration(seconds: 2);
       createAccountDelay = const Duration(seconds: 2);
-    case AuthDemoScenario.failure:
+    case AuthDemoScenario.error:
       loginResult = Result.error(Exception('Invalid email or password'));
       createAccountResult = Result.error(Exception('Email already in use'));
       loginDelay = const Duration(seconds: 2);

@@ -19,11 +19,11 @@ void main() {
       });
     });
 
-    group('failure scenario', () {
+    group('error scenario', () {
       late List<SingleChildWidget> providers;
 
       setUp(() {
-        providers = getAuthDemoProviders(scenario: AuthDemoScenario.failure);
+        providers = getAuthDemoProviders(scenario: AuthDemoScenario.error);
       });
 
       test('provides ChangeNotifierProvider for AuthRepository', () {
@@ -49,14 +49,14 @@ void main() {
   group('AuthDemoScenario enum', () {
     test('has all expected values', () {
       expect(AuthDemoScenario.values, contains(AuthDemoScenario.success));
-      expect(AuthDemoScenario.values, contains(AuthDemoScenario.failure));
+      expect(AuthDemoScenario.values, contains(AuthDemoScenario.error));
       expect(AuthDemoScenario.values, contains(AuthDemoScenario.loading));
       expect(AuthDemoScenario.values.length, 3);
     });
 
     test('has descriptive names', () {
       expect(AuthDemoScenario.success.name, 'success');
-      expect(AuthDemoScenario.failure.name, 'failure');
+      expect(AuthDemoScenario.error.name, 'error');
       expect(AuthDemoScenario.loading.name, 'loading');
     });
   });

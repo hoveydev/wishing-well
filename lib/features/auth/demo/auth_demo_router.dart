@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/routing/transitions.dart';
+import 'package:wishing_well/features/auth/demo/demo_success_screen.dart';
 import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
@@ -15,16 +16,12 @@ GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
     GoRoute(
       path: Routes.login.path,
       name: Routes.login.name,
-      pageBuilder: (context, state) {
-        final showSuccess = state.uri.queryParameters['demoSuccess'] == 'true';
-        return CustomTransitionPage(
-          child: LoginScreen(
-            viewModel: LoginViewModel(authRepository: authRepository),
-            showDemoSuccess: showSuccess,
-          ),
-          transitionsBuilder: noTransition,
-        );
-      },
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: LoginScreen(
+          viewModel: LoginViewModel(authRepository: authRepository),
+        ),
+        transitionsBuilder: noTransition,
+      ),
     ),
     GoRoute(
       path: Routes.forgotPassword.path,
@@ -56,11 +53,20 @@ GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
         transitionsBuilder: slideUpTransition,
       ),
     ),
-    // Home route - redirects to login with success message
+    // Demo success screen - shown after successful login simulation
+    GoRoute(
+      path: '/demo-success',
+      name: 'demoSuccess',
+      pageBuilder: (context, state) => const CustomTransitionPage(
+        child: DemoSuccessScreen(),
+        transitionsBuilder: slideUpTransition,
+      ),
+    ),
+    // Home route - redirects to demo success screen
     GoRoute(
       path: Routes.home.path,
       name: Routes.home.name,
-      redirect: (context, state) => '${Routes.login.path}?demoSuccess=true',
+      redirect: (context, state) => '/demo-success',
     ),
   ],
 );

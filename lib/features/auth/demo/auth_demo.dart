@@ -12,7 +12,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 // Available scenarios:
 // - success: Successful login/signup flow
-// - failure: Failed login/signup with error
+// - error: Failed login/signup with error
 // - loading: Indefinite loading state
 const AuthDemoScenario _scenario = AuthDemoScenario.success;
 

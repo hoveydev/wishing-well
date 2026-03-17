@@ -11,17 +11,8 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({
-    required this.viewModel,
-
-    /// Demo-only: Shows success message after login simulation.
-    this.showDemoSuccess = false,
-    super.key,
-  });
+  const LoginScreen({required this.viewModel, super.key});
   final LoginViewModel viewModel;
-
-  /// Demo-only flag to show success message after login simulation.
-  final bool showDemoSuccess;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -31,35 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   bool _accountConfirmationChecked = false;
-  bool _demoSuccessShown = false;
-
-  // Demo-only message shown after successful login simulation
-  static const String _demoLoginSuccessMessage =
-      'Login was successful. The application would route to home in production '
-      'but the demo does not have this functionality.';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _checkForAccountConfirmation();
-    _checkForDemoSuccess();
-  }
-
-  void _checkForDemoSuccess() {
-    // Show demo success message when redirected back after login
-    if (widget.showDemoSuccess && !_demoSuccessShown) {
-      _demoSuccessShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        final loading = context.read<LoadingController>();
-        loading.showSuccess(
-          _demoLoginSuccessMessage,
-          onOk: () {
-            // Stay on login screen
-          },
-        );
-      });
-    }
   }
 
   void _checkForAccountConfirmation() {

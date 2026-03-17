@@ -12,6 +12,13 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 
 GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
   initialLocation: Routes.login.path,
+  // Redirect any navigation to home route to demo success screen
+  redirect: (context, state) {
+    if (state.matchedLocation == Routes.home.path) {
+      return '/demo-success';
+    }
+    return null;
+  },
   routes: [
     GoRoute(
       path: Routes.login.path,
@@ -61,12 +68,6 @@ GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
         child: DemoSuccessScreen(),
         transitionsBuilder: slideUpTransition,
       ),
-    ),
-    // Home route - redirects to demo success screen
-    GoRoute(
-      path: Routes.home.path,
-      name: Routes.home.name,
-      redirect: (context, state) => '/demo-success',
     ),
   ],
 );

@@ -10,10 +10,11 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
-// Available scenarios:
-// - success: Successful login/signup flow
-// - error: Failed login/signup with error
-// - loading: Indefinite loading state
+/// Available scenarios:
+///
+/// - success: Successful login/signup flow
+/// - error: Failed login/signup with error
+/// - loading: Indefinite loading state
 const AuthDemoScenario _scenario = AuthDemoScenario.success;
 
 Future<void> main() async {

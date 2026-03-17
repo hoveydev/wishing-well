@@ -14,13 +14,6 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
   initialLocation: Routes.login.path,
-  // Redirect home route back to login with success indicator
-  redirect: (context, state) {
-    if (state.matchedLocation == Routes.home.path) {
-      return '${Routes.login.path}?demoLoginSuccess=true';
-    }
-    return null;
-  },
   routes: [
     GoRoute(
       path: Routes.login.path,
@@ -67,6 +60,13 @@ GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
         ),
         transitionsBuilder: slideUpTransition,
       ),
+    ),
+    // Home route - redirect to login with success indicator
+    GoRoute(
+      path: Routes.home.path,
+      name: Routes.home.name,
+      redirect: (context, state) =>
+          '${Routes.login.path}?demoLoginSuccess=true',
     ),
   ],
 );

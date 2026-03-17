@@ -238,14 +238,17 @@ class ResetPasswordViewModel extends ChangeNotifier
           context: 'ResetPasswordViewModel.tapResetPasswordButton',
           error: error,
         );
+        if (!context.mounted) return;
+        final l10n = AppLocalizations.of(context)!;
         if (error is AuthApiException) {
           _apiError = SupabaseAuthError(error.message);
           _updateCombinedError();
+          loading.showError(error.message);
         } else {
           _apiError = const UIAuthError(ResetPasswordErrorType.unknown);
           _updateCombinedError();
+          loading.showError(l10n.errorUnknown);
         }
-        loading.hide();
     }
   }
 }

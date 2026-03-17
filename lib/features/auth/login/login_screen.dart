@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/features/auth/login/components/login_buttons.dart';
@@ -71,22 +72,24 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: () => _dismissKeyboard(context),
-    child: Screen(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const LoginHeader(),
-        const AppSpacer.large(),
-        LoginInputs(
-          viewModel: widget.viewModel,
-          emailFocusNode: _emailFocusNode,
-          passwordFocusNode: _passwordFocusNode,
-        ),
-        const AppSpacer.large(),
-        LoginButtons(viewModel: widget.viewModel),
-      ],
+  Widget build(BuildContext context) => LoadingOverlay(
+    child: GestureDetector(
+      onTap: () => _dismissKeyboard(context),
+      child: Screen(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const LoginHeader(),
+          const AppSpacer.large(),
+          LoginInputs(
+            viewModel: widget.viewModel,
+            emailFocusNode: _emailFocusNode,
+            passwordFocusNode: _passwordFocusNode,
+          ),
+          const AppSpacer.large(),
+          LoginButtons(viewModel: widget.viewModel),
+        ],
+      ),
     ),
   );
 }

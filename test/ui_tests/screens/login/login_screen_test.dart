@@ -6,6 +6,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
@@ -415,6 +416,124 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(callbackCalled, true);
+      });
+    });
+
+    group(TestGroups.errorHandling, () {
+      testWidgets('shows error overlay when login fails with API error', (
+        WidgetTester tester,
+      ) async {
+        final mockRepo = MockAuthRepository(
+          loginResult: Result.error(Exception('Invalid login credentials')),
+        );
+        final testViewModel = LoginViewModel(authRepository: mockRepo);
+        final loadingController = LoadingController();
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: LoginScreen(viewModel: testViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Fill in valid credentials
+        final emailWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput && widget.type == AppInputType.password,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailWidgetFinder,
+          'test@email.com',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordWidgetFinder,
+          'password123',
+        );
+
+        // Tap login button
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+
+        // Wait for the async operation to complete
+        await tester.pumpAndSettle();
+
+        // Should show error overlay with the error message
+        // Note: There may be also an inline error, so we check for at least
+        // one error icon
+        expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
+        // Generic exception shows generic error message - appears in both
+        // inline and overlay
+        expect(
+          find.text('An unknown error occured. Please try again'),
+          findsNWidgets(2),
+        );
+
+        // OK button should be present (for the overlay)
+        // Note: localized as 'Ok'
+        expect(find.text('Ok'), findsOneWidget);
+
+        // Clean up
+        testViewModel.dispose();
+      });
+
+      testWidgets('error overlay OK button dismisses the error', (
+        WidgetTester tester,
+      ) async {
+        final mockRepo = MockAuthRepository(
+          loginResult: Result.error(Exception('Invalid credentials')),
+        );
+        final testViewModel = LoginViewModel(authRepository: mockRepo);
+        final loadingController = LoadingController();
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: LoginScreen(viewModel: testViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Fill in valid credentials and trigger login
+        final emailWidgetFinder = find.byWidgetPredicate(
+          (widget) => widget is AppInput && widget.type == AppInputType.email,
+        );
+        final passwordWidgetFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AppInput && widget.type == AppInputType.password,
+        );
+
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          emailWidgetFinder,
+          'test@email.com',
+        );
+        await TestHelpers.enterTextAndSettle(
+          tester,
+          passwordWidgetFinder,
+          'password123',
+        );
+
+        await TestHelpers.tapAndSettle(tester, find.text('Sign In'));
+        await tester.pumpAndSettle();
+
+        // Verify error overlay is showing
+        expect(loadingController.isError, true);
+
+        // Tap Ok to dismiss - note: localized as 'Ok'
+        await TestHelpers.tapAndSettle(tester, find.text('Ok'));
+
+        // Error should be cleared
+        expect(loadingController.isError, false);
+        expect(loadingController.isIdle, true);
+
+        // Clean up
+        testViewModel.dispose();
       });
     });
   });

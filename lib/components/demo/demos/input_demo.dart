@@ -112,7 +112,10 @@ class _InputDemoState extends State<InputDemo> {
               text: 'Consistent styling with theme colors',
             ),
             const FeatureBulletPoint(
-              text: 'Accessibility labels for screen readers',
+              text: 'Focus animation (200ms border color transition)',
+            ),
+            const FeatureBulletPoint(
+              text: 'No fill or glow on focus - clean minimal design',
             ),
           ]),
 

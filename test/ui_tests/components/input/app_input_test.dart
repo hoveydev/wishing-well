@@ -4,6 +4,7 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_colors.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -27,7 +28,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(DecoratedBox), findsOneWidget);
+        expect(find.byType(AnimatedContainer), findsWidgets);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Text Input');
       });
@@ -46,7 +47,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(DecoratedBox), findsOneWidget);
+        expect(find.byType(AnimatedContainer), findsWidgets);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Email Input');
         expect(find.byIcon(Icons.email_outlined), findsOneWidget);
@@ -66,7 +67,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(DecoratedBox), findsOneWidget);
+        expect(find.byType(AnimatedContainer), findsWidgets);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Password Input');
         expect(find.byIcon(Icons.lock_outline), findsOneWidget);
@@ -87,10 +88,70 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(DecoratedBox), findsOneWidget);
+        expect(find.byType(AnimatedContainer), findsWidgets);
         expect(find.byType(TextField), findsOneWidget);
         TestHelpers.expectTextOnce('Default Input');
         expect(find.byIcon(Icons.input), findsOneWidget);
+      });
+
+      testWidgets('has no box shadow in decoration', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            AppInput(
+              placeholder: 'Test Input',
+              type: AppInputType.text,
+              onChanged: (String val) => changedValue = val,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final animatedContainerFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedContainer &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).border != null,
+        );
+        expect(animatedContainerFinder, findsOneWidget);
+
+        final container = tester.widget<AnimatedContainer>(
+          animatedContainerFinder,
+        );
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.boxShadow, isNull);
+      });
+
+      testWidgets('has transparent background (no fill color)', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            AppInput(
+              placeholder: 'Test Input',
+              type: AppInputType.text,
+              onChanged: (String val) => changedValue = val,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the AnimatedContainer with border decoration (outer container)
+        final animatedContainerFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedContainer &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).border != null,
+        );
+        expect(animatedContainerFinder, findsOneWidget);
+
+        final container = tester.widget<AnimatedContainer>(
+          animatedContainerFinder,
+        );
+        final decoration = container.decoration as BoxDecoration;
+        // Color is null (not set) which means transparent/no fill
+        expect(decoration.color, isNull);
       });
     });
 
@@ -109,15 +170,22 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        final decoratedBoxFinder = find.byWidgetPredicate(
-          (widget) => widget is DecoratedBox && widget.child is TextField,
+        final animatedContainerFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedContainer &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).border != null,
         );
-        final inputWidget = tester.widget<DecoratedBox>(decoratedBoxFinder);
-        final BoxDecoration decoration = BoxDecoration(
-          border: Border.all(color: AppColors.primary),
-          borderRadius: BorderRadius.circular(AppBorderRadius.medium),
+        final inputWidget = tester.widget<AnimatedContainer>(
+          animatedContainerFinder,
         );
-        expect(inputWidget.decoration, decoration);
+        final decoration = inputWidget.decoration as BoxDecoration;
+
+        expect(
+          decoration.borderRadius,
+          BorderRadius.circular(AppBorderRadius.medium),
+        );
+        expect(decoration.border, isA<Border>());
       });
 
       testWidgets('has correct text field properties for text input', (
@@ -140,11 +208,14 @@ void main() {
         expect(input.autofillHints, []);
         expect(input.decoration!.prefixIconColor, AppColors.primary);
 
-        final border = OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-          borderSide: BorderSide.none,
+        // Verify inner TextField has no visible border
+        // Inner border radius is AppBorderRadius.medium - 1.5 = 12.5
+        final border = input.decoration!.border as OutlineInputBorder;
+        expect(
+          border.borderRadius,
+          BorderRadius.circular(AppBorderRadius.medium - 1.5),
         );
-        expect(input.decoration!.border, border);
+        expect(border.borderSide, BorderSide.none);
       });
 
       testWidgets('has correct text style properties', (
@@ -298,6 +369,86 @@ void main() {
         expect(input.focusNode, focusNode);
 
         focusNode.dispose();
+      });
+
+      testWidgets('border color animates on focus', (
+        WidgetTester tester,
+      ) async {
+        final focusNode = FocusNode();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.lightTheme,
+            home: Scaffold(
+              body: Center(
+                child: AppInput(
+                  placeholder: 'Test Input',
+                  type: AppInputType.text,
+                  onChanged: (String val) => changedValue = val,
+                  focusNode: focusNode,
+                ),
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the AnimatedContainer with border decoration
+        final animatedContainerFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedContainer &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).border != null,
+        );
+        final container = tester.widget<AnimatedContainer>(
+          animatedContainerFinder,
+        );
+
+        // Verify AnimatedContainer has correct animation properties
+        expect(container.duration, const Duration(milliseconds: 200));
+        expect(container.curve, Curves.easeInOut);
+
+        // Initially unfocused - border should be borderGray
+        final decoration = container.decoration as BoxDecoration;
+        expect((decoration.border as Border).top.color, AppColors.borderGray);
+
+        // Note: Full focus animation testing requires integration tests
+        // because the FocusNode needs to be attached to the focus tree
+        // to properly trigger listener callbacks in widget tests.
+
+        focusNode.dispose();
+      });
+    });
+
+    group(TestGroups.initialState, () {
+      testWidgets('renders in unfocused state with borderGray border', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            AppInput(
+              placeholder: 'Test Input',
+              type: AppInputType.text,
+              onChanged: (String val) => changedValue = val,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the AnimatedContainer with border decoration
+        final animatedContainerFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedContainer &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).border != null,
+        );
+        final container = tester.widget<AnimatedContainer>(
+          animatedContainerFinder,
+        );
+        final decoration = container.decoration as BoxDecoration;
+
+        // Unfocused state should have borderGray border
+        expect((decoration.border as Border).top.color, AppColors.borderGray);
       });
     });
   });

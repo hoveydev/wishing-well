@@ -170,6 +170,28 @@ void main() {
 
         expect(menuBar.preferredSize.height, 48);
       });
+
+      testWidgets('title text has overflow ellipsis for large text', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          buildMaterialAppHome(
+            Scaffold(
+              appBar: AppMenuBar(type: AppMenuBarType.main, action: () {}),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the title text
+        final titleText = find.text('WishingWell');
+        expect(titleText, findsOneWidget);
+
+        // Verify the text widget has overflow handling
+        final textWidget = tester.widget<Text>(titleText);
+        expect(textWidget.overflow, TextOverflow.ellipsis);
+        expect(textWidget.maxLines, 1);
+      });
     });
   });
 }

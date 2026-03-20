@@ -88,10 +88,15 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPressHandler = isLoading ? null : onPressed;
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    // Ensure minimum button height scales with text size
+    // Base height of 56 (button + padding) scales with text
+    final minHeight = (56.0 * textScale).clamp(56.0, 72.0);
     final buttonWidget = TextButton(
       style: ButtonFeedbackStyle.primary(
         context: context,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        minimumSize: WidgetStateProperty.all(Size(double.infinity, minHeight)),
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

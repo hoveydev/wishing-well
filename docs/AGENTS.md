@@ -156,6 +156,46 @@ When styling UI elements, always use the established theme system instead of har
 - Avoid building unnecessary widget trees
 - Use unawaited for fire-and-forget async operations
 
+### Accessibility (Large Text Support)
+The app supports system accessibility text scaling. When adding or modifying UI elements, consider how they behave at large text sizes:
+
+**Fixed Height Containers:**
+- Avoid fixed-height containers that can't accommodate scaled text
+- If fixed height is required, ensure it's generous enough (e.g., 120px instead of 80px for lists)
+- Consider using `MediaQuery.textScalerOf(context).scale()` for dynamic sizing
+
+**Text Overflow Handling:**
+- Always add `overflow: TextOverflow.ellipsis` to potentially long text in constrained spaces
+- Wrap secondary/optional text in `Flexible` widgets to allow shrinking
+- Example pattern:
+  ```dart
+  Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text('Section Title', style: textTheme.titleLarge),
+      Flexible(
+        child: Text(
+          'View All',
+          style: textTheme.bodySmall,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  ),
+  ```
+
+**Buttons:**
+- Primary buttons use `minimumSize` property for accessibility scaling
+- When creating custom buttons, consider using `ButtonFeedbackStyle.primary()` which supports `minimumSize` parameter
+
+**AppBar Titles:**
+- AppBar handles its own layout internally - don't use `Flexible` directly on title
+- Use `TextOverflow.ellipsis` and `maxLines: 1` on title text instead
+
+**Lists with Items:**
+- Ensure container height can accommodate scaled text alongside fixed-size elements (avatars, icons)
+- Consider adding `mainAxisSize: MainAxisSize.min` to columns to prevent overflow
+
 ### Git Hooks
 - Pre-commit hook runs format, analyze, and test with coverage
 - Install hooks by running `dart run git_hooks.dart`

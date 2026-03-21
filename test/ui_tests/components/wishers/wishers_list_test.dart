@@ -256,7 +256,10 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await TestHelpers.tapAndSettle(tester, find.byType(AddWisherItem));
+        // Tap on the add icon inside AddWisherItem
+        await tester.tap(find.byIcon(Icons.add), warnIfMissed: false);
+        await TestHelpers.pumpAndSettle(tester);
+
         expect(wasTapped, isTrue);
       });
 
@@ -447,6 +450,73 @@ void main() {
         expect(find.byType(WisherItem), findsOneWidget);
         TestHelpers.expectTextOnce('Only');
         TestHelpers.expectTextOnce('O');
+      });
+    });
+
+    group('Accessibility', () {
+      testWidgets('has increased container height for large text support', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(wishers: defaultTestWishers),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the Positioned widget which contains the inner SizedBox
+        final positionedFinder = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byType(Positioned),
+        );
+
+        // Find the inner SizedBox (height 120) inside the Positioned widget
+        final innerSizedBox = find.descendant(
+          of: positionedFinder.first,
+          matching: find.byType(SizedBox),
+        );
+
+        // Should find SizedBox with height from constant
+        final sizedBox = tester.widget<SizedBox>(innerSizedBox.first);
+        expect(sizedBox.height, AppSpacing.wisherListItemHeight);
+      });
+
+      testWidgets('View All text has overflow ellipsis for large text', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(wishers: defaultTestWishers),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the View All text
+        final viewAllText = find.text('View All');
+        expect(viewAllText, findsOneWidget);
+
+        // Verify the text widget has overflow handling
+        final textWidget = tester.widget<Text>(viewAllText);
+        expect(textWidget.overflow, TextOverflow.ellipsis);
+      });
+
+      testWidgets('View All is wrapped in Flexible for shrinking', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(wishers: defaultTestWishers),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find Flexible widget that contains View All text
+        final flexibleWithViewAll = find.ancestor(
+          of: find.text('View All'),
+          matching: find.byType(Flexible),
+        );
+
+        expect(flexibleWithViewAll, findsOneWidget);
       });
     });
   });

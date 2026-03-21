@@ -16,6 +16,7 @@ class ButtonFeedbackStyle {
     BorderSide? side,
     WidgetStateProperty<Color>? foregroundColor,
     WidgetStateProperty<Color>? backgroundColor,
+    WidgetStateProperty<Size>? minimumSize,
   }) {
     final durations = _getDurations(pressDuration, releaseDuration);
     final colorScheme = context.colorScheme;
@@ -50,6 +51,7 @@ class ButtonFeedbackStyle {
       ),
       elevation: WidgetStateProperty.all(0),
       shadowColor: WidgetStateProperty.all(Colors.transparent),
+      minimumSize: minimumSize,
     );
   }
 

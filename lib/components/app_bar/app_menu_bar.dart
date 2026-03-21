@@ -48,7 +48,12 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget? _menuBarTitle(AppLocalizations l10n, TextTheme textTheme) =>
       switch (type) {
-        AppMenuBarType.main => Text(l10n.appName, style: textTheme.titleMedium),
+        AppMenuBarType.main => Text(
+          l10n.appName,
+          style: textTheme.titleMedium,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
         _ => null,
       };
 

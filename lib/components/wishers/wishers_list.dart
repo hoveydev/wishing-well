@@ -57,16 +57,24 @@ class WishersList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(l10n.wishers, style: textTheme.titleLarge),
-              GestureDetector(
-                onTap: () =>
-                    AppLogger.debug('View All tapped', context: 'WishersList'),
-                child: Text(l10n.viewAll, style: textTheme.bodySmall),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () => AppLogger.debug(
+                    'View All tapped',
+                    context: 'WishersList',
+                  ),
+                  child: Text(
+                    l10n.viewAll,
+                    style: textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ],
           ),
           const AppSpacer.medium(),
           SizedBox(
-            height: 80,
+            height: AppSpacing.wisherListItemHeight,
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -74,7 +82,7 @@ class WishersList extends StatelessWidget {
                   left: -AppSpacing.screenPaddingStandard,
                   right: -AppSpacing.screenPaddingStandard,
                   child: SizedBox(
-                    height: 80,
+                    height: AppSpacing.wisherListItemHeight,
                     child: isLoading
                         ? const WishersListSkeleton()
                         : hasError

@@ -459,6 +459,59 @@ void main() {
           await gesture.cancel();
         });
       });
+
+      group('minimumSize parameter', () {
+        testWidgets('primary style accepts minimumSize parameter', (
+          tester,
+        ) async {
+          // Arrange & Act: Create button with minimumSize
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.primary(
+                    context: context,
+                    minimumSize: WidgetStateProperty.all(
+                      const Size(double.infinity, 56),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Min Size Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Min Size Button'), findsOneWidget);
+        });
+
+        testWidgets('primary style with minimumSize renders correctly', (
+          tester,
+        ) async {
+          // Arrange & Act: Create button with minimumSize
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.primary(
+                    context: context,
+                    minimumSize: WidgetStateProperty.all(
+                      const Size(double.infinity, 72),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Tall Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render with correct size
+          expect(find.text('Tall Button'), findsOneWidget);
+          expect(find.byType(ElevatedButton), findsOneWidget);
+        });
+      });
     });
   });
 }

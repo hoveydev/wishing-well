@@ -476,9 +476,9 @@ void main() {
           matching: find.byType(SizedBox),
         );
 
-        // Should find SizedBox with height 120 (increased from 80)
+        // Should find SizedBox with height from constant
         final sizedBox = tester.widget<SizedBox>(innerSizedBox.first);
-        expect(sizedBox.height, 120);
+        expect(sizedBox.height, AppSpacing.wisherListItemHeight);
       });
 
       testWidgets('View All text has overflow ellipsis for large text', (

@@ -74,7 +74,7 @@ class WishersList extends StatelessWidget {
           ),
           const AppSpacer.medium(),
           SizedBox(
-            height: 120,
+            height: AppSpacing.wisherListItemHeight,
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -82,7 +82,7 @@ class WishersList extends StatelessWidget {
                   left: -AppSpacing.screenPaddingStandard,
                   right: -AppSpacing.screenPaddingStandard,
                   child: SizedBox(
-                    height: 120,
+                    height: AppSpacing.wisherListItemHeight,
                     child: isLoading
                         ? const WishersListSkeleton()
                         : hasError

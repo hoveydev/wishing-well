@@ -5,14 +5,32 @@ import 'dart:io';
 // PRE-COMMIT CONFIGURATION
 // ===================================
 
+// Coverage exclusion patterns - must be kept in sync with scripts/test_coverage.sh
+// Note: These use substring matching (not glob patterns like lcov requires)
+const _excludePatterns = [
+  'l10n/app_localizations',
+  '.g.dart',
+  'main.dart',
+  'app_config.dart',
+  'app_logger.dart',
+  'components/demo/demos',
+  'components/demo/demo_home.dart',
+  'components/demo/demo_app.dart',
+  'data/data_sources/',
+  '/demo/',
+];
+
 // Enable test quality analysis during refactoring phase
 // - Set to 'true' to enforce test standards during refactoring
 // - Set to 'false' to skip for normal development
 const enableTestQualityAnalysis = true;
 
-// Coverage threshold percentage
+// Overall code coverage threshold (used for full repo coverage checks)
 const coverageThreshold = 90.0;
-// TODO: Update back to 95 when add wisher stuff is done
+
+// New code coverage threshold - stricter threshold for code being committed
+// This ensures new/changed code meets higher quality standards
+const newCodeCoverageThreshold = 95.0;
 
 void main(List<String> arguments) async {
   // Check if this is being run as a pre-commit hook
@@ -142,11 +160,12 @@ Future<bool> _preCommit() async {
     return false;
   }
 
-  // Run tests
-  print('🧪 Running tests...');
+  // Run tests with new code coverage (focus on changed files only)
+  print('🧪 Running tests for new code...');
   final coverageSuccess = await _checkCoverage(
-    threshold: coverageThreshold,
-  ); // Uses configuration variable from top of file
+    threshold: newCodeCoverageThreshold,
+    isNewCodeCoverage: true,
+  );
   if (!coverageSuccess) {
     return false;
   }
@@ -155,15 +174,77 @@ Future<bool> _preCommit() async {
   return true;
 }
 
-Future<bool> _checkCoverage({required double threshold}) async {
+/// Checks test coverage against the specified threshold.
+/// If isNewCodeCoverage is true, focuses on changed files only.
+Future<bool> _checkCoverage({
+  required double threshold,
+  bool isNewCodeCoverage = false,
+}) async {
   // Run pub get first to ensure dependencies are resolved
   await Process.run('flutter', ['pub', 'get'], runInShell: true);
 
+  List<String> testFiles = [];
+  List<String> changedFiles = [];
+
+  if (isNewCodeCoverage) {
+    // Get changed source files
+    print('📝 Finding changed source files...');
+    changedFiles = await _getChangedSourceFiles();
+
+    if (changedFiles.isEmpty) {
+      print('ℹ️  No source files changed. Skipping new code coverage check.\n');
+      return true;
+    }
+
+    print('Changed files: ${changedFiles.length}');
+    for (final file in changedFiles) {
+      print('  - $file');
+    }
+    print('');
+
+    // Map source files to test files
+    print('🔗 Mapping source files to test files...');
+    testFiles = _mapSourceToTestFiles(changedFiles);
+
+    if (testFiles.isEmpty) {
+      print(
+        '⚠️  No test files found for changed source files.\n'
+        '   This may indicate missing tests. Please ensure tests exist.\n',
+      );
+      // Don't fail, but warn - the developer should add tests
+      return true;
+    }
+
+    print('Test files to run: ${testFiles.length}');
+    for (final file in testFiles) {
+      print('  - $file');
+    }
+    print('');
+  }
+
   // Run tests with coverage
-  final testResult = await Process.run('flutter', [
-    'test',
-    '--coverage',
-  ], runInShell: true);
+  print(
+    isNewCodeCoverage
+        ? '🧪 Running tests for changed files only...'
+        : '🧪 Running all tests...',
+  );
+
+  ProcessResult testResult;
+
+  if (isNewCodeCoverage && testFiles.isNotEmpty) {
+    // Run only specific test files
+    testResult = await Process.run('flutter', [
+      'test',
+      '--coverage',
+      ...testFiles,
+    ], runInShell: true);
+  } else {
+    // Run all tests
+    testResult = await Process.run('flutter', [
+      'test',
+      '--coverage',
+    ], runInShell: true);
+  }
 
   if (testResult.exitCode != 0) {
     print('❌ Tests failed. Fix tests before checking coverage.\n');
@@ -182,17 +263,30 @@ Future<bool> _checkCoverage({required double threshold}) async {
     return false;
   }
 
-  // Parse coverage
-  final coverage = await _parseLcovCoverage(coverageFile);
+  // Parse coverage (optionally filtering for new code coverage)
+  final coverage = await _parseLcovCoverage(
+    coverageFile,
+    filterFiles: isNewCodeCoverage ? changedFiles : null,
+  );
 
-  print('Coverage: ${coverage.toStringAsFixed(2)}%');
+  final coverageType = isNewCodeCoverage ? 'New code coverage' : 'Coverage';
+  print('$coverageType: ${coverage.toStringAsFixed(2)}%');
 
   if (coverage < threshold) {
     print(
-      '❌ Coverage ${coverage.toStringAsFixed(2)}% is below threshold ${threshold.toStringAsFixed(2)}%\n',
+      '❌ $coverageType ${coverage.toStringAsFixed(2)}% is below threshold ${threshold.toStringAsFixed(2)}%\n',
     );
     print('Please add more tests to increase coverage.\n');
-    print('Check coverage report by running the folowing commands:\n');
+
+    if (isNewCodeCoverage) {
+      print('Changed files needing coverage:');
+      for (final file in changedFiles) {
+        print('  - $file');
+      }
+      print('');
+    }
+
+    print('Check coverage report by running the following commands:\n');
     print('`genhtml coverage/lcov.info -o coverage/html`');
     print('`open coverage/html/index.html`\n');
     return false;
@@ -202,38 +296,51 @@ Future<bool> _checkCoverage({required double threshold}) async {
   return true;
 }
 
-Future<double> _parseLcovCoverage(File lcovFile) async {
+/// Parses lcov coverage file and returns the coverage percentage.
+/// Optionally filters to only include specific files.
+Future<double> _parseLcovCoverage(
+  File lcovFile, {
+  List<String>? filterFiles,
+}) async {
   final lines = await lcovFile.readAsLines();
 
   // Coverage exclusions - must be kept in sync with scripts/test_coverage.sh
   // Note: These use substring matching (not glob patterns like lcov requires)
-  const excludePatterns = [
-    'l10n/app_localizations',
-    '.g.dart',
-    'main.dart',
-    'app_config.dart',
-    'app_logger.dart', // Logging utility - infrastructure, not business logic
-    'components/demo/demos', // Demo widgets don't need testing
-    'components/demo/demo_home.dart', // Demo app UI doesn't need testing
-    'components/demo/demo_app.dart', // Demo app UI doesn't need testing
-    'data/data_sources/', // Supabase wrappers - tested by Supabase itself
-    '/demo/', // Feature demos - isolated demo code, not production
-  ];
+  const excludePatterns = _excludePatterns;
 
   int totalLines = 0;
   int coveredLines = 0;
   String? currentFile;
+  bool isInFilteredFile = false;
 
   for (var line in lines) {
     if (line.startsWith('SF:')) {
       currentFile = line.substring(3);
+
+      // Check if this file should be included
+      final isExcluded = excludePatterns.any(
+        (pattern) => currentFile!.contains(pattern),
+      );
+
+      if (filterFiles != null && filterFiles.isNotEmpty) {
+        // For new code coverage, check if this file matches any of our changed files
+        // Convert to relative path for comparison
+        final relativePath = currentFile.contains('/lib/')
+            ? currentFile.substring(currentFile.indexOf('/lib/') + 4)
+            : currentFile;
+        isInFilteredFile = filterFiles.any(
+          (f) => relativePath.endsWith(f.replaceFirst('lib/', '')),
+        );
+        // Exclude if it's not a filtered file
+        if (!isInFilteredFile) continue;
+      }
+
+      // Skip excluded files
+      if (isExcluded) continue;
     }
 
-    // Skip excluded files
-    if (currentFile != null &&
-        excludePatterns.any((pattern) => currentFile!.contains(pattern))) {
-      continue;
-    }
+    // Skip files that aren't in our filter (if filtering is enabled)
+    if (filterFiles != null && !isInFilteredFile) continue;
 
     if (line.startsWith('DA:')) {
       // DA:line_number,execution_count
@@ -250,4 +357,167 @@ Future<double> _parseLcovCoverage(File lcovFile) async {
 
   if (totalLines == 0) return 0.0;
   return (coveredLines / totalLines) * 100;
+}
+
+// ===================================
+// NEW CODE COVERAGE FUNCTIONS
+// ===================================
+
+/// Gets the list of changed/added source files in the current commit.
+/// Only considers staged changes (--cached) to ensure we're checking
+/// what will actually be committed.
+Future<List<String>> _getChangedSourceFiles() async {
+  // Get staged changes (what will be committed)
+  final stagedResult = await Process.run('git', [
+    'diff',
+    '--cached',
+    '--name-only',
+    '--diff-filter=ACM',
+  ], runInShell: true);
+
+  if (stagedResult.exitCode != 0) {
+    print('⚠️  Could not get staged changes: ${stagedResult.stderr}');
+    return [];
+  }
+
+  final stagedFiles = (stagedResult.stdout as String)
+      .split('\n')
+      .where((f) => f.isNotEmpty && f.startsWith('lib/'))
+      .toList();
+
+  // Also check for new untracked files in lib/
+  final untrackedResult = await Process.run('git', [
+    'ls-files',
+    '--others',
+    '--exclude-standard',
+    'lib/',
+  ], runInShell: true);
+
+  if (untrackedResult.exitCode != 0) {
+    print('⚠️  Could not get untracked files: ${untrackedResult.stderr}');
+  } else {
+    final untrackedFiles = (untrackedResult.stdout as String)
+        .split('\n')
+        .where((f) => f.isNotEmpty)
+        .map((f) => 'lib/$f')
+        .toList();
+    stagedFiles.addAll(untrackedFiles);
+  }
+
+  // Filter out files that match our exclusion patterns
+  return stagedFiles.where((f) => !_isExcludedFromCoverage(f)).toList();
+}
+
+/// Checks if a file should be excluded from coverage calculations
+bool _isExcludedFromCoverage(String filePath) {
+  return _excludePatterns.any((pattern) => filePath.contains(pattern));
+}
+
+/// Maps source files to their corresponding test files.
+/// Follows the project's convention: lib/foo/bar.dart -> test/.../bar_test.dart
+List<String> _mapSourceToTestFiles(List<String> sourceFiles) {
+  final testFiles = <String>{};
+
+  for (final sourceFile in sourceFiles) {
+    final testFile = _sourceToTestPath(sourceFile);
+    if (testFile != null) {
+      testFiles.add(testFile);
+    }
+  }
+
+  return testFiles.toList();
+}
+
+/// Converts a source file path to its corresponding test file path.
+///
+/// Handles the project's path mapping:
+/// - lib/unit_tests/foo/bar.dart -> test/unit_tests/foo/bar_test.dart
+/// - lib/ui_tests/foo/bar.dart -> test/ui_tests/foo/bar_test.dart
+/// - lib/features/foo/bar_screen.dart -> test/ui_tests/screens/foo/bar_screen_test.dart
+/// - lib/features/foo/bar_view_model.dart -> test/unit_tests/screens/foo/bar_view_model_test.dart
+String? _sourceToTestPath(String sourcePath) {
+  if (!sourcePath.startsWith('lib/')) return null;
+
+  final relativePath = sourcePath.substring(4);
+
+  // Map lib paths to test paths
+  String testPath;
+
+  if (relativePath.startsWith('features/')) {
+    // features/foo/bar_screen.dart -> test/ui_tests/screens/foo/bar_screen_test.dart
+    // features/foo/bar_view_model.dart -> test/unit_tests/screens/foo/bar_view_model_test.dart
+    final parts = relativePath.split('/');
+    if (parts.length >= 3) {
+      final feature = parts[1];
+      final fileName = parts.last;
+
+      if (fileName.endsWith('_screen.dart') ||
+          fileName.endsWith('_view.dart')) {
+        testPath =
+            'test/ui_tests/screens/$feature/${_toTestFileName(fileName)}';
+      } else if (fileName.endsWith('_view_model.dart')) {
+        testPath =
+            'test/unit_tests/screens/$feature/${_toTestFileName(fileName)}';
+      } else {
+        // Default to unit tests for other files in features
+        testPath =
+            'test/unit_tests/screens/$feature/${_toTestFileName(fileName)}';
+      }
+    } else {
+      return null;
+    }
+  } else if (relativePath.startsWith('components/')) {
+    // components/foo/bar.dart -> test/unit_tests/components/bar_test.dart
+    final parts = relativePath.split('/');
+    if (parts.length >= 3) {
+      final fileName = parts.last;
+      testPath = 'test/unit_tests/components/${_toTestFileName(fileName)}';
+    } else {
+      return null;
+    }
+  } else if (relativePath.startsWith('data/')) {
+    // data/models/foo/bar.dart -> test/unit_tests/data/models/bar_test.dart
+    // data/repositories/foo/bar_impl.dart -> test/unit_tests/data/repositories/bar_impl_test.dart
+    final parts = relativePath.split('/');
+    if (parts.length >= 3) {
+      final subDir = parts.sublist(1, parts.length - 1).join('/');
+      final fileName = parts.last;
+      testPath = 'test/unit_tests/data/$subDir/${_toTestFileName(fileName)}';
+    } else {
+      return null;
+    }
+  } else if (relativePath.startsWith('utils/')) {
+    // utils/foo/bar.dart -> test/unit_tests/utils/bar_test.dart
+    final parts = relativePath.split('/');
+    if (parts.length >= 2) {
+      final fileName = parts.last;
+      testPath = 'test/unit_tests/utils/${_toTestFileName(fileName)}';
+    } else {
+      return null;
+    }
+  } else if (relativePath.startsWith('theme/') ||
+      relativePath.startsWith('routing/') ||
+      relativePath.startsWith('l10n/') ||
+      relativePath.startsWith('config/')) {
+    // Top-level lib directories map to app tests
+    final fileName = relativePath.split('/').last;
+    testPath = 'test/unit_tests/app/${_toTestFileName(fileName)}';
+  } else {
+    // Default: mirror structure under unit_tests/
+    final fileName = relativePath.split('/').last;
+    final dir = relativePath.contains('/')
+        ? relativePath.substring(0, relativePath.lastIndexOf('/'))
+        : '';
+    testPath = 'test/unit_tests/$dir/${_toTestFileName(fileName)}';
+  }
+
+  return testPath;
+}
+
+/// Converts a source file name to a test file name
+/// bar.dart -> bar_test.dart
+String _toTestFileName(String fileName) {
+  if (!fileName.contains('.')) return '${fileName}_test.dart';
+  final lastDot = fileName.lastIndexOf('.');
+  return '${fileName.substring(0, lastDot)}_test.dart';
 }

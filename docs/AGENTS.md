@@ -17,8 +17,8 @@ Flutter app using Provider for state management, Supabase for backend, and go_ro
 - `flutter gen-l10n` - Generate localization files after modifying app_en.arb
 
 ### Coverage Reporting
-- `./scripts/test_coverage.sh` - Full coverage workflow (excludes l10n, main.dart, app_config.dart)
-- Pre-commit hook enforces 95% coverage threshold (see git_hooks.dart:14)
+- `./scripts/test_coverage.sh` - Full coverage workflow (90% threshold for entire repo)
+- Pre-commit hook enforces 95% coverage on **changed files only**
 
 ## Code Style Guidelines
 
@@ -197,10 +197,33 @@ The app supports system accessibility text scaling. When adding or modifying UI 
 - Consider adding `mainAxisSize: MainAxisSize.min` to columns to prevent overflow
 
 ### Git Hooks
-- Pre-commit hook runs format, analyze, and test with coverage
-- Install hooks by running `dart run git_hooks.dart`
-- Coverage threshold: 95% (git_hooks.dart:14)
-- Exclusions configured in git_hooks.dart (l10n, generated, main.dart, app_config.dart, app_logger.dart)
+The pre-commit hook (`git_hooks.dart`) runs automated quality checks before each commit:
+
+**Installation:**
+```bash
+dart run git_hooks.dart
+```
+
+**Checks performed:**
+1. Code formatting (`dart format`)
+2. Static analysis (`dart analyze --fatal-infos`)
+3. Test quality analysis (optional, configurable)
+4. Test coverage for changed files
+
+**Coverage Thresholds:**
+- **New code coverage**: 95% (for code being committed)
+- **Overall coverage**: 90% (for full repo checks)
+- Exclusions: l10n, generated files, main.dart, app_config.dart, app_logger.dart, demo code
+
+**New Code Coverage Feature:**
+The pre-commit hook automatically:
+1. Detects staged and untracked files in `lib/`
+2. Maps changed source files to their corresponding tests
+3. Runs only the tests for changed files
+4. Calculates coverage for new code only
+5. Enforces 95% threshold on new code
+
+This focused approach ensures new code meets quality standards without penalizing existing code.
 
 ### Logging
 - Use `AppLogger` for all logging (import `package:wishing_well/utils/app_logger.dart`)

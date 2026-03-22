@@ -447,17 +447,18 @@ String? _sourceToTestPath(String sourcePath) {
     // Check for feature sub-components (features/*/*/components/*.dart)
     // These are UI components within a feature and should be UI tested
     // Example: features/add_wisher/add_wisher_landing/components/buttons.dart
-    //   -> test/ui_tests/screens/add_wisher/buttons_test.dart
+    //   -> test/ui_tests/screens/add_wisher/add_wisher_landing/buttons_test.dart
     // Pattern: features/{category}/{screen_folder}/components/{file}.dart
     final componentsMatch = RegExp(
       r'^features/([^/]+)/([^/]+)/components/([^/]+\.dart)$',
     ).firstMatch(relativePath);
     if (componentsMatch != null) {
-      // Use the screen folder name (parts[2]), not the category (parts[1])
+      // Use both category (group 1) and screen folder (group 2) for nested path
+      final category = componentsMatch.group(1)!;
       final screenFolder = componentsMatch.group(2)!;
       final fileName = componentsMatch.group(3)!;
       testPath =
-          'test/ui_tests/screens/$screenFolder/${_toTestFileName(fileName)}';
+          'test/ui_tests/screens/$category/$screenFolder/${_toTestFileName(fileName)}';
     } else {
       // Feature files map to tests following source structure:
       // - features/auth/login/login_screen.dart -> test/ui_tests/screens/login/login_screen_test.dart

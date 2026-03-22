@@ -444,34 +444,72 @@ String? _sourceToTestPath(String sourcePath) {
   String testPath;
 
   if (relativePath.startsWith('features/')) {
-    // features/foo/bar_screen.dart -> test/ui_tests/screens/foo/bar_screen_test.dart
-    // features/foo/bar_view_model.dart -> test/unit_tests/screens/foo/bar_view_model_test.dart
-    final parts = relativePath.split('/');
-    if (parts.length >= 3) {
-      final feature = parts[1];
-      final fileName = parts.last;
-
-      if (fileName.endsWith('_screen.dart') ||
-          fileName.endsWith('_view.dart')) {
-        testPath =
-            'test/ui_tests/screens/$feature/${_toTestFileName(fileName)}';
-      } else if (fileName.endsWith('_view_model.dart')) {
-        testPath =
-            'test/unit_tests/screens/$feature/${_toTestFileName(fileName)}';
-      } else {
-        // Default to unit tests for other files in features
-        testPath =
-            'test/unit_tests/screens/$feature/${_toTestFileName(fileName)}';
-      }
+    // Check for feature sub-components (features/*/*/components/*.dart)
+    // These are UI components within a feature and should be UI tested
+    // Example: features/add_wisher/add_wisher_landing/components/buttons.dart
+    //   -> test/ui_tests/screens/add_wisher/buttons_test.dart
+    // Pattern: features/{category}/{screen_folder}/components/{file}.dart
+    final componentsMatch = RegExp(
+      r'^features/([^/]+)/([^/]+)/components/([^/]+\.dart)$',
+    ).firstMatch(relativePath);
+    if (componentsMatch != null) {
+      // Use the screen folder name (parts[2]), not the category (parts[1])
+      final screenFolder = componentsMatch.group(2)!;
+      final fileName = componentsMatch.group(3)!;
+      testPath =
+          'test/ui_tests/screens/$screenFolder/${_toTestFileName(fileName)}';
     } else {
-      return null;
+      // Feature files map to tests following source structure:
+      // - features/auth/login/login_screen.dart -> test/ui_tests/screens/login/login_screen_test.dart
+      // - features/auth/login/login_view_model.dart -> test/unit_tests/screens/login/login_view_model_test.dart
+      // - features/add_wisher/add_wisher_details/screen.dart -> test/ui_tests/screens/add_wisher/add_wisher_details/screen_test.dart
+      final parts = relativePath.split('/');
+      if (parts.length >= 3) {
+        final fileName = parts.last;
+
+        // Determine the test path based on test type
+        if (fileName.endsWith('_screen.dart') ||
+            fileName.endsWith('_view.dart')) {
+          // UI test - preserve subdirectory structure
+          // e.g., features/add_wisher/add_wisher_details/file.dart -> test/ui_tests/screens/add_wisher/add_wisher_details/file_test.dart
+          final testSubDir = parts.sublist(2, parts.length - 1).join('/');
+          testPath =
+              'test/ui_tests/screens/$testSubDir/${_toTestFileName(fileName)}';
+        } else if (fileName.endsWith('_view_model.dart')) {
+          // Unit test for view model - preserve subdirectory structure
+          final testSubDir = parts.sublist(2, parts.length - 1).join('/');
+          testPath =
+              'test/unit_tests/screens/$testSubDir/${_toTestFileName(fileName)}';
+        } else {
+          // Default to unit tests for other files in features
+          final screenFolder = parts[2];
+          testPath =
+              'test/unit_tests/screens/$screenFolder/${_toTestFileName(fileName)}';
+        }
+      } else {
+        return null;
+      }
     }
   } else if (relativePath.startsWith('components/')) {
-    // components/foo/bar.dart -> test/unit_tests/components/bar_test.dart
+    // Components have two test locations:
+    // 1. Type files (*_type.dart) -> unit tests: test/unit_tests/components/{name}_test.dart
+    // 2. Widget files -> UI tests: test/ui_tests/components/{folder}/{name}_test.dart
     final parts = relativePath.split('/');
-    if (parts.length >= 3) {
-      final fileName = parts.last;
-      testPath = 'test/unit_tests/components/${_toTestFileName(fileName)}';
+    if (parts.length >= 2) {
+      final folderName = parts[1]; // e.g., 'button', 'app_alert'
+      final fileName =
+          parts.last; // e.g., 'app_button.dart' or 'app_button_type.dart'
+
+      if (fileName.endsWith('_type.dart')) {
+        // Type files go to unit tests
+        testPath = 'test/unit_tests/components/${_toTestFileName(fileName)}';
+      } else if (fileName.endsWith('.dart')) {
+        // Widget files go to UI tests
+        testPath =
+            'test/ui_tests/components/$folderName/${_toTestFileName(fileName)}';
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

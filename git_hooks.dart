@@ -471,15 +471,20 @@ String? _sourceToTestPath(String sourcePath) {
         if (fileName.endsWith('_screen.dart') ||
             fileName.endsWith('_view.dart')) {
           // UI test - preserve subdirectory structure
-          // e.g., features/add_wisher/add_wisher_details/file.dart -> test/ui_tests/screens/add_wisher/add_wisher_details/file_test.dart
-          final testSubDir = parts.sublist(2, parts.length - 1).join('/');
+          // For features/auth/login/login_screen.dart:
+          // subDir = parts[1..2] = 'auth/login'
+          // Result: test/ui_tests/screens/auth/login/login_screen_test.dart
+          final subDir = parts.sublist(1, parts.length - 1).join('/');
           testPath =
-              'test/ui_tests/screens/$testSubDir/${_toTestFileName(fileName)}';
+              'test/ui_tests/screens/$subDir/${_toTestFileName(fileName)}';
         } else if (fileName.endsWith('_view_model.dart')) {
           // Unit test for view model - preserve subdirectory structure
-          final testSubDir = parts.sublist(2, parts.length - 1).join('/');
+          // For features/auth/login/login_view_model.dart:
+          // subDir = parts[1..2] = 'auth/login'
+          // Result: test/unit_tests/screens/auth/login/login_view_model_test.dart
+          final subDir = parts.sublist(1, parts.length - 1).join('/');
           testPath =
-              'test/unit_tests/screens/$testSubDir/${_toTestFileName(fileName)}';
+              'test/unit_tests/screens/$subDir/${_toTestFileName(fileName)}';
         } else {
           // Default to unit tests for other files in features
           final screenFolder = parts[2];

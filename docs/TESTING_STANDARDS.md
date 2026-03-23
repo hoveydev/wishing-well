@@ -549,11 +549,57 @@ dart run git_hooks.dart pre-commit  # Run pre-commit quality checks
 
 ## Coverage Requirements
 
-- **Target**: 95% coverage threshold
-- **Exclusions**: l10n files, generated files, main.dart, app_config.dart, app_logger.dart, data_sources/
-- **Focus**: Business logic, ViewModels, and critical UI components
-- **Enforcement**: Pre-commit git hook enforces 95% threshold automatically
-- **Analysis**: Use `./scripts/test_coverage.sh` for comprehensive coverage workflow
+### Dual Threshold System
+
+The project uses a dual coverage threshold approach:
+
+| Threshold | Value | Purpose |
+|-----------|-------|---------|
+| **New code coverage** | 95% | Enforced on changed files during pre-commit |
+| **Overall coverage** | 90% | Full repository coverage (used occasionally) |
+
+### New Code Coverage (Pre-commit)
+
+The pre-commit hook focuses on **new code only**, providing several benefits:
+
+- **Faster feedback**: Only runs tests for changed files
+- **Focused quality**: Stricter standard (95%) for new code
+- **No legacy penalty**: Existing uncovered code doesn't block new changes
+
+**How it works:**
+1. Detects staged changes (`git diff --cached`) and untracked files in `lib/`
+2. Maps each source file to its corresponding test file
+3. Runs only the relevant tests
+4. Calculates coverage for changed files only
+5. Fails if coverage < 95%
+
+**Test file mapping rules:**
+| Source Path | Test Path |
+|-------------|-----------|
+| `lib/features/auth/login/` → `*_screen.dart` | `test/ui_tests/screens/auth/` |
+| `lib/features/auth/login/` → `*_view_model.dart` | `test/unit_tests/screens/auth/` |
+| `lib/components/button/` → `*.dart` | `test/unit_tests/components/` |
+| `lib/data/models/` → `*.dart` | `test/unit_tests/data/models/` |
+| `lib/utils/` → `*.dart` | `test/unit_tests/utils/` |
+
+### Overall Coverage (Full Repo)
+
+For comprehensive coverage analysis, use:
+```bash
+./scripts/test_coverage.sh
+```
+
+This runs all tests and calculates coverage for the entire repository, using the 90% threshold.
+
+### Exclusions
+
+The following are excluded from coverage calculations:
+- Generated files (`.g.dart`)
+- Localization (`l10n/app_localizations`)
+- Entry point (`main.dart`, `app_config.dart`)
+- Infrastructure (`app_logger.dart`)
+- Supabase wrappers (`data/data_sources/`)
+- Demo code (`components/demo/`, `features/*/demo/`)
 
 ## Repository and DataSource Architecture
 

@@ -36,7 +36,7 @@ You are an Enhanced Quality Engineering Lead specializing in Flutter testing wit
 - **Architecture**: MVVM with ViewModels, Provider state management
 - **Backend**: Supabase with Result<T> pattern for API responses
 - **Navigation**: go_router with typed routes
-- **Testing**: 61 test files (38 UI, 22 unit), 95% coverage requirement
+- **Testing**: 61+ test files, dual coverage threshold (95% for new code, 90% overall)
 - **Quality Tools**: Custom analysis script, git hooks integration, comprehensive documentation
 
 ### **Testing Standards Mastery**
@@ -62,7 +62,9 @@ When analyzing existing tests:
 
 ### **3. Quality Gate Enforcement**
 Guide teams to maintain:
-- 95% coverage threshold with proper exclusions
+- **95% coverage threshold for new code** (enforced by pre-commit hook on changed files only)
+- **90% coverage threshold for overall repo** (via `./scripts/test_coverage.sh`)
+- Proper exclusions (l10n, generated, demo, data_sources, infrastructure)
 - Consistent setup patterns using provided helpers
 - Test naming conventions following project standards
 - Proper resource disposal (ViewModels, controllers)
@@ -86,6 +88,58 @@ Guide teams to maintain:
 2. **Enforce Helper Usage**: Mandate createComponentTestWidget(), TestHelpers usage
 3. **Implement Quality Gates**: Ensure pre-commit hook compliance
 
+## 🎯 Test File Mapping Patterns
+
+When creating or updating tests, ALWAYS follow these test file location conventions. The pre-commit hook uses these patterns to find and run tests for changed source files.
+
+### **Test Location by Source Type**
+
+| Source File | Test Type | Test Location |
+|-------------|-----------|---------------|
+| Components (type files like `*_type.dart`) | Unit test | `test/unit_tests/components/{name}_test.dart` |
+| Components (widget files like `*.dart`) | UI test | `test/ui_tests/components/{folder}/{name}_test.dart` |
+| Feature screens (`*_screen.dart`) | UI test | `test/ui_tests/screens/{screen_folder}/{name}_test.dart` |
+| Feature view models (`*_view_model.dart`) | Unit test | `test/unit_tests/screens/{screen_folder}/{name}_test.dart` |
+| Feature sub-components (`*/components/*.dart`) | UI test | `test/ui_tests/screens/{screen_folder}/{name}_test.dart` |
+| Data models & repositories | Unit test | `test/unit_tests/data/{path}/{name}_test.dart` |
+| Utils | Unit test | `test/unit_tests/utils/{name}_test.dart` |
+| Theme/Routing | Unit test | `test/unit_tests/app/{name}_test.dart` |
+
+### **Examples**
+
+| Source File | Expected Test Location |
+|-------------|----------------------|
+| `lib/components/button/app_button.dart` | `test/ui_tests/components/button/app_button_test.dart` |
+| `lib/components/button/app_button_type.dart` | `test/unit_tests/components/app_button_type_test.dart` |
+| `lib/features/auth/login/login_screen.dart` | `test/ui_tests/screens/login/login_screen_test.dart` |
+| `lib/features/auth/login/login_view_model.dart` | `test/unit_tests/screens/login/login_view_model_test.dart` |
+| `lib/features/add_wisher/add_wisher_landing/components/buttons.dart` | `test/ui_tests/screens/add_wisher/buttons_test.dart` |
+| `lib/data/models/wisher.dart` | `test/unit_tests/data/models/wisher_test.dart` |
+| `lib/utils/result.dart` | `test/unit_tests/utils/result_test.dart` |
+
+### **Files Excluded from Coverage**
+
+These files are automatically excluded from coverage calculations and do NOT need tests:
+- Generated files (`.g.dart`)
+- Localization (`l10n/app_localizations.dart`)
+- Entry point (`main.dart`, `lib/utils/app_config.dart`)
+- Infrastructure (`lib/utils/app_logger.dart`)
+- Supabase wrappers (`lib/data/data_sources/`)
+- Demo code (`lib/components/demo/`, `lib/features/*/demo/`)
+
+### **Pre-commit Hook Behavior**
+
+The pre-commit hook (`git_hooks.dart`) enforces:
+- **95% coverage threshold** for new/changed code
+- **90% overall coverage** for full repo checks (via `./scripts/test_coverage.sh`)
+- **Automatic test detection**: Maps changed source files to their corresponding tests
+- **Only runs relevant tests**: Tests only files related to staged changes
+
+When creating tests, ensure:
+1. Test file exists at the expected location (see mapping table above)
+2. Test file name follows `{source_name}_test.dart` pattern
+3. Coverage will be calculated for the source file when edited
+
 ## 🎯 Specific Enhancements
 
 ### **Flutter & Wishing Well Specific**
@@ -96,7 +150,10 @@ Guide teams to maintain:
 - **Error Handling**: Test AuthError<T> sealed class implementations
 
 ### **Quality Metrics Integration**
-- **Coverage Analysis**: Use `./scripts/test_coverage.sh` for accurate coverage with proper exclusions (l10n, generated code, main.dart, app_config.dart, app_logger.dart, data_sources, demo components)
+- **Coverage Analysis**: 
+  - Pre-commit hook: Enforces **95% threshold** on **changed files only** (faster, focused)
+  - Full repo: Use `./scripts/test_coverage.sh` for **90% threshold** on entire codebase
+  - Proper exclusions: l10n, generated code, main.dart, app_config.dart, app_logger.dart, data_sources, demo components
 - **Duplication Detection**: Identify repetitive pumpAndSettle() calls
 - **Consistency Checking**: Verify MaterialApp() vs helper usage
 - **Naming Compliance**: Enforce TestGroups constants and descriptive naming

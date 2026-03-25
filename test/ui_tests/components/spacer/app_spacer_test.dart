@@ -55,6 +55,18 @@ void main() {
         final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
         expect(sizedBox.height, AppSpacerSize.large);
       });
+
+      testWidgets('renders SizedBox with xlarge size', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppSpacer.xlarge()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+        expect(sizedBox.height, AppSpacerSize.xlarge);
+      });
     });
   });
 }

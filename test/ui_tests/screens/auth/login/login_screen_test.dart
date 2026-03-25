@@ -250,6 +250,45 @@ void main() {
       });
     });
 
+    group('Keyboard Dismissal', () {
+      testWidgets('screen contains GestureDetector for tap dismissal', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Verify GestureDetector exists in the screen
+        expect(find.byType(GestureDetector), findsWidgets);
+      });
+
+      testWidgets('tapping GestureDetector does not throw', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: LoadingController(),
+            child: LoginScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Find the GestureDetector that wraps the screen content
+        final gestureDetector = find.byType(GestureDetector);
+        expect(gestureDetector, findsWidgets);
+
+        // Tap should not throw
+        await tester.tap(gestureDetector.first);
+        await tester.pump();
+
+        expect(find.byType(LoginScreen), findsOneWidget);
+      });
+    });
+
     group(TestGroups.behavior, () {
       testWidgets('initial state has no alert', (WidgetTester tester) async {
         await tester.pumpWidget(

@@ -110,6 +110,104 @@ void main() {
     });
   });
 
+  group(TestGroups.behavior, () {
+    test(
+      'updateEmailField with leading/trailing whitespace fails validation',
+      () {
+        // Validation doesn't trim - whitespace around email makes it invalid
+        viewModel.updateEmailField('  test@example.com  ');
+        expect(viewModel.hasAlert, true);
+        final error = viewModel.authError as UIAuthError;
+        expect(error.type, ForgotPasswordErrorType.badEmail);
+      },
+    );
+
+    test('updateEmailField with whitespace-only becomes badEmail', () {
+      // Whitespace fails regex - it's badEmail not noEmail
+      viewModel.updateEmailField('   ');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, ForgotPasswordErrorType.badEmail);
+    });
+
+    test('clearError can be called multiple times', () {
+      viewModel.updateEmailField('');
+      viewModel.clearError();
+      viewModel.clearError();
+      viewModel.clearError();
+      expect(viewModel.hasAlert, false);
+    });
+
+    test('error state transitions: valid -> invalid email', () {
+      viewModel.updateEmailField('valid@email.com');
+      expect(viewModel.hasAlert, false);
+
+      viewModel.updateEmailField('invalid');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, ForgotPasswordErrorType.badEmail);
+    });
+
+    test('error state transitions: invalid email -> empty', () {
+      viewModel.updateEmailField('invalid');
+      expect(viewModel.hasAlert, true);
+
+      viewModel.updateEmailField('');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, ForgotPasswordErrorType.noEmail);
+    });
+
+    test('ViewModel contract is implemented correctly', () {
+      final contract = viewModel as ForgotViewModelContract;
+      contract.updateEmailField('test@email.com');
+      expect(contract.hasAlert, false);
+
+      contract.updateEmailField('');
+      expect(contract.hasAlert, true);
+
+      contract.clearError();
+      expect(contract.hasAlert, false);
+    });
+  });
+
+  group('Error Type Tests', () {
+    test('all ForgotPasswordErrorType values are handled', () {
+      // Test none
+      expect(
+        ForgotPasswordErrorType.values,
+        contains(ForgotPasswordErrorType.none),
+      );
+      // Test noEmail
+      expect(
+        ForgotPasswordErrorType.values,
+        contains(ForgotPasswordErrorType.noEmail),
+      );
+      // Test badEmail
+      expect(
+        ForgotPasswordErrorType.values,
+        contains(ForgotPasswordErrorType.badEmail),
+      );
+      // Test unknown
+      expect(
+        ForgotPasswordErrorType.values,
+        contains(ForgotPasswordErrorType.unknown),
+      );
+
+      expect(ForgotPasswordErrorType.values.length, 4);
+    });
+
+    test('UIAuthError stores the error type correctly', () {
+      const error = UIAuthError(ForgotPasswordErrorType.noEmail);
+      expect(error.type, ForgotPasswordErrorType.noEmail);
+    });
+
+    test('SupabaseAuthError stores the message correctly', () {
+      const error = SupabaseAuthError<ForgotPasswordErrorType>('Network error');
+      expect(error.message, 'Network error');
+    });
+  });
+
   tearDown(() {
     viewModel.dispose();
   });

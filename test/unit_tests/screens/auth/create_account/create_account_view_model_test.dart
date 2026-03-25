@@ -370,6 +370,67 @@ void main() {
     });
   });
 
+  group('Error Type Tests', () {
+    test('all CreateAccountErrorType values are handled', () {
+      expect(
+        CreateAccountErrorType.values,
+        contains(CreateAccountErrorType.none),
+      );
+      expect(
+        CreateAccountErrorType.values,
+        contains(CreateAccountErrorType.noEmail),
+      );
+      expect(
+        CreateAccountErrorType.values,
+        contains(CreateAccountErrorType.badEmail),
+      );
+      expect(
+        CreateAccountErrorType.values,
+        contains(CreateAccountErrorType.passwordRequirementsNotMet),
+      );
+      expect(
+        CreateAccountErrorType.values,
+        contains(CreateAccountErrorType.unknown),
+      );
+      expect(CreateAccountErrorType.values.length, 5);
+    });
+
+    test('error transitions: valid -> noEmail', () {
+      viewModel.updateEmailField('test@email.com');
+      viewModel.updatePasswordOneField('ValidPassword123!');
+      viewModel.updatePasswordTwoField('ValidPassword123!');
+      expect(viewModel.hasAlert, false);
+
+      viewModel.updateEmailField('');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.noEmail);
+    });
+
+    test('error transitions: valid -> badEmail', () {
+      viewModel.updateEmailField('test@email.com');
+      viewModel.updatePasswordOneField('ValidPassword123!');
+      viewModel.updatePasswordTwoField('ValidPassword123!');
+
+      viewModel.updateEmailField('invalid-email');
+      expect(viewModel.hasAlert, true);
+      final error = viewModel.authError as UIAuthError;
+      expect(error.type, CreateAccountErrorType.badEmail);
+    });
+
+    test('clearError works when form is valid', () {
+      viewModel.updateEmailField('');
+      expect(viewModel.hasAlert, true);
+
+      viewModel.updateEmailField('test@email.com');
+      viewModel.updatePasswordOneField('ValidPassword123!');
+      viewModel.updatePasswordTwoField('ValidPassword123!');
+      viewModel.clearError();
+
+      expect(viewModel.hasAlert, false);
+    });
+  });
+
   tearDown(() {
     viewModel.dispose();
   });

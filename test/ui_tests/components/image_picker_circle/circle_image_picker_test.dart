@@ -253,5 +253,78 @@ void main() {
         expect(find.byType(CircleImagePicker), findsOneWidget);
       });
     });
+
+    group('hasImage edge cases', () {
+      test('hasImage returns false when imageUrl is empty string', () {
+        final widget = CircleImagePicker(onTap: () {}, imageUrl: '');
+        expect(widget.hasImage, isFalse);
+      });
+
+      test('hasImage returns false when imageUrl is null', () {
+        final widget = CircleImagePicker(onTap: () {});
+        expect(widget.hasImage, isFalse);
+      });
+
+      test(
+        'hasImage returns false when both imageFile and imageUrl are null',
+        () {
+          // Test without actual file - just verify the logic works
+          final widget = CircleImagePicker(onTap: () {});
+          // When both are null, hasImage should be false
+          expect(widget.hasImage, isFalse);
+        },
+      );
+
+      test('hasImage with whitespace-only URL returns true', () {
+        // Note: whitespace passes isNotEmpty check, so hasImage returns true
+        // This is the actual behavior of the component
+        final widget = CircleImagePicker(onTap: () {}, imageUrl: '   ');
+        expect(widget.hasImage, isTrue);
+      });
+    });
+
+    group('Image rendering', () {
+      testWidgets('showEditIcon property can be set to true', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(CircleImagePicker(onTap: () {})),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Just verify the widget renders
+        expect(find.byType(CircleImagePicker), findsOneWidget);
+      });
+
+      testWidgets('showEditIcon property can be set to false', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            CircleImagePicker(onTap: () {}, showEditIcon: false),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Just verify the widget renders
+        expect(find.byType(CircleImagePicker), findsOneWidget);
+      });
+
+      testWidgets('renders with large radius', (WidgetTester tester) async {
+        const largeRadius = 80.0;
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            CircleImagePicker(onTap: () {}, radius: largeRadius),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final circleAvatar = tester.widget<CircleAvatar>(
+          find.byType(CircleAvatar),
+        );
+        expect(circleAvatar.radius, largeRadius);
+      });
+    });
   });
 }

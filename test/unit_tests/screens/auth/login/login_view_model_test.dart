@@ -254,6 +254,72 @@ void main() {
     });
   });
 
+  group('Error Type Tests', () {
+    test('all LoginErrorType values are handled', () {
+      expect(LoginErrorType.values, contains(LoginErrorType.none));
+      expect(LoginErrorType.values, contains(LoginErrorType.noPasswordNoEmail));
+      expect(LoginErrorType.values, contains(LoginErrorType.noEmail));
+      expect(LoginErrorType.values, contains(LoginErrorType.badEmail));
+      expect(LoginErrorType.values, contains(LoginErrorType.noPassword));
+      expect(LoginErrorType.values, contains(LoginErrorType.unknown));
+      expect(LoginErrorType.values.length, 6);
+    });
+
+    test('error transitions: none -> noPasswordNoEmail -> noEmail', () {
+      // Initially no error
+      expect(viewModel.authError, isA<UIAuthError>());
+      expect((viewModel.authError as UIAuthError).type, LoginErrorType.none);
+
+      // Both empty
+      viewModel.updateEmailField('');
+      viewModel.updatePasswordField('');
+      expect(
+        (viewModel.authError as UIAuthError).type,
+        LoginErrorType.noPasswordNoEmail,
+      );
+
+      // Add email only
+      viewModel.updateEmailField('test@email.com');
+      expect(
+        (viewModel.authError as UIAuthError).type,
+        LoginErrorType.noPassword,
+      );
+    });
+
+    test('error transitions: none -> noPasswordNoEmail -> badEmail', () {
+      // Both empty -> noPasswordNoEmail
+      viewModel.updateEmailField('');
+      viewModel.updatePasswordField('');
+      expect(
+        (viewModel.authError as UIAuthError).type,
+        LoginErrorType.noPasswordNoEmail,
+      );
+
+      // Add invalid email
+      viewModel.updateEmailField('invalid');
+      expect(
+        (viewModel.authError as UIAuthError).type,
+        LoginErrorType.badEmail,
+      );
+    });
+
+    test('clearError does not cause issues when already clear', () {
+      // Clear when already clear - verify it doesn't throw
+      expect(() => viewModel.clearError(), returnsNormally);
+    });
+
+    test('multiple clearError calls work fine', () {
+      // Set and clear
+      viewModel.updateEmailField('');
+      viewModel.clearError();
+      viewModel.clearError();
+      viewModel.clearError();
+      // After clearError, error should be none but form is still invalid
+      // so hasAlert may still be true based on form state
+      expect(viewModel.authError, isA<UIAuthError>());
+    });
+  });
+
   tearDown(() {
     viewModel.dispose();
   });

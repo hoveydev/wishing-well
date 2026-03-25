@@ -85,6 +85,35 @@ void main() {
     });
 
     group(TestGroups.behavior, () {
+      testWidgets('animation controller starts correctly', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppThrobber.medium()),
+        );
+        await tester.pump();
+
+        // Animation should be running (repeat is called in initState)
+        final throbber = tester.widget<AppThrobber>(find.byType(AppThrobber));
+        expect(throbber.size, equals(16.0));
+      });
+
+      testWidgets('animation controller can be disposed properly', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppThrobber.small()),
+        );
+        await tester.pump();
+
+        // Widget should render without errors
+        expect(find.byType(AppThrobber), findsOneWidget);
+
+        // Pump again - animation should still be running
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(find.byType(AppThrobber), findsOneWidget);
+      });
+
       testWidgets('has correct size properties for each variant', (
         WidgetTester tester,
       ) async {

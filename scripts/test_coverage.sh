@@ -2,12 +2,14 @@
 set -e
 
 # -----------------------------------------------------------------------------
-# Run Flutter tests with coverage
+# Run Flutter tests with coverage (unit, widget, AND integration tests)
 # -----------------------------------------------------------------------------
 
 echo "🧪 Running Flutter tests with coverage..."
 echo ""
 
+# Run both regular tests and integration tests with coverage
+# Note: flutter test runs both test/ and integration_test/ directories by default
 flutter test --coverage --reporter compact
 
 echo ""
@@ -28,6 +30,7 @@ EXCLUDES=(
   "*/test_helpers/*"
   "*/test/testing/*"
   "*/features/*/demo/*"
+  # Note: Integration tests are NOT excluded - they count toward coverage
 )
 
 echo "🧹 Removing excluded files from coverage..."

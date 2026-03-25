@@ -18,6 +18,7 @@ const _excludePatterns = [
   'components/demo/demo_app.dart',
   'data/data_sources/',
   '/demo/',
+  // Note: Integration tests are NOT excluded - they count toward coverage
 ];
 
 // Enable test quality analysis during refactoring phase
@@ -223,23 +224,28 @@ Future<bool> _checkCoverage({
   }
 
   // Run tests with coverage
+  // Note: flutter test automatically runs both test/ (unit/widget) and integration_test/
+  // directories, so integration tests will be included in coverage automatically.
   print(
     isNewCodeCoverage
-        ? '🧪 Running tests for changed files only...'
-        : '🧪 Running all tests...',
+        ? '🧪 Running tests for changed files only (including integration tests)...'
+        : '🧪 Running all tests (including integration tests)...',
   );
 
   ProcessResult testResult;
 
   if (isNewCodeCoverage && testFiles.isNotEmpty) {
-    // Run only specific test files
+    // Run specific test files for changed source files
+    // This runs both unit/widget tests AND any related integration tests
+    // (flutter test automatically includes integration_test/ when running test files)
     testResult = await Process.run('flutter', [
       'test',
       '--coverage',
       ...testFiles,
     ], runInShell: true);
   } else {
-    // Run all tests
+    // Run all tests - includes both unit/widget tests AND integration tests
+    // Integration tests in integration_test/ are automatically included
     testResult = await Process.run('flutter', [
       'test',
       '--coverage',

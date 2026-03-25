@@ -547,6 +547,134 @@ dart run git_hooks.dart pre-commit  # Run pre-commit quality checks
 - **TestGroups**: Centralized test group naming constants
 - Located in `lib/test_helpers/helpers/test_helpers.dart`
 
+## Integration Tests
+
+### Overview
+
+The project includes a dedicated integration test framework for testing complete user flows and multi-screen interactions. Integration tests run on a real device or emulator and test the full application stack.
+
+### Directory Structure
+
+```
+integration_test/
+├── base/                    # Base classes for integration tests
+│   └── integration_test_base.dart
+├── helpers/                 # Test utilities and helpers
+│   ├── app_test_wrapper.dart
+│   ├── integration_finders.dart
+│   ├── integration_test_groups.dart
+│   └── helpers.dart         # Barrel export
+├── mocks/                   # Mock implementations
+│   ├── integration_mock_auth_repository.dart
+│   ├── integration_mock_wisher_repository.dart
+│   └── mocks.dart           # Barrel export
+├── providers/               # Provider configurations
+│   ├── integration_test_providers.dart
+│   └── providers.dart       # Barrel export
+├── integration_test.dart   # Main barrel export with documentation
+└── example_integration_test.dart  # Usage examples
+```
+
+### When to Use Integration Tests
+
+Integration tests are appropriate for:
+- **End-to-end user flows** (login → home → create wisher → logout)
+- **Navigation testing** across multiple screens
+- **Complex state interactions** between multiple providers
+- **Testing with actual go_router navigation**
+- **Cross-screen user journeys**
+
+Use unit/widget tests for:
+- Individual component logic
+- ViewModel business logic
+- Single screen rendering
+- Repository method testing
+
+### Framework Components
+
+**Base Classes:**
+- `IntegrationTestBase` - Base class with common setUp/tearDown
+- `AppTestWrapper` - Quick app launching wrapper
+
+**Helpers:**
+- `IntegrationFinders` - Common widget finding patterns
+- `IntegrationAssertions` - Common assertion helpers
+- `IntegrationTestGroups` - Test group naming constants (authentication, navigation, userJourneys, etc.)
+
+**Mocks:**
+- `IntegrationMockAuthRepository` - Auth repository mock with call tracking
+- `IntegrationMockWisherRepository` - Wisher repository mock with call tracking
+
+**Providers:**
+- `quickAuthMock()` - Pre-configured successful auth mock
+- `quickWisherMock()` - Pre-configured wisher mock
+- `withMockedAuth()` - Provider configuration with auth mock
+- `withMockedRepositories()` - Provider configuration with both mocks
+
+### Running Integration Tests
+
+```bash
+# Run all integration tests
+flutter test integration_test/
+
+# Run specific integration test file
+flutter test integration_test/my_test.dart
+
+# Run integration tests with coverage (included in overall coverage)
+flutter test integration_test/ --coverage
+
+# Using the provided script
+./scripts/run_integration_tests.sh
+./scripts/run_integration_tests.sh auth_flows_test.dart
+./scripts/run_integration_tests.sh --coverage
+```
+
+### Integration Test Example
+
+```dart
+import 'package:integration_test/integration_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:wishing_well/integration_test/base/base.dart';
+import 'package:wishing_well/integration_test/providers/providers.dart';
+import 'package:wishing_well/integration_test/mocks/mocks.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Authentication Flow', () {
+    testWidgets('user can login and view home', (WidgetTester tester) async {
+      // Set up mocks
+      final authMock = quickAuthMock(userId: 'test-user-123');
+
+      // Create providers
+      final providers = withMockedAuth(authRepository: authMock);
+
+      // Build app with providers
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: providers,
+          child: MaterialApp(home: MyTestScreen()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Test assertions
+      expect(find.text('Welcome'), findsOneWidget);
+    });
+  });
+}
+```
+
+### Coverage and Integration Tests
+
+Integration tests contribute to the overall code coverage:
+- **New code coverage** (pre-commit): Includes integration tests when relevant tests run
+- **Overall coverage** (`./scripts/test_coverage.sh`): Includes all integration tests
+
+Integration tests are **not** excluded from coverage calculations.
+
 ## Coverage Requirements
 
 ### Dual Threshold System

@@ -83,9 +83,15 @@ wishing_well/
 ├── scripts/
 │   ├── analyze_tests.sh            # Test quality analysis tool
 │   ├── test_coverage.sh            # Coverage reporting script
+│   ├── run_integration_tests.sh    # Integration test runner
 │   └── add_component.sh            # Automated component creation script
+├── integration_test/                # Integration test framework
+│   ├── base/                       # Base classes for integration tests
+│   ├── helpers/                    # Test utilities and finders
+│   ├── mocks/                      # Mock implementations
+│   └── providers/                  # Provider configurations
 ├── lib/testing/
-│   ├── ui_tests/                   # Widget and integration tests
+│   ├── ui_tests/                   # Widget tests
 │   └── unit_tests/                 # Pure unit tests
 ├── lib/test_helpers/              # Test helpers and mocks (at project root)
 │   ├── helpers/                    # Test infrastructure

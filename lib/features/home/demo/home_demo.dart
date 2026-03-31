@@ -19,7 +19,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 // - manyWishers: 50 wishers (some with images)
 // - brokenImages: Wishers with broken/invalid image URLs
 // - failure: Empty with error handling
-const HomeDemoScenario _scenario = HomeDemoScenario.failure;
+const HomeDemoScenario _scenario = HomeDemoScenario.defaultWishers;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

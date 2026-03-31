@@ -12,6 +12,10 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
+// Available scenarios:
+// - success: Creates wisher with image (shows in success overlay)
+// - error: Shows error on save
+// - loading: Shows loading state during save
 const AddWisherDemoScenario _scenario = AddWisherDemoScenario.success;
 
 Future<void> main() async {

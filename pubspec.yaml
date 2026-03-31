@@ -7,12 +7,14 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
+  cached_network_image: ^3.4.1
   coverage: ^1.15.0
   dotted_border: ^3.1.0
   file_picker: ^8.0.3
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.0
+  flutter_image_compress: ^2.3.0
   flutter_localizations:
     sdk: flutter
   git_hooks: ^1.0.2
@@ -25,6 +27,7 @@ dependencies:
   provider: ^6.1.5+1
   supabase_flutter: ^2.10.3
   uni_links: ^0.5.1
+  uuid: ^4.5.1
 dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:

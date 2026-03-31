@@ -6,11 +6,13 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 
 GoRouter addWisherDemoRouter(
   AuthRepository authRepository,
   WisherRepository wisherRepository,
+  ImageRepository imageRepository,
 ) => GoRouter(
   initialLocation: Routes.addWisher.path,
   routes: [
@@ -30,6 +32,7 @@ GoRouter addWisherDemoRouter(
               viewModel: AddWisherDetailsViewModel(
                 wisherRepository: wisherRepository,
                 authRepository: authRepository,
+                imageRepository: imageRepository,
               ),
             ),
             transitionsBuilder: slideInRightTransition,

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/dotted_border_config.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
@@ -44,6 +46,15 @@ class CircleImagePicker extends StatelessWidget {
   /// Whether an image is available (either local or remote)
   bool get hasImage =>
       imageFile != null || (imageUrl != null && imageUrl!.isNotEmpty);
+
+  /// Get auth headers for loading private images
+  Map<String, String> get _authHeaders {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session != null) {
+      return {'Authorization': 'Bearer ${session.accessToken}'};
+    }
+    return {};
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,36 +102,88 @@ class CircleImagePicker extends StatelessWidget {
   Widget _buildImageAvatar(BuildContext context) {
     final colorScheme = context.colorScheme;
 
-    // Prefer local file, then fall back to remote URL
-    final ImageProvider? backgroundImage = imageFile != null
-        ? FileImage(imageFile!)
-        : (imageUrl != null ? NetworkImage(imageUrl!) : null);
-
-    return Stack(
-      children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundColor: colorScheme.primary,
-          backgroundImage: backgroundImage,
-          child: backgroundImage == null
-              ? Icon(Icons.person, size: 24, color: colorScheme.onPrimary)
-              : null,
-        ),
-        if (showEditIcon)
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: CircleAvatar(
-              radius: radius * 0.32,
-              backgroundColor: colorScheme.surfaceGray,
-              child: Icon(
-                Icons.edit,
-                size: radius * 0.32,
-                color: colorScheme.primary,
+    // Prefer local file, then use CachedNetworkImage for remote URL
+    if (imageFile != null) {
+      return Stack(
+        children: [
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: colorScheme.primary,
+            backgroundImage: FileImage(imageFile!),
+          ),
+          if (showEditIcon)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CircleAvatar(
+                radius: radius * 0.32,
+                backgroundColor: colorScheme.surfaceGray,
+                child: Icon(
+                  Icons.edit,
+                  size: radius * 0.32,
+                  color: colorScheme.primary,
+                ),
               ),
             ),
+        ],
+      );
+    }
+
+    // Remote URL with caching
+    return CachedNetworkImage(
+      imageUrl: imageUrl!,
+      httpHeaders: _authHeaders,
+      imageBuilder: (context, imageProvider) => Stack(
+        children: [
+          CircleAvatar(radius: radius, backgroundImage: imageProvider),
+          if (showEditIcon)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CircleAvatar(
+                radius: radius * 0.32,
+                backgroundColor: colorScheme.surfaceGray,
+                child: Icon(
+                  Icons.edit,
+                  size: radius * 0.32,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+        ],
+      ),
+      placeholder: (context, url) => Stack(
+        children: [
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: colorScheme.primary,
+            child: Icon(Icons.person, size: 24, color: colorScheme.onPrimary),
           ),
-      ],
+        ],
+      ),
+      errorWidget: (context, url, error) => Stack(
+        children: [
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: colorScheme.primary,
+            child: Icon(Icons.person, size: 24, color: colorScheme.onPrimary),
+          ),
+          if (showEditIcon)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CircleAvatar(
+                radius: radius * 0.32,
+                backgroundColor: colorScheme.surfaceGray,
+                child: Icon(
+                  Icons.edit,
+                  size: radius * 0.32,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

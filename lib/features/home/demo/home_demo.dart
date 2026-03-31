@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/home/demo/home_demo_providers.dart';
 import 'package:wishing_well/features/home/demo/home_demo_router.dart';
@@ -13,14 +14,16 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 // Available scenarios:
 // - noWishers: Empty wishers list
-// - fewWishers: 2 wishers
-// - defaultWishers: 5 wishers
-// - manyWishers: 50 wishers
+// - fewWishers: 2 wishers (some with images)
+// - defaultWishers: 5 wishers (mix of with/without images)
+// - manyWishers: 50 wishers (some with images)
+// - brokenImages: Wishers with broken/invalid image URLs
 // - failure: Empty with error handling
-const HomeDemoScenario _scenario = HomeDemoScenario.manyWishers;
+const HomeDemoScenario _scenario = HomeDemoScenario.failure;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MultiProvider(
       providers: getHomeDemoProviders(scenario: _scenario),
@@ -28,7 +31,8 @@ Future<void> main() async {
         builder: (context) {
           final authRepo = context.read<AuthRepository>();
           final wisherRepo = context.read<WisherRepository>();
-          final router = homeDemoRouter(authRepo, wisherRepo);
+          final imageRepo = context.read<ImageRepository>();
+          final router = homeDemoRouter(authRepo, wisherRepo, imageRepo);
           return _DemoApp(router: router);
         },
       ),

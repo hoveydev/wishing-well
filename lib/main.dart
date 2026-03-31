@@ -38,7 +38,7 @@ enum AppRunConfig {
 }
 
 /// Current run configuration - change this to run different demos
-const AppRunConfig _runConfig = AppRunConfig.production;
+const AppRunConfig _runConfig = AppRunConfig.homeDemo;
 
 /// Current environment for the app.
 ///

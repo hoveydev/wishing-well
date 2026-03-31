@@ -137,16 +137,6 @@ void main() {
       testWidgets('shows profile picture when available', (
         WidgetTester tester,
       ) async {
-        // Override FlutterError.onError to
-        // suppress network image errors in tests
-        final originalOnError = FlutterError.onError;
-        FlutterError.onError = (FlutterErrorDetails details) {
-          // Ignore network image load errors
-          if (!details.toString().contains('NetworkImageLoadException')) {
-            originalOnError?.call(details);
-          }
-        };
-
         final wisherWithPic = createTestWisher(
           profilePicture: 'https://example.com/photo.jpg',
         );
@@ -159,20 +149,16 @@ void main() {
         await tester.pump();
         await tester.pump(const Duration(seconds: 1));
 
-        final circleAvatar = tester.widget<CircleAvatar>(
-          find.byType(CircleAvatar),
+        // The profile picture is shown using Image.network in a Stack
+        final imageFinder = find.byType(Image);
+        expect(imageFinder, findsOneWidget);
+
+        // Verify the image widget has the correct URL
+        final image = tester.widget<Image>(imageFinder);
+        expect(
+          (image.image as NetworkImage).url,
+          'https://example.com/photo.jpg',
         );
-
-        // Verify the backgroundImage is a NetworkImage with the correct URL
-        expect(circleAvatar.backgroundImage, isA<NetworkImage>());
-        final networkImage = circleAvatar.backgroundImage as NetworkImage;
-        expect(networkImage.url, 'https://example.com/photo.jpg');
-
-        // When profile picture is set, child should be null (initial not shown)
-        expect(circleAvatar.child, isNull);
-
-        // Restore original error handler
-        FlutterError.onError = originalOnError;
       });
 
       testWidgets('shows initial when no profile picture', (

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -16,14 +17,17 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
   HomeViewModel({
     required AuthRepository authRepository,
     required WisherRepository wisherRepository,
+    required ImageRepository imageRepository,
   }) : _authRepository = authRepository,
-       _wisherRepository = wisherRepository {
+       _wisherRepository = wisherRepository,
+       _imageRepository = imageRepository {
     // Listen to repository changes and forward them to our listeners
     _wisherRepository.addListener(_onRepositoryChanged);
   }
 
   final AuthRepository _authRepository;
   final WisherRepository _wisherRepository;
+  final ImageRepository _imageRepository;
   Object? _wisherError;
 
   @override
@@ -57,7 +61,20 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
     if (result case Error(:final error)) {
       _wisherError = error;
       notifyListeners();
+      return result;
     }
+
+    // Preload all profile pictures after fetching wishers
+    // We await this so images are ready before UI shows
+    final imageUrls = wishers
+        .where((w) => w.profilePicture != null)
+        .map((w) => w.profilePicture!)
+        .toList();
+
+    if (imageUrls.isNotEmpty) {
+      await _imageRepository.preloadImages(imageUrls);
+    }
+
     return result;
   }
 

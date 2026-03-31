@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -8,15 +9,18 @@ void main() {
   group('HomeViewModel', () {
     late MockAuthRepository mockAuthRepository;
     late MockWisherRepository mockWisherRepository;
+    late MockImageRepository mockImageRepository;
     late HomeViewModel viewModel;
 
     setUp(() {
       mockAuthRepository = MockAuthRepository();
       mockWisherRepository = MockWisherRepository();
+      mockImageRepository = MockImageRepository();
 
       viewModel = HomeViewModel(
         authRepository: mockAuthRepository,
         wisherRepository: mockWisherRepository,
+        imageRepository: mockImageRepository,
       );
     });
 
@@ -63,6 +67,7 @@ void main() {
       viewModel = HomeViewModel(
         authRepository: mockAuthRepository,
         wisherRepository: mockWisherRepository,
+        imageRepository: mockImageRepository,
       );
     });
 
@@ -123,6 +128,7 @@ void main() {
         final failingViewModel = HomeViewModel(
           authRepository: mockAuthRepository,
           wisherRepository: failingMockWisherRepository,
+          imageRepository: mockImageRepository,
         );
 
         // Act
@@ -144,6 +150,7 @@ void main() {
         final failingViewModel = HomeViewModel(
           authRepository: mockAuthRepository,
           wisherRepository: failingMockWisherRepository,
+          imageRepository: mockImageRepository,
         );
         await failingViewModel.fetchWishers();
         expect(failingViewModel.hasWisherError, isTrue);
@@ -155,6 +162,7 @@ void main() {
         final successViewModel = HomeViewModel(
           authRepository: mockAuthRepository,
           wisherRepository: successMockWisherRepository,
+          imageRepository: mockImageRepository,
         );
 
         // Act - Fetch succeeds
@@ -177,6 +185,7 @@ void main() {
         final failingViewModel = HomeViewModel(
           authRepository: mockAuthRepository,
           wisherRepository: failingMockWisherRepository,
+          imageRepository: mockImageRepository,
         );
 
         var notificationCount = 0;

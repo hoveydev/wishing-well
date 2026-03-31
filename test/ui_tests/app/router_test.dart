@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
@@ -22,6 +23,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 
 Widget startAppWithRouter(GoRouter router) => MultiProvider(
@@ -29,6 +31,9 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
     ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
     ChangeNotifierProvider<WisherRepository>(
       create: (_) => MockWisherRepository(),
+    ),
+    ChangeNotifierProvider<ImageRepository>(
+      create: (_) => MockImageRepository(),
     ),
     ChangeNotifierProvider<LoadingController>(
       create: (_) => LoadingController(),

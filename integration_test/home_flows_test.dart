@@ -13,6 +13,7 @@ import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'helpers/integration_test_groups.dart';
+import 'mocks/mocks.dart';
 import 'mocks/integration_mock_wisher_repository.dart';
 import 'providers/integration_test_providers.dart';
 
@@ -63,6 +64,7 @@ void main() {
               viewModel: HomeViewModel(
                 authRepository: authMock,
                 wisherRepository: wisherMock,
+                imageRepository: IntegrationMockImageRepository(),
               ),
             ),
           ),
@@ -110,6 +112,7 @@ void main() {
               viewModel: HomeViewModel(
                 authRepository: authMock,
                 wisherRepository: wisherMock,
+                imageRepository: IntegrationMockImageRepository(),
               ),
             ),
           ),
@@ -163,6 +166,7 @@ void main() {
               viewModel: HomeViewModel(
                 authRepository: authMock,
                 wisherRepository: wisherMock,
+                imageRepository: IntegrationMockImageRepository(),
               ),
             ),
           ),

@@ -76,6 +76,7 @@ GoRouter router() => GoRouter(
           viewModel: HomeViewModel(
             authRepository: context.read(),
             wisherRepository: context.read(),
+            imageRepository: context.read(),
           ),
         ),
         transitionsBuilder: noTransition,
@@ -105,6 +106,7 @@ GoRouter router() => GoRouter(
               viewModel: AddWisherDetailsViewModel(
                 wisherRepository: context.read(),
                 authRepository: context.read(),
+                imageRepository: context.read(),
               ),
             ),
             transitionsBuilder: slideInRightTransition,

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_providers.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_router.dart';
@@ -11,6 +12,10 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
+// Available scenarios:
+// - success: Creates wisher with image (shows in success overlay)
+// - error: Shows error on save
+// - loading: Shows loading state during save
 const AddWisherDemoScenario _scenario = AddWisherDemoScenario.success;
 
 Future<void> main() async {
@@ -22,7 +27,8 @@ Future<void> main() async {
         builder: (context) {
           final authRepo = context.read<AuthRepository>();
           final wisherRepo = context.read<WisherRepository>();
-          final router = addWisherDemoRouter(authRepo, wisherRepo);
+          final imageRepo = context.read<ImageRepository>();
+          final router = addWisherDemoRouter(authRepo, wisherRepo, imageRepo);
           return _DemoApp(router: router);
         },
       ),

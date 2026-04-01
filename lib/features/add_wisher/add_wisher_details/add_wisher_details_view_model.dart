@@ -6,8 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -29,6 +32,7 @@ enum AddWisherDetailsErrorType {
   firstNameRequired,
   lastNameRequired,
   bothNamesRequired,
+  invalidImage,
   unknown,
 }
 
@@ -42,11 +46,14 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   AddWisherDetailsViewModel({
     required WisherRepository wisherRepository,
     required AuthRepository authRepository,
+    required ImageRepository imageRepository,
   }) : _wisherRepository = wisherRepository,
-       _authRepository = authRepository;
+       _authRepository = authRepository,
+       _imageRepository = imageRepository;
 
   final WisherRepository _wisherRepository;
   final AuthRepository _authRepository;
+  final ImageRepository _imageRepository;
 
   String _firstName = '';
   String _lastName = '';
@@ -147,10 +154,45 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       return;
     }
 
+    // Upload the profile picture to Supabase Storage if an image was selected
+    String? profilePictureUrl;
+    if (_imageFile != null) {
+      AppLogger.debug(
+        'Uploading profile picture...',
+        context: 'AddWisherDetailsViewModel.tapSaveButton',
+      );
+
+      try {
+        profilePictureUrl = await _imageRepository.uploadImage(
+          filePath: _imageFile!.path,
+          bucketName: AppConfig.profilePicturesBucket,
+          folder: userId,
+        );
+
+        if (profilePictureUrl == null) {
+          AppLogger.warning(
+            'Failed to upload profile picture, continuing without it',
+            context: 'AddWisherDetailsViewModel.tapSaveButton',
+          );
+        }
+      } on ImageValidationException catch (e) {
+        AppLogger.warning(
+          'Invalid image file: ${e.message}',
+          context: 'AddWisherDetailsViewModel.tapSaveButton',
+        );
+        _error = const AddWisherDetailsError(
+          AddWisherDetailsErrorType.invalidImage,
+        );
+        loading.showError(e.message, onOk: clearError);
+        return;
+      }
+    }
+
     final response = await _wisherRepository.createWisher(
       userId: userId,
       firstName: _firstName,
       lastName: _lastName,
+      profilePicture: profilePictureUrl,
     );
 
     switch (response) {
@@ -159,6 +201,12 @@ class AddWisherDetailsViewModel extends ChangeNotifier
           'Wisher created successfully: ${value.id}',
           context: 'AddWisherDetailsViewModel.tapSaveButton',
         );
+
+        // Preload the new image for instant display on home screen
+        if (profilePictureUrl != null) {
+          await _imageRepository.preloadImages([profilePictureUrl]);
+        }
+
         // Show success message with wisher's name and optional photo
         loading.showSuccess(
           l10n.wisherCreatedSuccess(value.name),

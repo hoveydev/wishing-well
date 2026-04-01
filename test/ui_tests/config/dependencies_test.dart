@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository_impl.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -16,8 +17,8 @@ import 'package:wishing_well/test_helpers/mocks/mock_supabase_client_for_deps.da
 void main() {
   group('Dependencies', () {
     group(TestGroups.initialState, () {
-      test('providersRemote contains exactly 3 providers', () {
-        expect(providersRemote.length, 3);
+      test('providersRemote contains exactly 4 providers', () {
+        expect(providersRemote.length, 4);
       });
 
       test('providersRemote has correct provider types in order', () {
@@ -29,6 +30,10 @@ void main() {
         expect(
           providersRemote[2],
           isA<ChangeNotifierProvider<WisherRepository>>(),
+        );
+        expect(
+          providersRemote[3],
+          isA<ChangeNotifierProvider<ImageRepository>>(),
         );
       });
     });

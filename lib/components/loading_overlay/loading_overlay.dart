@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -222,17 +223,11 @@ class _OverlayContent extends StatelessWidget {
             // Show image for success, icon for error
             if (controller.isSuccess &&
                 (imageUrl != null || localImageFile != null))
-              CircleAvatar(
+              ProfileImageWithLabel(
+                imageUrl: imageUrl,
+                localImageFile: localImageFile,
+                name: name ?? '',
                 radius: const AppIconSize().overlayIcon / 2,
-                backgroundImage: imageUrl != null
-                    ? NetworkImage(imageUrl)
-                    : FileImage(localImageFile!),
-              )
-            else if (controller.isSuccess)
-              Icon(
-                icon,
-                size: const AppIconSize().overlayIcon,
-                color: iconColor,
               )
             else
               Icon(

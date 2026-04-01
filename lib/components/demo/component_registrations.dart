@@ -47,6 +47,7 @@ import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
+import 'package:wishing_well/components/demo/demos/profile_image_demo.dart';
 
 /// Registers all component demos with the registry.
 ///
@@ -197,6 +198,15 @@ void registerAllDemos() {
         'Modal bottom sheet for selecting image source (photo or file)',
   );
 
+  ComponentDemoRegistry.register(
+    componentName: 'profile_image',
+    title: 'Profile Image',
+    icon: Icons.account_circle,
+    demoBuilder: (_) => const ProfileImageDemo(),
+    description:
+        'Reusable profile image component with auth support for private bucket',
+  );
+
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -225,6 +235,7 @@ void registerAllDemos() {
     'wishers', // Wisher list component
     'image_picker_circle', // Image picker component
     'image_source_menu', // Image source menu component
+    'profile_image', // Profile image component with auth support
   ];
 
   // Verify that all required components have been registered

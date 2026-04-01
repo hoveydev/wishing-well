@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 
@@ -137,16 +138,6 @@ void main() {
       testWidgets('shows profile picture when available', (
         WidgetTester tester,
       ) async {
-        // Override FlutterError.onError to
-        // suppress network image errors in tests
-        final originalOnError = FlutterError.onError;
-        FlutterError.onError = (FlutterErrorDetails details) {
-          // Ignore network image load errors
-          if (!details.toString().contains('NetworkImageLoadException')) {
-            originalOnError?.call(details);
-          }
-        };
-
         final wisherWithPic = createTestWisher(
           profilePicture: 'https://example.com/photo.jpg',
         );
@@ -159,20 +150,13 @@ void main() {
         await tester.pump();
         await tester.pump(const Duration(seconds: 1));
 
-        final circleAvatar = tester.widget<CircleAvatar>(
-          find.byType(CircleAvatar),
-        );
+        // The profile picture is shown using CachedNetworkImage
+        final imageFinder = find.byType(CachedNetworkImage);
+        expect(imageFinder, findsOneWidget);
 
-        // Verify the backgroundImage is a NetworkImage with the correct URL
-        expect(circleAvatar.backgroundImage, isA<NetworkImage>());
-        final networkImage = circleAvatar.backgroundImage as NetworkImage;
-        expect(networkImage.url, 'https://example.com/photo.jpg');
-
-        // When profile picture is set, child should be null (initial not shown)
-        expect(circleAvatar.child, isNull);
-
-        // Restore original error handler
-        FlutterError.onError = originalOnError;
+        // Verify the image widget has the correct URL
+        final image = tester.widget<CachedNetworkImage>(imageFinder);
+        expect(image.imageUrl, 'https://example.com/photo.jpg');
       });
 
       testWidgets('shows initial when no profile picture', (

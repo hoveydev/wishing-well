@@ -5,6 +5,8 @@ import 'package:wishing_well/data/data_sources/auth/auth_data_source_supabase.da
 import 'package:wishing_well/data/data_sources/wisher/wisher_data_source_supabase.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
+import 'package:wishing_well/data/repositories/image/image_repository.dart';
+import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository_impl.dart';
 
@@ -24,5 +26,10 @@ List<SingleChildWidget> get providersRemote => [
     create: (context) => WisherRepositoryImpl(
       dataSource: WisherDataSourceSupabase(supabase: context.read()),
     ),
+  ),
+
+  // Storage repository for file uploads
+  ChangeNotifierProvider<ImageRepository>(
+    create: (context) => ImageRepositoryImpl(supabase: context.read()),
   ),
 ];

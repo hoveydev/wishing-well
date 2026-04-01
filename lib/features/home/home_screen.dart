@@ -18,22 +18,41 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    // Fetch wishers after the current build frame completes
+    WidgetsBinding.instance.addObserver(this);
+    // Fetch wishers after the widget tree is fully built
     // to avoid calling notifyListeners during build
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final result = await widget.viewModel.fetchWishers();
-      if (result case Error(:final error)) {
-        AppLogger.error(
-          'Failed to fetch wishers on home screen init',
-          context: 'HomeScreen',
-          error: error,
-        );
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchWishers();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Refresh wishers when app comes back to foreground
+    if (state == AppLifecycleState.resumed) {
+      _fetchWishers();
+    }
+  }
+
+  Future<void> _fetchWishers() async {
+    final result = await widget.viewModel.fetchWishers();
+    if (result case Error(:final error)) {
+      AppLogger.error(
+        'Failed to fetch wishers on home screen init',
+        context: 'HomeScreen',
+        error: error,
+      );
+    }
   }
 
   @override

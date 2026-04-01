@@ -34,6 +34,10 @@ class AppConfig {
   static String get accountConfirmUrl => _getOrThrow('ACCOUNT_CONFIRM_URL');
   static String get passwordResetUrl => _getOrThrow('PASSWORD_RESET_URL');
 
+  // Storage bucket names
+  static String get profilePicturesBucket =>
+      _getOrDefault('STORAGE_PROFILE_PICTURES_BUCKET', 'profile-pictures');
+
   static Environment get environment => _environment;
   static bool get isTest => _environment == Environment.test;
   static bool get isLocal => _environment == Environment.local;

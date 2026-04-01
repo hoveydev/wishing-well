@@ -5,6 +5,7 @@ import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 
 void main() {
@@ -17,6 +18,7 @@ void main() {
       viewModel = AddWisherDetailsViewModel(
         wisherRepository: mockRepository,
         authRepository: MockAuthRepository(),
+        imageRepository: MockImageRepository(),
       );
     });
 
@@ -230,7 +232,7 @@ void main() {
       });
 
       test('all error types are accounted for', () {
-        expect(AddWisherDetailsErrorType.values.length, 5);
+        expect(AddWisherDetailsErrorType.values.length, 6);
         expect(
           AddWisherDetailsErrorType.values,
           contains(AddWisherDetailsErrorType.none),
@@ -250,6 +252,10 @@ void main() {
         expect(
           AddWisherDetailsErrorType.values,
           contains(AddWisherDetailsErrorType.unknown),
+        );
+        expect(
+          AddWisherDetailsErrorType.values,
+          contains(AddWisherDetailsErrorType.invalidImage),
         );
       });
     });
@@ -332,6 +338,7 @@ void main() {
         final vm = AddWisherDetailsViewModel(
           wisherRepository: successRepo,
           authRepository: MockAuthRepository(),
+          imageRepository: MockImageRepository(),
         );
         addTearDown(vm.dispose);
 
@@ -347,6 +354,7 @@ void main() {
         final vm = AddWisherDetailsViewModel(
           wisherRepository: errorRepo,
           authRepository: MockAuthRepository(),
+          imageRepository: MockImageRepository(),
         );
         addTearDown(vm.dispose);
 
@@ -369,6 +377,7 @@ void main() {
         final vm = AddWisherDetailsViewModel(
           wisherRepository: repo,
           authRepository: MockAuthRepository(),
+          imageRepository: MockImageRepository(),
         );
         addTearDown(vm.dispose);
 

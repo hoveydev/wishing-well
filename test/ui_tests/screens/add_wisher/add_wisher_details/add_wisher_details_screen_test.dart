@@ -13,6 +13,7 @@ import 'package:wishing_well/theme/app_theme.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -27,6 +28,7 @@ void main() {
       viewModel = AddWisherDetailsViewModel(
         wisherRepository: MockWisherRepository(),
         authRepository: MockAuthRepository(),
+        imageRepository: MockImageRepository(),
       );
       loadingController = LoadingController();
       router = GoRouter(

@@ -1,9 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -201,15 +200,6 @@ class _OverlayContent extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
 
-  /// Get auth headers for loading private images
-  Map<String, String> get _authHeaders {
-    final session = Supabase.instance.client.auth.currentSession;
-    if (session != null) {
-      return {'Authorization': 'Bearer ${session.accessToken}'};
-    }
-    return {};
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -233,35 +223,11 @@ class _OverlayContent extends StatelessWidget {
             // Show image for success, icon for error
             if (controller.isSuccess &&
                 (imageUrl != null || localImageFile != null))
-              imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      httpHeaders: _authHeaders,
-                      imageBuilder: (context, imageProvider) => CircleAvatar(
-                        radius: const AppIconSize().overlayIcon / 2,
-                        backgroundImage: imageProvider,
-                      ),
-                      placeholder: (context, url) => CircleAvatar(
-                        radius: const AppIconSize().overlayIcon / 2,
-                        child: const CircularProgressIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => CircleAvatar(
-                        radius: const AppIconSize().overlayIcon / 2,
-                        child: Icon(
-                          icon,
-                          size: const AppIconSize().overlayIcon,
-                        ),
-                      ),
-                    )
-                  : CircleAvatar(
-                      radius: const AppIconSize().overlayIcon / 2,
-                      backgroundImage: FileImage(localImageFile!),
-                    )
-            else if (controller.isSuccess)
-              Icon(
-                icon,
-                size: const AppIconSize().overlayIcon,
-                color: iconColor,
+              ProfileImageWithLabel(
+                imageUrl: imageUrl,
+                localImageFile: localImageFile,
+                name: name ?? '',
+                radius: const AppIconSize().overlayIcon / 2,
               )
             else
               Icon(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 
@@ -149,16 +150,13 @@ void main() {
         await tester.pump();
         await tester.pump(const Duration(seconds: 1));
 
-        // The profile picture is shown using Image.network in a Stack
-        final imageFinder = find.byType(Image);
+        // The profile picture is shown using CachedNetworkImage
+        final imageFinder = find.byType(CachedNetworkImage);
         expect(imageFinder, findsOneWidget);
 
         // Verify the image widget has the correct URL
-        final image = tester.widget<Image>(imageFinder);
-        expect(
-          (image.image as NetworkImage).url,
-          'https://example.com/photo.jpg',
-        );
+        final image = tester.widget<CachedNetworkImage>(imageFinder);
+        expect(image.imageUrl, 'https://example.com/photo.jpg');
       });
 
       testWidgets('shows initial when no profile picture', (

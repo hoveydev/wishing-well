@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 

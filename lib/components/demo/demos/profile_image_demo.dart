@@ -16,191 +16,181 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
   String? _imageUrl;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile Image'),
-        backgroundColor: Colors.pink.withValues(alpha: 0.1),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Interactive Demo
-            _buildSection('Interactive Demo', [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'ProfileImage:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Center(
-                        child: ProfileImage(
-                          imageUrl: _imageUrl,
-                          firstName: _firstName,
-                          radius: _radius,
-                          showEditIcon: _showEditIcon,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ]),
-
-            // Controls
-            _buildSection('Controls', [
-              _buildTextField(
-                'First Name',
-                _firstName,
-                (v) => setState(() => _firstName = v),
-              ),
-              _buildTextField(
-                'Last Name',
-                _lastName,
-                (v) => setState(() => _lastName = v),
-              ),
-              _buildTextField(
-                'Image URL (optional)',
-                _imageUrl ?? '',
-                (v) => setState(() => _imageUrl = v.isEmpty ? null : v),
-              ),
-              _buildSlider(
-                'Radius',
-                _radius,
-                20,
-                80,
-                (v) => setState(() => _radius = v),
-              ),
-              _buildSwitch(
-                'Show Edit Icon',
-                _showEditIcon,
-                (v) => setState(() => _showEditIcon = v),
-              ),
-            ]),
-
-            // ProfileAvatar
-            _buildSection('ProfileAvatar (simpler version for lists)', [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'With image:',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 8),
-                      ProfileAvatar(
-                        imageUrl: _imageUrl,
-                        firstName: _firstName,
-                        lastName: _lastName,
-                        radius: 30,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Without image (fallback to initials):',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 8),
-                      ProfileAvatar(
-                        firstName: _firstName,
-                        lastName: _lastName,
-                        radius: 30,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ]),
-
-            // ProfileImageWithLabel
-            _buildSection(
-              'ProfileImageWithLabel (for success/error overlays)',
-              [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                      child: ProfileImageWithLabel(
-                        imageUrl: _imageUrl,
-                        name: '$_firstName $_lastName'.trim(),
-                        radius: 40,
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Profile Image'),
+      backgroundColor: Colors.pink.withValues(alpha: 0.1),
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Interactive Demo
+          _buildSection('Interactive Demo', [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      'ProfileImage:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: ProfileImage(
+                        imageUrl: _imageUrl,
+                        firstName: _firstName,
+                        radius: _radius,
+                        showEditIcon: _showEditIcon,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
+          ]),
 
-            // Sizes Comparison
-            _buildSection('Size Variations', [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          ProfileAvatar(firstName: 'A', radius: 20),
-                          const SizedBox(height: 4),
-                          const Text('20px', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          ProfileAvatar(firstName: 'B', radius: 30),
-                          const SizedBox(height: 4),
-                          const Text('30px', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          ProfileAvatar(firstName: 'C', radius: 40),
-                          const SizedBox(height: 4),
-                          const Text('40px', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          ProfileAvatar(firstName: 'D', radius: 50),
-                          const SizedBox(height: 4),
-                          const Text('50px', style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                    ],
+          // Controls
+          _buildSection('Controls', [
+            _buildTextField(
+              'First Name',
+              _firstName,
+              (v) => setState(() => _firstName = v),
+            ),
+            _buildTextField(
+              'Last Name',
+              _lastName,
+              (v) => setState(() => _lastName = v),
+            ),
+            _buildTextField(
+              'Image URL (optional)',
+              _imageUrl ?? '',
+              (v) => setState(() => _imageUrl = v.isEmpty ? null : v),
+            ),
+            _buildSlider(
+              'Radius',
+              _radius,
+              20,
+              80,
+              (v) => setState(() => _radius = v),
+            ),
+            _buildSwitch(
+              'Show Edit Icon',
+              _showEditIcon,
+              (v) => setState(() => _showEditIcon = v),
+            ),
+          ]),
+
+          // ProfileAvatar
+          _buildSection('ProfileAvatar (simpler version for lists)', [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      'With image:',
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 8),
+                    ProfileAvatar(
+                      imageUrl: _imageUrl,
+                      firstName: _firstName,
+                      lastName: _lastName,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Without image (fallback to initials):',
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 8),
+                    ProfileAvatar(firstName: _firstName, lastName: _lastName),
+                  ],
+                ),
+              ),
+            ),
+          ]),
+
+          // ProfileImageWithLabel
+          _buildSection('ProfileImageWithLabel (for success/error overlays)', [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: ProfileImageWithLabel(
+                    imageUrl: _imageUrl,
+                    name: '$_firstName $_lastName'.trim(),
                   ),
                 ),
               ),
-            ]),
+            ),
+          ]),
 
-            // Features
-            _buildSection('Features', [
-              const _FeatureBulletPoint(text: 'Supports local file display'),
-              const _FeatureBulletPoint(
-                text: 'Supports remote URL with auth headers',
+          // Sizes Comparison
+          _buildSection('Size Variations', [
+            const Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        ProfileAvatar(firstName: 'A', radius: 20),
+                        SizedBox(height: 4),
+                        Text('20px', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        ProfileAvatar(firstName: 'B'),
+                        SizedBox(height: 4),
+                        Text('30px', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        ProfileAvatar(firstName: 'C', radius: 40),
+                        SizedBox(height: 4),
+                        Text('40px', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        ProfileAvatar(firstName: 'D', radius: 50),
+                        SizedBox(height: 4),
+                        Text('50px', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const _FeatureBulletPoint(text: 'Loading state with spinner'),
-              const _FeatureBulletPoint(text: 'Error fallback to initials'),
-              const _FeatureBulletPoint(
-                text:
-                    'Three variants: ProfileImage, ProfileAvatar, ProfileImageWithLabel',
-              ),
-            ]),
-          ],
-        ),
+            ),
+          ]),
+
+          // Features
+          _buildSection('Features', [
+            const _FeatureBulletPoint(text: 'Supports local file display'),
+            const _FeatureBulletPoint(
+              text: 'Supports remote URL with auth headers',
+            ),
+            const _FeatureBulletPoint(text: 'Loading state with spinner'),
+            const _FeatureBulletPoint(text: 'Error fallback to initials'),
+            const _FeatureBulletPoint(
+              text:
+                  'Three variants: ProfileImage, ProfileAvatar, '
+                  'ProfileImageWithLabel',
+            ),
+          ]),
+        ],
       ),
-    );
-  }
+    ),
+  );
 
   Widget _buildSection(String title, List<Widget> children) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,

@@ -45,6 +45,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Claude agent memory (per-user, not shared)
-.claude/
+# Claude agent memory (per-user, not shared) - keep settings.json, ignore other files
+.claude/*
+!.claude/settings.json
 .openclaude-profile.json

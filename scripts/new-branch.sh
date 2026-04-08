@@ -103,6 +103,13 @@ else
     echo -e "${YELLOW}Warning: .env.development, .env.test, or .env.local not found in current directory${NC}"
 fi
 
+# Copy .openclaude-profile.json
+if [ -f ".openclaude-profile.json" ]; then
+    echo "Copying .openclaude-profile.json to worktree..."
+    cp ".openclaude-profile.json" "$WORKTREE_PATH/.openclaude-profile.json"
+    echo -e "${GREEN}✓ .openclaude-profile.json copied successfully${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}Feature branch workflow complete!${NC}"

@@ -84,25 +84,21 @@ class ProfileImage extends StatelessWidget {
   }
 
   /// Builds avatar showing local file
-  Widget _buildLocalFileAvatar(ColorScheme colorScheme) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: colorScheme.primary,
-      backgroundImage: FileImage(localImageFile!),
-    );
-  }
+  Widget _buildLocalFileAvatar(ColorScheme colorScheme) => CircleAvatar(
+    radius: radius,
+    backgroundColor: colorScheme.primary,
+    backgroundImage: FileImage(localImageFile!),
+  );
 
   /// Builds avatar showing network image with auth headers
-  Widget _buildNetworkAvatar(ColorScheme colorScheme) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl!,
-      httpHeaders: AuthService.storageHeaders,
-      imageBuilder: (context, imageProvider) =>
-          CircleAvatar(radius: radius, backgroundImage: imageProvider),
-      placeholder: (context, url) => _buildLoadingAvatar(colorScheme),
-      errorWidget: (context, url, error) => _buildInitialAvatar(colorScheme),
-    );
-  }
+  Widget _buildNetworkAvatar(ColorScheme colorScheme) => CachedNetworkImage(
+    imageUrl: imageUrl!,
+    httpHeaders: AuthService.storageHeaders,
+    imageBuilder: (context, imageProvider) =>
+        CircleAvatar(radius: radius, backgroundImage: imageProvider),
+    placeholder: (context, url) => _buildLoadingAvatar(colorScheme),
+    errorWidget: (context, url, error) => _buildInitialAvatar(colorScheme),
+  );
 
   /// Builds avatar showing initial letter fallback
   Widget _buildInitialAvatar(ColorScheme colorScheme) {
@@ -123,20 +119,18 @@ class ProfileImage extends StatelessWidget {
   }
 
   /// Builds loading placeholder avatar
-  Widget _buildLoadingAvatar(ColorScheme colorScheme) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: colorScheme.primary,
-      child: SizedBox(
-        width: radius * 0.5,
-        height: radius * 0.5,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: colorScheme.onPrimary,
-        ),
+  Widget _buildLoadingAvatar(ColorScheme colorScheme) => CircleAvatar(
+    radius: radius,
+    backgroundColor: colorScheme.primary,
+    child: SizedBox(
+      width: radius * 0.5,
+      height: radius * 0.5,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: colorScheme.onPrimary,
       ),
-    );
-  }
+    ),
+  );
 }
 
 /// A simpler version of ProfileImage for use in lists (like WisherItem).
@@ -229,10 +223,10 @@ class ProfileAvatar extends StatelessWidget {
 /// Useful for success/error overlays where you want to show the name.
 class ProfileImageWithLabel extends StatelessWidget {
   const ProfileImageWithLabel({
+    required this.name,
     super.key,
     this.imageUrl,
     this.localImageFile,
-    required this.name,
     this.radius = 40,
   });
 

@@ -29,7 +29,6 @@ class WisherItem extends StatelessWidget {
               imageUrl: wisher.profilePicture,
               firstName: wisher.firstName,
               lastName: wisher.lastName,
-              radius: 30,
             ),
           ),
           const AppSpacer.xsmall(),

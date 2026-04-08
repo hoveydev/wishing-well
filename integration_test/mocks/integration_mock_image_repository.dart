@@ -42,9 +42,9 @@ class IntegrationMockImageRepository extends ImageRepository {
   }
 
   @override
-  Map<String, String> getAuthHeaders() {
-    return {'Authorization': 'Bearer mock-token'};
-  }
+  Map<String, String> getAuthHeaders() => {
+    'Authorization': 'Bearer mock-token',
+  };
 
   @override
   Future<void> preloadImages(List<String> urls) async {

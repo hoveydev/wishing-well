@@ -25,8 +25,24 @@ void main() {
         expect(isMobile, true);
       });
 
-      test('all return false for web platform', () {
+      test('all return false for macOS platform', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+
+        expect(isIOS, false);
+        expect(isAndroid, false);
+        expect(isMobile, false);
+      });
+
+      test('all return false for windows platform', () {
+        debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+
+        expect(isIOS, false);
+        expect(isAndroid, false);
+        expect(isMobile, false);
+      });
+
+      test('all return false for linux platform', () {
+        debugDefaultTargetPlatformOverride = TargetPlatform.linux;
 
         expect(isIOS, false);
         expect(isAndroid, false);

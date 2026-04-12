@@ -65,9 +65,7 @@ void main() {
       vm.updateEmailField('test@example.com');
       expect(vm.authError, isA<UIAuthError>());
     });
-  });
 
-  group(TestGroups.validation, () {
     test('updatePasswordField with empty password sets noPassword error', () {
       viewModel.updateEmailField('test@example.com');
       viewModel.updatePasswordField('');
@@ -131,9 +129,7 @@ void main() {
       final error = viewModel.authError as UIAuthError;
       expect(error.type, LoginErrorType.noPasswordNoEmail);
     });
-  });
 
-  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         loginResult: Result.error(AuthApiException('API error')),
@@ -174,7 +170,7 @@ void main() {
     });
   });
 
-  group(TestGroups.errorHandling, () {
+  group('Login Button', () {
     test(
       'tapLoginButton with AuthApiException creates SupabaseAuthError',
       () async {

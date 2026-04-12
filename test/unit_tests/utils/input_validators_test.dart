@@ -10,6 +10,8 @@ void main() {
 
       test('isEmailEmpty returns false for non-empty string', () {
         expect(InputValidators.isEmailEmpty('test@email.com'), false);
+        expect(InputValidators.isEmailEmpty('invalid'), false);
+        expect(InputValidators.isEmailEmpty('   '), false);
       });
 
       test('isEmailValid returns true for valid email', () {
@@ -26,6 +28,8 @@ void main() {
         expect(InputValidators.isEmailValid('@example.com'), false);
         expect(InputValidators.isEmailValid('noatsign.com'), false);
         expect(InputValidators.isEmailValid(' spaces@email.com'), false);
+        expect(InputValidators.isEmailValid('spaces@email.com '), false);
+        expect(InputValidators.isEmailValid('   '), false);
       });
     });
 

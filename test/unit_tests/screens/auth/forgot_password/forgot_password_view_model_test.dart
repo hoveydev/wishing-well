@@ -78,9 +78,7 @@ void main() {
       final error = viewModel.authError as UIAuthError;
       expect(error.type, ForgotPasswordErrorType.none);
     });
-  });
 
-  group(TestGroups.errorHandling, () {
     test('UI errors are shown for invalid inputs', () {
       final repo = MockAuthRepository(
         sendPasswordResetRequestResult: Result.error(

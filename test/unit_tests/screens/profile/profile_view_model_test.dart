@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
@@ -20,6 +21,14 @@ void main() {
     });
 
     group(TestGroups.initialState, () {
+      test('implements ProfileViewmodelContract', () {
+        expect(viewModel, isA<ProfileViewmodelContract>());
+      });
+
+      test('extends ChangeNotifier', () {
+        expect(viewModel, isA<ChangeNotifier>());
+      });
+
       test('hasAlert returns false when no error', () {
         expect(viewModel.hasAlert, false);
       });
@@ -33,6 +42,28 @@ void main() {
       test('clearError can be called without error', () {
         expect(() => viewModel.clearError(), returnsNormally);
         expect(viewModel.hasAlert, false);
+      });
+    });
+
+    group(TestGroups.errorHandling, () {
+      test('clearError multiple times does not throw', () {
+        viewModel.clearError();
+        viewModel.clearError();
+        expect(viewModel.hasAlert, false);
+      });
+
+      test('clearError after clearError keeps error as none', () {
+        viewModel.clearError();
+        expect(viewModel.hasAlert, false);
+        expect((viewModel.authError as UIAuthError).type, ProfileErrorType.none);
+      });
+    });
+
+    group('ProfileErrorType', () {
+      test('has none and unknown values', () {
+        expect(ProfileErrorType.values, contains(ProfileErrorType.none));
+        expect(ProfileErrorType.values, contains(ProfileErrorType.unknown));
+        expect(ProfileErrorType.values.length, 2);
       });
     });
   });

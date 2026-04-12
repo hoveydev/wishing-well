@@ -6,44 +6,20 @@ import 'package:wishing_well/features/auth/demo/auth_demo_providers.dart';
 
 void main() {
   group('AuthDemoProviders', () {
-    group('success scenario', () {
-      late List<SingleChildWidget> providers;
+    for (final scenario in AuthDemoScenario.values) {
+      group('${scenario.name} scenario', () {
+        late List<SingleChildWidget> providers;
 
-      setUp(() {
-        providers = getAuthDemoProviders(scenario: AuthDemoScenario.success);
+        setUp(() {
+          providers = getAuthDemoProviders(scenario: scenario);
+        });
+
+        test('provides ChangeNotifierProvider for AuthRepository', () {
+          expect(providers.length, 1);
+          expect(providers.first, isA<ChangeNotifierProvider<AuthRepository>>());
+        });
       });
-
-      test('provides ChangeNotifierProvider for AuthRepository', () {
-        expect(providers.length, 1);
-        expect(providers.first, isA<ChangeNotifierProvider<AuthRepository>>());
-      });
-    });
-
-    group('error scenario', () {
-      late List<SingleChildWidget> providers;
-
-      setUp(() {
-        providers = getAuthDemoProviders(scenario: AuthDemoScenario.error);
-      });
-
-      test('provides ChangeNotifierProvider for AuthRepository', () {
-        expect(providers.length, 1);
-        expect(providers.first, isA<ChangeNotifierProvider<AuthRepository>>());
-      });
-    });
-
-    group('loading scenario', () {
-      late List<SingleChildWidget> providers;
-
-      setUp(() {
-        providers = getAuthDemoProviders(scenario: AuthDemoScenario.loading);
-      });
-
-      test('provides ChangeNotifierProvider for AuthRepository', () {
-        expect(providers.length, 1);
-        expect(providers.first, isA<ChangeNotifierProvider<AuthRepository>>());
-      });
-    });
+    }
   });
 
   group('AuthDemoScenario enum', () {

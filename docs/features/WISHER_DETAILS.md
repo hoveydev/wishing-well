@@ -340,7 +340,7 @@ class WisherItem extends StatelessWidget {
 |----------|----------|-----------------|
 | Wisher ID not found | Sets `wisher = null`, no error thrown | Shows "Wisher not found" message |
 | Empty/invalid ID | Searches for match, finds nothing | Shows "Wisher not found" message |
-| Repository unavailable | (Not handled - assumes pre-loaded) | Would show loading indefinitely |
+| Wishers not yet populated | Searches empty cached list, finds nothing | Shows "Wisher not found" message |
 
 **Future Improvements**:
 - Add error state to ViewModel via `Result<T>` pattern

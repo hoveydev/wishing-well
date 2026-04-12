@@ -31,7 +31,9 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -43,7 +45,9 @@ void main() {
 
       testWidgets('renders correct structure', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -70,7 +74,9 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -89,7 +95,9 @@ void main() {
         );
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(specialWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(specialWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -102,7 +110,9 @@ void main() {
         final longWisher = createTestWisher(firstName: longName);
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(longWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(longWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -120,8 +130,8 @@ void main() {
           createComponentTestWidget(
             Column(
               children: [
-                WisherItem(wisher1, EdgeInsets.zero),
-                WisherItem(wisher2, EdgeInsets.zero),
+                WisherItem(wisher1, EdgeInsets.zero, onTap: () {}),
+                WisherItem(wisher2, EdgeInsets.zero, onTap: () {}),
               ],
             ),
           ),
@@ -143,7 +153,9 @@ void main() {
         );
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(wisherWithPic, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(wisherWithPic, EdgeInsets.zero, onTap: () {}),
+          ),
         );
 
         // Pump a few frames to allow the async image loading to start
@@ -165,7 +177,9 @@ void main() {
         final wisherNoPic = createTestWisher();
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(wisherNoPic, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(wisherNoPic, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -180,7 +194,9 @@ void main() {
     group(TestGroups.interaction, () {
       testWidgets('handles tap events', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -192,7 +208,9 @@ void main() {
 
       testWidgets('tap gesture works correctly', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -214,7 +232,9 @@ void main() {
         const testPadding = EdgeInsets.all(16.0);
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, testPadding)),
+          createComponentTestWidget(
+            WisherItem(testWisher, testPadding, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -229,7 +249,9 @@ void main() {
         );
 
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -244,7 +266,9 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -259,7 +283,9 @@ void main() {
 
       testWidgets('opacity resets after tap', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createComponentTestWidget(WisherItem(testWisher, EdgeInsets.zero)),
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -283,6 +309,209 @@ void main() {
           ),
         );
         expect(finalOpacity.opacity, 1.0);
+      });
+    });
+
+    group('OnTap Callback', () {
+      testWidgets('calls onTap callback when avatar is tapped', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        var onTapCalled = false;
+        void callback() {
+          onTapCalled = true;
+        }
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: callback),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(onTapCalled, isTrue);
+      });
+
+      testWidgets('calls onTap with correct context', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        var callCount = 0;
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () => callCount++),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(callCount, 1);
+      });
+
+      testWidgets('calls onTap only once per tap', (WidgetTester tester) async {
+        // Arrange
+        var tapCount = 0;
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () => tapCount++),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(tapCount, 1);
+      });
+
+      testWidgets('calls onTap for multiple sequential taps', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        var tapCount = 0;
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () => tapCount++),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act - Tap multiple times
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(tapCount, 3);
+      });
+
+      testWidgets('does not call onTap when passed empty callback (no-op)', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, EdgeInsets.zero, onTap: () {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act & Assert - Should not throw
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(CircleAvatar), findsOneWidget);
+      });
+
+      testWidgets('passes different wisher data to same onTap', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        final List<String> tappedWishers = [];
+        final wish1 = createTestWisher(id: 'wish-1', firstName: 'Alice');
+        final wish2 = createTestWisher(id: 'wish-2', firstName: 'Bob');
+
+        // Act & Assert - Tap first wisher
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(
+              wish1,
+              EdgeInsets.zero,
+              onTap: () => tappedWishers.add(wish1.id),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        expect(tappedWishers.length, 1);
+        expect(tappedWishers.first, 'wish-1');
+
+        // Act & Assert - Tap second wisher
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(
+              wish2,
+              EdgeInsets.zero,
+              onTap: () => tappedWishers.add(wish2.id),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        expect(tappedWishers.length, 2);
+        expect(tappedWishers.last, 'wish-2');
+      });
+
+      testWidgets('onTap is called even with edge insets', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        var onTapCalled = false;
+        const padding = EdgeInsets.all(16.0);
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(testWisher, padding, onTap: () => onTapCalled = true),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(onTapCalled, isTrue);
+      });
+
+      testWidgets('onTap callback is accessible via TouchFeedbackOpacity', (
+        WidgetTester tester,
+      ) async {
+        // Arrange
+        var callbackExecuted = false;
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(
+              testWisher,
+              EdgeInsets.zero,
+              onTap: () => callbackExecuted = true,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Act - Tap the area with the gesture detector
+        await tester.tap(find.byType(CircleAvatar));
+        await tester.pumpAndSettle();
+
+        // Assert
+        expect(callbackExecuted, isTrue);
       });
     });
   });

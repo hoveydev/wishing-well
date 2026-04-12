@@ -3,16 +3,16 @@ import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/utils/app_logger.dart';
 
 /// Wisher avatar component that displays profile pictures.
 ///
 /// Shows initial letter as placeholder.
 /// On image load error, cleanly shows the initial.
 class WisherItem extends StatelessWidget {
-  const WisherItem(this.wisher, this.padding, {super.key});
+  const WisherItem(this.wisher, this.padding, {required this.onTap, super.key});
   final Wisher wisher;
   final EdgeInsets padding;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,7 @@ class WisherItem extends StatelessWidget {
       child: Column(
         children: [
           TouchFeedbackOpacity(
-            onTap: () =>
-                AppLogger.debug('${wisher.name} tapped', context: 'WisherItem'),
+            onTap: onTap,
             child: ProfileAvatar(
               imageUrl: wisher.profilePicture,
               firstName: wisher.firstName,

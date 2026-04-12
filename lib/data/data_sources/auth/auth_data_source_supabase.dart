@@ -32,10 +32,15 @@ class AuthDataSourceSupabase implements AuthDataSource {
       password: password,
     );
 
+    final session = response.session;
+    final user = response.user;
+
     return {
-      'user_id': response.user?.id,
-      'aud': response.user?.aud,
-      'email': response.user?.email,
+      'user_id': user?.id,
+      'aud': user?.aud,
+      'email': user?.email,
+      'access_token': session?.accessToken,
+      'refresh_token': session?.refreshToken,
     };
   }
 
@@ -51,7 +56,15 @@ class AuthDataSourceSupabase implements AuthDataSource {
       emailRedirectTo: emailRedirectTo,
     );
 
-    return {'user_id': response.user?.id, 'email': response.user?.email};
+    final user = response.user;
+    final session = response.session;
+
+    return {
+      'user_id': user?.id,
+      'email': user?.email,
+      'access_token': session?.accessToken,
+      'refresh_token': session?.refreshToken,
+    };
   }
 
   @override
@@ -70,14 +83,12 @@ class AuthDataSourceSupabase implements AuthDataSource {
     required String newPassword,
     required String token,
   }) async {
-    final attributes = UserAttributes(
-      email: email,
-      password: newPassword,
-      nonce: token,
+    final response = await _supabase.auth.updateUser(
+      UserAttributes(email: email, password: newPassword),
     );
 
-    final response = await _supabase.auth.updateUser(attributes);
+    final user = response.user;
 
-    return {'user_id': response.user?.id, 'email': response.user?.email};
+    return {'user_id': user?.id, 'email': user?.email};
   }
 }

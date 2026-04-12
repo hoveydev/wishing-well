@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class HomeViewModelContract {
@@ -11,6 +13,7 @@ abstract class HomeViewModelContract {
   bool get isLoadingWishers;
   Object? get wisherError;
   bool get hasWisherError;
+  void tapWisherItem(BuildContext context, Wisher wisher);
 }
 
 class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
@@ -76,6 +79,11 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
     }
 
     return result;
+  }
+
+  @override
+  void tapWisherItem(BuildContext context, Wisher wisher) {
+    context.push(Routes.wisherDetails.buildPath(id: wisher.id));
   }
 
   @override

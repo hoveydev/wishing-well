@@ -71,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             isLoading: viewModel.isLoadingWishers,
             hasError: viewModel.hasWisherError,
             onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+            onWisherTap: (wisher) => viewModel.tapWisherItem(context, wisher),
             onRetry: viewModel.fetchWishers,
           ),
         ],

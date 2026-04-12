@@ -10,7 +10,7 @@ Comprehensive feature documentation including architecture, design decisions, an
 - **Purpose**: Reference for understanding app features and their implementation
 - **Usage**: Learning how features are built, understanding architecture decisions, implementing new features
 - **Contents**: Feature overview, MVVM architecture, navigation flow, testing patterns, troubleshooting
-- **Current Features**: Wisher Details (detailed view of individual wisher)
+- **Current Features**: Wisher Details, Auth (login, create account, forgot/reset password), Home, Profile, Add Wisher
 
 ### **[LOGGING.md](./LOGGING.md)**
 Comprehensive logging system documentation with features, usage patterns, and best practices.

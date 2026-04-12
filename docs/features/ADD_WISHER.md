@@ -271,4 +271,4 @@ After `createWisher()` succeeds, the new profile picture URL is preloaded via `I
 ---
 
 **Last Updated**: April 2026  
-**Related Documentation**: See [TESTING_STANDARDS.md](./TESTING_STANDARDS.md), [AGENTS.md](./AGENTS.md)
+**Related Documentation**: See [TESTING_STANDARDS.md](../TESTING_STANDARDS.md), [AGENTS.md](../AGENTS.md)

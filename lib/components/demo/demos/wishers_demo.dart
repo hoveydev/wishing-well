@@ -65,6 +65,7 @@ class WishersDemo extends StatelessWidget {
               child: WishersList(
                 wishers: _demoWishers,
                 onAddWisherTap: _handleAddWisher,
+                onWisherTap: (wisher) => _handleWisherTap(wisher),
               ),
             ),
           ]),
@@ -131,6 +132,7 @@ class WishersDemo extends StatelessWidget {
               child: WishersList(
                 wishers: _demoWishers,
                 onAddWisherTap: _handleAddWisher,
+                onWisherTap: (wisher) => _handleWisherTap(wisher),
               ),
             ),
           ]),
@@ -177,6 +179,10 @@ class WishersDemo extends StatelessWidget {
 
 void _handleAddWisher() {
   AppLogger.debug('Add Wisher tapped!', context: 'WishersDemo');
+}
+
+void _handleWisherTap(Wisher wisher) {
+  AppLogger.debug('Wisher tapped: ${wisher.name}', context: 'WishersDemo');
 }
 
 class FeatureBulletPoint extends StatelessWidget {

@@ -32,12 +32,14 @@ void main() {
       bool isLoading = false,
       bool hasError = false,
       VoidCallback? onAddWisherTap,
+      void Function(Wisher)? onWisherTap,
       VoidCallback? onRetry,
     }) => WishersList(
       wishers: wishers,
       isLoading: isLoading,
       hasError: hasError,
       onAddWisherTap: onAddWisherTap ?? () => {},
+      onWisherTap: onWisherTap ?? (wisher) => {},
       onRetry: onRetry,
     );
 
@@ -251,6 +253,7 @@ void main() {
             WishersList(
               wishers: defaultTestWishers,
               onAddWisherTap: () => wasTapped = true,
+              onWisherTap: (wisher) => {},
             ),
           ),
         );

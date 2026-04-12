@@ -54,6 +54,8 @@ void main() {
             'user_id': 'test-user-id',
             'aud': 'authenticated',
             'email': 'test@example.com',
+            'access_token': 'test-access-token',
+            'refresh_token': 'test-refresh-token',
           };
 
           final result = await repository.login(
@@ -319,6 +321,8 @@ void main() {
           'user_id': 'test-user-id',
           'aud': 'authenticated',
           'email': 'test@example.com',
+          'access_token': 'test-access-token',
+          'refresh_token': 'test-refresh-token',
         };
         mockDataSource.mockAccessToken = 'test-token';
 

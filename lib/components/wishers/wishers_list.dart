@@ -12,6 +12,7 @@ import 'package:wishing_well/utils/app_logger.dart';
 class WishersList extends StatelessWidget {
   const WishersList({
     required this.onAddWisherTap,
+    required this.onWisherTap,
     required this.wishers,
     this.isLoading = false,
     this.hasError = false,
@@ -20,6 +21,7 @@ class WishersList extends StatelessWidget {
   });
 
   final void Function() onAddWisherTap;
+  final void Function(Wisher wisher) onWisherTap;
   final List<Wisher> wishers;
   final bool isLoading;
   final bool hasError;
@@ -40,7 +42,7 @@ class WishersList extends StatelessWidget {
     final padding = wisherIndex == wishers.length - 1
         ? EdgeInsets.zero
         : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
-    return WisherItem(wisher, padding);
+    return WisherItem(wisher, padding, onTap: () => onWisherTap(wisher));
   }
 
   @override

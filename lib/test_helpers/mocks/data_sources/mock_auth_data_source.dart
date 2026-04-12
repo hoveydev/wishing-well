@@ -93,7 +93,13 @@ class MockAuthDataSource implements AuthDataSource {
       throw signInWithPasswordError!;
     }
     return signInWithPasswordResult ??
-        {'user_id': 'test-user-id', 'aud': 'authenticated', 'email': email};
+        {
+          'user_id': 'test-user-id',
+          'aud': 'authenticated',
+          'email': email,
+          'access_token': 'test-access-token',
+          'refresh_token': 'test-refresh-token',
+        };
   }
 
   @override
@@ -106,7 +112,13 @@ class MockAuthDataSource implements AuthDataSource {
     if (signUpError != null) {
       throw signUpError!;
     }
-    return signUpResult ?? {'user_id': 'test-user-id', 'email': email};
+    return signUpResult ??
+        {
+          'user_id': 'test-user-id',
+          'email': email,
+          'access_token': 'test-access-token',
+          'refresh_token': 'test-refresh-token',
+        };
   }
 
   @override

@@ -117,7 +117,28 @@ When styling UI elements, always use the established theme system instead of har
 - Each component type has a base file and type-specific implementations
 - Components use named constructors (e.g., `AppButton.icon()`, `AppButton.label()`)
 
-### Error Handling
+**Component Action Pattern** (Important for Maintainability):
+- Components MUST NOT embed business logic (navigation, API calls, state mutations)
+- Actions must be passed into components as parameters (callbacks) from ViewModels
+- Use `VoidCallback`, `Function(T)`, or sealed callback enums for actions
+- Never import `go_router` in component files
+- Benefits: Generic components, testable without mocking navigation, reusable across contexts
+- Example - ❌ WRONG (embedded action):
+  ```dart
+  class WisherItem {
+    void onTap() {
+      context.push(Routes.wisherDetails.path...);  // Tightly coupled!
+    }
+  }
+  ```
+- Example - ✅ CORRECT (action as callback):
+  ```dart
+  class WisherItem {
+    final VoidCallback onTap;  // Action passed from parent
+  }
+  // In parent (HomeViewModel):
+  onTap: () => viewModel.tapWisherItem(context, wisher);
+  ```
 - Use AuthError<T> sealed class with type-specific implementations
 - UIAuthError for validation errors, SupabaseAuthError for API errors
 - Prioritize UI validation errors over API errors in display
@@ -143,6 +164,36 @@ When styling UI elements, always use the established theme system instead of har
 - Routes enum in lib/routing/routes.dart defines all app paths
 - Use go_router for navigation: `context.pushNamed(Routes.home.name)`
 - Use context.push() for navigation with paths: `context.push(Routes.profile.path)`
+- For parameterized routes, use helper method: `context.push(Routes.wisherDetails.buildPath(id: wisherId))`
+- Add buildPath() helper to Routes enum for type-safe parameter substitution
+
+**Navigation Pattern — Delegate to ViewModel:**
+All navigation logic must be delegated to ViewModel methods, not called directly from UI. This ensures:
+- Navigation logic is testable and mockable
+- Easy to add analytics, validation, or state mutations to navigation flows
+- Consistent with MVVM separation of concerns
+
+✅ **Correct Pattern:**
+```dart
+// In ViewModel
+void tapAddWisher(BuildContext context) {
+  context.pushNamed(Routes.addWisher.name);
+}
+
+void tapWisherItem(BuildContext context, Wisher wisher) {
+  context.push(Routes.wisherDetails.buildPath(id: wisher.id));
+}
+
+// In Screen/Component
+onAddWisherTap: () => viewModel.tapAddWisher(context),
+onWisherTap: (wisher) => viewModel.tapWisherItem(context, wisher),
+```
+
+❌ **Incorrect Pattern (avoid):**
+```dart
+// Don't call navigation directly from UI
+onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+```
 
 ### Localization
 - Add strings to lib/l10n/app_en.arb with @ descriptions

@@ -17,6 +17,8 @@ import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
+import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
+import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login',
@@ -88,6 +90,24 @@ GoRouter router() => GoRouter(
       pageBuilder: (context, state) => const CustomTransitionPage(
         child: ProfileScreen(),
         transitionsBuilder: slideUpTransition,
+      ),
+    ),
+    GoRoute(
+      path: Routes.wisherDetails.path,
+      name: Routes.wisherDetails.name,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: WisherDetailsScreen(
+          viewModel: WisherDetailsViewModel(
+            wisherRepository: context.read(),
+            wisherId:
+                state.pathParameters['id'] ??
+                (throw ArgumentError(
+                  'Missing wisher ID in route parameters for '
+                  '${Routes.wisherDetails.path}',
+                )),
+          ),
+        ),
+        transitionsBuilder: slideInRightTransition,
       ),
     ),
     GoRoute(

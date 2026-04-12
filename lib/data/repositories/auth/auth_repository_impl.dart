@@ -38,8 +38,9 @@ class AuthRepositoryImpl extends AuthRepository {
 
       final aud = response['aud'] as String?;
       final isAuthenticated = aud == 'authenticated';
+      final accessToken = response['access_token'] as String?;
 
-      if (isAuthenticated) {
+      if (isAuthenticated && accessToken != null) {
         AppLogger.info('Login successful', context: 'AuthRepository');
         return const Result.ok(null);
       } else {

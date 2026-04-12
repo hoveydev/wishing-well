@@ -4,6 +4,14 @@ This directory contains project documentation for developers and AI agents.
 
 ## 📚 Documentation Files
 
+### **[FEATURES.md](./FEATURES.md)**
+Comprehensive feature documentation including architecture, design decisions, and implementation details.
+
+- **Purpose**: Reference for understanding app features and their implementation
+- **Usage**: Learning how features are built, understanding architecture decisions, implementing new features
+- **Contents**: Feature overview, MVVM architecture, navigation flow, testing patterns, troubleshooting
+- **Current Features**: Wisher Details (detailed view of individual wisher)
+
 ### **[LOGGING.md](./LOGGING.md)**
 Comprehensive logging system documentation with features, usage patterns, and best practices.
 
@@ -43,9 +51,16 @@ Component demo registry system documentation.
 
 ### For New Team Members
 1. Read [AGENTS.md](./AGENTS.md) - Project overview and basic guidelines
-2. Read [LOGGING.md](./LOGGING.md) - How to use the logging system
-3. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
-4. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+2. Read [FEATURES.md](./FEATURES.md) - Learn about app features and architecture
+3. Read [LOGGING.md](./LOGGING.md) - How to use the logging system
+4. Read [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) - How to write tests
+5. See [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) - How to create new components
+
+### For Understanding Feature Architecture
+1. Reference [FEATURES.md](./FEATURES.md) for current feature overview
+2. Study MVVM structure and navigation patterns
+3. Review testing examples for similar features
+4. Check component callback patterns for UI interaction
 
 ### For Adding Logs
 1. Reference [LOGGING.md](./LOGGING.md) for usage patterns
@@ -65,9 +80,10 @@ Component demo registry system documentation.
 
 ### For AI Agents
 1. Start with [AGENTS.md](./AGENTS.md) for project context
-2. Follow [LOGGING.md](./LOGGING.md) for logging patterns
-3. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
-4. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
+2. Reference [FEATURES.md](./FEATURES.md) to understand feature architecture
+3. Follow [LOGGING.md](./LOGGING.md) for logging patterns
+4. Follow [TESTING_STANDARDS.md](./TESTING_STANDARDS.md) for test creation
+5. Use [ADD_COMPONENT_SCRIPT.md](./ADD_COMPONENT_SCRIPT.md) for component creation
 
 ## 📁 Updated Project Structure
 
@@ -75,11 +91,21 @@ Component demo registry system documentation.
 wishing_well/
 ├── docs/                          # 📚 Documentation
 │   ├── README.md                   # This file
+│   ├── FEATURES.md                 # Feature architecture and design
 │   ├── LOGGING.md                  # Logging standards and guidelines
 │   ├── TESTING_STANDARDS.md        # Testing patterns and guidelines
 │   ├── AGENTS.md                   # AI agent development guidelines
 │   ├── ADD_COMPONENT_SCRIPT.md     # Component creation script documentation
 │   └── COMPONENT_REGISTRY_GUIDE.md # Component registry system
+├── lib/features/                   # 🎯 Feature modules
+│   ├── wisher_details/             # NEW: Wisher detail view feature
+│   │   ├── wisher_details_screen.dart
+│   │   ├── wisher_details_view_model.dart
+│   │   └── demo/
+│   ├── home/                       # Home screen with wisher list
+│   ├── auth/                       # Authentication features
+│   ├── add_wisher/                 # Add new wisher flow
+│   └── profile/                    # User profile
 ├── scripts/
 │   ├── analyze_tests.sh            # Test quality analysis tool
 │   ├── test_coverage.sh            # Coverage reporting script
@@ -92,13 +118,25 @@ wishing_well/
 │   └── providers/                  # Provider configurations
 ├── lib/testing/
 │   ├── ui_tests/                   # Widget tests
+│   │   ├── screens/
+│   │   │   ├── wisher_details/     # NEW: Wisher details screen tests
+│   │   │   └── ...
+│   │   └── components/
 │   └── unit_tests/                 # Pure unit tests
-├── lib/test_helpers/              # Test helpers and mocks (at project root)
+│       ├── screens/
+│       │   ├── wisher_details/     # NEW: Wisher details ViewModel tests
+│       │   └── ...
+│       └── ...
+├── lib/test_helpers/              # Test helpers and mocks
 │   ├── helpers/                    # Test infrastructure
 │   └── mocks/                      # Mock implementations
 └── lib/                            # Application code
-    └── utils/
-        └── app_logger.dart         # Logging utility
+    ├── features/                   # Feature modules (see above)
+    ├── components/                 # Reusable UI components
+    ├── routing/                    # Navigation (updated for wisher_details)
+    ├── utils/
+    │   └── app_logger.dart         # Logging utility
+    └── ...
 ```
 
 ## 🔄 Maintenance

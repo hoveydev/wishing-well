@@ -6,7 +6,8 @@ enum Routes {
   resetPassword('/reset-password'), // forgot-password/reset-password
   createAccount('/create-account'),
   addWisher('/add-wisher'), // add-wisher
-  addWisherDetails('details'); // add-wisher/details
+  addWisherDetails('details'), // add-wisher/details
+  wisherDetails('/wisher-details/:id'); // wisher-details/:id
 
   const Routes(this.path);
   final String path;
@@ -19,4 +20,22 @@ enum Routes {
         (m) => '-${m.group(0)!.toLowerCase()}',
       )
       .toLowerCase();
+
+  /// Builds a route path with parameter substitution.
+  ///
+  /// For routes with path parameters (e.g., `/wisher-details/:id`),
+  /// this method safely replaces the named parameter with the provided value.
+  ///
+  /// Example:
+  /// ```dart
+  /// Routes.wisherDetails.buildPath(id: 'abc123')
+  /// // Returns: '/wisher-details/abc123'
+  /// ```
+  String buildPath({String? id}) {
+    var result = path;
+    if (id != null) {
+      result = result.replaceAll(':id', id);
+    }
+    return result;
+  }
 }

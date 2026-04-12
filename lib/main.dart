@@ -15,6 +15,8 @@ import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo.dart'
     as add_wisher_demo;
+import 'package:wishing_well/features/wisher_details/demo/wisher_details_demo.dart'
+    as wisher_details_demo;
 import 'package:wishing_well/features/auth/demo/auth_demo.dart' as auth_demo;
 import 'package:wishing_well/features/home/demo/home_demo.dart' as home_demo;
 import 'package:wishing_well/components/demo/main.dart' as components_demo;
@@ -35,6 +37,9 @@ enum AppRunConfig {
 
   /// Run the add_wisher feature demo
   addWisherDemo,
+
+  /// Run the wisher_details feature demo
+  wisherDetailsDemo,
 }
 
 /// Current run configuration - change this to run different demos
@@ -56,6 +61,8 @@ Future<void> main() async {
   switch (_runConfig) {
     case AppRunConfig.production:
       await _runProduction();
+    case AppRunConfig.wisherDetailsDemo:
+      await wisher_details_demo.main();
     case AppRunConfig.addWisherDemo:
       await add_wisher_demo.main();
     case AppRunConfig.homeDemo:

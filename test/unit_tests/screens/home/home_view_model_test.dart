@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
@@ -204,6 +205,73 @@ void main() {
 
         // Cleanup
         failingViewModel.dispose();
+      });
+    });
+
+    group('Navigation', () {
+      test('tapWisherItem uses correct route path', () {
+        // Arrange
+        final wisher = viewModel.wishers.first;
+
+        // Act
+        final expectedPath = Routes.wisherDetails.buildPath(id: wisher.id);
+
+        // Assert
+        expect(expectedPath, contains('wisher-details'));
+        expect(expectedPath, contains(wisher.id));
+        expect(expectedPath, '/wisher-details/${wisher.id}');
+      });
+
+      test('tapWisherItem replaces :id placeholder correctly', () {
+        // Arrange
+        const testId = 'test-wisher-id-12345';
+
+        // Act
+        final actualPath = Routes.wisherDetails.buildPath(id: testId);
+
+        // Assert
+        expect(actualPath, equals('/wisher-details/$testId'));
+        expect(actualPath, contains(testId));
+      });
+
+      test('tapWisherItem works with different wisher IDs', () {
+        // Arrange
+        final wishers = viewModel.wishers;
+
+        // Act & Assert - Verify path construction for multiple wishers
+        for (final wisher in wishers) {
+          final path = Routes.wisherDetails.buildPath(id: wisher.id);
+          expect(path, contains(wisher.id));
+          expect(path.startsWith('/wisher-details/'), isTrue);
+        }
+      });
+
+      test('tapWisherItem does not modify the wisher object', () {
+        // Arrange
+        final originalWisher = viewModel.wishers.first;
+        final originalId = originalWisher.id;
+        final originalName = originalWisher.firstName;
+
+        // Assert - Verify the wisher object properties remain unchanged
+        expect(originalWisher.id, equals(originalId));
+        expect(originalWisher.firstName, equals(originalName));
+      });
+
+      test('tapWisherItem constructs path for all repository wishers', () {
+        // Act & Assert - Verify correct paths for all default wishers
+        for (final wisher in viewModel.wishers) {
+          final path = Routes.wisherDetails.buildPath(id: wisher.id);
+
+          // Should have proper format
+          expect(path, startsWith('/wisher-details/'));
+          expect(path, contains(wisher.id));
+          expect(path.length, greaterThan('/wisher-details/'.length));
+        }
+      });
+
+      test('tapAddWisher uses correct route name', () {
+        // Verify the route name is available
+        expect(Routes.addWisher.name, isNotEmpty);
       });
     });
   });

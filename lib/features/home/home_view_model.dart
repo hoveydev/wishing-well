@@ -14,6 +14,7 @@ abstract class HomeViewModelContract {
   Object? get wisherError;
   bool get hasWisherError;
   void tapWisherItem(BuildContext context, Wisher wisher);
+  void tapAddWisher(BuildContext context);
 }
 
 class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
@@ -84,6 +85,11 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
   @override
   void tapWisherItem(BuildContext context, Wisher wisher) {
     context.push(Routes.wisherDetails.buildPath(id: wisher.id));
+  }
+
+  @override
+  void tapAddWisher(BuildContext context) {
+    context.pushNamed(Routes.addWisher.name);
   }
 
   @override

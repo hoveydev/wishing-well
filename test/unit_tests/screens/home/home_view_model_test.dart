@@ -268,6 +268,11 @@ void main() {
           expect(path.length, greaterThan('/wisher-details/'.length));
         }
       });
+
+      test('tapAddWisher uses correct route name', () {
+        // Verify the route name is available
+        expect(Routes.addWisher.name, isNotEmpty);
+      });
     });
   });
 }

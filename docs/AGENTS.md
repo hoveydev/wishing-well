@@ -167,6 +167,34 @@ When styling UI elements, always use the established theme system instead of har
 - For parameterized routes, use helper method: `context.push(Routes.wisherDetails.buildPath(id: wisherId))`
 - Add buildPath() helper to Routes enum for type-safe parameter substitution
 
+**Navigation Pattern — Delegate to ViewModel:**
+All navigation logic must be delegated to ViewModel methods, not called directly from UI. This ensures:
+- Navigation logic is testable and mockable
+- Easy to add analytics, validation, or state mutations to navigation flows
+- Consistent with MVVM separation of concerns
+
+✅ **Correct Pattern:**
+```dart
+// In ViewModel
+void tapAddWisher(BuildContext context) {
+  context.pushNamed(Routes.addWisher.name);
+}
+
+void tapWisherItem(BuildContext context, Wisher wisher) {
+  context.push(Routes.wisherDetails.buildPath(id: wisher.id));
+}
+
+// In Screen/Component
+onAddWisherTap: () => viewModel.tapAddWisher(context),
+onWisherTap: (wisher) => viewModel.tapWisherItem(context, wisher),
+```
+
+❌ **Incorrect Pattern (avoid):**
+```dart
+// Don't call navigation directly from UI
+onAddWisherTap: () => context.pushNamed(Routes.addWisher.name),
+```
+
 ### Localization
 - Add strings to lib/l10n/app_en.arb with @ descriptions
 - Run `flutter gen-l10n` after adding new strings

@@ -99,7 +99,12 @@ GoRouter router() => GoRouter(
         child: WisherDetailsScreen(
           viewModel: WisherDetailsViewModel(
             wisherRepository: context.read(),
-            wisherId: state.pathParameters['id'] ?? '',
+            wisherId:
+                state.pathParameters['id'] ??
+                (throw ArgumentError(
+                  'Missing wisher ID in route parameters for '
+                  '${Routes.wisherDetails.path}',
+                )),
           ),
         ),
         transitionsBuilder: slideInRightTransition,

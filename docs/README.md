@@ -5,12 +5,12 @@ This directory contains project documentation for developers and AI agents.
 ## 📚 Documentation Files
 
 ### **[FEATURES.md](./FEATURES.md)**
-Comprehensive feature documentation including architecture, design decisions, and implementation details.
+Index linking to individual per-feature documentation files in `docs/features/`.
 
-- **Purpose**: Reference for understanding app features and their implementation
-- **Usage**: Learning how features are built, understanding architecture decisions, implementing new features
-- **Contents**: Feature overview, MVVM architecture, navigation flow, testing patterns, troubleshooting
-- **Current Features**: Wisher Details, Auth (login, create account, forgot/reset password), Home, Profile, Add Wisher
+- **Purpose**: Entry point for understanding app features and their implementation
+- **Usage**: Navigate to the relevant per-feature file for architecture decisions, MVVM structure, navigation flow, testing patterns, and troubleshooting
+- **Contents**: Links to per-feature docs (see `docs/features/`)
+- **Current Features**: [Wisher Details](./features/WISHER_DETAILS.md), [Auth](./features/AUTH.md), [Home](./features/HOME.md), [Profile](./features/PROFILE.md), [Add Wisher](./features/ADD_WISHER.md)
 
 ### **[LOGGING.md](./LOGGING.md)**
 Comprehensive logging system documentation with features, usage patterns, and best practices.
@@ -91,7 +91,13 @@ Component demo registry system documentation.
 wishing_well/
 ├── docs/                          # 📚 Documentation
 │   ├── README.md                   # This file
-│   ├── FEATURES.md                 # Feature architecture and design
+│   ├── FEATURES.md                 # Index linking to per-feature docs
+│   ├── features/                   # Per-feature documentation
+│   │   ├── WISHER_DETAILS.md
+│   │   ├── AUTH.md
+│   │   ├── HOME.md
+│   │   ├── PROFILE.md
+│   │   └── ADD_WISHER.md
 │   ├── LOGGING.md                  # Logging standards and guidelines
 │   ├── TESTING_STANDARDS.md        # Testing patterns and guidelines
 │   ├── AGENTS.md                   # AI agent development guidelines

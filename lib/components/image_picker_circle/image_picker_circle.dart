@@ -89,14 +89,11 @@ class CircleImagePicker extends StatelessWidget {
     );
   }
 
-  Widget _buildImageAvatar(BuildContext context) {
-    // Use the ProfileImage component for consistency
-    return ProfileImage(
-      imageUrl: imageUrl,
-      localImageFile: imageFile,
-      radius: radius,
-      showEditIcon: showEditIcon,
-      onTap: onTap,
-    );
-  }
+  Widget _buildImageAvatar(BuildContext context) => ProfileImage(
+    imageUrl: imageUrl,
+    localImageFile: imageFile,
+    radius: radius,
+    showEditIcon: showEditIcon,
+    onTap: onTap,
+  );
 }

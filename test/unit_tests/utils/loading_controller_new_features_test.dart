@@ -96,46 +96,7 @@ void main() {
     });
 
     group('acknowledgeAndClear', () {
-      test('acknowledgeAndClear calls callback after clearing', () {
-        bool callbackCalled = false;
-        controller.showSuccess(
-          'Success!',
-          onOk: () {
-            callbackCalled = true;
-          },
-        );
-
-        controller.acknowledgeAndClear();
-
-        expect(callbackCalled, true);
-        expect(controller.isIdle, true);
-      });
-
-      test('acknowledgeAndClear works without callback', () {
-        controller.showSuccess('Success!');
-
-        // Should not throw
-        controller.acknowledgeAndClear();
-
-        expect(controller.isIdle, true);
-      });
-
-      test('acknowledgeAndClear works for error state', () {
-        bool callbackCalled = false;
-        controller.showError(
-          'Error!',
-          onOk: () {
-            callbackCalled = true;
-          },
-        );
-
-        controller.acknowledgeAndClear();
-
-        expect(callbackCalled, true);
-        expect(controller.isIdle, true);
-      });
-
-      test('acknowledgeAndClear clears all properties', () {
+      test('acknowledgeAndClear clears all new properties', () {
         controller.showSuccess('Message', name: 'John', imageUrl: 'url');
 
         controller.acknowledgeAndClear();

@@ -1,6 +1,6 @@
-# CLAUDE.md
+# Copilot Instructions
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to GitHub Copilot when working with code in this repository.
 
 ## Project Overview
 
@@ -29,7 +29,7 @@ Copy `.env.development` or `.env.test` and configure:
 flutter pub get                    # Install dependencies
 flutter test lib/testing/path/to/test_file.dart  # Run single test
 flutter test --coverage           # Run with coverage
-./scripts/test_coverage.sh        # Full coverage workflow (90% threshold)
+./scripts/test_coverage.sh        # Full coverage workflow (90% full-repo threshold)
 
 # Quality
 dart format .                     # Format all files
@@ -37,6 +37,9 @@ dart analyze --fatal-infos        # Static analysis (fails on warnings)
 
 # Localization
 flutter gen-l10n                  # Generate l10n after editing app_en.arb
+
+# Components
+./scripts/add_component.sh        # Scaffold new component, demo, and tests
 
 # Git hooks (install once)
 dart run git_hooks.dart           # Installs pre-commit hook
@@ -73,6 +76,48 @@ lib/
 - **Navigation**: `context.pushNamed(Routes.home.name)` using go_router
 - **Routing enum** in `lib/routing/routes.dart`
 
+### Component Action Pattern
+
+Components **must not** embed business logic (navigation, API calls, state mutations). All actions must be passed in as callbacks from the ViewModel:
+
+```dart
+// ❌ WRONG — navigation embedded in component
+class WisherItem extends StatelessWidget {
+  void onTap(BuildContext context) {
+    context.push(Routes.wisherDetails.path);  // tightly coupled!
+  }
+}
+
+// ✅ CORRECT — action passed as callback
+class WisherItem extends StatelessWidget {
+  final VoidCallback onTap;  // caller decides what happens
+}
+
+// In ViewModel:
+onTap: () => viewModel.tapWisherItem(context, wisher),
+```
+
+Never import `go_router` in component files.
+
+### Navigation Delegation Pattern
+
+All navigation logic must go through ViewModel methods, not be called directly from UI:
+
+```dart
+// ✅ CORRECT — navigation in ViewModel
+void tapAddWisher(BuildContext context) {
+  context.pushNamed(Routes.addWisher.name);
+}
+
+// In Screen/Component:
+onTap: () => viewModel.tapAddWisher(context),
+
+// ❌ INCORRECT — navigation called directly from UI
+onTap: () => context.pushNamed(Routes.addWisher.name),
+```
+
+For routes with parameters, use the `buildPath()` helper: `Routes.wisherDetails.buildPath(id: wisher.id)`
+
 ## Code Style
 
 - Always use `package:` imports (never relative)
@@ -84,11 +129,11 @@ lib/
 
 ## Testing
 
-- 95%+ coverage, tests in `lib/testing/unit_tests/` and `lib/testing/ui_tests/`
+- Tests in `lib/testing/unit_tests/` and `lib/testing/ui_tests/`
 - Use `MockAuthRepository` from `lib/test_helpers/mocks/`
 - Widget test helper: `createTestWidget()` from `lib/test_helpers/helpers/`
 - Tests organized with `group()` blocks and descriptive names
-- Pre-commit hook enforces 95% coverage on changed files only
+- Coverage thresholds: **95% on changed files** (enforced by pre-commit hook), **90% full repo** (`./scripts/test_coverage.sh`)
 
 ## Detailed Documentation
 

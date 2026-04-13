@@ -55,7 +55,8 @@ void main() {
       test('clearError after clearError keeps error as none', () {
         viewModel.clearError();
         expect(viewModel.hasAlert, false);
-        expect((viewModel.authError as UIAuthError).type, ProfileErrorType.none);
+        final error = viewModel.authError as UIAuthError;
+        expect(error.type, ProfileErrorType.none);
       });
     });
 

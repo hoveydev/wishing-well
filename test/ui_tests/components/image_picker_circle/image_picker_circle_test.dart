@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
+import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -284,6 +286,63 @@ void main() {
     });
 
     group('Image rendering', () {
+      testWidgets('renders ProfileImage when imageUrl is provided', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            CircleImagePicker(
+              onTap: () {},
+              imageUrl: 'https://example.com/photo.jpg',
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+
+        expect(find.byType(ProfileImage), findsOneWidget);
+        expect(find.byType(DottedBorder), findsNothing);
+      });
+
+      testWidgets('renders CachedNetworkImage with correct URL', (
+        WidgetTester tester,
+      ) async {
+        const testUrl = 'https://example.com/photo.jpg';
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            CircleImagePicker(onTap: () {}, imageUrl: testUrl),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+
+        final image = tester.widget<CachedNetworkImage>(
+          find.byType(CachedNetworkImage),
+        );
+        expect(image.imageUrl, testUrl);
+      });
+
+      testWidgets('calls onTap when image is present and tapped', (
+        WidgetTester tester,
+      ) async {
+        var wasTapped = false;
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            CircleImagePicker(
+              onTap: () => wasTapped = true,
+              imageUrl: 'https://example.com/photo.jpg',
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+
+        await tester.tap(find.byType(CircleImagePicker));
+        expect(wasTapped, isTrue);
+      });
+
       testWidgets('showEditIcon property can be set to true', (
         WidgetTester tester,
       ) async {

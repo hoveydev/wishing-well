@@ -16,7 +16,10 @@ void main() {
 
         test('provides ChangeNotifierProvider for AuthRepository', () {
           expect(providers.length, 1);
-          expect(providers.first, isA<ChangeNotifierProvider<AuthRepository>>());
+          expect(
+            providers.first,
+            isA<ChangeNotifierProvider<AuthRepository>>(),
+          );
         });
       });
     }

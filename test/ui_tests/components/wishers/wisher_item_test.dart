@@ -427,7 +427,7 @@ void main() {
       ) async {
         // Arrange
         final List<String> tappedWishers = [];
-        final wish1 = createTestWisher(id: 'wish-1', firstName: 'Alice');
+        final wish1 = createTestWisher(id: 'wish-1');
         final wish2 = createTestWisher(id: 'wish-2', firstName: 'Bob');
 
         // Act & Assert - Tap first wisher

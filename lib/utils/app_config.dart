@@ -71,5 +71,15 @@ class AppConfig {
       'All environment variables are present for ${_environment.name}',
       context: 'AppConfig.validate',
     );
+
+    if (_environment == Environment.local) {
+      AppLogger.warning(
+        'Running in LOCAL environment — Supabase must be running locally '
+        '(`supabase start`). Connection errors are likely caused by local '
+        'Supabase not being started. To switch environments, change '
+        '_environment in lib/main.dart.',
+        context: 'AppConfig',
+      );
+    }
   }
 }

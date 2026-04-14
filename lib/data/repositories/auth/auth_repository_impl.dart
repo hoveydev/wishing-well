@@ -57,6 +57,7 @@ class AuthRepositoryImpl extends AuthRepository {
         error: err,
         stackTrace: stackTrace,
       );
+      _logConnectionHintIfNeeded(err, 'AuthRepository.login');
       return Result.error(err);
     } finally {
       notifyListeners();
@@ -78,6 +79,7 @@ class AuthRepositoryImpl extends AuthRepository {
         error: err,
         stackTrace: stackTrace,
       );
+      _logConnectionHintIfNeeded(err, 'AuthRepository.logout');
       return Result.error(err);
     } finally {
       notifyListeners();
@@ -105,6 +107,7 @@ class AuthRepositoryImpl extends AuthRepository {
         error: err,
         stackTrace: stackTrace,
       );
+      _logConnectionHintIfNeeded(err, 'AuthRepository.createAccount');
       return Result.error(err);
     } finally {
       notifyListeners();
@@ -128,6 +131,10 @@ class AuthRepositoryImpl extends AuthRepository {
         context: 'AuthRepository',
         error: err,
         stackTrace: stackTrace,
+      );
+      _logConnectionHintIfNeeded(
+        err,
+        'AuthRepository.sendPasswordResetRequest',
       );
       return Result.error(err);
     } finally {
@@ -161,9 +168,23 @@ class AuthRepositoryImpl extends AuthRepository {
         error: err,
         stackTrace: stackTrace,
       );
+      _logConnectionHintIfNeeded(err, 'AuthRepository.resetUserPassword');
       return Result.error(err);
     } finally {
       notifyListeners();
+    }
+  }
+
+  void _logConnectionHintIfNeeded(Exception err, String context) {
+    final message = err.toString();
+    if (message.contains('Connection refused') ||
+        message.contains('SocketException')) {
+      AppLogger.warning(
+        'Hint: Connection refused — this often means the app is targeting a '
+        'local Supabase instance that is not running. '
+        'Run `supabase start` or change _environment in lib/main.dart.',
+        context: context,
+      );
     }
   }
 }

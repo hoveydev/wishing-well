@@ -42,7 +42,7 @@ void main() {
       });
 
       group('Close Menu Bar', () {
-        testWidgets('renders with close icon in actions', (
+        testWidgets('renders with close icon in leading', (
           WidgetTester tester,
         ) async {
           await tester.pumpWidget(

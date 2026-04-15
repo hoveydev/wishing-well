@@ -7,8 +7,8 @@ import 'package:wishing_well/components/image_picker_circle/image_picker_circle.
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_inputs.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_inputs.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 

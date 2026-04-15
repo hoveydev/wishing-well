@@ -5,7 +5,7 @@ import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart'
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 
 class EditWisherInputs extends StatefulWidget {
@@ -99,6 +99,7 @@ class _EditWisherInputsState extends State<EditWisherInputs> {
         EditWisherErrorType.firstNameRequired => l10n.errorFirstNameRequired,
         EditWisherErrorType.lastNameRequired => l10n.errorLastNameRequired,
         EditWisherErrorType.bothNamesRequired => l10n.errorBothNamesRequired,
+        EditWisherErrorType.noChanges => l10n.errorNoChanges,
         EditWisherErrorType.unknown => l10n.errorUnknown,
         _ => '',
       };

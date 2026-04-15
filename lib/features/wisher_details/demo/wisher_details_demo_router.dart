@@ -3,6 +3,8 @@ import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/routing/transitions.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
@@ -29,6 +31,25 @@ GoRouter wisherDetailsDemoRouter(
           transitionsBuilder: slideInRightTransition,
         );
       },
+      routes: [
+        GoRoute(
+          path: 'edit',
+          name: Routes.editWisher.name,
+          pageBuilder: (context, state) {
+            final id = state.pathParameters['id']!;
+            return CustomTransitionPage(
+              child: EditWisherScreen(
+                viewModel: EditWisherViewModel(
+                  wisherRepository: wisherRepository,
+                  imageRepository: imageRepository,
+                  wisherId: id,
+                ),
+              ),
+              transitionsBuilder: slideInRightTransition,
+            );
+          },
+        ),
+      ],
     ),
   ],
 );

@@ -87,6 +87,7 @@ class WisherDetailsViewModel extends ChangeNotifier
           'Wisher deleted: $_wisherId',
           context: 'WisherDetailsViewModel.tapDeleteWisher',
         );
+        loading.hide();
         context.pop();
       case Error(:final error):
         AppLogger.error(

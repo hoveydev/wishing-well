@@ -36,6 +36,7 @@ enum EditWisherErrorType {
   bothNamesRequired,
   invalidImage,
   unknown,
+  noChanges,
 }
 
 class EditWisherError {
@@ -67,6 +68,10 @@ class EditWisherViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   String? _existingImageUrl;
+
+  String _originalFirstName = '';
+  String _originalLastName = '';
+  String? _originalImageUrl;
 
   EditWisherError _error = const EditWisherError(EditWisherErrorType.none);
 
@@ -133,6 +138,12 @@ class EditWisherViewModel extends ChangeNotifier
         'Wisher update failed: $_error',
         context: 'EditWisherViewModel.tapSaveButton',
       );
+      return;
+    }
+
+    if (!_hasChanges()) {
+      _error = const EditWisherError(EditWisherErrorType.noChanges);
+      notifyListeners();
       return;
     }
 
@@ -205,6 +216,7 @@ class EditWisherViewModel extends ChangeNotifier
         loading.showSuccess(
           l10n.wisherUpdatedSuccess(value.name),
           name: value.name,
+          imageUrl: profilePictureUrl,
           localImageFile: _imageFile,
           onOk: () {
             if (context.mounted) {
@@ -243,11 +255,20 @@ class EditWisherViewModel extends ChangeNotifier
       _firstName = _wisher!.firstName;
       _lastName = _wisher!.lastName;
       _existingImageUrl = _wisher!.profilePicture;
+      _originalFirstName = _wisher!.firstName;
+      _originalLastName = _wisher!.lastName;
+      _originalImageUrl = _wisher!.profilePicture;
     }
 
     _isLoading = false;
     notifyListeners();
   }
+
+  bool _hasChanges() =>
+      _firstName != _originalFirstName ||
+      _lastName != _originalLastName ||
+      _imageFile != null ||
+      _existingImageUrl != _originalImageUrl;
 
   void _validateForm() {
     final previousError = _error;

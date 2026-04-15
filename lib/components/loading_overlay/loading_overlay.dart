@@ -221,12 +221,11 @@ class _OverlayContent extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Show image for success, icon for error
-            if (controller.isSuccess &&
-                (imageUrl != null || localImageFile != null))
-              ProfileImageWithLabel(
+            if (controller.isSuccess && name != null)
+              ProfileImage(
                 imageUrl: imageUrl,
                 localImageFile: localImageFile,
-                name: name ?? '',
+                firstName: name,
                 radius: const AppIconSize().overlayIcon / 2,
               )
             else

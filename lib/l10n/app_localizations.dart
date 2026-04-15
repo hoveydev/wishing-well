@@ -579,6 +579,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Changes'**
   String get saveChanges;
+
+  /// Label for delete wisher button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Wisher'**
+  String get deleteWisher;
+
+  /// Error message when no changes were made to wisher
+  ///
+  /// In en, this message translates to:
+  /// **'No changes were made.'**
+  String get errorNoChanges;
 }
 
 class _AppLocalizationsDelegate

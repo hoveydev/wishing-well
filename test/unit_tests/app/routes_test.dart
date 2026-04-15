@@ -29,7 +29,7 @@ void main() {
         expect(Routes.addWisher.path, '/add-wisher');
         expect(Routes.addWisherDetails.path, 'details');
         expect(Routes.wisherDetails.path, '/wisher-details/:id');
-        expect(Routes.editWisher.path, '/edit-wisher/:id');
+        expect(Routes.editWisher.path, '/wisher-details/:id/edit');
       });
 
       test('routes have correct kebab-case names', () {
@@ -54,7 +54,7 @@ void main() {
 
       test('buildPath replaces :id for editWisher', () {
         final result = Routes.editWisher.buildPath(id: 'xyz789');
-        expect(result, '/edit-wisher/xyz789');
+        expect(result, '/wisher-details/xyz789/edit');
       });
 
       test('buildPath without id returns path unchanged', () {

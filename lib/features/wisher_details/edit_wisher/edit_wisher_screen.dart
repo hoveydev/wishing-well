@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_button.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_header.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_button.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_header.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 
 class EditWisherScreen extends StatefulWidget {
   const EditWisherScreen({required this.viewModel, super.key});

@@ -359,7 +359,7 @@ void main() {
               ),
             ),
             GoRoute(
-              path: '/edit-wisher/:id',
+              path: '/wisher-details/:id/edit',
               builder: (context, state) =>
                   const Scaffold(body: Text('Edit Screen')),
             ),
@@ -462,6 +462,30 @@ void main() {
 
         expect(mockWisherRepository.wishers.length, initialCount - 1);
         expect(mockWisherRepository.wishers.any((w) => w.id == '1'), isFalse);
+      });
+
+      testWidgets('tapDeleteWisher confirm success hides loading before pop', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('delete-btn')));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Delete'));
+        await tester.pump();
+
+        // After successful delete, loading.hide() is called so it goes
+        // back to idle before popping
+        expect(loadingController.isIdle, isTrue);
       });
 
       testWidgets('tapDeleteWisher confirm error shows error overlay', (

@@ -347,5 +347,13 @@
     "saveChanges": "Save Changes",
     "@saveChanges": {
         "description": "Save button text on Edit Wisher screen"
+    },
+    "deleteWisher": "Delete Wisher",
+    "@deleteWisher": {
+        "description": "Label for delete wisher button"
+    },
+    "errorNoChanges": "No changes were made.",
+    "@errorNoChanges": {
+        "description": "Error message when no changes were made to wisher"
     }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_header.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_header.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';

@@ -74,7 +74,20 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         child: AppLogo(size: const AppIconSize().xsmall),
       ),
     ),
-    AppMenuBarType.close => null,
+    AppMenuBarType.close => Builder(
+      builder: (context) => Semantics(
+        label: l10n.appBarClose,
+        button: true,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+          child: AppButton.icon(
+            icon: Icons.close,
+            onPressed: action,
+            type: AppButtonType.tertiary,
+          ),
+        ),
+      ),
+    ),
     AppMenuBarType.dismiss => Builder(
       builder: (context) => Semantics(
         label: l10n.appBarDismiss,
@@ -134,22 +147,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     ],
-    AppMenuBarType.close => [
-      Builder(
-        builder: (context) => Semantics(
-          label: l10n.appBarClose,
-          button: true,
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacerSize.xsmall),
-            child: AppButton.icon(
-              icon: Icons.close,
-              onPressed: action,
-              type: AppButtonType.tertiary,
-            ),
-          ),
-        ),
-      ),
-    ],
+    AppMenuBarType.close => null,
     AppMenuBarType.dismiss => null,
     AppMenuBarType.back => null,
   };

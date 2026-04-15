@@ -10,8 +10,8 @@ import 'package:wishing_well/features/auth/create_account/create_account_screen.
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_screen.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
@@ -111,25 +111,27 @@ GoRouter router() => GoRouter(
         ),
         transitionsBuilder: slideUpWithParallaxTransition,
       ),
-    ),
-    GoRoute(
-      path: Routes.editWisher.path,
-      name: Routes.editWisher.name,
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: EditWisherScreen(
-          viewModel: EditWisherViewModel(
-            wisherRepository: context.read(),
-            imageRepository: context.read(),
-            wisherId:
-                state.pathParameters['id'] ??
-                (throw ArgumentError(
-                  'Missing wisher ID in route parameters for '
-                  '${Routes.editWisher.path}',
-                )),
+      routes: [
+        GoRoute(
+          path: 'edit',
+          name: Routes.editWisher.name,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: EditWisherScreen(
+              viewModel: EditWisherViewModel(
+                wisherRepository: context.read(),
+                imageRepository: context.read(),
+                wisherId:
+                    state.pathParameters['id'] ??
+                    (throw ArgumentError(
+                      'Missing wisher ID in route parameters for '
+                      '${Routes.editWisher.path}',
+                    )),
+              ),
+            ),
+            transitionsBuilder: slideInRightTransition,
           ),
         ),
-        transitionsBuilder: slideInRightTransition,
-      ),
+      ],
     ),
     GoRoute(
       path: Routes.addWisher.path,

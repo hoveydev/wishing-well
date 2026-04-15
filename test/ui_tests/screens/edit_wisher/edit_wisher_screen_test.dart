@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_button.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_header.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_screen.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_button.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_header.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
@@ -30,10 +30,10 @@ void main() {
       );
       loadingController = LoadingController();
       router = GoRouter(
-        initialLocation: '/edit-wisher/1',
+        initialLocation: '/wisher-details/1/edit',
         routes: [
           GoRoute(
-            path: '/edit-wisher/1',
+            path: '/wisher-details/:id/edit',
             builder: (context, state) => EditWisherScreen(viewModel: viewModel),
           ),
         ],

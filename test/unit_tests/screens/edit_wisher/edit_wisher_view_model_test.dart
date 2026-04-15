@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
@@ -225,7 +225,7 @@ void main() {
 
     group('Error Type Coverage', () {
       test('all error types are accounted for', () {
-        expect(EditWisherErrorType.values.length, 6);
+        expect(EditWisherErrorType.values.length, 7);
         expect(
           EditWisherErrorType.values,
           containsAll([
@@ -235,6 +235,7 @@ void main() {
             EditWisherErrorType.bothNamesRequired,
             EditWisherErrorType.invalidImage,
             EditWisherErrorType.unknown,
+            EditWisherErrorType.noChanges,
           ]),
         );
       });
@@ -242,6 +243,10 @@ void main() {
       test('EditWisherError holds its type', () {
         const error = EditWisherError(EditWisherErrorType.unknown);
         expect(error.type, EditWisherErrorType.unknown);
+      });
+
+      test('noChanges error type exists', () {
+        expect(EditWisherErrorType.noChanges, isA<EditWisherErrorType>());
       });
     });
 
@@ -397,6 +402,27 @@ void main() {
         expect(loadingController.isIdle, isTrue);
       });
 
+      testWidgets('with no changes sets noChanges error without loading', (
+        WidgetTester tester,
+      ) async {
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: mockImageRepository,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        // No changes made — same name as Alice Test loaded from repo
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+
+        expect(vm.error.type, EditWisherErrorType.noChanges);
+        expect(loadingController.isIdle, isTrue);
+      });
+
       testWidgets('with null wisher shows error', (WidgetTester tester) async {
         // Use a wisherId that doesn't exist so _wisher is null
         final vm = EditWisherViewModel(
@@ -430,6 +456,9 @@ void main() {
         );
         addTearDown(vm.dispose);
 
+        // Make a change so noChanges check does not short-circuit
+        vm.updateFirstName('Alicia');
+
         await tester.pumpWidget(buildTestWidget(vm));
         await TestHelpers.pumpAndSettle(tester);
 
@@ -452,6 +481,9 @@ void main() {
         );
         addTearDown(vm.dispose);
         addTearDown(errorRepo.dispose);
+
+        // Make a change so noChanges check does not short-circuit
+        vm.updateFirstName('Alicia');
 
         await tester.pumpWidget(buildTestWidget(vm));
         await TestHelpers.pumpAndSettle(tester);
@@ -476,6 +508,9 @@ void main() {
         );
         addTearDown(vm.dispose);
         addTearDown(errorRepo.dispose);
+
+        // Make a change so noChanges check does not short-circuit
+        vm.updateFirstName('Alicia');
 
         await tester.pumpWidget(buildTestWidget(vm));
         await TestHelpers.pumpAndSettle(tester);

@@ -12,7 +12,7 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_screen.
 import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_screen.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';

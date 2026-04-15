@@ -406,11 +406,13 @@ void main() {
               path: '/wisher-details/:id',
               builder: (context, state) =>
                   WisherDetailsScreen(viewModel: viewModel),
-            ),
-            GoRoute(
-              path: '/edit-wisher/:id',
-              builder: (context, state) =>
-                  const Scaffold(body: Center(child: Text('Edit Screen'))),
+              routes: [
+                GoRoute(
+                  path: 'edit',
+                  builder: (context, state) =>
+                      const Scaffold(body: Center(child: Text('Edit Screen'))),
+                ),
+              ],
             ),
             GoRoute(
               path: '/home',

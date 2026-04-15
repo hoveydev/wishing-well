@@ -269,4 +269,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveChanges => 'Save Changes';
+
+  @override
+  String get deleteWisher => 'Delete Wisher';
+
+  @override
+  String get errorNoChanges => 'No changes were made.';
 }

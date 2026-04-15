@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/button/app_button.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_button.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_button.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
@@ -102,6 +102,10 @@ void main() {
         WidgetTester tester,
       ) async {
         final loadingController = LoadingController();
+
+        // Make a change so noChanges check does not short-circuit
+        viewModel.updateFirstName('NewName');
+
         final goRouter = GoRouter(
           initialLocation: '/test',
           routes: [

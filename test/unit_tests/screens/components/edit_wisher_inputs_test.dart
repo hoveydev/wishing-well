@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
 import 'package:wishing_well/components/input/app_input.dart';
-import 'package:wishing_well/features/edit_wisher/components/edit_wisher_inputs.dart';
-import 'package:wishing_well/features/edit_wisher/edit_wisher_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_inputs.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
@@ -255,6 +255,8 @@ void main() {
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
+        // Make a change so noChanges check does not short-circuit
+        vmWithError.updateFirstName('NewName');
         await tester.tap(find.text('Save'));
         await tester.pump();
 
@@ -268,6 +270,60 @@ void main() {
 
         expect(vmWithError.error.type, EditWisherErrorType.unknown);
         expect(find.byType(AppInlineAlert), findsOneWidget);
+      });
+
+      testWidgets('shows noChanges error message', (WidgetTester tester) async {
+        // Trigger noChanges error by tapping save without any changes
+        final goRouter = GoRouter(
+          initialLocation: '/t',
+          routes: [
+            GoRoute(
+              path: '/t',
+              builder: (context, state) => ChangeNotifierProvider(
+                create: (_) => LoadingController(),
+                child: Scaffold(
+                  body: Builder(
+                    builder: (context) => ElevatedButton(
+                      onPressed: () => viewModel.tapSaveButton(context),
+                      child: const Text('Save'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(
+          MaterialApp.router(
+            theme: AppTheme.lightTheme,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: goRouter,
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // No changes made — triggers noChanges
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+
+        expect(viewModel.error.type, EditWisherErrorType.noChanges);
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            EditWisherInputs(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(AppInlineAlert), findsOneWidget);
+        expect(find.text('No changes were made.'), findsOneWidget);
       });
     });
   });

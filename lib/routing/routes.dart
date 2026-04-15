@@ -7,7 +7,8 @@ enum Routes {
   createAccount('/create-account'),
   addWisher('/add-wisher'), // add-wisher
   addWisherDetails('details'), // add-wisher/details
-  wisherDetails('/wisher-details/:id'); // wisher-details/:id
+  wisherDetails('/wisher-details/:id'), // wisher-details/:id
+  editWisher('/edit-wisher/:id'); // edit-wisher/:id
 
   const Routes(this.path);
   final String path;

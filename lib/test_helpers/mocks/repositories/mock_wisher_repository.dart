@@ -7,11 +7,13 @@ class MockWisherRepository extends WisherRepository {
     Result<Wisher>? createWisherResult,
     Result<void>? deleteWisherResult,
     Result<void>? fetchWishersResult,
+    Result<Wisher>? updateWisherResult,
     List<Wisher>? initialWishers,
     this.delay = Duration.zero,
   }) : createWisherResult = createWisherResult ?? _defaultCreateWisherResult,
        deleteWisherResult = deleteWisherResult ?? const Result.ok(null),
        fetchWishersResult = fetchWishersResult ?? const Result.ok(null),
+       updateWisherResult = updateWisherResult,
        _wishers = initialWishers ?? _defaultWishers;
 
   /// Optional delay to simulate network latency
@@ -67,6 +69,10 @@ class MockWisherRepository extends WisherRepository {
   final Result<Wisher> createWisherResult;
   final Result<void> deleteWisherResult;
   final Result<void> fetchWishersResult;
+
+  /// Optional override for updateWisher result.
+  /// When null, update succeeds and mutates the in-memory list.
+  final Result<Wisher>? updateWisherResult;
 
   final List<Wisher> _wishers;
   bool _isLoading = false;
@@ -135,6 +141,9 @@ class MockWisherRepository extends WisherRepository {
 
   @override
   Future<Result<Wisher>> updateWisher(Wisher wisher) async {
+    if (updateWisherResult != null) {
+      return updateWisherResult!;
+    }
     final index = _wishers.indexWhere((w) => w.id == wisher.id);
     if (index != -1) {
       _wishers[index] = wisher;

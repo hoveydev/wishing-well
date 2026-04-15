@@ -299,5 +299,53 @@
                 "example": "John Smith"
             }
         }
+    },
+    "wisherUpdatedSuccess": "{name} has been updated!",
+    "@wisherUpdatedSuccess": {
+        "description": "Success message when a wisher is updated",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "John Smith"
+            }
+        }
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Label for cancel button"
+    },
+    "delete": "Delete",
+    "@delete": {
+        "description": "Label for delete button"
+    },
+    "wisherDeleteConfirmTitle": "Delete Wisher?",
+    "@wisherDeleteConfirmTitle": {
+        "description": "Title for wisher delete confirmation dialog"
+    },
+    "wisherDeleteConfirmMessage": "Are you sure you want to delete {name}? This cannot be undone.",
+    "@wisherDeleteConfirmMessage": {
+        "description": "Body for wisher delete confirmation dialog",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "John Smith"
+            }
+        }
+    },
+    "appBarEdit": "Edit",
+    "@appBarEdit": {
+        "description": "Accessibility label for edit button in app bar"
+    },
+    "editWisherScreenHeader": "Edit Wisher Details",
+    "@editWisherScreenHeader": {
+        "description": "Header for edit wisher screen"
+    },
+    "editWisherScreenSubtext": "Update the details below to keep your wisher's information current.",
+    "@editWisherScreenSubtext": {
+        "description": "Subtext for edit wisher screen"
+    },
+    "saveChanges": "Save Changes",
+    "@saveChanges": {
+        "description": "Save button text on Edit Wisher screen"
     }
 }

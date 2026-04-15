@@ -1,7 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
+import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 
 void main() {
   group('WisherDetailsViewModel', () {
@@ -13,128 +22,146 @@ void main() {
 
     group('Initialization', () {
       test('initializes with loading state false', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert
         expect(viewModel.isLoading, isFalse);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('initializes with wisher null when not found', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: 'nonexistent-id',
         );
 
-        // Assert
         expect(viewModel.wisher, isNull);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('initializes with correct wisherId lookup', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert - Alice exists with ID '1'
         expect(viewModel.wisher, isNotNull);
         expect(viewModel.wisher!.firstName, 'Alice');
 
-        // Cleanup
         viewModel.dispose();
       });
     });
 
     group('Wisher Loading', () {
       test('finds wisher from cached list by ID', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert
         expect(viewModel.wisher, isNotNull);
         expect(viewModel.wisher!.firstName, 'Alice');
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('returns null when wisher ID not found in cache', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: 'definitely-not-a-real-id',
         );
 
-        // Assert
         expect(viewModel.wisher, isNull);
         expect(viewModel.isLoading, isFalse);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('handles empty wisherId gracefully', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '',
         );
 
-        // Assert - Should not throw, wisher should be null
         expect(viewModel.wisher, isNull);
         expect(viewModel.isLoading, isFalse);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('finds correct wisher when multiple wishers exist', () {
-        // Act - Mock has 4 default wishers with IDs '1', '2', '3', '4'
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '2',
         );
 
-        // Assert
         expect(viewModel.wisher, isNotNull);
         expect(viewModel.wisher!.firstName, 'Bob');
 
-        // Cleanup
+        viewModel.dispose();
+      });
+    });
+
+    group('Repository Listener', () {
+      test('updates wisher when repository changes', () async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+
+        expect(viewModel.wisher?.firstName, 'Alice');
+
+        final updatedAlice = Wisher(
+          id: '1',
+          userId: 'test-user',
+          firstName: 'Alicia',
+          lastName: 'Test',
+          createdAt: DateTime(2024),
+          updatedAt: DateTime.now(),
+        );
+
+        await mockWisherRepository.updateWisher(updatedAlice);
+
+        expect(viewModel.wisher?.firstName, 'Alicia');
+
+        viewModel.dispose();
+      });
+
+      test('notifies listeners when repository changes', () async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+
+        var notifyCount = 0;
+        viewModel.addListener(() => notifyCount++);
+
+        mockWisherRepository.notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 10));
+
+        expect(notifyCount, greaterThan(0));
+
         viewModel.dispose();
       });
     });
 
     group('Loading State', () {
       test('initializes with isLoading false after construction', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert - Loading completes synchronously
         expect(viewModel.isLoading, isFalse);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('updates listeners when loading completes', () async {
-        // Arrange
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
@@ -145,21 +172,17 @@ void main() {
           notificationCount++;
         });
 
-        // Act - Trigger notification by notifying listeners
         mockWisherRepository.notifyListeners();
         await Future.delayed(const Duration(milliseconds: 50));
 
-        // Assert
         expect(notificationCount, greaterThanOrEqualTo(0));
 
-        // Cleanup
         viewModel.dispose();
       });
     });
 
     group('Listener Management', () {
       test('cleans up listener on dispose', () async {
-        // Arrange
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
@@ -170,10 +193,8 @@ void main() {
           notificationCount++;
         });
 
-        // Act
         viewModel.dispose();
 
-        // Create a separate wisher to notify listeners
         final tempVm = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '2',
@@ -182,63 +203,73 @@ void main() {
         mockWisherRepository.notifyListeners();
         await Future.delayed(const Duration(milliseconds: 50));
 
-        // Assert - Disposed viewModel should not receive notifications
         expect(notificationCount, 0);
 
-        // Cleanup
         tempVm.dispose();
       });
     });
 
     group('Contract Implementation', () {
       test('implements WisherDetailsViewModelContract', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert
         expect(viewModel, isA<WisherDetailsViewModelContract>());
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('exposes wisher through contract', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert
         final Wisher? wisher = viewModel.wisher;
         expect(wisher, isNotNull);
 
-        // Cleanup
         viewModel.dispose();
       });
 
       test('exposes isLoading through contract', () {
-        // Act
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
 
-        // Assert
         final bool isLoading = viewModel.isLoading;
         expect(isLoading, isFalse);
 
-        // Cleanup
+        viewModel.dispose();
+      });
+
+      test('contract has tapDeleteWisher method', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        final contract = viewModel as WisherDetailsViewModelContract;
+        expect(contract.tapDeleteWisher, isNotNull);
+
+        viewModel.dispose();
+      });
+
+      test('contract has tapEditWisher method', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        final contract = viewModel as WisherDetailsViewModelContract;
+        expect(contract.tapEditWisher, isNotNull);
+
         viewModel.dispose();
       });
     });
 
     group('Edge Cases', () {
       test('handles empty wisherId gracefully without errors', () {
-        // Act & Assert
         expect(() {
           final vm = WisherDetailsViewModel(
             wisherRepository: mockWisherRepository,
@@ -249,7 +280,6 @@ void main() {
       });
 
       test('can construct multiple instances with different IDs', () {
-        // Act
         final vm1 = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
@@ -259,18 +289,15 @@ void main() {
           wisherId: '2',
         );
 
-        // Assert
         expect(vm1.wisher!.firstName, 'Alice');
         expect(vm2.wisher!.firstName, 'Bob');
         expect(vm1.wisher!.id, isNot(vm2.wisher!.id));
 
-        // Cleanup
         vm1.dispose();
         vm2.dispose();
       });
 
       test('works with all mock repository wishers', () {
-        // Test that we can access all default wishers
         final ids = ['1', '2', '3', '4'];
         final expectedNames = ['Alice', 'Bob', 'Charlie', 'Diana'];
 
@@ -285,6 +312,203 @@ void main() {
 
           vm.dispose();
         }
+      });
+    });
+
+    group('tapDeleteWisher and tapEditWisher', () {
+      late LoadingController loadingController;
+
+      Widget buildRouterWidget(
+        WisherDetailsViewModel viewModel, {
+        List<GoRoute> extraRoutes = const [],
+      }) {
+        late GoRouter goRouter;
+        goRouter = GoRouter(
+          initialLocation: '/home',
+          routes: [
+            GoRoute(
+              path: '/home',
+              builder: (context, state) => Scaffold(
+                body: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () => goRouter.push('/test'),
+                    child: const Text('Go to test'),
+                  ),
+                ),
+              ),
+            ),
+            GoRoute(
+              path: '/test',
+              builder: (context, state) => Scaffold(
+                body: Builder(
+                  builder: (context) => Column(
+                    children: [
+                      ElevatedButton(
+                        key: const Key('delete-btn'),
+                        onPressed: () => viewModel.tapDeleteWisher(context),
+                        child: const Text('Trigger Delete'),
+                      ),
+                      ElevatedButton(
+                        key: const Key('edit-btn'),
+                        onPressed: () => viewModel.tapEditWisher(context),
+                        child: const Text('Edit'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            GoRoute(
+              path: '/edit-wisher/:id',
+              builder: (context, state) =>
+                  const Scaffold(body: Text('Edit Screen')),
+            ),
+            ...extraRoutes,
+          ],
+        );
+
+        return ChangeNotifierProvider<LoadingController>.value(
+          value: loadingController,
+          child: MaterialApp.router(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: goRouter,
+          ),
+        );
+      }
+
+      Future<void> navigateToTestPage(WidgetTester tester) async {
+        await tester.tap(find.text('Go to test'));
+        await TestHelpers.pumpAndSettle(tester);
+      }
+
+      setUp(() {
+        loadingController = LoadingController();
+      });
+
+      testWidgets('tapDeleteWisher shows AlertDialog', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('delete-btn')));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+      });
+
+      testWidgets('tapDeleteWisher cancel does not delete wisher', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+
+        final initialCount = mockWisherRepository.wishers.length;
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('delete-btn')));
+        await tester.pumpAndSettle();
+
+        // Tap Cancel
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(mockWisherRepository.wishers.length, initialCount);
+      });
+
+      testWidgets('tapDeleteWisher confirm success deletes wisher', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+
+        final initialCount = mockWisherRepository.wishers.length;
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('delete-btn')));
+        await tester.pumpAndSettle();
+
+        // Tap Delete to confirm
+        await tester.tap(find.text('Delete'));
+        await tester.pump();
+
+        expect(mockWisherRepository.wishers.length, initialCount - 1);
+        expect(mockWisherRepository.wishers.any((w) => w.id == '1'), isFalse);
+      });
+
+      testWidgets('tapDeleteWisher confirm error shows error overlay', (
+        WidgetTester tester,
+      ) async {
+        final errorRepo = MockWisherRepository(
+          deleteWisherResult: Result.error(Exception('delete failed')),
+        );
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: errorRepo,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+        addTearDown(errorRepo.dispose);
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('delete-btn')));
+        await tester.pumpAndSettle();
+
+        // Confirm delete
+        await tester.tap(find.text('Delete'));
+        await tester.pump();
+
+        // Loading controller should be in error state
+        expect(loadingController.isError, isTrue);
+      });
+
+      testWidgets('tapEditWisher navigates to edit screen', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+        addTearDown(viewModel.dispose);
+
+        await tester.pumpWidget(buildRouterWidget(viewModel));
+        await TestHelpers.pumpAndSettle(tester);
+        await navigateToTestPage(tester);
+
+        await tester.tap(find.byKey(const Key('edit-btn')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Edit Screen'), findsOneWidget);
       });
     });
   });

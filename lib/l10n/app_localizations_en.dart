@@ -237,4 +237,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String wisherCreatedSuccess(String name) {
     return '$name has been added!';
   }
+
+  @override
+  String wisherUpdatedSuccess(String name) {
+    return '$name has been updated!';
+  }
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get wisherDeleteConfirmTitle => 'Delete Wisher?';
+
+  @override
+  String wisherDeleteConfirmMessage(String name) {
+    return 'Are you sure you want to delete $name? This cannot be undone.';
+  }
+
+  @override
+  String get appBarEdit => 'Edit';
+
+  @override
+  String get editWisherScreenHeader => 'Edit Wisher Details';
+
+  @override
+  String get editWisherScreenSubtext =>
+      'Update the details below to keep your wisher\'s information current.';
+
+  @override
+  String get saveChanges => 'Save Changes';
 }

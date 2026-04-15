@@ -149,89 +149,100 @@ class EditWisherViewModel extends ChangeNotifier
 
     loading.show();
 
-    final userId = _wisher?.userId;
-    if (userId == null) {
-      AppLogger.error(
-        'Wisher update failed: No userId on wisher',
-        context: 'EditWisherViewModel.tapSaveButton',
-      );
-      _error = const EditWisherError(EditWisherErrorType.unknown);
-      loading.showError(l10n.errorUnknown, onOk: clearError);
-      return;
-    }
-
-    String? profilePictureUrl = _existingImageUrl;
-
-    if (_imageFile != null) {
-      AppLogger.debug(
-        'Uploading updated profile picture...',
-        context: 'EditWisherViewModel.tapSaveButton',
-      );
-      try {
-        profilePictureUrl = await _imageRepository.uploadImage(
-          filePath: _imageFile!.path,
-          bucketName: AppConfig.profilePicturesBucket,
-          folder: userId,
-        );
-        if (profilePictureUrl == null) {
-          AppLogger.warning(
-            'Failed to upload profile picture, continuing without it',
-            context: 'EditWisherViewModel.tapSaveButton',
-          );
-        }
-      } on ImageValidationException catch (e) {
-        AppLogger.warning(
-          'Invalid image file: ${e.message}',
-          context: 'EditWisherViewModel.tapSaveButton',
-        );
-        _error = const EditWisherError(EditWisherErrorType.invalidImage);
-        loading.showError(e.message, onOk: clearError);
-        return;
-      }
-    }
-
-    final updatedWisher = Wisher(
-      id: _wisher!.id,
-      userId: userId,
-      firstName: _firstName,
-      lastName: _lastName,
-      profilePicture: profilePictureUrl,
-      createdAt: _wisher!.createdAt,
-      updatedAt: DateTime.now(),
-    );
-
-    final response = await _wisherRepository.updateWisher(updatedWisher);
-
-    switch (response) {
-      case Ok(:final value):
-        AppLogger.info(
-          'Wisher updated successfully: ${value.id}',
-          context: 'EditWisherViewModel.tapSaveButton',
-        );
-
-        if (profilePictureUrl != null) {
-          await _imageRepository.preloadImages([profilePictureUrl]);
-        }
-
-        loading.showSuccess(
-          l10n.wisherUpdatedSuccess(value.name),
-          name: value.name,
-          imageUrl: profilePictureUrl,
-          localImageFile: _imageFile,
-          onOk: () {
-            if (context.mounted) {
-              context.pop();
-            }
-          },
-        );
-      case Error(:final error):
+    try {
+      final userId = _wisher?.userId;
+      if (userId == null) {
         AppLogger.error(
-          'Wisher update failed',
+          'Wisher update failed: No userId on wisher',
           context: 'EditWisherViewModel.tapSaveButton',
-          error: error,
         );
         _error = const EditWisherError(EditWisherErrorType.unknown);
         loading.showError(l10n.errorUnknown, onOk: clearError);
+        return;
+      }
+
+      String? profilePictureUrl = _existingImageUrl;
+
+      if (_imageFile != null) {
+        AppLogger.debug(
+          'Uploading updated profile picture...',
+          context: 'EditWisherViewModel.tapSaveButton',
+        );
+        try {
+          profilePictureUrl = await _imageRepository.uploadImage(
+            filePath: _imageFile!.path,
+            bucketName: AppConfig.profilePicturesBucket,
+            folder: userId,
+          );
+          if (profilePictureUrl == null) {
+            AppLogger.warning(
+              'Failed to upload profile picture, continuing without it',
+              context: 'EditWisherViewModel.tapSaveButton',
+            );
+          }
+        } on ImageValidationException catch (e) {
+          AppLogger.warning(
+            'Invalid image file: ${e.message}',
+            context: 'EditWisherViewModel.tapSaveButton',
+          );
+          _error = const EditWisherError(EditWisherErrorType.invalidImage);
+          loading.showError(e.message, onOk: clearError);
+          return;
+        }
+      }
+
+      final updatedWisher = Wisher(
+        id: _wisher!.id,
+        userId: userId,
+        firstName: _firstName,
+        lastName: _lastName,
+        profilePicture: profilePictureUrl,
+        createdAt: _wisher!.createdAt,
+        updatedAt: DateTime.now(),
+      );
+
+      final response = await _wisherRepository.updateWisher(updatedWisher);
+
+      switch (response) {
+        case Ok(:final value):
+          AppLogger.info(
+            'Wisher updated successfully: ${value.id}',
+            context: 'EditWisherViewModel.tapSaveButton',
+          );
+
+          if (profilePictureUrl != null) {
+            await _imageRepository.preloadImages([profilePictureUrl]);
+          }
+
+          loading.showSuccess(
+            l10n.wisherUpdatedSuccess(value.name),
+            name: value.name,
+            imageUrl: profilePictureUrl,
+            localImageFile: _imageFile,
+            onOk: () {
+              if (context.mounted) {
+                context.pop();
+              }
+            },
+          );
+        case Error(:final error):
+          AppLogger.error(
+            'Wisher update failed',
+            context: 'EditWisherViewModel.tapSaveButton',
+            error: error,
+          );
+          _error = const EditWisherError(EditWisherErrorType.unknown);
+          loading.showError(l10n.errorUnknown, onOk: clearError);
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Unexpected error during wisher update',
+        context: 'EditWisherViewModel.tapSaveButton',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      _error = const EditWisherError(EditWisherErrorType.unknown);
+      loading.showError(l10n.errorUnknown, onOk: clearError);
     }
   }
 

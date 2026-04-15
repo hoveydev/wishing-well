@@ -511,6 +511,50 @@ void main() {
           expect(find.text('Tall Button'), findsOneWidget);
           expect(find.byType(ElevatedButton), findsOneWidget);
         });
+
+        testWidgets('tertiary style accepts minimumSize parameter', (
+          tester,
+        ) async {
+          // Arrange & Act: Create tertiary button with minimumSize
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Icon Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Icon Button'), findsOneWidget);
+        });
+
+        testWidgets(
+          'tertiary style with null minimumSize uses Flutter default',
+          (tester) async {
+            // Arrange & Act: Create tertiary button without minimumSize
+            await tester.pumpWidget(
+              createScreenComponentTestWidget(
+                Builder(
+                  builder: (context) => ElevatedButton(
+                    style: ButtonFeedbackStyle.tertiary(context: context),
+                    onPressed: () {},
+                    child: const Text('Default Size Button'),
+                  ),
+                ),
+              ),
+            );
+
+            // Assert: Button should render
+            expect(find.text('Default Size Button'), findsOneWidget);
+          },
+        );
       });
     });
   });

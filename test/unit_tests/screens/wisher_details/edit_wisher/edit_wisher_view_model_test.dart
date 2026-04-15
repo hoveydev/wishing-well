@@ -605,6 +605,33 @@ void main() {
           expect(vm.error.type, EditWisherErrorType.invalidImage);
         },
       );
+
+      testWidgets(
+        'with unexpected exception after loading.show shows error not spinner',
+        (WidgetTester tester) async {
+          final unexpectedRepo = _UnexpectedThrowingImageRepository();
+          final vm = EditWisherViewModel(
+            wisherRepository: mockRepository,
+            imageRepository: unexpectedRepo,
+            wisherId: '1',
+          );
+          addTearDown(vm.dispose);
+
+          final tempFile = File(
+            '${Directory.systemTemp.path}/test_unexpected.jpg',
+          );
+          vm.updateImage(tempFile);
+
+          await tester.pumpWidget(buildTestWidget(vm));
+          await TestHelpers.pumpAndSettle(tester);
+
+          await tester.tap(find.text('Save'));
+          await tester.pump();
+
+          expect(loadingController.isError, isTrue);
+          expect(vm.error.type, EditWisherErrorType.unknown);
+        },
+      );
     });
   });
 }
@@ -628,5 +655,17 @@ class _ThrowingImageRepository extends MockImageRepository {
     String? folder,
   }) async {
     throw ImageValidationException('Invalid image format for testing');
+  }
+}
+
+/// Mock image repository that throws an unexpected non-validation exception
+class _UnexpectedThrowingImageRepository extends MockImageRepository {
+  @override
+  Future<String?> uploadImage({
+    required String filePath,
+    required String bucketName,
+    String? folder,
+  }) async {
+    throw Exception('Unexpected network error');
   }
 }

@@ -94,6 +94,10 @@ class TertiaryButton extends StatelessWidget {
         shape: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
             ? const CircleBorder()
             : null,
+        minimumSize:
+            _tertiaryButtonContentType == _TertiaryButtonContentType.icon
+            ? const WidgetStatePropertyAll(Size(48, 48))
+            : null,
         color: color,
       ),
       onPressed: onPressHandler,

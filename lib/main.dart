@@ -43,7 +43,7 @@ enum AppRunConfig {
 }
 
 /// Current run configuration - change this to run different demos
-const AppRunConfig _runConfig = AppRunConfig.wisherDetailsDemo;
+const AppRunConfig _runConfig = AppRunConfig.production;
 
 /// Current environment for the app.
 ///

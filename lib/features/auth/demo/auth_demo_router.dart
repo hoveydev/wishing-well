@@ -121,11 +121,5 @@ class _DemoLoginScreenState extends State<_DemoLoginScreen> {
   }
 
   @override
-  void dispose() {
-    _viewModel.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => LoginScreen(viewModel: _viewModel);
 }

@@ -6,7 +6,6 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/utils/auth_service.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 
 /// A reusable profile image component with authenticated network image support.
 ///
@@ -73,11 +72,11 @@ class ProfileImage extends StatelessWidget {
               right: 0,
               child: CircleAvatar(
                 radius: radius * 0.32,
-                backgroundColor: colorScheme.surfaceGray ?? Colors.white,
+                backgroundColor: colorScheme.surfaceGray!,
                 child: Icon(
                   Icons.edit,
                   size: radius * 0.32,
-                  color: colorScheme.primary ?? AppColors.primary,
+                  color: colorScheme.primary!,
                 ),
               ),
             ),
@@ -89,7 +88,7 @@ class ProfileImage extends StatelessWidget {
   /// Builds avatar showing local file
   Widget _buildLocalFileAvatar(AppColorScheme colorScheme) => CircleAvatar(
     radius: radius,
-    backgroundColor: colorScheme.primary ?? const Color(0xFF3A8FB7),
+    backgroundColor: colorScheme.primary!,
     backgroundImage: FileImage(localImageFile!),
   );
 
@@ -109,12 +108,12 @@ class ProfileImage extends StatelessWidget {
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: colorScheme.primary ?? const Color(0xFF3A8FB7),
+      backgroundColor: colorScheme.primary!,
       child: Text(
         initial,
         style: TextStyle(
           fontSize: radius * 0.67,
-          color: colorScheme.onPrimary ?? const Color(0xFFE8E8E8),
+          color: colorScheme.onPrimary!,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -124,13 +123,13 @@ class ProfileImage extends StatelessWidget {
   /// Builds loading placeholder avatar
   Widget _buildLoadingAvatar(AppColorScheme colorScheme) => CircleAvatar(
     radius: radius,
-    backgroundColor: colorScheme.primary ?? const Color(0xFF3A8FB7),
+    backgroundColor: colorScheme.primary!,
     child: SizedBox(
       width: radius * 0.5,
       height: radius * 0.5,
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: colorScheme.onPrimary ?? const Color(0xFFE8E8E8),
+        color: colorScheme.onPrimary!,
       ),
     ),
   );
@@ -176,12 +175,12 @@ class ProfileAvatar extends StatelessWidget {
     if (!hasImage) {
       return CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary ?? AppColors.primary,
+        backgroundColor: colorScheme.primary!,
         child: Text(
           initial,
           style: TextStyle(
             fontSize: radius * 0.67,
-            color: colorScheme.onPrimary ?? AppColors.onPrimary,
+            color: colorScheme.onPrimary!,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -195,24 +194,24 @@ class ProfileAvatar extends StatelessWidget {
           CircleAvatar(radius: radius, backgroundImage: imageProvider),
       placeholder: (context, url) => CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary ?? AppColors.primary,
+        backgroundColor: colorScheme.primary!,
         child: SizedBox(
           width: radius * 0.5,
           height: radius * 0.5,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: colorScheme.onPrimary ?? AppColors.onPrimary,
+            color: colorScheme.onPrimary!,
           ),
         ),
       ),
       errorWidget: (context, url, error) => CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary ?? AppColors.primary,
+        backgroundColor: colorScheme.primary!,
         child: Text(
           initial,
           style: TextStyle(
             fontSize: radius * 0.67,
-            color: colorScheme.onPrimary ?? AppColors.onPrimary,
+            color: colorScheme.onPrimary!,
             fontWeight: FontWeight.w600,
           ),
         ),

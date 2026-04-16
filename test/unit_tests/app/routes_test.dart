@@ -29,7 +29,7 @@ void main() {
         expect(Routes.addWisher.path, '/add-wisher');
         expect(Routes.addWisherDetails.path, 'details');
         expect(Routes.wisherDetails.path, '/wisher-details/:id');
-        expect(Routes.editWisher.path, '/wisher-details/:id/edit');
+        expect(Routes.editWisher.path, 'edit');
       });
 
       test('routes have correct kebab-case names', () {

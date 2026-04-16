@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/button/app_button_size.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/button/button_feedback_style.dart';
@@ -96,7 +97,12 @@ class TertiaryButton extends StatelessWidget {
             : null,
         minimumSize:
             _tertiaryButtonContentType == _TertiaryButtonContentType.icon
-            ? const WidgetStatePropertyAll(Size(48, 48))
+            ? const WidgetStatePropertyAll(
+                Size(
+                  AppButtonSize.minTouchTarget,
+                  AppButtonSize.minTouchTarget,
+                ),
+              )
             : null,
         color: color,
       ),

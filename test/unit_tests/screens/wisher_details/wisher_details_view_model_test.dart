@@ -32,15 +32,14 @@ void main() {
         viewModel.dispose();
       });
 
-      test('initializes with wisher null when not found', () {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'nonexistent-id',
+      test('throws when wisher ID is not found', () {
+        expect(
+          () => WisherDetailsViewModel(
+            wisherRepository: mockWisherRepository,
+            wisherId: 'nonexistent-id',
+          ),
+          throwsStateError,
         );
-
-        expect(viewModel.wisher, isNull);
-
-        viewModel.dispose();
       });
 
       test('initializes with correct wisherId lookup', () {
@@ -69,28 +68,24 @@ void main() {
         viewModel.dispose();
       });
 
-      test('returns null when wisher ID not found in cache', () {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'definitely-not-a-real-id',
+      test('throws when wisher ID is not found in cache', () {
+        expect(
+          () => WisherDetailsViewModel(
+            wisherRepository: mockWisherRepository,
+            wisherId: 'definitely-not-a-real-id',
+          ),
+          throwsStateError,
         );
-
-        expect(viewModel.wisher, isNull);
-        expect(viewModel.isLoading, isFalse);
-
-        viewModel.dispose();
       });
 
-      test('handles empty wisherId gracefully', () {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: '',
+      test('throws for empty wisherId', () {
+        expect(
+          () => WisherDetailsViewModel(
+            wisherRepository: mockWisherRepository,
+            wisherId: '',
+          ),
+          throwsStateError,
         );
-
-        expect(viewModel.wisher, isNull);
-        expect(viewModel.isLoading, isFalse);
-
-        viewModel.dispose();
       });
 
       test('finds correct wisher when multiple wishers exist', () {
@@ -269,14 +264,14 @@ void main() {
     });
 
     group('Edge Cases', () {
-      test('handles empty wisherId gracefully without errors', () {
-        expect(() {
-          final vm = WisherDetailsViewModel(
+      test('throws for empty wisherId', () {
+        expect(
+          () => WisherDetailsViewModel(
             wisherRepository: mockWisherRepository,
             wisherId: '',
-          );
-          vm.dispose();
-        }, returnsNormally);
+          ),
+          throwsStateError,
+        );
       });
 
       test('can construct multiple instances with different IDs', () {

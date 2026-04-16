@@ -274,8 +274,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteWisher => 'Delete Wisher';
 
   @override
-  String get wisherNotFound => 'Wisher not found';
-
-  @override
   String get errorNoChanges => 'No changes were made.';
 }

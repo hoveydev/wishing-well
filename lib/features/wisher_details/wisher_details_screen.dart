@@ -38,7 +38,7 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
               appBar: AppMenuBar(
                 action: () => context.pop(),
                 type: AppMenuBarType.close,
-                additionalActions: viewModel.wisher != null
+                additionalActions: !viewModel.isLoading
                     ? [
                         Builder(
                           builder: (context) => Semantics(
@@ -64,14 +64,9 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
               children: [
                 if (viewModel.isLoading)
                   const CircularProgressIndicator()
-                else if (viewModel.wisher != null)
-                  WisherDetailsProfile(wisher: viewModel.wisher!)
                 else
-                  Text(
-                    l10n.wisherNotFound,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                if (viewModel.wisher != null)
+                  WisherDetailsProfile(wisher: viewModel.wisher!),
+                if (!viewModel.isLoading)
                   WisherDetailsDeleteButton(
                     onPressed: () => viewModel.tapDeleteWisher(context),
                   ),

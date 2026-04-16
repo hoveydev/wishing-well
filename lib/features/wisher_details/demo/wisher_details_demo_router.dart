@@ -21,6 +21,11 @@ GoRouter wisherDetailsDemoRouter(
       name: Routes.wisherDetails.name,
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
+        final hasWisher = wisherRepository.wishers.any((w) => w.id == id);
+        if (!hasWisher) {
+          throw StateError('Wisher $id not found');
+        }
+
         return CustomTransitionPage(
           child: WisherDetailsScreen(
             viewModel: WisherDetailsViewModel(
@@ -33,7 +38,7 @@ GoRouter wisherDetailsDemoRouter(
       },
       routes: [
         GoRoute(
-          path: 'edit',
+          path: Routes.editWisher.path,
           name: Routes.editWisher.name,
           pageBuilder: (context, state) {
             final id = state.pathParameters['id']!;

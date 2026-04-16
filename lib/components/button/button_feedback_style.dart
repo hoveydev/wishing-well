@@ -15,35 +15,27 @@ class ButtonFeedbackStyle {
     BorderRadius? borderRadius,
     BorderSide? side,
     WidgetStateProperty<Color>? foregroundColor,
-    WidgetStateProperty<Color>? backgroundColor,
+    Color? color,
     WidgetStateProperty<Size>? minimumSize,
   }) {
     final durations = _getDurations(pressDuration, releaseDuration);
     final colorScheme = context.colorScheme;
+    final buttonColor = color ?? colorScheme.primary!;
 
     return ButtonStyle(
-      backgroundBuilder: (context, states, child) {
-        final resolved =
-            backgroundColor?.resolve(states) ??
-            colorScheme.primary!.withValues(alpha: 1);
-        final color = states.contains(WidgetState.pressed)
-            ? (backgroundColor != null
-                  ? resolved.withValues(alpha: 0.5)
-                  : colorScheme.primary!.withValues(alpha: 0.5))
-            : resolved;
-
-        return AnimatedContainer(
-          duration: states.contains(WidgetState.pressed)
-              ? durations.press
-              : durations.release,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: borderRadius ?? BorderRadius.circular(14),
-            border: side != null ? Border.fromBorderSide(side) : null,
-          ),
-          child: child,
-        );
-      },
+      backgroundBuilder: (context, states, child) => AnimatedContainer(
+        duration: states.contains(WidgetState.pressed)
+            ? durations.press
+            : durations.release,
+        decoration: BoxDecoration(
+          color: states.contains(WidgetState.pressed)
+              ? buttonColor.withValues(alpha: 0.5)
+              : buttonColor,
+          borderRadius: borderRadius ?? BorderRadius.circular(14),
+          border: side != null ? Border.fromBorderSide(side) : null,
+        ),
+        child: child,
+      ),
 
       foregroundColor:
           foregroundColor ?? WidgetStatePropertyAll(colorScheme.onPrimary),

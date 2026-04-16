@@ -352,10 +352,6 @@
     "@deleteWisher": {
         "description": "Label for delete wisher button"
     },
-    "wisherNotFound": "Wisher not found",
-    "@wisherNotFound": {
-        "description": "Fallback message when selected wisher is unavailable"
-    },
     "errorNoChanges": "No changes were made.",
     "@errorNoChanges": {
         "description": "Error message when no changes were made to wisher"

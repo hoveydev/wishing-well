@@ -51,6 +51,8 @@ class WisherDetailsViewModel extends ChangeNotifier
     final l10n = AppLocalizations.of(context)!;
     final wisherName = _wisher?.name ?? '';
 
+    // TODO(hoveydev): Replace this with the shared custom confirm dialog
+    // component once that follow-up story lands.
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -103,7 +105,12 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   void _onRepositoryChanged() {
     final wishers = _wisherRepository.wishers;
-    _wisher = wishers.where((w) => w.id == _wisherId).firstOrNull;
+    final updated = wishers.where((w) => w.id == _wisherId).firstOrNull;
+    if (updated == null) {
+      return;
+    }
+
+    _wisher = updated;
     notifyListeners();
   }
 
@@ -113,6 +120,9 @@ class WisherDetailsViewModel extends ChangeNotifier
 
     final wishers = _wisherRepository.wishers;
     _wisher = wishers.where((w) => w.id == _wisherId).firstOrNull;
+    if (_wisher == null) {
+      throw StateError('Wisher $_wisherId not found');
+    }
 
     _isLoading = false;
     notifyListeners();

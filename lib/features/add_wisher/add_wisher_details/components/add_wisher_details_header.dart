@@ -1,16 +1,13 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
+import 'package:wishing_well/components/image_source_menu/image_source_picker.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/components/add_wisher_details_inputs.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
-import 'package:wishing_well/utils/app_logger.dart';
 
 class AddWisherDetailsHeader extends StatefulWidget {
   const AddWisherDetailsHeader({required this.viewModel, super.key});
@@ -86,51 +83,14 @@ class _AddWisherDetailsHeaderState extends State<AddWisherDetailsHeader> {
   }
 
   Future<void> _pickImage(ImageSourceOption option) async {
-    switch (option) {
-      case ImageSourceOption.photo:
-        AppLogger.info(
-          'User selected: Choose a Photo (gallery)',
-          context: 'AddWisherDetailsHeader._showImagePicker',
-        );
-        final XFile? image = await _imagePicker.pickImage(
-          source: ImageSource.gallery,
-        );
-        if (image != null) {
-          widget.viewModel.updateImage(File(image.path));
-        }
-      case ImageSourceOption.file:
-        AppLogger.info(
-          'User selected: Choose a File',
-          context: 'AddWisherDetailsHeader._showImagePicker',
-        );
-        try {
-          // Use FileType.custom with image extensions to open Files app on iOS
-          // (FileType.image would open the photo library instead)
-          final FilePickerResult? result = await FilePicker.platform.pickFiles(
-            type: FileType.custom,
-            allowedExtensions: const [
-              'jpg',
-              'jpeg',
-              'png',
-              'gif',
-              'heic',
-              'heif',
-              'webp',
-            ],
-          );
-          if (result != null && result.files.isNotEmpty) {
-            final file = result.files.first;
-            if (file.path != null) {
-              widget.viewModel.updateImage(File(file.path!));
-            }
-          }
-        } catch (e) {
-          // Handle case where file picker platform isn't available (tests)
-          AppLogger.warning(
-            'File picker not available: $e',
-            context: 'AddWisherDetailsHeader._pickImage',
-          );
-        }
+    final file = await ImageSourcePicker.pick(
+      imagePicker: _imagePicker,
+      option: option,
+      logContext: 'AddWisherDetailsHeader._pickImage',
+    );
+
+    if (file != null) {
+      widget.viewModel.updateImage(file);
     }
   }
 }

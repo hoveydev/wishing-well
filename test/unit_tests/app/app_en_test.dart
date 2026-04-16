@@ -31,7 +31,6 @@ void main() {
         expect(loc.editWisherScreenHeader, isNotEmpty);
         expect(loc.editWisherScreenSubtext, isNotEmpty);
         expect(loc.saveChanges, isNotEmpty);
-        expect(loc.wisherNotFound, isNotEmpty);
         expect(loc.wisherUpdatedSuccess('Test'), isNotEmpty);
         expect(loc.wisherDeleteConfirmMessage('Test'), isNotEmpty);
       });

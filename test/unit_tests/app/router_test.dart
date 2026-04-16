@@ -76,7 +76,7 @@ void main() {
       test('router can navigate to editWisher route', () {
         final goRouter = router();
         expect(
-          () => goRouter.go(Routes.editWisher.buildPath(id: 'test-id')),
+          () => goRouter.go(Routes.editWisher.buildPath(id: '1')),
           returnsNormally,
         );
       });
@@ -84,7 +84,7 @@ void main() {
       test('router can navigate to wisherDetails route', () {
         final goRouter = router();
         expect(
-          () => goRouter.go(Routes.wisherDetails.buildPath(id: 'test-id')),
+          () => goRouter.go(Routes.wisherDetails.buildPath(id: '1')),
           returnsNormally,
         );
       });

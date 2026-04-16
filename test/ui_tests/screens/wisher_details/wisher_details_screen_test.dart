@@ -8,6 +8,7 @@ import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -64,27 +65,6 @@ void main() {
         viewModel.dispose();
       });
 
-      testWidgets('displays "Wisher not found" message when wisher is null', (
-        WidgetTester tester,
-      ) async {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'nonexistent-id',
-        );
-
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: WisherDetailsScreen(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Wisher not found'), findsOneWidget);
-        expect(find.byType(CircularProgressIndicator), findsNothing);
-
-        viewModel.dispose();
-      });
-
       testWidgets('renders edit icon button when wisher is loaded', (
         WidgetTester tester,
       ) async {
@@ -105,26 +85,6 @@ void main() {
         viewModel.dispose();
       });
 
-      testWidgets('does not render edit icon when wisher is not found', (
-        WidgetTester tester,
-      ) async {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'nonexistent-id',
-        );
-
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: WisherDetailsScreen(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.byIcon(Icons.edit_outlined), findsNothing);
-
-        viewModel.dispose();
-      });
-
       testWidgets('renders delete button when wisher is loaded', (
         WidgetTester tester,
       ) async {
@@ -141,26 +101,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Delete Wisher'), findsOneWidget);
-
-        viewModel.dispose();
-      });
-
-      testWidgets('does not render delete button when wisher not found', (
-        WidgetTester tester,
-      ) async {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'nonexistent-id',
-        );
-
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: WisherDetailsScreen(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Delete Wisher'), findsNothing);
 
         viewModel.dispose();
       });
@@ -376,44 +316,14 @@ void main() {
     });
 
     group('Error Handling', () {
-      testWidgets('displays fallback UI when wisher data is incomplete', (
-        WidgetTester tester,
-      ) async {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: 'invalid-id-that-does-not-exist',
-        );
-
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: WisherDetailsScreen(viewModel: viewModel),
+      test('throws when wisher ID does not exist', () {
+        expect(
+          () => WisherDetailsViewModel(
+            wisherRepository: mockWisherRepository,
+            wisherId: 'invalid-id-that-does-not-exist',
           ),
+          throwsStateError,
         );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Wisher not found'), findsOneWidget);
-
-        viewModel.dispose();
-      });
-
-      testWidgets('handles empty wisherId gracefully', (
-        WidgetTester tester,
-      ) async {
-        final viewModel = WisherDetailsViewModel(
-          wisherRepository: mockWisherRepository,
-          wisherId: '',
-        );
-
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: WisherDetailsScreen(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Wisher not found'), findsOneWidget);
-
-        viewModel.dispose();
       });
     });
 
@@ -429,7 +339,7 @@ void main() {
                   WisherDetailsScreen(viewModel: viewModel),
               routes: [
                 GoRoute(
-                  path: 'edit',
+                  path: Routes.editWisher.path,
                   builder: (context, state) =>
                       const Scaffold(body: Center(child: Text('Edit Screen'))),
                 ),

@@ -586,12 +586,6 @@ abstract class AppLocalizations {
   /// **'Delete Wisher'**
   String get deleteWisher;
 
-  /// Fallback message when selected wisher is unavailable
-  ///
-  /// In en, this message translates to:
-  /// **'Wisher not found'**
-  String get wisherNotFound;
-
   /// Error message when no changes were made to wisher
   ///
   /// In en, this message translates to:

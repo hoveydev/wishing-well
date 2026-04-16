@@ -8,7 +8,7 @@ enum Routes {
   addWisher('/add-wisher'), // add-wisher
   addWisherDetails('details'), // add-wisher/details
   wisherDetails('/wisher-details/:id'), // wisher-details/:id
-  editWisher('/wisher-details/:id/edit'); // wisher-details/:id/edit
+  editWisher('edit'); // wisher-details/:id/edit
 
   const Routes(this.path);
   final String path;
@@ -33,6 +33,13 @@ enum Routes {
   /// // Returns: '/wisher-details/abc123'
   /// ```
   String buildPath({String? id}) {
+    if (this == Routes.editWisher) {
+      if (id == null) {
+        throw ArgumentError('Missing id for ${Routes.editWisher.name} path');
+      }
+      return '${Routes.wisherDetails.buildPath(id: id)}/${Routes.editWisher.path}';
+    }
+
     var result = path;
     if (id != null) {
       result = result.replaceAll(':id', id);

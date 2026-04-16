@@ -740,6 +740,30 @@ void main() {
         await gesture.up();
         await TestHelpers.pumpAndSettle(tester);
       });
+
+      testWidgets('primary button passes backgroundColor through AppButton', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            AppButton.label(
+              label: testLabel,
+              onPressed: () {},
+              type: AppButtonType.primary,
+              backgroundColor: Colors.red,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final animatedFinder = find.descendant(
+          of: find.byType(TextButton),
+          matching: find.byType(AnimatedContainer),
+        );
+        final animated = tester.widget<AnimatedContainer>(animatedFinder.first);
+        final decoration = animated.decoration as BoxDecoration;
+        expect(decoration.color, Colors.red);
+      });
     });
   });
 }

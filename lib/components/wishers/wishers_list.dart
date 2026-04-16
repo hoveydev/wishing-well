@@ -249,6 +249,6 @@ class WishersList extends StatelessWidget {
       textScaler: textScaler,
     )..layout();
 
-    return painter.width;
+    return painter.width.ceilToDouble();
   }
 }

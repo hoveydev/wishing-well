@@ -277,6 +277,27 @@ void main() {
 
         viewModel.dispose();
       });
+
+      testWidgets('disposes view model when screen is removed', (
+        WidgetTester tester,
+      ) async {
+        final trackedViewModel = _TrackedWisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: WisherDetailsScreen(viewModel: trackedViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+
+        expect(trackedViewModel.disposeCallCount, 1);
+      });
     });
 
     group('Different Wisher IDs', () {
@@ -476,4 +497,19 @@ void main() {
       });
     });
   });
+}
+
+class _TrackedWisherDetailsViewModel extends WisherDetailsViewModel {
+  _TrackedWisherDetailsViewModel({
+    required super.wisherRepository,
+    required super.wisherId,
+  });
+
+  int disposeCallCount = 0;
+
+  @override
+  void dispose() {
+    disposeCallCount += 1;
+    super.dispose();
+  }
 }

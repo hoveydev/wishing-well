@@ -22,6 +22,12 @@ class WisherDetailsScreen extends StatefulWidget {
 
 class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
   @override
+  void dispose() {
+    widget.viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) =>
       ChangeNotifierProvider<WisherDetailsViewModel>.value(
         value: widget.viewModel,
@@ -62,7 +68,7 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
                   WisherDetailsProfile(wisher: viewModel.wisher!)
                 else
                   Text(
-                    'Wisher not found',
+                    l10n.wisherNotFound,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 if (viewModel.wisher != null)

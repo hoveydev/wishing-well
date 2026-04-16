@@ -17,6 +17,12 @@ class EditWisherScreen extends StatefulWidget {
 
 class _EditWisherScreenState extends State<EditWisherScreen> {
   @override
+  void dispose() {
+    widget.viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Screen(
     appBar: AppMenuBar(action: () => context.pop(), type: AppMenuBarType.back),
     mainAxisAlignment: MainAxisAlignment.spaceBetween,

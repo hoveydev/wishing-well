@@ -32,6 +32,7 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   Wisher? _wisher;
   bool _isLoading = true;
+  bool _isDisposed = false;
 
   @override
   Wisher? get wisher => _wisher;
@@ -119,6 +120,8 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   @override
   void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     _wisherRepository.removeListener(_onRepositoryChanged);
     super.dispose();
   }

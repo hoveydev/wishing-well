@@ -165,6 +165,44 @@ void main() {
 
         expect(find.byType(EditWisherScreen), findsOneWidget);
       });
+
+      testWidgets('disposes view model when screen is removed', (
+        WidgetTester tester,
+      ) async {
+        final trackedViewModel = _TrackedEditWisherViewModel(
+          wisherRepository: MockWisherRepository(),
+          imageRepository: MockImageRepository(),
+          wisherId: '1',
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: EditWisherScreen(viewModel: trackedViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+
+        expect(trackedViewModel.disposeCallCount, 1);
+      });
     });
   });
+}
+
+class _TrackedEditWisherViewModel extends EditWisherViewModel {
+  _TrackedEditWisherViewModel({
+    required super.wisherRepository,
+    required super.imageRepository,
+    required super.wisherId,
+  });
+
+  int disposeCallCount = 0;
+
+  @override
+  void dispose() {
+    disposeCallCount += 1;
+    super.dispose();
+  }
 }

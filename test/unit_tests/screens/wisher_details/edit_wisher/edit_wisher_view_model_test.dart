@@ -553,11 +553,24 @@ void main() {
       });
 
       testWidgets(
-        'with imageFile set and upload returns null continues without image',
+        'with imageFile set and upload returns null preserves existing image',
         (WidgetTester tester) async {
+          final repositoryWithProfilePicture = MockWisherRepository(
+            initialWishers: [
+              Wisher(
+                id: '1',
+                userId: 'test-user',
+                firstName: 'Alice',
+                lastName: 'Test',
+                profilePicture: 'https://example.com/existing.jpg',
+                createdAt: DateTime(2024),
+                updatedAt: DateTime(2024),
+              ),
+            ],
+          );
           final nullUploadRepo = _NullUploadImageRepository();
           final vm = EditWisherViewModel(
-            wisherRepository: mockRepository,
+            wisherRepository: repositoryWithProfilePicture,
             imageRepository: nullUploadRepo,
             wisherId: '1',
           );
@@ -574,8 +587,11 @@ void main() {
           await tester.tap(find.text('Save'));
           await tester.pump();
 
-          // Success even with null upload result
           expect(loadingController.isSuccess, isTrue);
+          expect(
+            repositoryWithProfilePicture.wishers.first.profilePicture,
+            'https://example.com/existing.jpg',
+          );
         },
       );
 

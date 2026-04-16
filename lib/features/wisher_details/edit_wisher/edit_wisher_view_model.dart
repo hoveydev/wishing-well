@@ -63,6 +63,7 @@ class EditWisherViewModel extends ChangeNotifier
 
   Wisher? _wisher;
   bool _isLoading = true;
+  bool _isDisposed = false;
 
   String _firstName = '';
   String _lastName = '';
@@ -169,16 +170,18 @@ class EditWisherViewModel extends ChangeNotifier
           context: 'EditWisherViewModel.tapSaveButton',
         );
         try {
-          profilePictureUrl = await _imageRepository.uploadImage(
+          final uploadedProfilePictureUrl = await _imageRepository.uploadImage(
             filePath: _imageFile!.path,
             bucketName: AppConfig.profilePicturesBucket,
             folder: userId,
           );
-          if (profilePictureUrl == null) {
+          if (uploadedProfilePictureUrl == null) {
             AppLogger.warning(
               'Failed to upload profile picture, continuing without it',
               context: 'EditWisherViewModel.tapSaveButton',
             );
+          } else {
+            profilePictureUrl = uploadedProfilePictureUrl;
           }
         } on ImageValidationException catch (e) {
           AppLogger.warning(
@@ -300,6 +303,8 @@ class EditWisherViewModel extends ChangeNotifier
 
   @override
   void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     _wisherRepository.removeListener(_onRepositoryChanged);
     super.dispose();
   }

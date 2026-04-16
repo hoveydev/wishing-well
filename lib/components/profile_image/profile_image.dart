@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/utils/auth_service.dart';
+import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 /// A reusable profile image component with authenticated network image support.
 ///
@@ -47,7 +49,7 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     // Build the avatar based on available image
     Widget avatar;
@@ -70,11 +72,11 @@ class ProfileImage extends StatelessWidget {
               right: 0,
               child: CircleAvatar(
                 radius: radius * 0.32,
-                backgroundColor: colorScheme.surfaceContainerHighest,
+                backgroundColor: colorScheme.surfaceGray!,
                 child: Icon(
                   Icons.edit,
                   size: radius * 0.32,
-                  color: colorScheme.primary,
+                  color: colorScheme.primary!,
                 ),
               ),
             ),
@@ -84,14 +86,14 @@ class ProfileImage extends StatelessWidget {
   }
 
   /// Builds avatar showing local file
-  Widget _buildLocalFileAvatar(ColorScheme colorScheme) => CircleAvatar(
+  Widget _buildLocalFileAvatar(AppColorScheme colorScheme) => CircleAvatar(
     radius: radius,
-    backgroundColor: colorScheme.primary,
+    backgroundColor: colorScheme.primary!,
     backgroundImage: FileImage(localImageFile!),
   );
 
   /// Builds avatar showing network image with auth headers
-  Widget _buildNetworkAvatar(ColorScheme colorScheme) => CachedNetworkImage(
+  Widget _buildNetworkAvatar(AppColorScheme colorScheme) => CachedNetworkImage(
     imageUrl: imageUrl!,
     httpHeaders: AuthService.storageHeaders,
     imageBuilder: (context, imageProvider) =>
@@ -101,17 +103,17 @@ class ProfileImage extends StatelessWidget {
   );
 
   /// Builds avatar showing initial letter fallback
-  Widget _buildInitialAvatar(ColorScheme colorScheme) {
+  Widget _buildInitialAvatar(AppColorScheme colorScheme) {
     final initial = firstName.isNotEmpty ? firstName[0].toUpperCase() : '?';
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: colorScheme.primary,
+      backgroundColor: colorScheme.primary!,
       child: Text(
         initial,
         style: TextStyle(
           fontSize: radius * 0.67,
-          color: colorScheme.onPrimary,
+          color: colorScheme.onPrimary!,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -119,15 +121,15 @@ class ProfileImage extends StatelessWidget {
   }
 
   /// Builds loading placeholder avatar
-  Widget _buildLoadingAvatar(ColorScheme colorScheme) => CircleAvatar(
+  Widget _buildLoadingAvatar(AppColorScheme colorScheme) => CircleAvatar(
     radius: radius,
-    backgroundColor: colorScheme.primary,
+    backgroundColor: colorScheme.primary!,
     child: SizedBox(
       width: radius * 0.5,
       height: radius * 0.5,
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: colorScheme.onPrimary,
+        color: colorScheme.onPrimary!,
       ),
     ),
   );
@@ -168,17 +170,17 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     if (!hasImage) {
       return CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.primary!,
         child: Text(
           initial,
           style: TextStyle(
             fontSize: radius * 0.67,
-            color: colorScheme.onPrimary,
+            color: colorScheme.onPrimary!,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -192,24 +194,24 @@ class ProfileAvatar extends StatelessWidget {
           CircleAvatar(radius: radius, backgroundImage: imageProvider),
       placeholder: (context, url) => CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.primary!,
         child: SizedBox(
           width: radius * 0.5,
           height: radius * 0.5,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: colorScheme.onPrimary,
+            color: colorScheme.onPrimary!,
           ),
         ),
       ),
       errorWidget: (context, url, error) => CircleAvatar(
         radius: radius,
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.primary!,
         child: Text(
           initial,
           style: TextStyle(
             fontSize: radius * 0.67,
-            color: colorScheme.onPrimary,
+            color: colorScheme.onPrimary!,
             fontWeight: FontWeight.w600,
           ),
         ),

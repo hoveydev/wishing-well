@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
@@ -261,8 +262,8 @@ void main() {
         await tester.pump();
         await tester.pumpAndSettle();
 
-        // Should show success icon
-        expect(find.byIcon(Icons.check_circle), findsOneWidget);
+        // Should show ProfileImage (not check_circle) when name is provided
+        expect(find.byType(ProfileImage), findsOneWidget);
 
         // Should show OK button
         expect(find.text('Ok'), findsOneWidget);

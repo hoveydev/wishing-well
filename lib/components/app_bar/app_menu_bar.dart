@@ -10,9 +10,15 @@ import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
-  const AppMenuBar({required this.action, required this.type, super.key});
+  const AppMenuBar({
+    required this.action,
+    required this.type,
+    super.key,
+    this.additionalActions,
+  });
   final AppMenuBarType type;
   final void Function() action;
+  final List<Widget>? additionalActions;
 
   @override
   Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight);
@@ -33,7 +39,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       centerTitle: false,
       title: _menuBarTitle(l10n, textTheme),
-      actions: _menuBarActions(action, l10n),
+      actions: _buildActions(action, l10n),
       elevation: 1,
       shadowColor: Colors.transparent,
       bottom: PreferredSize(
@@ -68,7 +74,20 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         child: AppLogo(size: const AppIconSize().xsmall),
       ),
     ),
-    AppMenuBarType.close => null,
+    AppMenuBarType.close => Builder(
+      builder: (context) => Semantics(
+        label: l10n.appBarClose,
+        button: true,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+          child: AppButton.icon(
+            icon: Icons.close,
+            onPressed: action,
+            type: AppButtonType.tertiary,
+          ),
+        ),
+      ),
+    ),
     AppMenuBarType.dismiss => Builder(
       builder: (context) => Semantics(
         label: l10n.appBarDismiss,
@@ -100,6 +119,14 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
     ),
   };
 
+  List<Widget>? _buildActions(void Function() action, AppLocalizations l10n) {
+    final typeActions = _menuBarActions(action, l10n);
+    if (additionalActions == null || additionalActions!.isEmpty) {
+      return typeActions;
+    }
+    return [...additionalActions!, ...(typeActions ?? [])];
+  }
+
   List<Widget>? _menuBarActions(
     void Function() action,
     AppLocalizations l10n,
@@ -120,22 +147,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     ],
-    AppMenuBarType.close => [
-      Builder(
-        builder: (context) => Semantics(
-          label: l10n.appBarClose,
-          button: true,
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacerSize.xsmall),
-            child: AppButton.icon(
-              icon: Icons.close,
-              onPressed: action,
-              type: AppButtonType.tertiary,
-            ),
-          ),
-        ),
-      ),
-    ],
+    AppMenuBarType.close => null,
     AppMenuBarType.dismiss => null,
     AppMenuBarType.back => null,
   };

@@ -7,26 +7,25 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 void main() {
   group('ButtonFeedbackStyle', () {
     group(TestGroups.component, () {
-      testWidgets(
-        'primary style with null backgroundColor uses default color',
-        (tester) async {
-          // Arrange & Act: Create button with null backgroundColor
-          await tester.pumpWidget(
-            createScreenComponentTestWidget(
-              Builder(
-                builder: (context) => ElevatedButton(
-                  style: ButtonFeedbackStyle.primary(context: context),
-                  onPressed: () {},
-                  child: const Text('Primary Button'),
-                ),
+      testWidgets('primary style with null color uses default color', (
+        tester,
+      ) async {
+        // Arrange & Act: Create button with default color
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(context: context),
+                onPressed: () {},
+                child: const Text('Primary Button'),
               ),
             ),
-          );
+          ),
+        );
 
-          // Assert: Button should render
-          expect(find.text('Primary Button'), findsOneWidget);
-        },
-      );
+        // Assert: Button should render
+        expect(find.text('Primary Button'), findsOneWidget);
+      });
 
       testWidgets('primary style with null side uses BorderSide.none', (
         tester,
@@ -48,15 +47,15 @@ void main() {
         expect(find.text('Primary Button'), findsOneWidget);
       });
 
-      testWidgets('primary style with custom backgroundColor', (tester) async {
-        // Arrange & Act: Create button with custom backgroundColor
+      testWidgets('primary style with custom color', (tester) async {
+        // Arrange & Act: Create button with custom color
         await tester.pumpWidget(
           createScreenComponentTestWidget(
             Builder(
               builder: (context) => ElevatedButton(
                 style: ButtonFeedbackStyle.primary(
                   context: context,
-                  backgroundColor: WidgetStateProperty.all(Colors.blue),
+                  color: Colors.blue,
                 ),
                 onPressed: () {},
                 child: const Text('Primary Button'),
@@ -90,35 +89,29 @@ void main() {
         expect(find.text('Primary Button'), findsOneWidget);
       });
 
-      testWidgets(
-        'primary style backgroundColor fallback when resolve returns null',
-        (tester) async {
-          // Arrange: Create a WidgetStateProperty using fromMap
-          const backgroundColor = WidgetStateProperty<Color>.fromMap({
-            WidgetState.disabled: Colors.grey,
-            WidgetState.pressed: Colors.blue,
-          });
-
-          // Act: Create button with backgroundColor
-          await tester.pumpWidget(
-            createScreenComponentTestWidget(
-              Builder(
-                builder: (context) => ElevatedButton(
-                  style: ButtonFeedbackStyle.primary(
-                    context: context,
-                    backgroundColor: backgroundColor,
-                  ),
-                  onPressed: null, // Disabled to trigger the state
-                  child: const Text('Primary Button'),
+      testWidgets('primary style with custom color pressed state', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            Builder(
+              builder: (context) => ElevatedButton(
+                style: ButtonFeedbackStyle.primary(
+                  context: context,
+                  color: Colors.blue,
                 ),
+                onPressed: () {},
+                child: const Text('Primary Button'),
               ),
             ),
-          );
+          ),
+        );
 
-          // Assert: Button should still render
-          expect(find.text('Primary Button'), findsOneWidget);
-        },
-      );
+        final gesture = await tester.press(find.text('Primary Button'));
+        await tester.pump(const Duration(milliseconds: 50));
+        expect(find.text('Primary Button'), findsOneWidget);
+        await gesture.cancel();
+      });
 
       testWidgets('secondary style with null side uses default border', (
         tester,
@@ -511,6 +504,50 @@ void main() {
           expect(find.text('Tall Button'), findsOneWidget);
           expect(find.byType(ElevatedButton), findsOneWidget);
         });
+
+        testWidgets('tertiary style accepts minimumSize parameter', (
+          tester,
+        ) async {
+          // Arrange & Act: Create tertiary button with minimumSize
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              Builder(
+                builder: (context) => ElevatedButton(
+                  style: ButtonFeedbackStyle.tertiary(
+                    context: context,
+                    minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Icon Button'),
+                ),
+              ),
+            ),
+          );
+
+          // Assert: Button should render
+          expect(find.text('Icon Button'), findsOneWidget);
+        });
+
+        testWidgets(
+          'tertiary style with null minimumSize uses Flutter default',
+          (tester) async {
+            // Arrange & Act: Create tertiary button without minimumSize
+            await tester.pumpWidget(
+              createScreenComponentTestWidget(
+                Builder(
+                  builder: (context) => ElevatedButton(
+                    style: ButtonFeedbackStyle.tertiary(context: context),
+                    onPressed: () {},
+                    child: const Text('Default Size Button'),
+                  ),
+                ),
+              ),
+            );
+
+            // Assert: Button should render
+            expect(find.text('Default Size Button'), findsOneWidget);
+          },
+        );
       });
     });
   });

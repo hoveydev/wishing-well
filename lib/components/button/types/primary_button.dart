@@ -17,6 +17,7 @@ class PrimaryButton extends StatelessWidget {
     this.semanticLabel,
     this.iconSize,
     this.fontWeight,
+    this.backgroundColor,
   }) : _primaryButtonContentType = primaryButtonContentType;
 
   const PrimaryButton.icon({
@@ -28,6 +29,7 @@ class PrimaryButton extends StatelessWidget {
     String? semanticLabel,
     double? iconSize,
     FontWeight? fontWeight,
+    Color? backgroundColor,
   }) : this._(
          key: key,
          icon: icon,
@@ -38,6 +40,7 @@ class PrimaryButton extends StatelessWidget {
          primaryButtonContentType: _PrimaryButtonContentType.icon,
          iconSize: iconSize,
          fontWeight: fontWeight,
+         backgroundColor: backgroundColor,
        );
 
   const PrimaryButton.label({
@@ -47,6 +50,7 @@ class PrimaryButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     FontWeight? fontWeight,
+    Color? backgroundColor,
   }) : this._(
          key: key,
          label: label,
@@ -55,6 +59,7 @@ class PrimaryButton extends StatelessWidget {
          alignment: alignment,
          primaryButtonContentType: _PrimaryButtonContentType.label,
          fontWeight: fontWeight,
+         backgroundColor: backgroundColor,
        );
 
   const PrimaryButton.labelWithIcon({
@@ -65,6 +70,7 @@ class PrimaryButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     FontWeight? fontWeight,
+    Color? backgroundColor,
   }) : this._(
          key: key,
          icon: icon,
@@ -74,6 +80,7 @@ class PrimaryButton extends StatelessWidget {
          alignment: alignment,
          primaryButtonContentType: _PrimaryButtonContentType.labelWithIcon,
          fontWeight: fontWeight,
+         backgroundColor: backgroundColor,
        );
   final IconData? icon;
   final String? label;
@@ -84,6 +91,7 @@ class PrimaryButton extends StatelessWidget {
   final _PrimaryButtonContentType _primaryButtonContentType;
   final double? iconSize;
   final FontWeight? fontWeight;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +100,13 @@ class PrimaryButton extends StatelessWidget {
     // Ensure minimum button height scales with text size
     // Base height of 56 (button + padding) scales with text
     final minHeight = (56.0 * textScale).clamp(56.0, 72.0);
+
     final buttonWidget = TextButton(
       style: ButtonFeedbackStyle.primary(
         context: context,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         minimumSize: WidgetStateProperty.all(Size(double.infinity, minHeight)),
+        color: backgroundColor,
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

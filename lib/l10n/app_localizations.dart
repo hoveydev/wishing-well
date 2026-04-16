@@ -525,6 +525,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} has been added!'**
   String wisherCreatedSuccess(String name);
+
+  /// Success message when a wisher is updated
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has been updated!'**
+  String wisherUpdatedSuccess(String name);
+
+  /// Label for cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Label for delete button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// Title for wisher delete confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Wisher?'**
+  String get wisherDeleteConfirmTitle;
+
+  /// Body for wisher delete confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {name}? This cannot be undone.'**
+  String wisherDeleteConfirmMessage(String name);
+
+  /// Accessibility label for edit button in app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get appBarEdit;
+
+  /// Header for edit wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Wisher Details'**
+  String get editWisherScreenHeader;
+
+  /// Subtext for edit wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'Update the details below to keep your wisher\'s information current.'**
+  String get editWisherScreenSubtext;
+
+  /// Save button text on Edit Wisher screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// Label for delete wisher button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Wisher'**
+  String get deleteWisher;
+
+  /// Error message when no changes were made to wisher
+  ///
+  /// In en, this message translates to:
+  /// **'No changes were made.'**
+  String get errorNoChanges;
 }
 
 class _AppLocalizationsDelegate

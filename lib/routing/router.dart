@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/routing/transitions.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
@@ -10,6 +11,8 @@ import 'package:wishing_well/features/auth/create_account/create_account_screen.
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
+import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
@@ -95,20 +98,50 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.wisherDetails.path,
       name: Routes.wisherDetails.name,
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: WisherDetailsScreen(
-          viewModel: WisherDetailsViewModel(
-            wisherRepository: context.read(),
-            wisherId:
-                state.pathParameters['id'] ??
-                (throw ArgumentError(
-                  'Missing wisher ID in route parameters for '
-                  '${Routes.wisherDetails.path}',
-                )),
+      pageBuilder: (context, state) {
+        final wisherId =
+            state.pathParameters['id'] ??
+            (throw ArgumentError(
+              'Missing wisher ID in route parameters for '
+              '${Routes.wisherDetails.path}',
+            ));
+        final wisherRepository = context.read<WisherRepository>();
+        final hasWisher = wisherRepository.wishers.any((w) => w.id == wisherId);
+        if (!hasWisher) {
+          throw StateError('Wisher $wisherId not found');
+        }
+
+        return CustomTransitionPage(
+          child: WisherDetailsScreen(
+            viewModel: WisherDetailsViewModel(
+              wisherRepository: wisherRepository,
+              wisherId: wisherId,
+            ),
+          ),
+          transitionsBuilder: slideUpWithParallaxTransition,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: Routes.editWisher.path,
+          name: Routes.editWisher.name,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: EditWisherScreen(
+              viewModel: EditWisherViewModel(
+                wisherRepository: context.read(),
+                imageRepository: context.read(),
+                wisherId:
+                    state.pathParameters['id'] ??
+                    (throw ArgumentError(
+                      'Missing wisher ID in route parameters for '
+                      '${Routes.editWisher.path}',
+                    )),
+              ),
+            ),
+            transitionsBuilder: slideInRightTransition,
           ),
         ),
-        transitionsBuilder: slideInRightTransition,
-      ),
+      ],
     ),
     GoRoute(
       path: Routes.addWisher.path,

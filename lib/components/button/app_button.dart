@@ -19,6 +19,7 @@ class AppButton extends StatelessWidget {
     this.iconSize,
     this.color,
     this.fontWeight,
+    this.backgroundColor,
   }) : _appButtonContentType = appButtonContentType;
 
   /// Creates an icon-only button.
@@ -30,6 +31,7 @@ class AppButton extends StatelessWidget {
   /// [alignment] - Alignment of content within the button.
   /// [iconSize] - Custom size for the icon.
   /// [color] - Custom color (only applies to tertiary buttons).
+  /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for text (label buttons only).
   const AppButton.icon({
     required IconData icon,
@@ -40,6 +42,7 @@ class AppButton extends StatelessWidget {
     MainAxisAlignment alignment = MainAxisAlignment.center,
     double? iconSize,
     Color? color,
+    Color? backgroundColor,
     FontWeight? fontWeight,
   }) : this._(
          key: key,
@@ -51,6 +54,7 @@ class AppButton extends StatelessWidget {
          appButtonContentType: _AppButtonContentType.icon,
          iconSize: iconSize,
          color: color,
+         backgroundColor: backgroundColor,
          fontWeight: fontWeight,
        );
 
@@ -62,6 +66,7 @@ class AppButton extends StatelessWidget {
   /// [isLoading] - Shows a loading indicator instead of the label.
   /// [alignment] - Alignment of content within the button.
   /// [color] - Custom color (only applies to tertiary buttons).
+  /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for the label text.
   const AppButton.label({
     required String label,
@@ -71,6 +76,7 @@ class AppButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     Color? color,
+    Color? backgroundColor,
     FontWeight? fontWeight,
   }) : this._(
          key: key,
@@ -81,6 +87,7 @@ class AppButton extends StatelessWidget {
          type: type,
          appButtonContentType: _AppButtonContentType.label,
          color: color,
+         backgroundColor: backgroundColor,
          fontWeight: fontWeight,
        );
 
@@ -93,6 +100,7 @@ class AppButton extends StatelessWidget {
   /// [isLoading] - Shows a loading indicator instead of content.
   /// [alignment] - Alignment of content within the button.
   /// [color] - Custom color (only applies to tertiary buttons).
+  /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for the label text.
   const AppButton.labelWithIcon({
     required IconData icon,
@@ -103,6 +111,7 @@ class AppButton extends StatelessWidget {
     bool isLoading = false,
     MainAxisAlignment alignment = MainAxisAlignment.center,
     Color? color,
+    Color? backgroundColor,
     FontWeight? fontWeight,
   }) : this._(
          key: key,
@@ -114,6 +123,7 @@ class AppButton extends StatelessWidget {
          type: type,
          appButtonContentType: _AppButtonContentType.labelWithIcon,
          color: color,
+         backgroundColor: backgroundColor,
          fontWeight: fontWeight,
        );
   final String? label;
@@ -125,6 +135,7 @@ class AppButton extends StatelessWidget {
   final _AppButtonContentType _appButtonContentType;
   final double? iconSize;
   final Color? color;
+  final Color? backgroundColor;
 
   /// Custom font weight for button text.
   ///
@@ -142,6 +153,7 @@ class AppButton extends StatelessWidget {
               onPressed: onPressed,
               alignment: alignment,
               iconSize: iconSize,
+              backgroundColor: backgroundColor,
               fontWeight: fontWeight,
             );
           case _AppButtonContentType.label:
@@ -149,6 +161,7 @@ class AppButton extends StatelessWidget {
               label: label!,
               onPressed: onPressed,
               alignment: alignment,
+              backgroundColor: backgroundColor,
               fontWeight: fontWeight,
             );
           case _AppButtonContentType.labelWithIcon:
@@ -157,6 +170,7 @@ class AppButton extends StatelessWidget {
               label: label!,
               onPressed: onPressed,
               alignment: alignment,
+              backgroundColor: backgroundColor,
               fontWeight: fontWeight,
             );
         }

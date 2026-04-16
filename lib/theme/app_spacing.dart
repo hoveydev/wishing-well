@@ -10,6 +10,7 @@ class AppSpacing {
   static const double wisherListItemHeight = 80.0;
   static const double wisherAvatarDiameter = 60.0;
   static const double wisherLabelTopSpacing = 4.0;
+  static const double defaultBodySmallLineHeight = 1.33;
 
   static double wisherListItemHeightFor(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -18,7 +19,9 @@ class AppSpacing {
     final scaledBodySmallFontSize = MediaQuery.textScalerOf(
       context,
     ).scale(bodySmallFontSize);
-    final labelHeight = scaledBodySmallFontSize * (bodySmall?.height ?? 1.33);
+    final labelHeight =
+        scaledBodySmallFontSize *
+        (bodySmall?.height ?? defaultBodySmallLineHeight);
 
     return math.max(
       wisherListItemHeight,

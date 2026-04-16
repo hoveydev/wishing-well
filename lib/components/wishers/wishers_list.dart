@@ -11,7 +11,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 
-class WishersList extends StatelessWidget {
+class WishersList extends StatefulWidget {
   const WishersList({
     required this.onAddWisherTap,
     required this.onWisherTap,
@@ -29,20 +29,28 @@ class WishersList extends StatelessWidget {
   final bool hasError;
   final VoidCallback? onRetry;
 
+  @override
+  State<WishersList> createState() => _WishersListState();
+}
+
+class _WishersListState extends State<WishersList> {
+  _WishersErrorHeightCacheKey? _cachedErrorHeightKey;
+  double? _cachedErrorHeight;
+
   Widget _buildItem(BuildContext context, int index) {
     if (index == 0) {
       return AddWisherItem(
         const EdgeInsets.only(right: AppSpacing.wisherSpacing),
-        onAddWisherTap,
+        widget.onAddWisherTap,
       );
     }
 
     final wisherIndex = index - 1;
-    final wisher = wishers[wisherIndex];
-    final padding = wisherIndex == wishers.length - 1
+    final wisher = widget.wishers[wisherIndex];
+    final padding = wisherIndex == widget.wishers.length - 1
         ? EdgeInsets.zero
         : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
-    return WisherItem(wisher, padding, onTap: () => onWisherTap(wisher));
+    return WisherItem(wisher, padding, onTap: () => widget.onWisherTap(wisher));
   }
 
   @override
@@ -56,11 +64,12 @@ class WishersList extends StatelessWidget {
         final errorMessage = l10n.wishersErrorMessage;
         final retryText = l10n.tryAgain;
         final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
+        final showErrorCard = widget.hasError && !widget.isLoading;
         final widenedListWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
             : MediaQuery.sizeOf(context).width +
                   (AppSpacing.screenPaddingStandard * 2);
-        final itemHeight = hasError
+        final itemHeight = showErrorCard
             ? _wisherRowHeightFor(
                 context: context,
                 wisherHeight: wisherHeight,
@@ -107,11 +116,11 @@ class WishersList extends StatelessWidget {
                       right: -AppSpacing.screenPaddingStandard,
                       child: SizedBox(
                         height: itemHeight,
-                        child: isLoading
+                        child: widget.isLoading
                             ? const WishersListSkeleton()
-                            : hasError
+                            : showErrorCard
                             ? AppErrorCard(
-                                onRetry: onRetry,
+                                onRetry: widget.onRetry,
                                 title: errorTitle,
                                 message: errorMessage,
                                 retryText: retryText,
@@ -121,7 +130,7 @@ class WishersList extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppSpacing.screenPaddingStandard,
                                 ),
-                                itemCount: wishers.length + 1,
+                                itemCount: widget.wishers.length + 1,
                                 itemBuilder: _buildItem,
                               ),
                       ),
@@ -145,17 +154,66 @@ class WishersList extends StatelessWidget {
     required String retryText,
     required TextTheme textTheme,
   }) {
-    final errorHeight = _errorCardHeightFor(
+    final errorHeight = _errorCardHeightForMemoized(
       context: context,
       availableWidth: availableWidth,
       errorTitle: errorTitle,
       errorMessage: errorMessage,
       retryText: retryText,
-      hasRetry: onRetry != null,
+      hasRetry: widget.onRetry != null,
       textTheme: textTheme,
     );
 
     return math.max(wisherHeight, errorHeight).ceilToDouble();
+  }
+
+  double _errorCardHeightForMemoized({
+    required BuildContext context,
+    required double availableWidth,
+    required String errorTitle,
+    required String errorMessage,
+    required String retryText,
+    required bool hasRetry,
+    required TextTheme textTheme,
+  }) {
+    final titleStyle = AppErrorCard.titleTextStyle(textTheme);
+    final messageStyle = AppErrorCard.messageTextStyle(textTheme);
+    final retryStyle = AppErrorCard.retryTextStyle(textTheme);
+    final textScaler = MediaQuery.textScalerOf(context);
+    final cacheKey = _WishersErrorHeightCacheKey(
+      availableWidth: availableWidth,
+      hasRetry: hasRetry,
+      errorTitle: errorTitle,
+      errorMessage: errorMessage,
+      retryText: retryText,
+      textDirection: Directionality.of(context),
+      titleStyle: titleStyle,
+      messageStyle: messageStyle,
+      retryStyle: retryStyle,
+      scaledTitleFontSize: textScaler.scale(titleStyle.fontSize ?? 12.0),
+      scaledMessageFontSize: textScaler.scale(messageStyle.fontSize ?? 12.0),
+      scaledRetryFontSize: textScaler.scale(retryStyle.fontSize ?? 12.0),
+    );
+
+    if (_cachedErrorHeightKey == cacheKey && _cachedErrorHeight != null) {
+      return _cachedErrorHeight!;
+    }
+
+    final calculatedHeight = _errorCardHeightFor(
+      context: context,
+      availableWidth: availableWidth,
+      errorTitle: errorTitle,
+      errorMessage: errorMessage,
+      retryText: retryText,
+      hasRetry: hasRetry,
+      titleStyle: titleStyle,
+      messageStyle: messageStyle,
+      retryStyle: retryStyle,
+    );
+
+    _cachedErrorHeightKey = cacheKey;
+    _cachedErrorHeight = calculatedHeight;
+    return calculatedHeight;
   }
 
   double _errorCardHeightFor({
@@ -165,7 +223,9 @@ class WishersList extends StatelessWidget {
     required String errorMessage,
     required String retryText,
     required bool hasRetry,
-    required TextTheme textTheme,
+    required TextStyle titleStyle,
+    required TextStyle messageStyle,
+    required TextStyle retryStyle,
   }) {
     const horizontalPadding = AppErrorCard.defaultHorizontalPadding;
     const innerPadding = AppErrorCard.defaultInnerPadding;
@@ -179,9 +239,6 @@ class WishersList extends StatelessWidget {
     final cardWidth = math.max(0.0, availableWidth - (horizontalPadding * 2));
     final innerWidth = math.max(0.0, cardWidth - (innerPadding * 2));
 
-    final titleStyle = AppErrorCard.titleTextStyle(textTheme);
-    final messageStyle = AppErrorCard.messageTextStyle(textTheme);
-    final retryStyle = AppErrorCard.retryTextStyle(textTheme);
     final retryColumnWidth = hasRetry
         ? math.max(
             buttonSize,
@@ -256,4 +313,68 @@ class WishersList extends StatelessWidget {
 
     return painter.width.ceilToDouble();
   }
+}
+
+class _WishersErrorHeightCacheKey {
+  const _WishersErrorHeightCacheKey({
+    required this.availableWidth,
+    required this.hasRetry,
+    required this.errorTitle,
+    required this.errorMessage,
+    required this.retryText,
+    required this.textDirection,
+    required this.titleStyle,
+    required this.messageStyle,
+    required this.retryStyle,
+    required this.scaledTitleFontSize,
+    required this.scaledMessageFontSize,
+    required this.scaledRetryFontSize,
+  });
+
+  final double availableWidth;
+  final bool hasRetry;
+  final String errorTitle;
+  final String errorMessage;
+  final String retryText;
+  final TextDirection textDirection;
+  final TextStyle titleStyle;
+  final TextStyle messageStyle;
+  final TextStyle retryStyle;
+  final double scaledTitleFontSize;
+  final double scaledMessageFontSize;
+  final double scaledRetryFontSize;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _WishersErrorHeightCacheKey &&
+          runtimeType == other.runtimeType &&
+          availableWidth == other.availableWidth &&
+          hasRetry == other.hasRetry &&
+          errorTitle == other.errorTitle &&
+          errorMessage == other.errorMessage &&
+          retryText == other.retryText &&
+          textDirection == other.textDirection &&
+          titleStyle == other.titleStyle &&
+          messageStyle == other.messageStyle &&
+          retryStyle == other.retryStyle &&
+          scaledTitleFontSize == other.scaledTitleFontSize &&
+          scaledMessageFontSize == other.scaledMessageFontSize &&
+          scaledRetryFontSize == other.scaledRetryFontSize;
+
+  @override
+  int get hashCode => Object.hash(
+    availableWidth,
+    hasRetry,
+    errorTitle,
+    errorMessage,
+    retryText,
+    textDirection,
+    titleStyle,
+    messageStyle,
+    retryStyle,
+    scaledTitleFontSize,
+    scaledMessageFontSize,
+    scaledRetryFontSize,
+  );
 }

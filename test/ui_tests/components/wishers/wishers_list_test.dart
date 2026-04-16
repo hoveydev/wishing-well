@@ -508,6 +508,40 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
+      testWidgets('uses base row height while loading with hasError', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+            child: createScreenComponentTestWidget(
+              createWishersList(isLoading: true, hasError: true),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        final wishersListContext = tester.element(find.byType(WishersList));
+        final expectedHeight = AppSpacing.wisherListItemHeightFor(
+          wishersListContext,
+        );
+        final rowHeightSizedBoxFinder = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.height != null &&
+                widget.child is Stack,
+            description: 'SizedBox with a non-null height and Stack child',
+          ),
+        );
+
+        expect(rowHeightSizedBoxFinder, findsOneWidget);
+
+        final sizedBox = tester.widget<SizedBox>(rowHeightSizedBoxFinder);
+        expect(sizedBox.height, expectedHeight);
+      });
+
       testWidgets('keeps error text visible without ellipses', (
         WidgetTester tester,
       ) async {

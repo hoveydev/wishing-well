@@ -52,6 +52,9 @@ class WishersList extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        final errorTitle = l10n.wishersErrorTitle;
+        final errorMessage = l10n.wishersErrorMessage;
+        final retryText = l10n.tryAgain;
         final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
         final widenedListWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
@@ -62,7 +65,9 @@ class WishersList extends StatelessWidget {
                 context: context,
                 wisherHeight: wisherHeight,
                 availableWidth: widenedListWidth,
-                l10n: l10n,
+                errorTitle: errorTitle,
+                errorMessage: errorMessage,
+                retryText: retryText,
                 textTheme: textTheme,
               )
             : wisherHeight;
@@ -107,9 +112,9 @@ class WishersList extends StatelessWidget {
                             : hasError
                             ? AppErrorCard(
                                 onRetry: onRetry,
-                                title: l10n.wishersErrorTitle,
-                                message: l10n.wishersErrorMessage,
-                                retryText: l10n.tryAgain,
+                                title: errorTitle,
+                                message: errorMessage,
+                                retryText: retryText,
                               )
                             : ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -135,13 +140,17 @@ class WishersList extends StatelessWidget {
     required BuildContext context,
     required double wisherHeight,
     required double availableWidth,
-    required AppLocalizations l10n,
+    required String errorTitle,
+    required String errorMessage,
+    required String retryText,
     required TextTheme textTheme,
   }) {
     final errorHeight = _errorCardHeightFor(
       context: context,
       availableWidth: availableWidth,
-      l10n: l10n,
+      errorTitle: errorTitle,
+      errorMessage: errorMessage,
+      retryText: retryText,
       hasRetry: onRetry != null,
       textTheme: textTheme,
     );
@@ -152,15 +161,17 @@ class WishersList extends StatelessWidget {
   double _errorCardHeightFor({
     required BuildContext context,
     required double availableWidth,
-    required AppLocalizations l10n,
+    required String errorTitle,
+    required String errorMessage,
+    required String retryText,
     required bool hasRetry,
     required TextTheme textTheme,
   }) {
-    const horizontalPadding = AppSpacing.screenPaddingStandard;
-    const innerPadding = 8.0;
-    const buttonSize = 36.0;
-    const gapBetweenColumns = 8.0;
-    const gapBetweenRows = 2.0;
+    const horizontalPadding = AppErrorCard.defaultHorizontalPadding;
+    const innerPadding = AppErrorCard.defaultInnerPadding;
+    const buttonSize = AppErrorCard.defaultButtonSize;
+    const gapBetweenColumns = AppErrorCard.defaultColumnGap;
+    const gapBetweenRows = AppErrorCard.defaultRowGap;
     const measurementSafetyBuffer = 2.0;
 
     final textScaler = MediaQuery.textScalerOf(context);
@@ -168,19 +179,13 @@ class WishersList extends StatelessWidget {
     final cardWidth = math.max(0.0, availableWidth - (horizontalPadding * 2));
     final innerWidth = math.max(0.0, cardWidth - (innerPadding * 2));
 
-    final bodyStyle = textTheme.bodySmall ?? const TextStyle(fontSize: 12);
-    final titleStyle = bodyStyle.copyWith(fontWeight: FontWeight.w600);
-    final messageStyle = bodyStyle.copyWith();
-    final retryStyle = bodyStyle.copyWith(fontWeight: FontWeight.w600);
+    final titleStyle = AppErrorCard.titleTextStyle(textTheme);
+    final messageStyle = AppErrorCard.messageTextStyle(textTheme);
+    final retryStyle = AppErrorCard.retryTextStyle(textTheme);
     final retryColumnWidth = hasRetry
         ? math.max(
             buttonSize,
-            _measureTextWidth(
-              l10n.tryAgain,
-              retryStyle,
-              textScaler,
-              textDirection,
-            ),
+            _measureTextWidth(retryText, retryStyle, textScaler, textDirection),
           )
         : 0.0;
     final leftColumnWidth = hasRetry
@@ -188,14 +193,14 @@ class WishersList extends StatelessWidget {
         : innerWidth;
 
     final titleHeight = _measureTextHeight(
-      l10n.wishersErrorTitle,
+      errorTitle,
       titleStyle,
       leftColumnWidth,
       textScaler,
       textDirection,
     );
     final messageHeight = _measureTextHeight(
-      l10n.wishersErrorMessage,
+      errorMessage,
       messageStyle,
       leftColumnWidth,
       textScaler,
@@ -203,7 +208,7 @@ class WishersList extends StatelessWidget {
     );
     final retryHeight = hasRetry
         ? _measureTextHeight(
-            l10n.tryAgain,
+            retryText,
             retryStyle,
             retryColumnWidth,
             textScaler,

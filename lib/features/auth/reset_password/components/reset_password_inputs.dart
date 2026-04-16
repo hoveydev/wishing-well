@@ -8,7 +8,7 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_view_mo
 
 class ResetPasswordInputs extends StatefulWidget {
   const ResetPasswordInputs({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+  final ResetPasswordViewModelContract viewModel;
 
   @override
   State<ResetPasswordInputs> createState() => _ResetPasswordInputsState();

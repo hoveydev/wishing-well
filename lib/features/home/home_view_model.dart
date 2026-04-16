@@ -4,15 +4,18 @@ import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class HomeViewModelContract {
+abstract class HomeViewModelContract implements ScreenViewModelContract {
   String? get firstName;
   List<Wisher> get wishers;
   bool get isLoadingWishers;
   Object? get wisherError;
   bool get hasWisherError;
+  Future<Result<void>> fetchWishers();
+  void tapProfile(BuildContext context);
   void tapWisherItem(BuildContext context, Wisher wisher);
   void tapAddWisher(BuildContext context);
 }
@@ -56,6 +59,7 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
 
   /// Fetches wishers from the repository.
   /// Should be called when the home screen initializes.
+  @override
   Future<Result<void>> fetchWishers() async {
     // Clear any previous error
     _wisherError = null;
@@ -80,6 +84,11 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
     }
 
     return result;
+  }
+
+  @override
+  void tapProfile(BuildContext context) {
+    context.push(Routes.profile.path);
   }
 
   @override

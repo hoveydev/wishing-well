@@ -7,7 +7,7 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_view_mo
 
 class ResetPasswordHeader extends StatelessWidget {
   const ResetPasswordHeader({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+  final ResetPasswordViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

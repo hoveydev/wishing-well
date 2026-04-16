@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
@@ -9,7 +8,7 @@ import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_vie
 
 class EditWisherScreen extends StatefulWidget {
   const EditWisherScreen({required this.viewModel, super.key});
-  final EditWisherViewModel viewModel;
+  final EditWisherViewModelContract viewModel;
 
   @override
   State<EditWisherScreen> createState() => _EditWisherScreenState();
@@ -24,7 +23,10 @@ class _EditWisherScreenState extends State<EditWisherScreen> {
 
   @override
   Widget build(BuildContext context) => Screen(
-    appBar: AppMenuBar(action: () => context.pop(), type: AppMenuBarType.back),
+    appBar: AppMenuBar(
+      action: () => widget.viewModel.tapBackButton(context),
+      type: AppMenuBarType.back,
+    ),
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [

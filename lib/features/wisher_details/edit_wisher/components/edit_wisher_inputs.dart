@@ -10,7 +10,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 
 class EditWisherInputs extends StatefulWidget {
   const EditWisherInputs({required this.viewModel, super.key});
-  final EditWisherViewModel viewModel;
+  final EditWisherViewModelContract viewModel;
 
   @override
   State<EditWisherInputs> createState() => _EditWisherInputsState();

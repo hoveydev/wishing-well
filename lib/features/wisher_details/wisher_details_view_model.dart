@@ -3,15 +3,18 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class WisherDetailsViewModelContract {
+abstract class WisherDetailsViewModelContract
+    implements ScreenViewModelContract {
   Wisher? get wisher;
   bool get isLoading;
+  void tapCloseButton(BuildContext context);
   void tapEditWisher(BuildContext context);
   Future<void> tapDeleteWisher(BuildContext context);
 }
@@ -39,6 +42,11 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   @override
   bool get isLoading => _isLoading;
+
+  @override
+  void tapCloseButton(BuildContext context) {
+    context.pop();
+  }
 
   @override
   void tapEditWisher(BuildContext context) {

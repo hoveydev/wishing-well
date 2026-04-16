@@ -21,8 +21,8 @@ void main() {
     });
 
     group(TestGroups.initialState, () {
-      test('implements ProfileViewmodelContract', () {
-        expect(viewModel, isA<ProfileViewmodelContract>());
+      test('implements ProfileViewModelContract', () {
+        expect(viewModel, isA<ProfileViewModelContract>());
       });
 
       test('extends ChangeNotifier', () {

@@ -86,7 +86,7 @@ class _DemoLoginScreen extends StatefulWidget {
 }
 
 class _DemoLoginScreenState extends State<_DemoLoginScreen> {
-  late final LoginViewModel _viewModel;
+  late final LoginViewModelContract _viewModel;
   bool _demoSuccessShown = false;
 
   @override
@@ -107,7 +107,7 @@ class _DemoLoginScreenState extends State<_DemoLoginScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         // Remove query param to prevent showing again on rebuild
-        context.goNamed(Routes.login.name);
+        _viewModel.clearAccountConfirmationQuery(context);
 
         // Show success message
         final loading = context.read<LoadingController>();

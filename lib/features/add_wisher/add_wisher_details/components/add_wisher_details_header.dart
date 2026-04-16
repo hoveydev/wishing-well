@@ -11,7 +11,7 @@ import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_d
 
 class AddWisherDetailsHeader extends StatefulWidget {
   const AddWisherDetailsHeader({required this.viewModel, super.key});
-  final AddWisherDetailsViewModel viewModel;
+  final AddWisherDetailsViewModelContract viewModel;
 
   @override
   State<AddWisherDetailsHeader> createState() => _AddWisherDetailsHeaderState();

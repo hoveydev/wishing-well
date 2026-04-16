@@ -29,10 +29,6 @@ void main() {
       );
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     group(TestGroups.rendering, () {
       testWidgets('renders screen with all required UI elements', (
         WidgetTester tester,
@@ -99,7 +95,9 @@ void main() {
         expect(viewModel.wishers.length, greaterThanOrEqualTo(0));
       });
 
-      testWidgets('disposes viewModel correctly', (WidgetTester tester) async {
+      testWidgets('removes screen without disposal errors', (
+        WidgetTester tester,
+      ) async {
         final testViewModel = HomeViewModel(
           authRepository: mockAuthRepository,
           wisherRepository: mockWisherRepository,
@@ -111,8 +109,9 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Dispose should not throw
-        testViewModel.dispose();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await TestHelpers.pumpAndSettle(tester);
+        expect(tester.takeException(), isNull);
       });
     });
   });

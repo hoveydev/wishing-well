@@ -16,7 +16,7 @@ class LoginInputs extends StatelessWidget {
     this.passwordFocusNode,
     super.key,
   });
-  final LoginViewModel viewModel;
+  final LoginViewModelContract viewModel;
   final FocusNode? emailFocusNode;
   final FocusNode? passwordFocusNode;
 

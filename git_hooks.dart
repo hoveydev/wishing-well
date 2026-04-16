@@ -121,6 +121,26 @@ Future<bool> _runTestQualityAnalysis() async {
   return true;
 }
 
+Future<bool> _runScreenViewModelAnalysis() async {
+  print('🧭 Running screen/viewmodel consistency analysis...');
+  final analysisResult = await Process.run(
+    './scripts/analyze_screen_viewmodels.sh',
+    [],
+    runInShell: true,
+  );
+
+  if (analysisResult.exitCode != 0) {
+    print('❌ Screen/viewmodel consistency analysis failed:');
+    print(analysisResult.stdout);
+    print(analysisResult.stderr);
+    print('\n💡 To fix these issues, see: docs/AGENTS.md\n');
+    return false;
+  }
+
+  print('✅ Screen/viewmodel consistency analysis passed\n');
+  return true;
+}
+
 Future<bool> _preCommit() async {
   print('🔍 Running pre-commit checks...\n');
 
@@ -161,6 +181,11 @@ Future<bool> _preCommit() async {
     return false;
   }
 
+  final screenViewModelAnalysisSuccess = await _runScreenViewModelAnalysis();
+  if (!screenViewModelAnalysisSuccess) {
+    return false;
+  }
+
   // Run tests with new code coverage (focus on changed files only)
   print('🧪 Running tests for new code...');
   final coverageSuccess = await _checkCoverage(
@@ -191,6 +216,7 @@ Future<bool> _checkCoverage({
     // Get changed source files
     print('📝 Finding changed source files...');
     changedFiles = await _getChangedSourceFiles();
+    changedFiles = changedFiles.where(_hasCoverableLines).toList();
 
     if (changedFiles.isEmpty) {
       print('ℹ️  No source files changed. Skipping new code coverage check.\n');
@@ -405,7 +431,6 @@ Future<List<String>> _getChangedSourceFiles() async {
     final untrackedFiles = (untrackedResult.stdout as String)
         .split('\n')
         .where((f) => f.isNotEmpty)
-        .map((f) => 'lib/$f')
         .toList();
     stagedFiles.addAll(untrackedFiles);
   }
@@ -419,6 +444,48 @@ bool _isExcludedFromCoverage(String filePath) {
   return _excludePatterns.any((pattern) => filePath.contains(pattern));
 }
 
+/// Returns true when a file contains Dart statements that should appear in LCOV.
+bool _hasCoverableLines(String filePath) {
+  final file = File(filePath);
+  if (!file.existsSync()) return true;
+
+  final lines = file.readAsLinesSync();
+
+  for (final rawLine in lines) {
+    final line = rawLine.trim();
+
+    if (line.isEmpty ||
+        line.startsWith('//') ||
+        line.startsWith('///') ||
+        line.startsWith('*') ||
+        line.startsWith('import ') ||
+        line.startsWith('export ') ||
+        line.startsWith('part ') ||
+        line.startsWith('library ') ||
+        line.startsWith('@') ||
+        line == '{' ||
+        line == '}') {
+      continue;
+    }
+
+    if (RegExp(r'^(abstract\s+)?class\s+\w+[^{]*\{$').hasMatch(line) ||
+        RegExp(r'^(abstract\s+)?mixin\s+\w+[^{]*\{$').hasMatch(line) ||
+        RegExp(r'^enum\s+\w+[^{]*\{$').hasMatch(line) ||
+        RegExp(
+          r'^(final|const|static)\s+[\w<>,?]+\s+\w+\s*;$',
+        ).hasMatch(line) ||
+        RegExp(r'^[\w<>,?]+\s+\w+\s*;$').hasMatch(line) ||
+        RegExp(r'^[\w<>,?]+\s+\w+\([^)]*\);$').hasMatch(line) ||
+        RegExp(r'^(get|set)\s+\w+[^;]*;$').hasMatch(line)) {
+      continue;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 /// Maps source files to their corresponding test files.
 /// Follows the project's convention: lib/foo/bar.dart -> test/.../bar_test.dart
 List<String> _mapSourceToTestFiles(List<String> sourceFiles) {
@@ -427,11 +494,35 @@ List<String> _mapSourceToTestFiles(List<String> sourceFiles) {
   for (final sourceFile in sourceFiles) {
     final testFile = _sourceToTestPath(sourceFile);
     if (testFile != null) {
+      if (File(testFile).existsSync()) {
+        testFiles.add(testFile);
+        continue;
+      }
+
+      final fallbackTestFile = _componentToScreenTestPath(sourceFile);
+      if (fallbackTestFile != null && File(fallbackTestFile).existsSync()) {
+        testFiles.add(fallbackTestFile);
+        continue;
+      }
+
       testFiles.add(testFile);
     }
   }
 
   return testFiles.toList();
+}
+
+String? _componentToScreenTestPath(String sourcePath) {
+  final match = RegExp(
+    r'^lib/features/([^/]+)/([^/]+)/components/[^/]+\.dart$',
+  ).firstMatch(sourcePath);
+
+  if (match == null) return null;
+
+  final featureGroup = match.group(1)!;
+  final screenFolder = match.group(2)!;
+
+  return 'test/ui_tests/screens/$featureGroup/$screenFolder/${screenFolder}_screen_test.dart';
 }
 
 /// Converts a source file path to its corresponding test file path.
@@ -493,10 +584,9 @@ String? _sourceToTestPath(String sourcePath) {
           testPath =
               'test/unit_tests/screens/$subDir/${_toTestFileName(fileName)}';
         } else {
-          // Default to unit tests for other files in features
-          final screenFolder = parts[2];
-          testPath =
-              'test/unit_tests/screens/$screenFolder/${_toTestFileName(fileName)}';
+          // Default to mirrored unit tests for shared feature infrastructure
+          final subDir = parts.sublist(0, parts.length - 1).join('/');
+          testPath = 'test/unit_tests/lib/$subDir/${_toTestFileName(fileName)}';
         }
       } else {
         return null;

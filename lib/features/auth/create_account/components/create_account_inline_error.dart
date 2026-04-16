@@ -7,7 +7,7 @@ import 'package:wishing_well/utils/auth_error.dart';
 
 class CreateAccountInlineError extends StatelessWidget {
   const CreateAccountInlineError({required this.viewModel, super.key});
-  final CreateAccountViewModel viewModel;
+  final CreateAccountViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

@@ -119,6 +119,7 @@ void clearError();
 void tapForgotPasswordButton(BuildContext context);
 Future<void> tapLoginButton(BuildContext context);
 void tapCreateAccountButton(BuildContext context);
+void clearAccountConfirmationQuery(BuildContext context);
 ```
 
 **Error Types**:
@@ -165,6 +166,7 @@ bool get hasAlert;
 AuthError<CreateAccountErrorType> get authError;
 void clearError();
 Future<void> tapCreateAccountButton(BuildContext context);
+void tapDismissButton(BuildContext context);
 ```
 
 **Password Requirements**:
@@ -196,13 +198,14 @@ enum CreateAccountPasswordRequirements {
 
 **File**: `lib/features/auth/forgot_password/forgot_password_view_model.dart`
 
-**Public API** (`ForgotViewModelContract`):
+**Public API** (`ForgotPasswordViewModelContract`):
 ```dart
 void updateEmailField(String email);
 bool get hasAlert;
 AuthError<ForgotPasswordErrorType> get authError;
 void clearError();
 Future<void> tapSendResetLinkButton(BuildContext context);
+void tapDismissButton(BuildContext context);
 ```
 
 **Error Types**:
@@ -386,4 +389,3 @@ Login's `TextEditingController` instances live in the ViewModel so the ViewModel
 - Close button on reset password shows a confirmation modal before discarding changes
 
 ---
-

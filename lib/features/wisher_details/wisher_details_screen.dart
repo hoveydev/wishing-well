@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
@@ -14,7 +12,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 
 class WisherDetailsScreen extends StatefulWidget {
   const WisherDetailsScreen({required this.viewModel, super.key});
-  final WisherDetailsViewModel viewModel;
+  final WisherDetailsViewModelContract viewModel;
 
   @override
   State<WisherDetailsScreen> createState() => _WisherDetailsScreenState();
@@ -28,51 +26,46 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      ChangeNotifierProvider<WisherDetailsViewModel>.value(
-        value: widget.viewModel,
-        child: Consumer<WisherDetailsViewModel>(
-          builder: (context, viewModel, child) {
-            final l10n = AppLocalizations.of(context)!;
-            return Screen(
-              appBar: AppMenuBar(
-                action: () => context.pop(),
-                type: AppMenuBarType.close,
-                additionalActions: !viewModel.isLoading
-                    ? [
-                        Builder(
-                          builder: (context) => Semantics(
-                            label: l10n.appBarEdit,
-                            button: true,
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                AppSpacerSize.xsmall,
-                              ),
-                              child: AppButton.icon(
-                                icon: Icons.edit_outlined,
-                                onPressed: () =>
-                                    viewModel.tapEditWisher(context),
-                                type: AppButtonType.tertiary,
-                              ),
-                            ),
-                          ),
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: widget.viewModel,
+    builder: (context, _) {
+      final l10n = AppLocalizations.of(context)!;
+      return Screen(
+        appBar: AppMenuBar(
+          action: () => widget.viewModel.tapCloseButton(context),
+          type: AppMenuBarType.close,
+          additionalActions: !widget.viewModel.isLoading
+              ? [
+                  Builder(
+                    builder: (context) => Semantics(
+                      label: l10n.appBarEdit,
+                      button: true,
+                      child: Padding(
+                        padding: const EdgeInsets.all(AppSpacerSize.xsmall),
+                        child: AppButton.icon(
+                          icon: Icons.edit_outlined,
+                          onPressed: () =>
+                              widget.viewModel.tapEditWisher(context),
+                          type: AppButtonType.tertiary,
                         ),
-                      ]
-                    : null,
-              ),
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (viewModel.isLoading)
-                  const CircularProgressIndicator()
-                else
-                  WisherDetailsProfile(wisher: viewModel.wisher!),
-                if (!viewModel.isLoading)
-                  WisherDetailsDeleteButton(
-                    onPressed: () => viewModel.tapDeleteWisher(context),
+                      ),
+                    ),
                   ),
-              ],
-            );
-          },
+                ]
+              : null,
         ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (widget.viewModel.isLoading)
+            const CircularProgressIndicator()
+          else
+            WisherDetailsProfile(wisher: widget.viewModel.wisher!),
+          if (!widget.viewModel.isLoading)
+            WisherDetailsDeleteButton(
+              onPressed: () => widget.viewModel.tapDeleteWisher(context),
+            ),
+        ],
       );
+    },
+  );
 }

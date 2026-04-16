@@ -41,8 +41,6 @@ void main() {
         expect(find.byType(Screen), findsOneWidget);
         expect(find.byType(AppMenuBar), findsOneWidget);
         expect(find.byType(CircularProgressIndicator), findsNothing);
-
-        viewModel.dispose();
       });
 
       testWidgets('renders wisher name when wisher is found', (
@@ -61,8 +59,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Alice Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('renders edit icon button when wisher is loaded', (
@@ -81,8 +77,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byIcon(Icons.edit_outlined), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('renders delete button when wisher is loaded', (
@@ -101,8 +95,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Delete Wisher'), findsOneWidget);
-
-        viewModel.dispose();
       });
     });
 
@@ -121,8 +113,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byIcon(Icons.close), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('responds to ViewModel state changes', (
@@ -146,8 +136,6 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Alice Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('handles rapid state changes without errors', (
@@ -171,13 +159,11 @@ void main() {
         }
 
         expect(find.text('Alice Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
     });
 
     group('State Management', () {
-      testWidgets('uses ChangeNotifierProvider with Consumer pattern', (
+      testWidgets('rebuilds from the injected view model', (
         WidgetTester tester,
       ) async {
         final viewModel = WisherDetailsViewModel(
@@ -194,11 +180,9 @@ void main() {
 
         expect(find.byType(WisherDetailsScreen), findsOneWidget);
         expect(find.text('Alice Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
 
-      testWidgets('provides viewModel to Consumer widget', (
+      testWidgets('renders the injected view model state', (
         WidgetTester tester,
       ) async {
         final viewModel = WisherDetailsViewModel(
@@ -214,8 +198,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Alice Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('disposes view model when screen is removed', (
@@ -257,8 +239,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Bob Test'), findsOneWidget);
-
-        viewModel.dispose();
       });
 
       testWidgets('correctly displays multiple wishers in sequence', (
@@ -275,8 +255,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
         expect(find.text('Alice Test'), findsOneWidget);
 
-        vm1.dispose();
-
         final vm2 = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '2',
@@ -288,8 +266,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Bob Test'), findsOneWidget);
-
-        vm2.dispose();
       });
     });
 
@@ -310,8 +286,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(Text), findsWidgets);
-
-        viewModel.dispose();
       });
     });
 
@@ -377,8 +351,6 @@ void main() {
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
-        addTearDown(viewModel.dispose);
-
         await tester.pumpWidget(buildGoRouterTestWidget(viewModel));
         await TestHelpers.pumpAndSettle(tester);
 
@@ -395,8 +367,6 @@ void main() {
           wisherRepository: mockWisherRepository,
           wisherId: '1',
         );
-        addTearDown(viewModel.dispose);
-
         await tester.pumpWidget(buildGoRouterTestWidget(viewModel));
         await TestHelpers.pumpAndSettle(tester);
 

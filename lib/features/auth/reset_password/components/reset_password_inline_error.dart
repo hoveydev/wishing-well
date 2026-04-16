@@ -7,7 +7,7 @@ import 'package:wishing_well/utils/auth_error.dart';
 
 class ResetPasswordInlineError extends StatelessWidget {
   const ResetPasswordInlineError({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+  final ResetPasswordViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

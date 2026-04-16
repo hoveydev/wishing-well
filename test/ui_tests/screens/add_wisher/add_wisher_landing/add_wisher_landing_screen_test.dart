@@ -40,10 +40,6 @@ void main() {
       );
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     Widget createTestWidget() =>
         ChangeNotifierProvider<LoadingController>.value(
           value: loadingController,
@@ -158,7 +154,6 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectWidgetOnce(AddWisherLandingScreen);
-        customViewModel.dispose();
       });
 
       testWidgets('handles ViewModel disposal correctly', (

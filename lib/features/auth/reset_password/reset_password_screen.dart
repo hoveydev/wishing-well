@@ -9,13 +9,19 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_view_mo
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+  final ResetPasswordViewModelContract viewModel;
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  @override
+  void dispose() {
+    widget.viewModel.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => LoadingOverlay(
     child: Screen(

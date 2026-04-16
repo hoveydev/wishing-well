@@ -10,7 +10,7 @@ import 'package:wishing_well/theme/app_theme.dart';
 
 class CreateAccountPasswordChecklist extends StatelessWidget {
   const CreateAccountPasswordChecklist({required this.viewModel, super.key});
-  final CreateAccountViewModel viewModel;
+  final CreateAccountViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

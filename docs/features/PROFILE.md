@@ -64,8 +64,9 @@ ProfileScreen({required this.viewModel, super.key});
 
 **Responsibility**: Executes logout and surfaces any errors.
 
-**Public API** (`ProfileViewmodelContract`):
+**Public API** (`ProfileViewModelContract`):
 ```dart
+void tapCloseButton(BuildContext context);
 Future<void> tapLogoutButton(BuildContext context);
 AuthError<ProfileErrorType> get authError;
 bool get hasAlert;
@@ -139,4 +140,3 @@ LoginScreen
 - Account deletion
 
 ---
-

@@ -11,7 +11,7 @@ import 'package:wishing_well/utils/auth_error.dart';
 
 class ForgotPasswordInput extends StatelessWidget {
   const ForgotPasswordInput({required this.viewModel, super.key});
-  final ForgotPasswordViewModel viewModel;
+  final ForgotPasswordViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

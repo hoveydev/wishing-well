@@ -157,7 +157,7 @@ void main() {
     });
 
     test('ViewModel contract is implemented correctly', () {
-      final contract = viewModel as ForgotViewModelContract;
+      final contract = viewModel as ForgotPasswordViewModelContract;
       contract.updateEmailField('test@email.com');
       expect(contract.hasAlert, false);
 

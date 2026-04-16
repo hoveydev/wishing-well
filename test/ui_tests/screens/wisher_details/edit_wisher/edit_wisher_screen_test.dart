@@ -40,10 +40,6 @@ void main() {
       );
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     Widget createTestWidget() =>
         ChangeNotifierProvider<LoadingController>.value(
           value: loadingController,

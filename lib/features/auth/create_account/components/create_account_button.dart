@@ -7,7 +7,7 @@ import 'package:wishing_well/features/auth/create_account/create_account_view_mo
 
 class CreateAccountButton extends StatelessWidget {
   const CreateAccountButton({required this.viewModel, super.key});
-  final CreateAccountViewModel viewModel;
+  final CreateAccountViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 
 class EditWisherButton extends StatelessWidget {
   const EditWisherButton({required this.viewModel, super.key});
-  final EditWisherViewModel viewModel;
+  final EditWisherViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

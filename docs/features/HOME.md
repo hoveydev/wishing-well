@@ -80,6 +80,8 @@ List<Wisher> get wishers;        // Current wishers list from WisherRepository
 bool get isLoadingWishers;       // Loading state forwarded from WisherRepository
 Object? get wisherError;         // Non-null when last fetch failed
 bool get hasWisherError;
+Future<Result<void>> fetchWishers();
+void tapProfile(BuildContext context);
 void tapWisherItem(BuildContext context, Wisher wisher);
 void tapAddWisher(BuildContext context);
 ```
@@ -87,9 +89,11 @@ void tapAddWisher(BuildContext context);
 **How It Works**:
 1. Constructor adds a listener to `WisherRepository` to forward its `notifyListeners()` calls to the screen
 2. `fetchWishers()` clears any previous error, calls `WisherRepository.fetchWishers()`, then preloads all profile picture URLs via `ImageRepository.preloadImages()`
-3. `tapWisherItem()` navigates to `/wisher-details/:id` using `Routes.wisherDetails.buildPath(id: wisher.id)`
-4. `tapAddWisher()` navigates to `/add-wisher`
-5. On dispose, removes the repository listener to prevent memory leaks
+3. `tapProfile()` navigates to `/profile`
+4. `tapWisherItem()` navigates to `/wisher-details/:id` using
+   `Routes.wisherDetails.buildPath(id: wisher.id)`
+5. `tapAddWisher()` navigates to `/add-wisher`
+6. On dispose, removes the repository listener to prevent memory leaks
 
 ## Navigation
 
@@ -193,4 +197,3 @@ Images are preloaded in `fetchWishers()` immediately after the wisher list is re
 - Wisher sorting (alphabetical, recent, upcoming)
 
 ---
-

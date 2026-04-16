@@ -21,10 +21,6 @@ void main() {
       viewModel = LoginViewModel(authRepository: mockAuthRepository);
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     group(TestGroups.rendering, () {
       testWidgets('renders screen with all required UI elements', (
         WidgetTester tester,
@@ -340,9 +336,6 @@ void main() {
 
         // Verify initial state
         expect(testViewModel.hasAlert, false);
-
-        // Clean up
-        testViewModel.dispose();
       });
 
       testWidgets('LoadingController showSuccess works correctly', (
@@ -516,9 +509,6 @@ void main() {
         // OK button should be present (for the overlay)
         // Note: localized as 'Ok'
         expect(find.text('Ok'), findsOneWidget);
-
-        // Clean up
-        testViewModel.dispose();
       });
 
       testWidgets('error overlay OK button dismisses the error', (
@@ -570,9 +560,6 @@ void main() {
         // Error should be cleared
         expect(loadingController.isError, false);
         expect(loadingController.isIdle, true);
-
-        // Clean up
-        testViewModel.dispose();
       });
     });
   });

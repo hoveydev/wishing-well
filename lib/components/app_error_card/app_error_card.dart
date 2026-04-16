@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
+const double _defaultAppErrorCardButtonSize = 36;
+const double _defaultAppErrorCardHorizontalPadding =
+    AppSpacing.screenPaddingStandard;
+const double _defaultAppErrorCardInnerPadding = 8;
+const double _defaultAppErrorCardColumnGap = 8;
+const double _defaultAppErrorCardRowGap = 2;
+
 class AppErrorCard extends StatelessWidget {
   const AppErrorCard({
     required this.onRetry,
@@ -10,14 +17,21 @@ class AppErrorCard extends StatelessWidget {
     required this.retryText,
     this.icon = Icons.refresh,
     this.iconSize = 18,
-    this.buttonSize = 36,
+    this.buttonSize = _defaultAppErrorCardButtonSize,
     this.titleFontSize,
     this.messageFontSize,
     this.retryTextFontSize,
-    this.horizontalPadding = AppSpacing.screenPaddingStandard,
-    this.innerPadding = 8,
+    this.horizontalPadding = _defaultAppErrorCardHorizontalPadding,
+    this.innerPadding = _defaultAppErrorCardInnerPadding,
     super.key,
   });
+
+  static const double defaultButtonSize = _defaultAppErrorCardButtonSize;
+  static const double defaultHorizontalPadding =
+      _defaultAppErrorCardHorizontalPadding;
+  static const double defaultInnerPadding = _defaultAppErrorCardInnerPadding;
+  static const double defaultColumnGap = _defaultAppErrorCardColumnGap;
+  static const double defaultRowGap = _defaultAppErrorCardRowGap;
 
   final VoidCallback? onRetry;
   final String title;
@@ -31,6 +45,35 @@ class AppErrorCard extends StatelessWidget {
   final double? retryTextFontSize;
   final double horizontalPadding;
   final double innerPadding;
+
+  static TextStyle titleTextStyle(
+    TextTheme textTheme, {
+    Color? color,
+    double? fontSize,
+  }) => (textTheme.bodySmall ?? const TextStyle(fontSize: 12)).copyWith(
+    color: color,
+    fontWeight: FontWeight.w600,
+    fontSize: fontSize,
+  );
+
+  static TextStyle messageTextStyle(
+    TextTheme textTheme, {
+    Color? color,
+    double? fontSize,
+  }) => (textTheme.bodySmall ?? const TextStyle(fontSize: 12)).copyWith(
+    color: color,
+    fontSize: fontSize,
+  );
+
+  static TextStyle retryTextStyle(
+    TextTheme textTheme, {
+    Color? color,
+    double? fontSize,
+  }) => (textTheme.bodySmall ?? const TextStyle(fontSize: 12)).copyWith(
+    color: color,
+    fontWeight: FontWeight.w600,
+    fontSize: fontSize,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -55,29 +98,26 @@ class AppErrorCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodySmall?.copyWith(
+                    style: titleTextStyle(
+                      textTheme,
                       color: colorScheme.error,
-                      fontWeight: FontWeight.w600,
                       fontSize: titleFontSize,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: defaultRowGap),
                   Text(
                     message,
-                    style: textTheme.bodySmall?.copyWith(
+                    style: messageTextStyle(
+                      textTheme,
                       color: colorScheme.error!.withValues(alpha: 0.8),
                       fontSize: messageFontSize,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
             if (onRetry != null) ...[
-              const SizedBox(width: 8),
+              const SizedBox(width: defaultColumnGap),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -96,12 +136,12 @@ class AppErrorCard extends StatelessWidget {
                       icon: Icon(icon, size: iconSize),
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: defaultRowGap),
                   Text(
                     retryText,
-                    style: textTheme.bodySmall?.copyWith(
+                    style: retryTextStyle(
+                      textTheme,
                       color: colorScheme.error,
-                      fontWeight: FontWeight.w600,
                       fontSize: retryTextFontSize,
                     ),
                   ),

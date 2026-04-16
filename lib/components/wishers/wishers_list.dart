@@ -52,15 +52,20 @@ class WishersList extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final itemHeight = _wisherRowHeightFor(
-          context: context,
-          availableWidth: constraints.maxWidth.isFinite
-              ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
-              : MediaQuery.sizeOf(context).width +
-                    (AppSpacing.screenPaddingStandard * 2),
-          l10n: l10n,
-          textTheme: textTheme,
-        );
+        final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
+        final widenedListWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
+            : MediaQuery.sizeOf(context).width +
+                  (AppSpacing.screenPaddingStandard * 2);
+        final itemHeight = hasError
+            ? _wisherRowHeightFor(
+                context: context,
+                wisherHeight: wisherHeight,
+                availableWidth: widenedListWidth,
+                l10n: l10n,
+                textTheme: textTheme,
+              )
+            : wisherHeight;
 
         return Semantics(
           header: true,
@@ -128,15 +133,11 @@ class WishersList extends StatelessWidget {
 
   double _wisherRowHeightFor({
     required BuildContext context,
+    required double wisherHeight,
     required double availableWidth,
     required AppLocalizations l10n,
     required TextTheme textTheme,
   }) {
-    final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
-    if (!hasError) {
-      return wisherHeight;
-    }
-
     final errorHeight = _errorCardHeightFor(
       context: context,
       availableWidth: availableWidth,

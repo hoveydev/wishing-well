@@ -34,6 +34,8 @@ class WishersList extends StatefulWidget {
 }
 
 class _WishersListState extends State<WishersList> {
+  static const double _defaultErrorCardBodyFontSize = 12.0;
+
   _WishersErrorHeightCacheKey? _cachedErrorHeightKey;
   double? _cachedErrorHeight;
 
@@ -176,9 +178,9 @@ class _WishersListState extends State<WishersList> {
     required bool hasRetry,
     required TextTheme textTheme,
   }) {
-    final titleStyle = AppErrorCard.titleTextStyle(textTheme);
-    final messageStyle = AppErrorCard.messageTextStyle(textTheme);
-    final retryStyle = AppErrorCard.retryTextStyle(textTheme);
+    final bodySmallStyle =
+        textTheme.bodySmall ??
+        const TextStyle(fontSize: _defaultErrorCardBodyFontSize);
     final textScaler = MediaQuery.textScalerOf(context);
     final cacheKey = _WishersErrorHeightCacheKey(
       availableWidth: availableWidth,
@@ -187,18 +189,19 @@ class _WishersListState extends State<WishersList> {
       errorMessage: errorMessage,
       retryText: retryText,
       textDirection: Directionality.of(context),
-      titleStyle: titleStyle,
-      messageStyle: messageStyle,
-      retryStyle: retryStyle,
-      scaledTitleFontSize: textScaler.scale(titleStyle.fontSize ?? 12.0),
-      scaledMessageFontSize: textScaler.scale(messageStyle.fontSize ?? 12.0),
-      scaledRetryFontSize: textScaler.scale(retryStyle.fontSize ?? 12.0),
+      bodySmallStyle: bodySmallStyle,
+      scaledBodySmallFontSize: textScaler.scale(
+        bodySmallStyle.fontSize ?? _defaultErrorCardBodyFontSize,
+      ),
     );
 
     if (_cachedErrorHeightKey == cacheKey && _cachedErrorHeight != null) {
       return _cachedErrorHeight!;
     }
 
+    final titleStyle = AppErrorCard.titleTextStyle(textTheme);
+    final messageStyle = AppErrorCard.messageTextStyle(textTheme);
+    final retryStyle = AppErrorCard.retryTextStyle(textTheme);
     final calculatedHeight = _errorCardHeightFor(
       context: context,
       availableWidth: availableWidth,
@@ -323,12 +326,8 @@ class _WishersErrorHeightCacheKey {
     required this.errorMessage,
     required this.retryText,
     required this.textDirection,
-    required this.titleStyle,
-    required this.messageStyle,
-    required this.retryStyle,
-    required this.scaledTitleFontSize,
-    required this.scaledMessageFontSize,
-    required this.scaledRetryFontSize,
+    required this.bodySmallStyle,
+    required this.scaledBodySmallFontSize,
   });
 
   final double availableWidth;
@@ -337,12 +336,8 @@ class _WishersErrorHeightCacheKey {
   final String errorMessage;
   final String retryText;
   final TextDirection textDirection;
-  final TextStyle titleStyle;
-  final TextStyle messageStyle;
-  final TextStyle retryStyle;
-  final double scaledTitleFontSize;
-  final double scaledMessageFontSize;
-  final double scaledRetryFontSize;
+  final TextStyle bodySmallStyle;
+  final double scaledBodySmallFontSize;
 
   @override
   bool operator ==(Object other) =>
@@ -355,12 +350,8 @@ class _WishersErrorHeightCacheKey {
           errorMessage == other.errorMessage &&
           retryText == other.retryText &&
           textDirection == other.textDirection &&
-          titleStyle == other.titleStyle &&
-          messageStyle == other.messageStyle &&
-          retryStyle == other.retryStyle &&
-          scaledTitleFontSize == other.scaledTitleFontSize &&
-          scaledMessageFontSize == other.scaledMessageFontSize &&
-          scaledRetryFontSize == other.scaledRetryFontSize;
+          bodySmallStyle == other.bodySmallStyle &&
+          scaledBodySmallFontSize == other.scaledBodySmallFontSize;
 
   @override
   int get hashCode => Object.hash(
@@ -370,11 +361,7 @@ class _WishersErrorHeightCacheKey {
     errorMessage,
     retryText,
     textDirection,
-    titleStyle,
-    messageStyle,
-    retryStyle,
-    scaledTitleFontSize,
-    scaledMessageFontSize,
-    scaledRetryFontSize,
+    bodySmallStyle,
+    scaledBodySmallFontSize,
   );
 }

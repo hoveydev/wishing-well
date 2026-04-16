@@ -1,7 +1,24 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+
 class AppSpacing {
   static const double appBarHeight = 48.0;
   static const double screenPaddingStandard = 24.0;
   static const double wisherSpacing = 16.0;
   static const double appBarTitleSpacing = 8.0;
-  static const double wisherListItemHeight = 120.0;
+  static const double wisherListItemHeight = 80.0;
+
+  static double wisherListItemHeightFor(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final bodySmall = textTheme.bodySmall;
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final labelHeight =
+        (bodySmall?.fontSize ?? 12.0) * (bodySmall?.height ?? 1.33) * textScale;
+
+    return math.max(
+      wisherListItemHeight,
+      (60.0 + 4.0 + labelHeight).ceilToDouble(),
+    );
+  }
 }

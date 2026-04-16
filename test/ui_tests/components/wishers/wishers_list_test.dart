@@ -461,27 +461,72 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            createWishersList(wishers: defaultTestWishers),
+          MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+            child: createScreenComponentTestWidget(
+              createWishersList(wishers: defaultTestWishers),
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Find the Positioned widget which contains the inner SizedBox
-        final positionedFinder = find.descendant(
-          of: find.byType(WishersList),
-          matching: find.byType(Positioned),
+        final wishersListContext = tester.element(find.byType(WishersList));
+        final expectedHeight = AppSpacing.wisherListItemHeightFor(
+          wishersListContext,
         );
 
-        // Find the inner SizedBox (height 120) inside the Positioned widget
-        final innerSizedBox = find.descendant(
-          of: positionedFinder.first,
-          matching: find.byType(SizedBox),
-        );
+        // Find the outer SizedBox that drives the row height
+        final outerSizedBox = tester
+            .widgetList<SizedBox>(find.byType(SizedBox))
+            .firstWhere((widget) => widget.child is Stack);
 
-        // Should find SizedBox with height from constant
-        final sizedBox = tester.widget<SizedBox>(innerSizedBox.first);
-        expect(sizedBox.height, AppSpacing.wisherListItemHeight);
+        final sizedBox = outerSizedBox;
+        expect(sizedBox.height, greaterThanOrEqualTo(expectedHeight));
+      });
+
+      testWidgets('does not overflow the error card at large text sizes', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+            child: createScreenComponentTestWidget(
+              createWishersList(hasError: true, onRetry: () {}),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets('keeps error text visible without ellipses', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+            child: createScreenComponentTestWidget(
+              createWishersList(hasError: true, onRetry: () {}),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final titleText = tester.widget<Text>(
+          find.text('Error Loading Wishers'),
+        );
+        final messageText = tester.widget<Text>(
+          find.text(
+            'Something went wrong while loading your wishers. '
+            'Please try again.',
+          ),
+        );
+        final retryText = tester.widget<Text>(find.text('retry'));
+
+        expect(titleText.overflow, isNull);
+        expect(messageText.overflow, isNull);
+        expect(retryText.overflow, isNull);
       });
 
       testWidgets('View All text has overflow ellipsis for large text', (

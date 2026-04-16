@@ -60,8 +60,6 @@ class AppErrorCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       fontSize: titleFontSize,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -70,8 +68,6 @@ class AppErrorCard extends StatelessWidget {
                       color: colorScheme.error!.withValues(alpha: 0.8),
                       fontSize: messageFontSize,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

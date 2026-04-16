@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
@@ -11,16 +12,18 @@ import 'package:wishing_well/utils/input_validators.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class ForgotViewModelContract {
+abstract class ForgotPasswordViewModelContract
+    implements ScreenViewModelContract {
   void updateEmailField(String email);
   bool get hasAlert;
   AuthError<ForgotPasswordErrorType> get authError;
   void clearError();
   Future<void> tapSendResetLinkButton(BuildContext context);
+  void tapDismissButton(BuildContext context);
 }
 
 class ForgotPasswordViewModel extends ChangeNotifier
-    implements ForgotViewModelContract {
+    implements ForgotPasswordViewModelContract {
   ForgotPasswordViewModel({required AuthRepository authRepository})
     : _authRepository = authRepository;
 
@@ -154,5 +157,10 @@ class ForgotPasswordViewModel extends ChangeNotifier
           loading.showError(l10n.errorUnknown);
         }
     }
+  }
+
+  @override
+  void tapDismissButton(BuildContext context) {
+    context.pop();
   }
 }

@@ -71,13 +71,14 @@ test/
 **Key Features**:
 - "Add from Contacts" button is rendered but disabled (TODO)
 - "Add Manually" button navigates to the details screen
-- Uses `AddWisherLandingViewModel` (currently a placeholder with no state)
+- Uses `AddWisherLandingViewModel` for navigation actions
 
 ### AddWisherLandingViewModel
 
 **File**: `lib/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart`
 
-Extends `ChangeNotifier`, implements `AddWisherLandingViewModelContract`. Currently has no business logic — navigation to the details screen is handled directly in the screen component.
+Extends `ChangeNotifier`, implements `AddWisherLandingViewModelContract`, and
+owns landing-screen navigation actions such as close and manual add.
 
 ---
 
@@ -111,10 +112,11 @@ void updateLastName(String lastName);
 void updateImage(File? imageFile);
 File? get imageFile;
 bool get hasAlert;
-AddWisherDetailsError? get error;
+AddWisherDetailsError get error;
 void clearError();
 bool get isFormValid;
 Future<void> tapSaveButton(BuildContext context);
+void tapBackButton(BuildContext context);
 ```
 
 **Error Types**:

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
@@ -11,7 +10,7 @@ import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({required this.viewModel, super.key});
 
-  final ForgotPasswordViewModel viewModel;
+  final ForgotPasswordViewModelContract viewModel;
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -19,10 +18,16 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
+  void dispose() {
+    widget.viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => LoadingOverlay(
     child: Screen(
       appBar: AppMenuBar(
-        action: () => context.pop(),
+        action: () => widget.viewModel.tapDismissButton(context),
         type: AppMenuBarType.dismiss,
       ),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

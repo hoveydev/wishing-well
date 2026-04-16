@@ -409,7 +409,7 @@ void main() {
 
       test('contract error getter works', () {
         final contract = viewModel as AddWisherDetailsViewModelContract;
-        expect(contract.error?.type, AddWisherDetailsErrorType.none);
+        expect(contract.error.type, AddWisherDetailsErrorType.none);
       });
 
       test('contract clearError method works', () {

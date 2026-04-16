@@ -13,7 +13,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.viewModel, super.key});
-  final LoginViewModel viewModel;
+  final LoginViewModelContract viewModel;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -43,14 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
           if (!mounted) return;
           final loading = context.read<LoadingController>();
           final l10n = AppLocalizations.of(context)!;
-          loading.showSuccess(
-            l10n.accountConfirmationMessage,
-            onOk: () {
-              // Just acknowledge - stay on login screen
-            },
-          );
+          loading.showSuccess(l10n.accountConfirmationMessage, onOk: () {});
           // Remove the query parameter to prevent showing again on rebuild
-          context.goNamed(state.uri.path);
+          widget.viewModel.clearAccountConfirmationQuery(context);
         });
       }
     } catch (_) {
@@ -62,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
+    widget.viewModel.dispose();
     super.dispose();
   }
 

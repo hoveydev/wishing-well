@@ -7,7 +7,7 @@ import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_d
 
 class AddWisherDetailsButton extends StatelessWidget {
   const AddWisherDetailsButton({required this.viewModel, super.key});
-  final AddWisherDetailsViewModel viewModel;
+  final AddWisherDetailsViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

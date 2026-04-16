@@ -8,6 +8,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
+import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -17,7 +18,7 @@ import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repositor
 
 // Helper functions for GoRouter routes
 Widget _profileScreenBuilder(BuildContext context, GoRouterState state) =>
-    const ProfileScreen();
+    ProfileScreen(viewModel: ProfileViewModel(authRepository: context.read()));
 
 Widget _loginScreenBuilder(BuildContext context, GoRouterState state) =>
     const Scaffold(body: Text('Login Screen'));

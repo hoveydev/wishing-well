@@ -9,6 +9,7 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
+import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
@@ -97,7 +98,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const ProfileScreen(),
+            home: ProfileScreen(
+              viewModel: ProfileViewModel(authRepository: authMock),
+            ),
           ),
         ),
       );
@@ -137,7 +140,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const ProfileScreen(),
+            home: ProfileScreen(
+              viewModel: ProfileViewModel(authRepository: authMock),
+            ),
           ),
         ),
       );

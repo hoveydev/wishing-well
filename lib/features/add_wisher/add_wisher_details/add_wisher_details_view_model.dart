@@ -9,22 +9,25 @@ import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class AddWisherDetailsViewModelContract {
+abstract class AddWisherDetailsViewModelContract
+    implements ScreenViewModelContract {
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
   void updateImage(File? imageFile);
   File? get imageFile;
   bool get hasAlert;
-  AddWisherDetailsError? get error;
+  AddWisherDetailsError get error;
   void clearError();
   bool get isFormValid;
   Future<void> tapSaveButton(BuildContext context);
+  void tapBackButton(BuildContext context);
 }
 
 enum AddWisherDetailsErrorType {
@@ -122,6 +125,11 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   @override
   bool get isFormValid => _firstName.isNotEmpty && _lastName.isNotEmpty;
+
+  @override
+  void tapBackButton(BuildContext context) {
+    context.pop();
+  }
 
   @override
   Future<void> tapSaveButton(BuildContext context) async {

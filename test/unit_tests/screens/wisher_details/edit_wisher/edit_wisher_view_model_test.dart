@@ -278,7 +278,7 @@ void main() {
 
       test('contract error getter works', () {
         final contract = viewModel as EditWisherViewModelContract;
-        expect(contract.error?.type, EditWisherErrorType.none);
+        expect(contract.error.type, EditWisherErrorType.none);
       });
 
       test('contract isFormValid getter works', () {

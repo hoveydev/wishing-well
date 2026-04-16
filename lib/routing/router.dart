@@ -16,6 +16,7 @@ import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_vie
 import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
+import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
@@ -90,8 +91,10 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.profile.path,
       name: Routes.profile.name,
-      pageBuilder: (context, state) => const CustomTransitionPage(
-        child: ProfileScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: ProfileScreen(
+          viewModel: ProfileViewModel(authRepository: context.read()),
+        ),
         transitionsBuilder: slideUpTransition,
       ),
     ),

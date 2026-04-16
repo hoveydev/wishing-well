@@ -3,13 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class ProfileViewmodelContract {
+abstract class ProfileViewModelContract implements ScreenViewModelContract {
+  void tapCloseButton(BuildContext context);
   Future<void> tapLogoutButton(BuildContext context);
   AuthError<ProfileErrorType> get authError;
   bool get hasAlert;
@@ -17,7 +19,7 @@ abstract class ProfileViewmodelContract {
 }
 
 class ProfileViewModel extends ChangeNotifier
-    implements ProfileViewmodelContract {
+    implements ProfileViewModelContract {
   ProfileViewModel({required AuthRepository authRepository})
     : _authRepository = authRepository;
 
@@ -40,6 +42,11 @@ class ProfileViewModel extends ChangeNotifier
   @override
   void clearError() {
     _setAuthError = const UIAuthError(ProfileErrorType.none);
+  }
+
+  @override
+  void tapCloseButton(BuildContext context) {
+    context.pop();
   }
 
   @override

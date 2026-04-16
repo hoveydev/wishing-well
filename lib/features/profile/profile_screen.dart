@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
@@ -12,26 +10,25 @@ import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({required this.viewModel, super.key});
+
+  final ProfileViewModelContract viewModel;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final ProfileViewModel _viewModel;
-
   @override
   void initState() {
     super.initState();
-    _viewModel = ProfileViewModel(authRepository: context.read());
-    _viewModel.addListener(_showErrorAlert);
+    widget.viewModel.addListener(_showErrorAlert);
   }
 
   @override
   void dispose() {
-    _viewModel.removeListener(_showErrorAlert);
-    _viewModel.dispose();
+    widget.viewModel.removeListener(_showErrorAlert);
+    widget.viewModel.dispose();
     super.dispose();
   }
 
@@ -41,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Screen(
       appBar: AppMenuBar(
-        action: () => context.pop(),
+        action: () => widget.viewModel.tapCloseButton(context),
         type: AppMenuBarType.close,
       ),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SizedBox.shrink(),
         AppButton.label(
           label: l10n.logout,
-          onPressed: () => _viewModel.tapLogoutButton(context),
+          onPressed: () => widget.viewModel.tapLogoutButton(context),
           type: AppButtonType.tertiary,
         ),
       ],
@@ -58,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showErrorAlert() {
-    if (_viewModel.authError == const UIAuthError(ProfileErrorType.none)) {
+    if (widget.viewModel.authError ==
+        const UIAuthError(ProfileErrorType.none)) {
       return;
     }
 
@@ -73,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             message: _errorMessage(context),
             confirmLabel: l10n.ok,
             onConfirm: () {
-              _viewModel.clearError();
+              widget.viewModel.clearError();
             },
           );
         },
@@ -84,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _errorMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return switch (_viewModel.authError) {
+    return switch (widget.viewModel.authError) {
       UIAuthError(:final type) => switch (type) {
         ProfileErrorType.unknown => l10n.errorUnknown,
         ProfileErrorType.none => '',

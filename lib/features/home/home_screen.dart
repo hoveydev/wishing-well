@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
-import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/result.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({required this.viewModel, super.key});
-  final HomeViewModel viewModel;
+  final HomeViewModelContract viewModel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -33,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    widget.viewModel.dispose();
     super.dispose();
   }
 
@@ -56,26 +54,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider.value(
-    value: widget.viewModel,
-    child: Consumer<HomeViewModel>(
-      builder: (context, viewModel, child) => Screen(
-        appBar: AppMenuBar(
-          action: () => context.push(Routes.profile.path),
-          type: AppMenuBarType.main,
-        ),
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          WishersList(
-            wishers: viewModel.wishers,
-            isLoading: viewModel.isLoadingWishers,
-            hasError: viewModel.hasWisherError,
-            onAddWisherTap: () => viewModel.tapAddWisher(context),
-            onWisherTap: (wisher) => viewModel.tapWisherItem(context, wisher),
-            onRetry: viewModel.fetchWishers,
-          ),
-        ],
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: widget.viewModel,
+    builder: (context, _) => Screen(
+      appBar: AppMenuBar(
+        action: () => widget.viewModel.tapProfile(context),
+        type: AppMenuBarType.main,
       ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WishersList(
+          wishers: widget.viewModel.wishers,
+          isLoading: widget.viewModel.isLoadingWishers,
+          hasError: widget.viewModel.hasWisherError,
+          onAddWisherTap: () => widget.viewModel.tapAddWisher(context),
+          onWisherTap: (wisher) =>
+              widget.viewModel.tapWisherItem(context, wisher),
+          onRetry: widget.viewModel.fetchWishers,
+        ),
+      ],
     ),
   );
 }

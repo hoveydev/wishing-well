@@ -10,7 +10,7 @@ import 'package:wishing_well/theme/app_theme.dart';
 
 class ResetPasswordChecklist extends StatelessWidget {
   const ResetPasswordChecklist({required this.viewModel, super.key});
-  final ResetPasswordViewModel viewModel;
+  final ResetPasswordViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

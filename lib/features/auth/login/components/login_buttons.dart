@@ -7,7 +7,7 @@ import 'package:wishing_well/features/auth/login/login_view_model.dart';
 
 class LoginButtons extends StatelessWidget {
   const LoginButtons({required this.viewModel, super.key});
-  final LoginViewModel viewModel;
+  final LoginViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_
 
 class ForgotPasswordHeader extends StatelessWidget {
   const ForgotPasswordHeader({required this.viewModel, super.key});
-  final ForgotPasswordViewModel viewModel;
+  final ForgotPasswordViewModelContract viewModel;
 
   @override
   Widget build(BuildContext context) {

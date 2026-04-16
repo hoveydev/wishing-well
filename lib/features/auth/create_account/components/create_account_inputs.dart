@@ -9,7 +9,7 @@ import 'package:wishing_well/features/auth/create_account/create_account_view_mo
 
 class CreateAccountInputs extends StatefulWidget {
   const CreateAccountInputs({required this.viewModel, super.key});
-  final CreateAccountViewModel viewModel;
+  final CreateAccountViewModelContract viewModel;
 
   @override
   State<CreateAccountInputs> createState() => _CreateAccountInputsState();

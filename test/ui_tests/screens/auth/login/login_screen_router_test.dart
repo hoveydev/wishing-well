@@ -19,10 +19,6 @@ void main() {
       viewModel = LoginViewModel(authRepository: MockAuthRepository());
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     testWidgets('screen renders with all subcomponents', (
       WidgetTester tester,
     ) async {

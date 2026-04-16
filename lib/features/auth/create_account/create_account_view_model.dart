@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
@@ -12,7 +13,8 @@ import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/password_validator.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class CreateAccountViewModelContract {
+abstract class CreateAccountViewModelContract
+    implements ScreenViewModelContract {
   void updateEmailField(String email);
   void updatePasswordOneField(String password);
   void updatePasswordTwoField(String password);
@@ -21,6 +23,7 @@ abstract class CreateAccountViewModelContract {
   void clearError();
   Set<CreateAccountPasswordRequirements> get metPasswordRequirements;
   Future<void> tapCreateAccountButton(BuildContext context);
+  void tapDismissButton(BuildContext context);
 }
 
 enum CreateAccountPasswordRequirements {
@@ -266,5 +269,10 @@ class CreateAccountViewModel extends ChangeNotifier
           loading.showError(l10n.errorUnknown);
         }
     }
+  }
+
+  @override
+  void tapDismissButton(BuildContext context) {
+    context.pop();
   }
 }

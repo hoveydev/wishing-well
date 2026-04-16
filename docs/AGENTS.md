@@ -100,10 +100,18 @@ When styling UI elements, always use the established theme system instead of har
 ### Architecture Patterns
 
 **MVVM with ViewModels:**
-- Screens receive ViewModel via constructor: `const HomeScreen({required this.viewmodel, super.key})`
-- ViewModels extend ChangeNotifier and implement a Contract interface
-- Define contract as abstract class with public methods/properties
-- Private fields use underscore prefix, public methods expose via interface
+- Screens receive a `*ViewModelContract` via constructor:
+  `const HomeScreen({required this.viewModel, super.key})`
+- Routers, demos, and tests create the concrete ViewModel and pass it into the
+  screen
+- ViewModel contracts implement `ScreenViewModelContract`, so screens can listen
+  and dispose through the contract type
+- Routed screens own the injected ViewModel lifecycle and call
+  `viewModel.dispose()` in `dispose`
+- Screen files must not instantiate ViewModels or call `go_router` directly;
+  navigation is delegated to ViewModel methods
+- Use `ListenableBuilder` when a screen needs to rebuild from ViewModel state
+- Private fields use underscore prefix, public methods expose via the contract
 
 **Repository Pattern:**
 - Abstract repository class defines interface in lib/data/
@@ -151,8 +159,8 @@ When styling UI elements, always use the established theme system instead of har
 - Controllers (TextEditingController, FocusNode) disposed in viewModel/screen dispose
 
 ### Testing
-- Unit tests in lib/testing/unit_tests/ using standard flutter_test
-- UI widget tests in lib/testing/ui_tests/
+- Unit tests in `test/unit_tests/` using standard flutter_test
+- UI widget tests in `test/ui_tests/`
 - Organize tests with group() blocks
 - Use descriptive test names: `test('description', () {...})`
 - Use testWidgets for widget testing with WidgetTester

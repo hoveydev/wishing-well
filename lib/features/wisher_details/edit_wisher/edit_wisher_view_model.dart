@@ -7,19 +7,20 @@ import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
-abstract class EditWisherViewModelContract {
+abstract class EditWisherViewModelContract implements ScreenViewModelContract {
   Wisher? get wisher;
   bool get isLoading;
   File? get imageFile;
   String? get existingImageUrl;
   bool get hasAlert;
-  EditWisherError? get error;
+  EditWisherError get error;
   bool get isFormValid;
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
@@ -27,6 +28,7 @@ abstract class EditWisherViewModelContract {
   void clearImage();
   void clearError();
   Future<void> tapSaveButton(BuildContext context);
+  void tapBackButton(BuildContext context);
 }
 
 enum EditWisherErrorType {
@@ -126,6 +128,11 @@ class EditWisherViewModel extends ChangeNotifier
   void clearError() {
     _error = const EditWisherError(EditWisherErrorType.none);
     notifyListeners();
+  }
+
+  @override
+  void tapBackButton(BuildContext context) {
+    context.pop();
   }
 
   @override

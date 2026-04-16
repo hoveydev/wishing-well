@@ -20,10 +20,6 @@ void main() {
       viewModel = CreateAccountViewModel(authRepository: mockAuthRepository);
     });
 
-    tearDown(() {
-      viewModel.dispose();
-    });
-
     group(TestGroups.rendering, () {
       testWidgets('renders with all required elements', (
         WidgetTester tester,
@@ -393,8 +389,6 @@ void main() {
 
           // OK button should be present - note: localized as 'Ok'
           expect(find.text('Ok'), findsOneWidget);
-
-          errorViewModel.dispose();
         },
       );
 
@@ -466,8 +460,6 @@ void main() {
         // The inline error icon might still be visible
         final errorIcons = find.byIcon(Icons.error);
         expect(errorIcons, findsOneWidget); // Only inline error remains
-
-        errorViewModel.dispose();
       });
 
       testWidgets('handles supabase auth error gracefully', (
@@ -534,8 +526,6 @@ void main() {
           find.text('An unknown error occured. Please try again'),
           findsNWidgets(2),
         );
-
-        errorViewModel.dispose();
       });
 
       testWidgets('handles unknown error gracefully', (
@@ -600,8 +590,6 @@ void main() {
           find.text('An unknown error occured. Please try again'),
           findsNWidgets(2),
         );
-
-        errorViewModel.dispose();
       });
     });
 
@@ -673,8 +661,6 @@ void main() {
 
         // Verify form is valid by checking ViewModel state
         expect(successViewModel.hasAlert, isFalse);
-
-        successViewModel.dispose();
       });
     });
   });

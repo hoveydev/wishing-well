@@ -57,8 +57,8 @@ test/
 **Responsibility**: Pure presentation layer - renders the UI based on ViewModel state
 
 **Key Features**:
-- Wraps ViewModel with `ChangeNotifierProvider` for dependency injection
-- Uses `Consumer` pattern to listen to state changes
+- Receives a `WisherDetailsViewModelContract` via constructor injection
+- Uses `ListenableBuilder` to listen to state changes
 - Renders loading spinner while data loads
 - Shows wisher name when found
 - Displays "Wisher not found" fallback message
@@ -72,10 +72,10 @@ const WisherDetailsScreen({
 });
 ```
 
-**State Management**: 
-- Receives `WisherDetailsViewModel` via constructor injection
-- Uses `Consumer<WisherDetailsViewModel>` to observe state changes
-- No internal state management (stateless presentation)
+**State Management**:
+- Receives `WisherDetailsViewModelContract` via constructor injection
+- Uses `ListenableBuilder` to observe state changes
+- Disposes the injected ViewModel when the routed screen is removed
 
 ### WisherDetailsViewModel
 
@@ -94,6 +94,9 @@ const WisherDetailsScreen({
 ```dart
 Wisher? get wisher;        // The wisher being displayed (null if not found)
 bool get isLoading;        // Loading state during lookup
+void tapCloseButton(BuildContext context);
+void tapEditWisher(BuildContext context);
+Future<void> tapDeleteWisher(BuildContext context);
 ```
 
 **Initialization**:
@@ -415,4 +418,3 @@ class WisherItem extends StatelessWidget {
 **Related Documentation**: See [TESTING_STANDARDS.md](../TESTING_STANDARDS.md), [AGENTS.md](../AGENTS.md)
 
 ---
-

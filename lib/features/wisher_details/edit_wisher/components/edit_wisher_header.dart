@@ -11,7 +11,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 
 class EditWisherHeader extends StatefulWidget {
   const EditWisherHeader({required this.viewModel, super.key});
-  final EditWisherViewModel viewModel;
+  final EditWisherViewModelContract viewModel;
 
   @override
   State<EditWisherHeader> createState() => _EditWisherHeaderState();

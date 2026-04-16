@@ -34,8 +34,6 @@ class WishersList extends StatefulWidget {
 }
 
 class _WishersListState extends State<WishersList> {
-  static const double _defaultErrorCardBodyFontSize = 12.0;
-
   _WishersErrorHeightCacheKey? _cachedErrorHeightKey;
   double? _cachedErrorHeight;
 
@@ -178,9 +176,7 @@ class _WishersListState extends State<WishersList> {
     required bool hasRetry,
     required TextTheme textTheme,
   }) {
-    final bodySmallStyle =
-        textTheme.bodySmall ??
-        const TextStyle(fontSize: _defaultErrorCardBodyFontSize);
+    final bodySmallStyle = AppErrorCard.messageTextStyle(textTheme);
     final textScaler = MediaQuery.textScalerOf(context);
     final cacheKey = _WishersErrorHeightCacheKey(
       availableWidth: availableWidth,
@@ -190,9 +186,7 @@ class _WishersListState extends State<WishersList> {
       retryText: retryText,
       textDirection: Directionality.of(context),
       bodySmallStyle: bodySmallStyle,
-      scaledBodySmallFontSize: textScaler.scale(
-        bodySmallStyle.fontSize ?? _defaultErrorCardBodyFontSize,
-      ),
+      scaledBodySmallFontSize: textScaler.scale(bodySmallStyle.fontSize ?? 0.0),
     );
 
     if (_cachedErrorHeightKey == cacheKey && _cachedErrorHeight != null) {

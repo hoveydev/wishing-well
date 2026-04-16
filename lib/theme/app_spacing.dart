@@ -12,9 +12,11 @@ class AppSpacing {
   static double wisherListItemHeightFor(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodySmall = textTheme.bodySmall;
-    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final labelHeight =
-        (bodySmall?.fontSize ?? 12.0) * (bodySmall?.height ?? 1.33) * textScale;
+    final bodySmallFontSize = bodySmall?.fontSize ?? 12.0;
+    final scaledBodySmallFontSize = MediaQuery.textScalerOf(
+      context,
+    ).scale(bodySmallFontSize);
+    final labelHeight = scaledBodySmallFontSize * (bodySmall?.height ?? 1.33);
 
     return math.max(
       wisherListItemHeight,

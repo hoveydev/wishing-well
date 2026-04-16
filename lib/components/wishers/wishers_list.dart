@@ -55,8 +55,9 @@ class WishersList extends StatelessWidget {
         final itemHeight = _wisherRowHeightFor(
           context: context,
           availableWidth: constraints.maxWidth.isFinite
-              ? constraints.maxWidth
-              : MediaQuery.sizeOf(context).width,
+              ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
+              : MediaQuery.sizeOf(context).width +
+                    (AppSpacing.screenPaddingStandard * 2),
           l10n: l10n,
           textTheme: textTheme,
         );
@@ -132,10 +133,15 @@ class WishersList extends StatelessWidget {
     required TextTheme textTheme,
   }) {
     final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
+    if (!hasError) {
+      return wisherHeight;
+    }
+
     final errorHeight = _errorCardHeightFor(
       context: context,
       availableWidth: availableWidth,
       l10n: l10n,
+      hasRetry: onRetry != null,
       textTheme: textTheme,
     );
 
@@ -146,6 +152,7 @@ class WishersList extends StatelessWidget {
     required BuildContext context,
     required double availableWidth,
     required AppLocalizations l10n,
+    required bool hasRetry,
     required TextTheme textTheme,
   }) {
     const horizontalPadding = AppSpacing.screenPaddingStandard;
@@ -158,10 +165,9 @@ class WishersList extends StatelessWidget {
     final textDirection = Directionality.of(context);
     final cardWidth = math.max(0.0, availableWidth - (horizontalPadding * 2));
     final innerWidth = math.max(0.0, cardWidth - (innerPadding * 2));
-    final leftColumnWidth = math.max(
-      0.0,
-      innerWidth - buttonSize - gapBetweenColumns,
-    );
+    final leftColumnWidth = hasRetry
+        ? math.max(0.0, innerWidth - buttonSize - gapBetweenColumns)
+        : innerWidth;
 
     final bodyStyle = textTheme.bodySmall ?? const TextStyle(fontSize: 12);
     final titleStyle = bodyStyle.copyWith(fontWeight: FontWeight.w600);
@@ -182,16 +188,20 @@ class WishersList extends StatelessWidget {
       textScaler,
       textDirection,
     );
-    final retryHeight = _measureTextHeight(
-      l10n.tryAgain,
-      retryStyle,
-      buttonSize,
-      textScaler,
-      textDirection,
-    );
+    final retryHeight = hasRetry
+        ? _measureTextHeight(
+            l10n.tryAgain,
+            retryStyle,
+            buttonSize,
+            textScaler,
+            textDirection,
+          )
+        : 0.0;
 
     final leftColumnHeight = titleHeight + gapBetweenRows + messageHeight;
-    final rightColumnHeight = buttonSize + gapBetweenRows + retryHeight;
+    final rightColumnHeight = hasRetry
+        ? buttonSize + gapBetweenRows + retryHeight
+        : 0.0;
 
     return (innerPadding * 2) + math.max(leftColumnHeight, rightColumnHeight);
   }

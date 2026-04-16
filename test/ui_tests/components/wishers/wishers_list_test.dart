@@ -477,7 +477,12 @@ void main() {
 
         // Find the outer SizedBox that drives the row height
         final outerSizedBox = tester
-            .widgetList<SizedBox>(find.byType(SizedBox))
+            .widgetList<SizedBox>(
+              find.descendant(
+                of: find.byType(WishersList),
+                matching: find.byType(SizedBox),
+              ),
+            )
             .firstWhere((widget) => widget.child is Stack);
 
         final sizedBox = outerSizedBox;

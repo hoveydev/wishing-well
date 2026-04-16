@@ -161,19 +161,31 @@ class WishersList extends StatelessWidget {
     const buttonSize = 36.0;
     const gapBetweenColumns = 8.0;
     const gapBetweenRows = 2.0;
+    const measurementSafetyBuffer = 2.0;
 
     final textScaler = MediaQuery.textScalerOf(context);
     final textDirection = Directionality.of(context);
     final cardWidth = math.max(0.0, availableWidth - (horizontalPadding * 2));
     final innerWidth = math.max(0.0, cardWidth - (innerPadding * 2));
-    final leftColumnWidth = hasRetry
-        ? math.max(0.0, innerWidth - buttonSize - gapBetweenColumns)
-        : innerWidth;
 
     final bodyStyle = textTheme.bodySmall ?? const TextStyle(fontSize: 12);
     final titleStyle = bodyStyle.copyWith(fontWeight: FontWeight.w600);
     final messageStyle = bodyStyle.copyWith();
     final retryStyle = bodyStyle.copyWith(fontWeight: FontWeight.w600);
+    final retryColumnWidth = hasRetry
+        ? math.max(
+            buttonSize,
+            _measureTextWidth(
+              l10n.tryAgain,
+              retryStyle,
+              textScaler,
+              textDirection,
+            ),
+          )
+        : 0.0;
+    final leftColumnWidth = hasRetry
+        ? math.max(0.0, innerWidth - retryColumnWidth - gapBetweenColumns)
+        : innerWidth;
 
     final titleHeight = _measureTextHeight(
       l10n.wishersErrorTitle,
@@ -193,7 +205,7 @@ class WishersList extends StatelessWidget {
         ? _measureTextHeight(
             l10n.tryAgain,
             retryStyle,
-            buttonSize,
+            retryColumnWidth,
             textScaler,
             textDirection,
           )
@@ -204,7 +216,9 @@ class WishersList extends StatelessWidget {
         ? buttonSize + gapBetweenRows + retryHeight
         : 0.0;
 
-    return (innerPadding * 2) + math.max(leftColumnHeight, rightColumnHeight);
+    return (innerPadding * 2) +
+        math.max(leftColumnHeight, rightColumnHeight) +
+        measurementSafetyBuffer;
   }
 
   double _measureTextHeight(
@@ -220,6 +234,21 @@ class WishersList extends StatelessWidget {
       textScaler: textScaler,
     )..layout(maxWidth: maxWidth);
 
-    return painter.height;
+    return painter.height.ceilToDouble();
+  }
+
+  double _measureTextWidth(
+    String text,
+    TextStyle style,
+    TextScaler textScaler,
+    TextDirection textDirection,
+  ) {
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: textDirection,
+      textScaler: textScaler,
+    )..layout();
+
+    return painter.width;
   }
 }

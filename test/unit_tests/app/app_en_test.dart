@@ -20,7 +20,6 @@ void main() {
         expect(loc.errorInvalidEmail, isNotEmpty);
         expect(loc.errorUnknown, isNotEmpty);
         expect(loc.loginScreenHeader, isNotEmpty);
-        expect(loc.loginScreenHeader, isNotEmpty);
         expect(loc.addWisherScreenHeader, isNotEmpty);
         expect(loc.firstName, isNotEmpty);
         expect(loc.lastName, isNotEmpty);

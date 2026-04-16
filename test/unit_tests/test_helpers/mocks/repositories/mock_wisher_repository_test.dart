@@ -84,13 +84,14 @@ void main() {
       test('updateWisher notifies listeners on success', () async {
         final repository = MockWisherRepository();
         var notified = false;
-        repository.addListener(() => notified = true);
+        void listener() => notified = true;
+        repository.addListener(listener);
 
         final wisher = repository.wishers.first;
         await repository.updateWisher(wisher);
 
         expect(notified, isTrue);
-        repository.removeListener(() {});
+        repository.removeListener(listener);
       });
 
       test('deleteWisher removes wisher from list on success', () async {

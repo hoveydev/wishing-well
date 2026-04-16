@@ -175,7 +175,7 @@ void main() {
         mockWisherRepository.notifyListeners();
         await Future.delayed(const Duration(milliseconds: 50));
 
-        expect(notificationCount, greaterThanOrEqualTo(0));
+        expect(notificationCount, greaterThan(0));
 
         viewModel.dispose();
       });

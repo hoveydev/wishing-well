@@ -41,7 +41,8 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   @override
   void tapEditWisher(BuildContext context) {
-    context.push(Routes.editWisher.buildPath(id: _wisher!.id));
+    // Use the stored wisherId to avoid crashes if _wisher is null.
+    context.push(Routes.editWisher.buildPath(id: _wisherId));
   }
 
   @override

@@ -8,6 +8,8 @@ class AppSpacing {
   static const double wisherSpacing = 16.0;
   static const double appBarTitleSpacing = 8.0;
   static const double wisherListItemHeight = 80.0;
+  static const double wisherAvatarDiameter = 60.0;
+  static const double wisherLabelTopSpacing = 4.0;
 
   static double wisherListItemHeightFor(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -20,7 +22,8 @@ class AppSpacing {
 
     return math.max(
       wisherListItemHeight,
-      (60.0 + 4.0 + labelHeight).ceilToDouble(),
+      (wisherAvatarDiameter + wisherLabelTopSpacing + labelHeight)
+          .ceilToDouble(),
     );
   }
 }

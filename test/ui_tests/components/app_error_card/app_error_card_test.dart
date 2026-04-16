@@ -37,7 +37,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byIcon(Icons.refresh));
+      await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
 
       expect(tapped, isTrue);

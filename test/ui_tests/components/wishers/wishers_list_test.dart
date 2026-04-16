@@ -475,17 +475,20 @@ void main() {
           wishersListContext,
         );
 
-        // Find the outer SizedBox that drives the row height
-        final outerSizedBox = tester
-            .widgetList<SizedBox>(
-              find.descendant(
-                of: find.byType(WishersList),
-                matching: find.byType(SizedBox),
-              ),
-            )
-            .firstWhere((widget) => widget.child is Stack);
+        final rowHeightSizedBoxFinder = find.descendant(
+          of: find.byType(WishersList),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is SizedBox &&
+                widget.height != null &&
+                widget.child is Stack,
+            description: 'SizedBox with a non-null height and Stack child',
+          ),
+        );
 
-        final sizedBox = outerSizedBox;
+        expect(rowHeightSizedBoxFinder, findsOneWidget);
+
+        final sizedBox = tester.widget<SizedBox>(rowHeightSizedBoxFinder);
         expect(sizedBox.height, greaterThanOrEqualTo(expectedHeight));
       });
 

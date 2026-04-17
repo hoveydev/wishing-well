@@ -56,13 +56,8 @@ class AppConfig {
   }
 
   // ignore: unused_element
-  static String _getOrDefault(String key, String defaultValue) {
-    if (!dotenv.isInitialized) {
-      return defaultValue;
-    }
-
-    return dotenv.maybeGet(key, fallback: defaultValue) ?? defaultValue;
-  }
+  static String _getOrDefault(String key, String defaultValue) =>
+      dotenv.env[key] ?? defaultValue;
 
   static void validate() {
     // This will throw if any required key is missing

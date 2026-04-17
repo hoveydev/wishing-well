@@ -139,20 +139,11 @@ void main() {
         TestHelpers.expectTextOnce('N');
       });
 
-      testWidgets('renders fallback label when both names are blank', (
-        WidgetTester tester,
-      ) async {
-        final unnamedWisher = createTestWisher(firstName: '', lastName: '');
-
-        await tester.pumpWidget(
-          createComponentTestWidget(
-            WisherItem(unnamedWisher, EdgeInsets.zero, onTap: () {}),
-          ),
+      test('throws when both names are blank', () {
+        expect(
+          () => createTestWisher(firstName: '', lastName: ''),
+          throwsA(isA<AssertionError>()),
         );
-        await TestHelpers.pumpAndSettle(tester);
-
-        TestHelpers.expectTextOnce(Wisher.unnamedDisplayName);
-        TestHelpers.expectTextOnce('?');
       });
 
       testWidgets('renders multiple wishers correctly', (

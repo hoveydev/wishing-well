@@ -32,24 +32,26 @@ void main() {
         expect(find.text('Alice Smith'), findsOneWidget);
       });
 
-      testWidgets('renders fallback name when both names are blank', (
+      testWidgets('renders single-name wisher when only last name is set', (
         WidgetTester tester,
       ) async {
-        final unnamedWisher = Wisher(
+        final wisherWithOnlyLastName = Wisher(
           id: '2',
           userId: 'user1',
           firstName: '',
-          lastName: '',
+          lastName: 'Brown',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         );
 
         await tester.pumpWidget(
-          buildMaterialAppHome(WisherDetailsProfile(wisher: unnamedWisher)),
+          buildMaterialAppHome(
+            WisherDetailsProfile(wisher: wisherWithOnlyLastName),
+          ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.text(Wisher.unnamedDisplayName), findsOneWidget);
+        expect(find.text('Brown'), findsOneWidget);
       });
     });
   });

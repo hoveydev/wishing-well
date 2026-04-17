@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/utils/auth_service.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
@@ -164,14 +163,10 @@ class ProfileAvatar extends StatelessWidget {
   bool get hasImage => imageUrl != null && imageUrl!.isNotEmpty;
 
   /// The full name for display
-  String get name {
-    final fullName = [
-      firstName,
-      lastName,
-    ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
-
-    return fullName.isEmpty ? Wisher.unnamedDisplayName : fullName;
-  }
+  String get name => [
+    firstName,
+    lastName,
+  ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
 
   /// The initial letter to display
   String get initial {

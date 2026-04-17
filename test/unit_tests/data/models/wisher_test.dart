@@ -65,9 +65,11 @@ void main() {
         expect(wisher.name, 'Doe');
       });
 
-      test('name getter falls back when both names are blank', () {
-        final wisher = createTestWisher(firstName: '  ', lastName: '');
-        expect(wisher.name, Wisher.unnamedDisplayName);
+      test('throws when both names are blank', () {
+        expect(
+          () => createTestWisher(firstName: '', lastName: ''),
+          throwsA(isA<AssertionError>()),
+        );
       });
 
       test('initial getter returns first letter of first name', () {

@@ -11,7 +11,10 @@ class Wisher {
     required this.createdAt,
     required this.updatedAt,
     this.profilePicture,
-  });
+  }) : assert(
+         firstName != '' || lastName != '',
+         'At least one of firstName or lastName must be non-empty.',
+       );
 
   /// Creates a Wisher from a JSON map (from Supabase)
   factory Wisher.fromJson(Map<String, dynamic> json) => Wisher(
@@ -45,17 +48,11 @@ class Wisher {
   /// When this wisher was last updated
   final DateTime updatedAt;
 
-  static const String unnamedDisplayName = 'Unnamed wisher';
-
   /// Convenience getter for a display-safe full name.
-  String get name {
-    final fullName = [
-      firstName,
-      lastName,
-    ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
-
-    return fullName.isEmpty ? unnamedDisplayName : fullName;
-  }
+  String get name => [
+    firstName,
+    lastName,
+  ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
 
   /// Convenience getter for display initial.
   String get initial {

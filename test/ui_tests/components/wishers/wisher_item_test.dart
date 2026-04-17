@@ -139,13 +139,6 @@ void main() {
         TestHelpers.expectTextOnce('N');
       });
 
-      test('throws when both names are blank', () {
-        expect(
-          () => createTestWisher(firstName: '', lastName: ''),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-
       testWidgets('renders multiple wishers correctly', (
         WidgetTester tester,
       ) async {

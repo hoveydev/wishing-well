@@ -41,8 +41,8 @@ class AddWisherContactPhotoFileBridge {
     if (tempImageFile == null) return;
 
     try {
-      if (await tempImageFile.parent.exists()) {
-        await tempImageFile.parent.delete(recursive: true);
+      if (await tempImageFile.exists()) {
+        await tempImageFile.delete();
       }
     } on Exception {
       AppLogger.warning(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/utils/auth_service.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
@@ -169,7 +170,7 @@ class ProfileAvatar extends StatelessWidget {
       lastName,
     ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
 
-    return fullName.isEmpty ? 'Unnamed wisher' : fullName;
+    return fullName.isEmpty ? Wisher.unnamedDisplayName : fullName;
   }
 
   /// The initial letter to display

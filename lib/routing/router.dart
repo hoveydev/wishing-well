@@ -7,6 +7,7 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
@@ -23,6 +24,7 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_screen.
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
+import 'package:wishing_well/utils/app_config.dart';
 
 GoRouter router() => GoRouter(
   initialLocation: '/login',
@@ -150,7 +152,17 @@ GoRouter router() => GoRouter(
       path: Routes.addWisher.path,
       name: Routes.addWisher.name,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: AddWisherLandingScreen(viewModel: AddWisherLandingViewModel()),
+        child: AddWisherLandingScreen(
+          viewModel: AddWisherLandingViewModel(
+            contactAccess: context.read(),
+            contactBatchImporter: AddWisherContactBatchImporter(
+              authRepository: context.read(),
+              wisherRepository: context.read(),
+              imageRepository: context.read(),
+              profilePicturesBucketName: AppConfig.profilePicturesBucket,
+            ),
+          ),
+        ),
         transitionsBuilder: slideUpWithParallaxTransition,
       ),
       routes: [

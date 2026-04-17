@@ -187,6 +187,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFromContacts => 'Add From Contacts';
 
   @override
+  String get contactImportPermissionDenied =>
+      'Contacts permission was denied. Please allow access to continue.';
+
+  @override
+  String get contactImportUnexpectedFailure =>
+      'We couldn\'t access your contacts right now. Please try again.';
+
+  @override
+  String contactImportSuccessNamed(String name) {
+    return '$name added from contacts.';
+  }
+
+  @override
+  String contactImportSuccessMultiple(int count) {
+    return '$count contacts added from contacts.';
+  }
+
+  @override
+  String contactImportPartialSuccess(int importedCount, int failedCount) {
+    return 'Added $importedCount contacts. $failedCount couldn\'t be added.';
+  }
+
+  @override
+  String get contactImportFailureSingle =>
+      'We couldn\'t add the selected contact. Please try again.';
+
+  @override
+  String get contactImportFailureMultiple =>
+      'We couldn\'t add the selected contacts. Please try again.';
+
+  @override
+  String contactImportDuplicateWarningSingle(String name) {
+    return '$name is already a registered wisher. Add them anyway?';
+  }
+
+  @override
+  String contactImportDuplicateWarningMultiple(int count) {
+    return '$count selected contacts already match existing wishers. Add them anyway?';
+  }
+
+  @override
+  String get continueAction => 'Continue';
+
+  @override
   String get addManually => 'Add Manually';
 
   @override

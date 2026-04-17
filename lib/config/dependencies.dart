@@ -9,6 +9,7 @@ import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository_impl.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 
 List<SingleChildWidget> get providersRemote => [
   // Supabase client
@@ -31,5 +32,10 @@ List<SingleChildWidget> get providersRemote => [
   // Storage repository for file uploads
   ChangeNotifierProvider<ImageRepository>(
     create: (context) => ImageRepositoryImpl(supabase: context.read()),
+  ),
+
+  // Contacts access for add-from-contacts flows
+  Provider<AddWisherContactAccess>(
+    create: (_) => AddWisherContactAccess.platform(),
   ),
 ];

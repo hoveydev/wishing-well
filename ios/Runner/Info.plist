@@ -45,6 +45,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Wishing Well needs access to your camera to take profile pictures.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Wishing Well uses your contacts so you can add wishers from them.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wishing Well needs access to your photo library to select profile pictures.</string>
 	<key>UIApplicationSceneManifest</key>

@@ -31,6 +31,26 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
         expect(find.text('Alice Smith'), findsOneWidget);
       });
+
+      testWidgets('renders fallback name when both names are blank', (
+        WidgetTester tester,
+      ) async {
+        final unnamedWisher = Wisher(
+          id: '2',
+          userId: 'user1',
+          firstName: '',
+          lastName: '',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        await tester.pumpWidget(
+          buildMaterialAppHome(WisherDetailsProfile(wisher: unnamedWisher)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text(Wisher.unnamedDisplayName), findsOneWidget);
+      });
     });
   });
 }

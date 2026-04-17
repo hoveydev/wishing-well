@@ -430,6 +430,66 @@ abstract class AppLocalizations {
   /// **'Add From Contacts'**
   String get addFromContacts;
 
+  /// Error shown when contacts permission is denied during add from contacts
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts permission was denied. Please allow access to continue.'**
+  String get contactImportPermissionDenied;
+
+  /// Error shown when add from contacts fails unexpectedly before import
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t access your contacts right now. Please try again.'**
+  String get contactImportUnexpectedFailure;
+
+  /// Success message shown when a single contact is imported successfully
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added from contacts.'**
+  String contactImportSuccessNamed(String name);
+
+  /// Success message shown when multiple contacts are imported successfully
+  ///
+  /// In en, this message translates to:
+  /// **'{count} contacts added from contacts.'**
+  String contactImportSuccessMultiple(int count);
+
+  /// Success message shown when some selected contacts are imported and some fail
+  ///
+  /// In en, this message translates to:
+  /// **'Added {importedCount} contacts. {failedCount} couldn\'t be added.'**
+  String contactImportPartialSuccess(int importedCount, int failedCount);
+
+  /// Error shown when a single selected contact could not be imported
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t add the selected contact. Please try again.'**
+  String get contactImportFailureSingle;
+
+  /// Error shown when multiple selected contacts could not be imported
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t add the selected contacts. Please try again.'**
+  String get contactImportFailureMultiple;
+
+  /// Warning shown before importing a contact whose name matches an existing wisher
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is already a registered wisher. Add them anyway?'**
+  String contactImportDuplicateWarningSingle(String name);
+
+  /// Warning shown before importing multiple contacts whose names match existing wishers
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected contacts already match existing wishers. Add them anyway?'**
+  String contactImportDuplicateWarningMultiple(int count);
+
+  /// Label for continue action button
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueAction;
+
   /// Button text for adding wisher manually
   ///
   /// In en, this message translates to:

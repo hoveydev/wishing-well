@@ -30,7 +30,7 @@ class AppButton extends StatelessWidget {
   /// [isLoading] - Shows a loading indicator instead of the icon.
   /// [alignment] - Alignment of content within the button.
   /// [iconSize] - Custom size for the icon.
-  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [color] - Custom color for secondary/tertiary buttons.
   /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for text (label buttons only).
   const AppButton.icon({
@@ -65,7 +65,7 @@ class AppButton extends StatelessWidget {
   /// [type] - The button style (primary, secondary, tertiary).
   /// [isLoading] - Shows a loading indicator instead of the label.
   /// [alignment] - Alignment of content within the button.
-  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [color] - Custom color for secondary/tertiary buttons.
   /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for the label text.
   const AppButton.label({
@@ -99,7 +99,7 @@ class AppButton extends StatelessWidget {
   /// [type] - The button style (primary, secondary, tertiary).
   /// [isLoading] - Shows a loading indicator instead of content.
   /// [alignment] - Alignment of content within the button.
-  /// [color] - Custom color (only applies to tertiary buttons).
+  /// [color] - Custom color for secondary/tertiary buttons.
   /// [backgroundColor] - Custom background (only applies to primary buttons).
   /// [fontWeight] - Custom font weight for the label text.
   const AppButton.labelWithIcon({
@@ -181,14 +181,20 @@ class AppButton extends StatelessWidget {
               icon: icon!,
               onPressed: onPressed,
               iconSize: iconSize,
+              color: color,
             );
           case _AppButtonContentType.label:
-            return SecondaryButton.label(label: label!, onPressed: onPressed);
+            return SecondaryButton.label(
+              label: label!,
+              onPressed: onPressed,
+              color: color,
+            );
           case _AppButtonContentType.labelWithIcon:
             return SecondaryButton.labelWithIcon(
               icon: icon!,
               label: label!,
               onPressed: onPressed,
+              color: color,
             );
         }
       case AppButtonType.tertiary:

@@ -27,7 +27,7 @@ void main() {
     final testWisher = createTestWisher();
 
     group(TestGroups.rendering, () {
-      testWidgets('renders wisher firstName and initial', (
+      testWidgets('renders wisher display name and initial', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
@@ -39,7 +39,7 @@ void main() {
 
         TestHelpers.expectWidgetOnce(WisherItem);
         TestHelpers.expectWidgetOnce(CircleAvatar);
-        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('Alice Johnson');
         TestHelpers.expectTextOnce('A');
       });
 
@@ -53,7 +53,7 @@ void main() {
 
         TestHelpers.expectWidgetOnce(WisherItem);
         TestHelpers.expectWidgetOnce(CircleAvatar);
-        TestHelpers.expectTextOnce('Alice');
+        TestHelpers.expectTextOnce('Alice Johnson');
         TestHelpers.expectTextOnce('A');
 
         // Verify the main column structure within WisherItem
@@ -101,7 +101,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce('Alice-123');
+        TestHelpers.expectTextOnce('Alice-123 Test');
         TestHelpers.expectTextOnce('A');
       });
 
@@ -116,8 +116,43 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce(longName);
+        TestHelpers.expectTextOnce('$longName Johnson');
         TestHelpers.expectTextOnce('V');
+      });
+
+      testWidgets('renders last name when first name is blank', (
+        WidgetTester tester,
+      ) async {
+        final partialNameWisher = createTestWisher(
+          firstName: '',
+          lastName: 'Ng',
+        );
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(partialNameWisher, EdgeInsets.zero, onTap: () {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Ng');
+        TestHelpers.expectTextOnce('N');
+      });
+
+      testWidgets('renders fallback label when both names are blank', (
+        WidgetTester tester,
+      ) async {
+        final unnamedWisher = createTestWisher(firstName: '', lastName: '');
+
+        await tester.pumpWidget(
+          createComponentTestWidget(
+            WisherItem(unnamedWisher, EdgeInsets.zero, onTap: () {}),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce(Wisher.unnamedDisplayName);
+        TestHelpers.expectTextOnce('?');
       });
 
       testWidgets('renders multiple wishers correctly', (
@@ -139,8 +174,8 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(WisherItem), findsNWidgets(2));
-        TestHelpers.expectTextOnce('Alec');
-        TestHelpers.expectTextOnce('Bob');
+        TestHelpers.expectTextOnce('Alec Johnson');
+        TestHelpers.expectTextOnce('Bob Johnson');
         TestHelpers.expectTextOnce('A');
         TestHelpers.expectTextOnce('B');
       });
@@ -258,7 +293,7 @@ void main() {
         final wisherItem = tester.widget<WisherItem>(find.byType(WisherItem));
         expect(wisherItem.wisher.firstName, 'TestName');
         expect(wisherItem.wisher.name, 'TestName TestLast');
-        TestHelpers.expectTextOnce('TestName');
+        TestHelpers.expectTextOnce('TestName TestLast');
         TestHelpers.expectTextOnce('T');
       });
 

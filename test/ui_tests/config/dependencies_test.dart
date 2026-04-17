@@ -9,6 +9,7 @@ import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository_impl.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/data_sources/mock_auth_data_source.dart';
 import 'package:wishing_well/test_helpers/mocks/data_sources/mock_wisher_data_source.dart';
@@ -17,8 +18,8 @@ import 'package:wishing_well/test_helpers/mocks/mock_supabase_client_for_deps.da
 void main() {
   group('Dependencies', () {
     group(TestGroups.initialState, () {
-      test('providersRemote contains exactly 4 providers', () {
-        expect(providersRemote.length, 4);
+      test('providersRemote contains exactly 5 providers', () {
+        expect(providersRemote.length, 5);
       });
 
       test('providersRemote has correct provider types in order', () {
@@ -35,6 +36,7 @@ void main() {
           providersRemote[3],
           isA<ChangeNotifierProvider<ImageRepository>>(),
         );
+        expect(providersRemote[4], isA<Provider<AddWisherContactAccess>>());
       });
     });
 
@@ -45,6 +47,7 @@ void main() {
           late SupabaseClient supabase;
           late AuthRepository authRepository;
           late WisherRepository wisherRepository;
+          late AddWisherContactAccess contactAccess;
 
           // Create mock data sources
           final mockAuthDataSource = MockAuthDataSource();
@@ -63,6 +66,13 @@ void main() {
               create: (context) =>
                   WisherRepositoryImpl(dataSource: mockWisherDataSource),
             ),
+            Provider<AddWisherContactAccess>(
+              create: (_) => AddWisherContactAccess(
+                requestPermission: () async => true,
+                pickContactId: () async => null,
+                loadContact: (_) async => null,
+              ),
+            ),
           ];
 
           await tester.pumpWidget(
@@ -73,6 +83,7 @@ void main() {
                   supabase = context.read<SupabaseClient>();
                   authRepository = context.read<AuthRepository>();
                   wisherRepository = context.read<WisherRepository>();
+                  contactAccess = context.read<AddWisherContactAccess>();
                   return const SizedBox.shrink();
                 },
               ),
@@ -84,6 +95,7 @@ void main() {
           expect(supabase, isA<SupabaseClient>());
           expect(authRepository, isA<AuthRepositoryImpl>());
           expect(wisherRepository, isA<WisherRepositoryImpl>());
+          expect(contactAccess, isA<AddWisherContactAccess>());
         },
       );
 

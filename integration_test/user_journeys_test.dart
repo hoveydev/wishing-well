@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
@@ -14,7 +15,10 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -88,7 +92,7 @@ void main() {
               value: loadingController,
             ),
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             localizationsDelegates: const [
@@ -98,8 +102,24 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: ProfileScreen(
-              viewModel: ProfileViewModel(authRepository: authMock),
+            routerConfig: GoRouter(
+              initialLocation: Routes.profile.path,
+              routes: [
+                GoRoute(
+                  path: Routes.profile.path,
+                  builder: (context, state) => ProfileScreen(
+                    viewModel: ProfileViewModel(
+                      authRepository: context.read<AuthRepository>(),
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  path: Routes.login.path,
+                  name: Routes.login.name,
+                  builder: (context, state) =>
+                      const Scaffold(body: Text('Login Screen')),
+                ),
+              ],
             ),
           ),
         ),
@@ -130,7 +150,7 @@ void main() {
               value: loadingController,
             ),
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             localizationsDelegates: const [
@@ -140,8 +160,24 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: ProfileScreen(
-              viewModel: ProfileViewModel(authRepository: authMock),
+            routerConfig: GoRouter(
+              initialLocation: Routes.profile.path,
+              routes: [
+                GoRoute(
+                  path: Routes.profile.path,
+                  builder: (context, state) => ProfileScreen(
+                    viewModel: ProfileViewModel(
+                      authRepository: context.read<AuthRepository>(),
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  path: Routes.login.path,
+                  name: Routes.login.name,
+                  builder: (context, state) =>
+                      const Scaffold(body: Text('Login Screen')),
+                ),
+              ],
             ),
           ),
         ),
@@ -157,6 +193,7 @@ void main() {
 
       // Verify logout was called
       expect(authMock.logoutCallCount, 1);
+      expect(find.text('Login Screen'), findsOneWidget);
     });
 
     testWidgets('home with existing wishers renders correctly', (
@@ -258,7 +295,14 @@ void main() {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             home: AddWisherLandingScreen(
-              viewModel: AddWisherLandingViewModel(),
+              viewModel: AddWisherLandingViewModel(
+                contactAccess: _UserJourneyContactAccess(),
+                contactBatchImporter: AddWisherContactBatchImporter(
+                  authRepository: authMock,
+                  imageRepository: IntegrationMockImageRepository(),
+                  wisherRepository: wisherMock,
+                ),
+              ),
             ),
           ),
         ),
@@ -359,18 +403,41 @@ void main() {
       await tester.pumpAndSettle();
 
       // Fill form
-      final textFields = find.byType(TextFormField);
-      await tester.enterText(textFields.first, 'Test');
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(AddWisherDetailsScreen)),
+      )!;
+      final firstNameField = find.descendant(
+        of: find.bySemanticsLabel(l10n.firstName),
+        matching: find.byType(TextField),
+      );
+      final lastNameField = find.descendant(
+        of: find.bySemanticsLabel(l10n.lastName),
+        matching: find.byType(TextField),
+      );
+      await tester.enterText(firstNameField, 'Test');
       await tester.pumpAndSettle();
-      await tester.enterText(textFields.last, 'Wisher');
+      await tester.enterText(lastNameField, 'Wisher');
       await tester.pumpAndSettle();
 
       // Submit
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.tap(find.text(l10n.save));
       await tester.pumpAndSettle();
 
       // Verify
       expect(wisherMock.createWisherCallCount, 1);
     });
   });
+}
+
+class _UserJourneyContactAccess extends AddWisherContactAccess {
+  _UserJourneyContactAccess()
+    : super(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      );
+
+  @override
+  Future<AddWisherContactAccessResult> selectContacts() async =>
+      const AddWisherContactAccessCancelled();
 }

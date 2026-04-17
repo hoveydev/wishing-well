@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -34,6 +35,13 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
     ),
     ChangeNotifierProvider<ImageRepository>(
       create: (_) => MockImageRepository(),
+    ),
+    Provider<AddWisherContactAccess>(
+      create: (_) => AddWisherContactAccess(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      ),
     ),
     ChangeNotifierProvider<LoadingController>(
       create: (_) => LoadingController(),

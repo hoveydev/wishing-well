@@ -15,6 +15,7 @@ import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart'
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -25,6 +26,15 @@ import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_reposit
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
+Provider<AddWisherContactAccess> _contactAccessProvider() =>
+    Provider<AddWisherContactAccess>(
+      create: (_) => AddWisherContactAccess(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      ),
+    );
+
 Widget _buildApp() => MultiProvider(
   providers: [
     ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
@@ -34,6 +44,7 @@ Widget _buildApp() => MultiProvider(
     ChangeNotifierProvider<ImageRepository>(
       create: (_) => MockImageRepository(),
     ),
+    _contactAccessProvider(),
     ChangeNotifierProvider<LoadingController>(
       create: (_) => LoadingController(),
     ),
@@ -115,6 +126,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -157,6 +169,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -197,6 +210,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -239,6 +253,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -282,6 +297,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -324,6 +340,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -369,6 +386,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -409,6 +427,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -451,6 +470,7 @@ void main() {
               ChangeNotifierProvider<ImageRepository>(
                 create: (_) => MockImageRepository(),
               ),
+              _contactAccessProvider(),
               ChangeNotifierProvider<LoadingController>(
                 create: (_) => LoadingController(),
               ),
@@ -471,7 +491,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        goRouter.goNamed(Routes.addWisherDetails.name);
+        goRouter.go('${Routes.addWisher.path}/${Routes.addWisherDetails.path}');
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(AddWisherDetailsScreen), findsOneWidget);

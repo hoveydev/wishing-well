@@ -60,9 +60,24 @@ void main() {
         expect(wisher.name, 'John Doe');
       });
 
+      test('name getter omits blank name parts', () {
+        final wisher = createTestWisher(firstName: '', lastName: 'Doe');
+        expect(wisher.name, 'Doe');
+      });
+
+      test('name getter falls back when both names are blank', () {
+        final wisher = createTestWisher(firstName: '  ', lastName: '');
+        expect(wisher.name, Wisher.unnamedDisplayName);
+      });
+
       test('initial getter returns first letter of first name', () {
         final wisher = createTestWisher(firstName: 'Bob');
         expect(wisher.initial, 'B');
+      });
+
+      test('initial getter falls back to last name', () {
+        final wisher = createTestWisher(firstName: '', lastName: 'Doe');
+        expect(wisher.initial, 'D');
       });
 
       test('initial getter handles lowercase names', () {

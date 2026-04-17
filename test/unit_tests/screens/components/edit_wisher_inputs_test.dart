@@ -31,300 +31,173 @@ void main() {
       viewModel.dispose();
     });
 
-    group(TestGroups.rendering, () {
-      testWidgets('renders two AppInput widgets', (WidgetTester tester) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+    testWidgets('renders two AppInput widgets', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(EditWisherInputs(viewModel: viewModel)),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(AppInput), findsNWidgets(2));
-      });
-
-      testWidgets('renders first name input', (WidgetTester tester) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.byType(AppInput).first, findsOneWidget);
-      });
-
-      testWidgets('renders last name input', (WidgetTester tester) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.byType(AppInput).last, findsOneWidget);
-      });
-
-      testWidgets('pre-populates first name from wisher', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Alice'), findsOneWidget);
-      });
-
-      testWidgets('pre-populates last name from wisher', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.text('Test'), findsOneWidget);
-      });
+      expect(find.byType(AppInput), findsNWidgets(2));
     });
 
-    group(TestGroups.behavior, () {
-      testWidgets('passes viewModel to constructor', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+    testWidgets('pre-populates first and last names from the wisher', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(EditWisherInputs(viewModel: viewModel)),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        final inputsWidget = tester.widget<EditWisherInputs>(
-          find.byType(EditWisherInputs),
-        );
-        expect(inputsWidget.viewModel, viewModel);
-      });
+      expect(find.text('Alice'), findsOneWidget);
+      expect(find.text('Test'), findsOneWidget);
+    });
 
-      testWidgets('does not show alert initially', (WidgetTester tester) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+    testWidgets('clearing both names keeps the form valid', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(EditWisherInputs(viewModel: viewModel)),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        expect(viewModel.hasAlert, isFalse);
-      });
+      final textFields = find.byType(TextField);
+      await tester.enterText(textFields.first, '');
+      await tester.enterText(textFields.last, '');
+      await TestHelpers.pumpAndSettle(tester);
 
-      testWidgets('onChanged for first name calls updateFirstName', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+      expect(viewModel.isFormValid, isTrue);
+      expect(viewModel.hasAlert, isFalse);
+      expect(find.byType(AppInlineAlert), findsNothing);
+    });
 
-        final firstNameField = find.byType(AppInput).first;
-        await tester.enterText(firstNameField, 'NewFirstName');
-        await tester.pump();
+    testWidgets('editing one field still keeps the form valid', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(EditWisherInputs(viewModel: viewModel)),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        expect(viewModel.isFormValid, isTrue);
-      });
+      await tester.enterText(find.byType(AppInput).first, '');
+      await TestHelpers.pumpAndSettle(tester);
 
-      testWidgets('onChanged for last name calls updateLastName', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+      expect(viewModel.isFormValid, isTrue);
+      expect(find.byType(AppInlineAlert), findsNothing);
+    });
 
-        final lastNameField = find.byType(AppInput).last;
-        await tester.enterText(lastNameField, 'NewLastName');
-        await tester.pump();
+    testWidgets('shows unknown error message when save fails', (
+      WidgetTester tester,
+    ) async {
+      final errorRepo = MockWisherRepository(
+        updateWisherResult: Result.error(Exception('fail')),
+      );
+      final vmWithError = EditWisherViewModel(
+        wisherRepository: errorRepo,
+        imageRepository: MockImageRepository(),
+        wisherId: '1',
+      );
+      addTearDown(vmWithError.dispose);
+      addTearDown(errorRepo.dispose);
 
-        expect(viewModel.isFormValid, isTrue);
-      });
-
-      testWidgets('shows error message when viewModel has alert', (
-        WidgetTester tester,
-      ) async {
-        // Trigger a validation error first
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('');
-
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(viewModel.hasAlert, isTrue);
-        // AppInlineAlert should be shown
-        expect(find.byType(AppInlineAlert), findsOneWidget);
-      });
-
-      testWidgets('shows firstNameRequired error message', (
-        WidgetTester tester,
-      ) async {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('Smith');
-
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(viewModel.error.type, EditWisherErrorType.firstNameRequired);
-        expect(find.byType(AppInlineAlert), findsOneWidget);
-      });
-
-      testWidgets('shows lastNameRequired error message', (
-        WidgetTester tester,
-      ) async {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('');
-
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(viewModel.error.type, EditWisherErrorType.lastNameRequired);
-        expect(find.byType(AppInlineAlert), findsOneWidget);
-      });
-
-      testWidgets('shows unknown error message', (WidgetTester tester) async {
-        // Use a repo that fails on update to get the unknown error type
-        final errorRepo = MockWisherRepository(
-          updateWisherResult: Result.error(Exception('fail')),
-        );
-        final vmWithError = EditWisherViewModel(
-          wisherRepository: errorRepo,
-          imageRepository: MockImageRepository(),
-          wisherId: '1',
-        );
-        addTearDown(vmWithError.dispose);
-        addTearDown(errorRepo.dispose);
-
-        // Trigger update error via tapSaveButton using GoRouter context
-        final goRouter = GoRouter(
-          initialLocation: '/t',
-          routes: [
-            GoRoute(
-              path: '/t',
-              builder: (context, state) => ChangeNotifierProvider(
-                create: (_) => LoadingController(),
-                child: Scaffold(
-                  body: Builder(
-                    builder: (context) => ElevatedButton(
-                      onPressed: () => vmWithError.tapSaveButton(context),
-                      child: const Text('Save'),
-                    ),
+      final goRouter = GoRouter(
+        initialLocation: '/t',
+        routes: [
+          GoRoute(
+            path: '/t',
+            builder: (context, state) => ChangeNotifierProvider(
+              create: (_) => LoadingController(),
+              child: Scaffold(
+                body: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () => vmWithError.tapSaveButton(context),
+                    child: const Text('Save'),
                   ),
                 ),
               ),
             ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          theme: AppTheme.lightTheme,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
-        );
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: goRouter,
+        ),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        await tester.pumpWidget(
-          MaterialApp.router(
-            theme: AppTheme.lightTheme,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            routerConfig: goRouter,
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-        // Make a change so noChanges check does not short-circuit
-        vmWithError.updateFirstName('NewName');
-        await tester.tap(find.text('Save'));
-        await tester.pump();
+      vmWithError.updateFirstName('');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
 
-        // Now render the inputs with the viewModel that has the unknown error
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: vmWithError),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(
+          EditWisherInputs(viewModel: vmWithError),
+        ),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        expect(vmWithError.error.type, EditWisherErrorType.unknown);
-        expect(find.byType(AppInlineAlert), findsOneWidget);
-      });
+      expect(vmWithError.error.type, EditWisherErrorType.unknown);
+      expect(find.byType(AppInlineAlert), findsOneWidget);
+    });
 
-      testWidgets('shows noChanges error message', (WidgetTester tester) async {
-        // Trigger noChanges error by tapping save without any changes
-        final goRouter = GoRouter(
-          initialLocation: '/t',
-          routes: [
-            GoRoute(
-              path: '/t',
-              builder: (context, state) => ChangeNotifierProvider(
-                create: (_) => LoadingController(),
-                child: Scaffold(
-                  body: Builder(
-                    builder: (context) => ElevatedButton(
-                      onPressed: () => viewModel.tapSaveButton(context),
-                      child: const Text('Save'),
-                    ),
+    testWidgets('shows noChanges error message when nothing changed', (
+      WidgetTester tester,
+    ) async {
+      final goRouter = GoRouter(
+        initialLocation: '/t',
+        routes: [
+          GoRoute(
+            path: '/t',
+            builder: (context, state) => ChangeNotifierProvider(
+              create: (_) => LoadingController(),
+              child: Scaffold(
+                body: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () => viewModel.tapSaveButton(context),
+                    child: const Text('Save'),
                   ),
                 ),
               ),
             ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          theme: AppTheme.lightTheme,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
-        );
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: goRouter,
+        ),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        await tester.pumpWidget(
-          MaterialApp.router(
-            theme: AppTheme.lightTheme,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            routerConfig: goRouter,
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+      await tester.tap(find.text('Save'));
+      await tester.pump();
 
-        // No changes made — triggers noChanges
-        await tester.tap(find.text('Save'));
-        await tester.pump();
+      await tester.pumpWidget(
+        createScreenComponentTestWidget(EditWisherInputs(viewModel: viewModel)),
+      );
+      await TestHelpers.pumpAndSettle(tester);
 
-        expect(viewModel.error.type, EditWisherErrorType.noChanges);
-
-        await tester.pumpWidget(
-          createScreenComponentTestWidget(
-            EditWisherInputs(viewModel: viewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
-
-        expect(find.byType(AppInlineAlert), findsOneWidget);
-        expect(find.text('No changes were made.'), findsOneWidget);
-      });
+      expect(viewModel.error.type, EditWisherErrorType.noChanges);
+      expect(find.byType(AppInlineAlert), findsOneWidget);
+      expect(find.text('No changes were made.'), findsOneWidget);
     });
   });
 }

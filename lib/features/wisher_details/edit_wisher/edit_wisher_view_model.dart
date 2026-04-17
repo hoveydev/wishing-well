@@ -97,7 +97,7 @@ class EditWisherViewModel extends ChangeNotifier
   bool get hasAlert => _error.type != EditWisherErrorType.none;
 
   @override
-  bool get isFormValid => _firstName.isNotEmpty && _lastName.isNotEmpty;
+  bool get isFormValid => true;
 
   @override
   void updateFirstName(String firstName) {
@@ -293,15 +293,7 @@ class EditWisherViewModel extends ChangeNotifier
 
   void _validateForm() {
     final previousError = _error;
-    if (_firstName.isEmpty && _lastName.isEmpty) {
-      _error = const EditWisherError(EditWisherErrorType.bothNamesRequired);
-    } else if (_firstName.isEmpty) {
-      _error = const EditWisherError(EditWisherErrorType.firstNameRequired);
-    } else if (_lastName.isEmpty) {
-      _error = const EditWisherError(EditWisherErrorType.lastNameRequired);
-    } else {
-      _error = const EditWisherError(EditWisherErrorType.none);
-    }
+    _error = const EditWisherError(EditWisherErrorType.none);
 
     if (previousError.type != _error.type) {
       notifyListeners();

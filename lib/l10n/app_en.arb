@@ -230,6 +230,74 @@
     "@addFromContacts": {
         "description": "Button text for adding wisher from contacts"
     },
+    "contactImportPermissionDenied": "Contacts permission was denied. Please allow access to continue.",
+    "@contactImportPermissionDenied": {
+        "description": "Error shown when contacts permission is denied during add from contacts"
+    },
+    "contactImportUnexpectedFailure": "We couldn't access your contacts right now. Please try again.",
+    "@contactImportUnexpectedFailure": {
+        "description": "Error shown when add from contacts fails unexpectedly before import"
+    },
+    "contactImportSuccessNamed": "{name} added from contacts.",
+    "@contactImportSuccessNamed": {
+        "description": "Success message shown when a single contact is imported successfully",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "contactImportSuccessMultiple": "{count} contacts added from contacts.",
+    "@contactImportSuccessMultiple": {
+        "description": "Success message shown when multiple contacts are imported successfully",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "contactImportPartialSuccess": "Added {importedCount} contacts. {failedCount} couldn't be added.",
+    "@contactImportPartialSuccess": {
+        "description": "Success message shown when some selected contacts are imported and some fail",
+        "placeholders": {
+            "importedCount": {
+                "type": "int"
+            },
+            "failedCount": {
+                "type": "int"
+            }
+        }
+    },
+    "contactImportFailureSingle": "We couldn't add the selected contact. Please try again.",
+    "@contactImportFailureSingle": {
+        "description": "Error shown when a single selected contact could not be imported"
+    },
+    "contactImportFailureMultiple": "We couldn't add the selected contacts. Please try again.",
+    "@contactImportFailureMultiple": {
+        "description": "Error shown when multiple selected contacts could not be imported"
+    },
+    "contactImportDuplicateWarningSingle": "{name} is already a registered wisher. Add them anyway?",
+    "@contactImportDuplicateWarningSingle": {
+        "description": "Warning shown before importing a contact whose name matches an existing wisher",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "contactImportDuplicateWarningMultiple": "{count} selected contacts already match existing wishers. Add them anyway?",
+    "@contactImportDuplicateWarningMultiple": {
+        "description": "Warning shown before importing multiple contacts whose names match existing wishers",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "continueAction": "Continue",
+    "@continueAction": {
+        "description": "Label for continue action button"
+    },
     "addManually": "Add Manually",
     "@addManually": {
         "description": "Button text for adding wisher manually"

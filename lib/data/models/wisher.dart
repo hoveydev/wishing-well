@@ -45,11 +45,28 @@ class Wisher {
   /// When this wisher was last updated
   final DateTime updatedAt;
 
-  /// Convenience getter for full name
-  String get name => '$firstName $lastName';
+  static const String unnamedDisplayName = 'Unnamed wisher';
 
-  /// Convenience getter for display initial (first letter of first name)
-  String get initial => firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
+  /// Convenience getter for a display-safe full name.
+  String get name {
+    final fullName = [
+      firstName,
+      lastName,
+    ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
+
+    return fullName.isEmpty ? unnamedDisplayName : fullName;
+  }
+
+  /// Convenience getter for display initial.
+  String get initial {
+    final firstAvailableNamePart = [firstName, lastName]
+        .map((part) => part.trim())
+        .firstWhere((part) => part.isNotEmpty, orElse: () => '');
+
+    return firstAvailableNamePart.isEmpty
+        ? ''
+        : firstAvailableNamePart[0].toUpperCase();
+  }
 
   /// Converts Wisher to a JSON map (for Supabase)
   Map<String, dynamic> toJson() => {

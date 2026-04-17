@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
+import 'package:wishing_well/components/button/types/primary_button.dart';
+import 'package:wishing_well/components/button/types/secondary_button.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -245,6 +250,147 @@ void main() {
       });
     });
 
+    group('warning state', () {
+      testWidgets('shows warning content when showWarning is called', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: const LoadingOverlay(child: Screen(children: [])),
+          ),
+        );
+        await tester.pump();
+
+        loadingController.showWarning(
+          'Duplicates were found. Continue anyway?',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+        await tester.pump();
+        await tester.pumpAndSettle();
+
+        expect(find.byIcon(Icons.warning_amber_outlined), findsOneWidget);
+        expect(
+          find.text('Duplicates were found. Continue anyway?'),
+          findsOneWidget,
+        );
+        expect(find.text('Continue'), findsOneWidget);
+        expect(find.text('Cancel'), findsOneWidget);
+      });
+
+      testWidgets(
+        'stacks warning buttons vertically with primary and error colors',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              loadingController: loadingController,
+              child: const LoadingOverlay(child: Screen(children: [])),
+            ),
+          );
+          await tester.pump();
+
+          loadingController.showWarning(
+            'Duplicates were found. Continue anyway?',
+            primaryActionLabel: 'Continue',
+            secondaryActionLabel: 'Cancel',
+          );
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          final primaryButtonFinder = find.byType(PrimaryButton);
+          final secondaryButtonFinder = find.byType(SecondaryButton);
+          final primaryButtonPosition = tester.getTopLeft(primaryButtonFinder);
+          final secondaryButtonPosition = tester.getTopLeft(
+            secondaryButtonFinder,
+          );
+          final primaryButton = tester.widget<PrimaryButton>(
+            primaryButtonFinder,
+          );
+          final secondaryButton = tester.widget<SecondaryButton>(
+            secondaryButtonFinder,
+          );
+          final warningMessage = tester.widget<Text>(
+            find.text('Duplicates were found. Continue anyway?'),
+          );
+
+          expect(
+            secondaryButtonPosition.dy,
+            greaterThan(primaryButtonPosition.dy),
+          );
+          expect(
+            (secondaryButtonPosition.dx - primaryButtonPosition.dx).abs(),
+            lessThanOrEqualTo(1),
+          );
+          expect(primaryButton.backgroundColor, AppColors.primary);
+          expect(secondaryButton.color, AppColors.error);
+          expect(warningMessage.style?.color, AppColors.primary);
+        },
+      );
+
+      testWidgets(
+        'tapping primary warning action runs callback and dismisses',
+        (WidgetTester tester) async {
+          var primaryTapped = false;
+
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              loadingController: loadingController,
+              child: const LoadingOverlay(child: Screen(children: [])),
+            ),
+          );
+          await tester.pump();
+
+          loadingController.showWarning(
+            'Duplicates were found. Continue anyway?',
+            primaryActionLabel: 'Continue',
+            secondaryActionLabel: 'Cancel',
+            onPrimaryAction: () {
+              primaryTapped = true;
+            },
+          );
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          await TestHelpers.tapAndSettle(tester, find.text('Continue'));
+
+          expect(primaryTapped, true);
+          expect(loadingController.isIdle, true);
+        },
+      );
+
+      testWidgets(
+        'tapping secondary warning action runs callback and dismisses',
+        (WidgetTester tester) async {
+          var secondaryTapped = false;
+
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              loadingController: loadingController,
+              child: const LoadingOverlay(child: Screen(children: [])),
+            ),
+          );
+          await tester.pump();
+
+          loadingController.showWarning(
+            'Duplicates were found. Continue anyway?',
+            primaryActionLabel: 'Continue',
+            secondaryActionLabel: 'Cancel',
+            onSecondaryAction: () {
+              secondaryTapped = true;
+            },
+          );
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          await TestHelpers.tapAndSettle(tester, find.text('Cancel'));
+
+          expect(secondaryTapped, true);
+          expect(loadingController.isIdle, true);
+        },
+      );
+    });
+
     group('success state with name', () {
       testWidgets('shows success with name renders correctly', (
         WidgetTester tester,
@@ -268,6 +414,74 @@ void main() {
         // Should show OK button
         expect(find.text('Ok'), findsOneWidget);
       });
+
+      testWidgets('bolds the personalized contact name within success copy', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            loadingController: loadingController,
+            child: const LoadingOverlay(child: Screen(children: [])),
+          ),
+        );
+        await tester.pump();
+
+        loadingController.showSuccess(
+          'Alex Morgan added from contacts.',
+          name: 'Alex Morgan',
+        );
+        await tester.pump();
+        await tester.pumpAndSettle();
+
+        final richText = tester.widget<RichText>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is RichText &&
+                (widget.text as TextSpan).toPlainText() ==
+                    'Alex Morgan added from contacts.',
+          ),
+        );
+        final text = richText.text as TextSpan;
+
+        expect(text.toPlainText(), 'Alex Morgan added from contacts.');
+        expect(text.children, hasLength(2));
+        expect(text.children!.first.toPlainText(), 'Alex Morgan');
+        expect(text.children!.first.style?.fontWeight, FontWeight.bold);
+        expect(text.children!.last.toPlainText(), ' added from contacts.');
+        expect(find.byType(ProfileImage), findsOneWidget);
+        expect(find.byIcon(Icons.check_circle), findsNothing);
+      });
+
+      testWidgets(
+        'renders the personalized success avatar from a local contact image',
+        (WidgetTester tester) async {
+          final localImageFile = File('assets/images/logo.png');
+
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              loadingController: loadingController,
+              child: const LoadingOverlay(child: Screen(children: [])),
+            ),
+          );
+          await tester.pump();
+
+          loadingController.showSuccess(
+            'Alex Morgan added from contacts.',
+            name: 'Alex Morgan',
+            localImageFile: localImageFile,
+          );
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          final profileImage = tester.widget<ProfileImage>(
+            find.byType(ProfileImage),
+          );
+
+          expect(profileImage.localImageFile?.path, localImageFile.path);
+          expect(profileImage.imageUrl, isNull);
+          expect(find.byIcon(Icons.check_circle), findsNothing);
+        },
+      );
 
       testWidgets('success state with name shows OK button', (
         WidgetTester tester,

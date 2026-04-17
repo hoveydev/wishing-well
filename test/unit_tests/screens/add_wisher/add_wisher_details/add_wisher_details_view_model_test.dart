@@ -1,17 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
-import 'package:wishing_well/utils/result.dart';
-
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
+import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/result.dart';
 
 void main() {
   group('AddWisherDetailsViewModel', () {
-    late AddWisherDetailsViewModel viewModel;
     late MockWisherRepository mockRepository;
+    late AddWisherDetailsViewModel viewModel;
 
     setUp(() {
       mockRepository = MockWisherRepository();
@@ -31,190 +35,54 @@ void main() {
         expect(viewModel, isA<AddWisherDetailsViewModelContract>());
       });
 
-      test('has empty first name initially', () {
-        expect(viewModel.isFormValid, isFalse);
-      });
-
-      test('has empty last name initially', () {
-        expect(viewModel.isFormValid, isFalse);
-      });
-
-      test('has no error initially', () {
+      test('starts valid with optional names', () {
+        expect(viewModel.isFormValid, isTrue);
         expect(viewModel.error.type, AddWisherDetailsErrorType.none);
         expect(viewModel.hasAlert, isFalse);
       });
 
-      test('error is AddWisherDetailsError type initially', () {
-        expect(viewModel.error, isA<AddWisherDetailsError>());
+      test('imageFile starts null', () {
+        expect(viewModel.imageFile, isNull);
       });
     });
 
     group(TestGroups.validation, () {
-      test('updateFirstName updates the first name', () {
+      test('updateFirstName keeps form valid when last name is empty', () {
         viewModel.updateFirstName('John');
-        expect(viewModel.isFormValid, isFalse); // Last name still empty
-      });
 
-      test('updateLastName updates the last name', () {
-        viewModel.updateLastName('Doe');
-        expect(viewModel.isFormValid, isFalse); // First name still empty
-      });
-
-      test('isFormValid returns true when both names are provided', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
         expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
       });
 
-      test('isFormValid returns false when only first name is provided', () {
-        viewModel.updateFirstName('John');
-        expect(viewModel.isFormValid, isFalse);
-      });
-
-      test('isFormValid returns false when only last name is provided', () {
+      test('updateLastName keeps form valid when first name is empty', () {
         viewModel.updateLastName('Doe');
-        expect(viewModel.isFormValid, isFalse);
-      });
 
-      test('trimming whitespace from first name', () {
-        viewModel.updateFirstName('  John  ');
-        expect(viewModel.isFormValid, isFalse); // Last name still empty
-      });
-
-      test('trimming whitespace from last name', () {
-        viewModel.updateLastName('  Doe  ');
-        expect(viewModel.isFormValid, isFalse); // First name still empty
-      });
-
-      test('updateFirstName trims whitespace and updates correctly', () {
-        viewModel.updateFirstName('  Jane  ');
-        expect(viewModel.isFormValid, isFalse); // Last name still empty
-
-        viewModel.updateLastName('Smith');
         expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
       });
 
-      test('updateLastName trims whitespace and updates correctly', () {
-        viewModel.updateLastName('  Smith  ');
-        expect(viewModel.isFormValid, isFalse); // First name still empty
-
-        viewModel.updateFirstName('Jane');
-        expect(viewModel.isFormValid, isTrue);
-      });
-
-      test('empty string after trimming is treated as empty', () {
+      test('whitespace-only names are trimmed to empty without error', () {
         viewModel.updateFirstName('   ');
         viewModel.updateLastName('   ');
-        expect(viewModel.isFormValid, isFalse);
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.bothNamesRequired,
-        );
+
+        expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
+        expect(viewModel.hasAlert, isFalse);
       });
     });
 
     group(TestGroups.errorHandling, () {
-      test('shows bothNamesRequired error when both fields are empty', () {
+      test('clearing names does not create a validation error', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.bothNamesRequired,
-        );
-        expect(viewModel.hasAlert, isTrue);
-      });
-
-      test('shows firstNameRequired error when first name is empty', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('Doe');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.firstNameRequired,
-        );
-        expect(viewModel.hasAlert, isTrue);
-      });
-
-      test('shows lastNameRequired error when last name is empty', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.lastNameRequired,
-        );
-        expect(viewModel.hasAlert, isTrue);
-      });
-
-      test('clears error when both names are valid', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isTrue);
-
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
-      });
-
-      test('clearError clears the error state', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isTrue);
-
-        viewModel.clearError();
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
-      });
-
-      test('clearError can be called multiple times without issue', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('');
-
-        viewModel.clearError();
-        viewModel.clearError();
-        viewModel.clearError();
 
         expect(viewModel.error.type, AddWisherDetailsErrorType.none);
         expect(viewModel.hasAlert, isFalse);
       });
 
-      test('error transitions from bothNamesRequired to firstNameRequired', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.bothNamesRequired,
-        );
+      test('clearError is safe when there is no validation error', () {
+        viewModel.clearError();
 
-        viewModel.updateLastName('');
-        viewModel.updateFirstName('John');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.lastNameRequired,
-        );
-      });
-
-      test('error transitions from firstNameRequired to none', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('Doe');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.firstNameRequired,
-        );
-
-        viewModel.updateFirstName('John');
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
-      });
-
-      test('error transitions from lastNameRequired to none', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.lastNameRequired,
-        );
-
-        viewModel.updateLastName('Doe');
         expect(viewModel.error.type, AddWisherDetailsErrorType.none);
         expect(viewModel.hasAlert, isFalse);
       });
@@ -226,103 +94,24 @@ void main() {
         expect(error.type, AddWisherDetailsErrorType.unknown);
       });
 
-      test('none error type has no alert', () {
-        const error = AddWisherDetailsError(AddWisherDetailsErrorType.none);
-        expect(error.type, AddWisherDetailsErrorType.none);
-      });
-
-      test('all error types are accounted for', () {
+      test('all error types are still accounted for', () {
         expect(AddWisherDetailsErrorType.values.length, 6);
         expect(
           AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.none),
-        );
-        expect(
-          AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.firstNameRequired),
-        );
-        expect(
-          AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.lastNameRequired),
-        );
-        expect(
-          AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.bothNamesRequired),
-        );
-        expect(
-          AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.unknown),
-        );
-        expect(
-          AddWisherDetailsErrorType.values,
-          contains(AddWisherDetailsErrorType.invalidImage),
-        );
-      });
-    });
-
-    group('Form Validation Sequence', () {
-      test('validates in sequence: empty -> firstName only -> both names', () {
-        // Initially empty - no validation error yet until first update
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-
-        // Add first name only
-        viewModel.updateFirstName('John');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.lastNameRequired,
-        );
-
-        // Add last name
-        viewModel.updateLastName('Doe');
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.isFormValid, isTrue);
-      });
-
-      test('validates in sequence: empty -> lastName only -> both names', () {
-        // Add last name only
-        viewModel.updateLastName('Doe');
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.firstNameRequired,
-        );
-
-        // Add first name
-        viewModel.updateFirstName('John');
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.isFormValid, isTrue);
-      });
-
-      test('removing firstName triggers validation error', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
-        expect(viewModel.isFormValid, isTrue);
-        expect(viewModel.hasAlert, isFalse);
-
-        viewModel.updateFirstName('');
-        expect(viewModel.isFormValid, isFalse);
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.firstNameRequired,
-        );
-      });
-
-      test('removing lastName triggers validation error', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
-        expect(viewModel.isFormValid, isTrue);
-        expect(viewModel.hasAlert, isFalse);
-
-        viewModel.updateLastName('');
-        expect(viewModel.isFormValid, isFalse);
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.lastNameRequired,
+          containsAll([
+            AddWisherDetailsErrorType.none,
+            AddWisherDetailsErrorType.firstNameRequired,
+            AddWisherDetailsErrorType.lastNameRequired,
+            AddWisherDetailsErrorType.bothNamesRequired,
+            AddWisherDetailsErrorType.invalidImage,
+            AddWisherDetailsErrorType.unknown,
+          ]),
         );
       });
     });
 
     group('Repository Integration', () {
-      test('createWisher success result returns wisher', () async {
+      test('createWisher success result returns wisher', () {
         final successRepo = MockWisherRepository(
           createWisherResult: Result.ok(
             Wisher(
@@ -335,206 +124,203 @@ void main() {
             ),
           ),
         );
-        final vm = AddWisherDetailsViewModel(
-          wisherRepository: successRepo,
-          authRepository: MockAuthRepository(),
-          imageRepository: MockImageRepository(),
-        );
-        addTearDown(vm.dispose);
 
-        // The repository result is handled in tapSaveButton
-        // This tests that the mock can return success
         expect(successRepo.createWisherResult, isA<Ok<Wisher>>());
       });
 
-      test('createWisher error result returns error', () async {
+      test('createWisher error result returns error', () {
         final errorRepo = MockWisherRepository(
           createWisherResult: Result.error(Exception('Database error')),
         );
-        final vm = AddWisherDetailsViewModel(
-          wisherRepository: errorRepo,
-          authRepository: MockAuthRepository(),
-          imageRepository: MockImageRepository(),
-        );
-        addTearDown(vm.dispose);
 
-        // The repository result is handled in tapSaveButton
         expect(errorRepo.createWisherResult, isA<Error<Wisher>>());
       });
+    });
 
-      test('repository with initial wishers loads correctly', () {
-        final initialWishers = [
-          Wisher(
-            id: '1',
-            userId: 'test-user',
-            firstName: 'Existing',
-            lastName: 'Wisher',
-            createdAt: DateTime.now(),
-            updatedAt: DateTime.now(),
-          ),
-        ];
-        final repo = MockWisherRepository(initialWishers: initialWishers);
+    group('tapSaveButton duplicate flow', () {
+      late LoadingController loadingController;
+
+      Widget buildTestWidget(AddWisherDetailsViewModel vm) =>
+          ChangeNotifierProvider<LoadingController>.value(
+            value: loadingController,
+            child: MaterialApp(
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () => vm.tapSaveButton(context),
+                    child: const Text('Save'),
+                  ),
+                ),
+              ),
+            ),
+          );
+
+      setUp(() {
+        loadingController = LoadingController();
+      });
+
+      testWidgets('cancel keeps manual add flow on details screen', (
+        WidgetTester tester,
+      ) async {
+        final authRepository = MockAuthRepository(userId: 'user-1');
+        await authRepository.login(email: 'test@example.com', password: 'pw');
+        final repository = _RecordingWisherRepository(
+          initialWishers: [
+            Wisher(
+              id: 'existing-1',
+              userId: 'user-1',
+              firstName: 'Alex',
+              lastName: 'Morgan',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+          ],
+        );
         final vm = AddWisherDetailsViewModel(
-          wisherRepository: repo,
-          authRepository: MockAuthRepository(),
+          wisherRepository: repository,
+          authRepository: authRepository,
           imageRepository: MockImageRepository(),
         );
         addTearDown(vm.dispose);
+        addTearDown(authRepository.dispose);
+        addTearDown(repository.dispose);
 
-        expect(repo.wishers.length, 1);
-        expect(repo.wishers.first.firstName, 'Existing');
+        vm.updateFirstName('Alex');
+        vm.updateLastName('Morgan');
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+
+        expect(loadingController.isWarning, isTrue);
+        expect(
+          loadingController.message,
+          'Alex Morgan is already a registered wisher. Add them anyway?',
+        );
+        expect(repository.createCallCount, 0);
+
+        loadingController.secondaryActionAndClear();
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(loadingController.isIdle, isTrue);
+        expect(repository.createCallCount, 0);
+        expect(repository.wishers, hasLength(1));
+        expect(find.text('Save'), findsOneWidget);
+      });
+
+      testWidgets('continue saves after normalized duplicate confirmation', (
+        WidgetTester tester,
+      ) async {
+        final authRepository = MockAuthRepository(userId: 'user-1');
+        await authRepository.login(email: 'test@example.com', password: 'pw');
+        final repository = _RecordingWisherRepository(
+          initialWishers: [
+            Wisher(
+              id: 'existing-1',
+              userId: 'user-1',
+              firstName: 'Alex',
+              lastName: 'Morgan',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+          ],
+        );
+        final vm = AddWisherDetailsViewModel(
+          wisherRepository: repository,
+          authRepository: authRepository,
+          imageRepository: MockImageRepository(),
+        );
+        addTearDown(vm.dispose);
+        addTearDown(authRepository.dispose);
+        addTearDown(repository.dispose);
+
+        vm.updateFirstName(' alex ');
+        vm.updateLastName(' MORGAN ');
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+
+        expect(loadingController.isWarning, isTrue);
+        expect(repository.createCallCount, 0);
+
+        loadingController.primaryActionAndClear();
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(repository.createCallCount, 1);
+        expect(loadingController.isSuccess, isTrue);
+        expect(loadingController.message, 'alex MORGAN has been added!');
+        expect(repository.wishers, hasLength(2));
+        expect(repository.wishers.first.firstName, 'alex');
+        expect(repository.wishers.first.lastName, 'MORGAN');
       });
     });
 
     group('ViewModel Contract Implementation', () {
-      test('contract updateFirstName method works', () {
+      test('contract update methods allow partial or empty names', () {
         final contract = viewModel as AddWisherDetailsViewModelContract;
-        contract.updateFirstName('Test');
-        expect(viewModel.isFormValid, isFalse);
-      });
 
-      test('contract updateLastName method works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        contract.updateLastName('Test');
-        expect(viewModel.isFormValid, isFalse);
-      });
+        contract.updateFirstName('');
+        contract.updateLastName('');
 
-      test('contract hasAlert getter works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        expect(contract.hasAlert, isFalse);
-
-        viewModel.updateFirstName('');
-        expect(contract.hasAlert, isTrue);
-      });
-
-      test('contract error getter works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        expect(contract.error.type, AddWisherDetailsErrorType.none);
-      });
-
-      test('contract clearError method works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        viewModel.updateFirstName('');
-        expect(contract.hasAlert, isTrue);
-
-        contract.clearError();
-        expect(contract.hasAlert, isFalse);
-      });
-
-      test('contract isFormValid getter works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        expect(contract.isFormValid, isFalse);
-
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
         expect(contract.isFormValid, isTrue);
+        expect(contract.hasAlert, isFalse);
+      });
+
+      test('contract imageFile getter works', () {
+        final contract = viewModel as AddWisherDetailsViewModelContract;
+
+        expect(contract.imageFile, isNull);
       });
     });
 
     group('Image Functionality', () {
-      test('has null imageFile initially', () {
-        expect(viewModel.imageFile, isNull);
-      });
-
-      test('updateImage sets the image file', () {
-        expect(viewModel.imageFile, isNull);
-
-        // Set to null - in real tests this would be a File object
-        viewModel.updateImage(null);
-        expect(viewModel.imageFile, isNull);
-      });
-
       test('updateImage can be called with null to clear', () {
         viewModel.updateImage(null);
         expect(viewModel.imageFile, isNull);
       });
 
-      test('updateImage notifies listeners when changed', () {
-        var notifyCount = 0;
-        viewModel.addListener(() => notifyCount++);
-
-        viewModel.updateImage(null);
-        // Initial call may or may not notify depending on implementation
-        // The key is that it doesn't throw
-        expect(notifyCount, greaterThanOrEqualTo(0));
-      });
-
-      test('updateImage can be called multiple times', () {
-        viewModel.updateImage(null);
-        viewModel.updateImage(null);
-        viewModel.updateImage(null);
-
-        expect(viewModel.imageFile, isNull);
-      });
-
-      test('imageFile getter returns private field value', () {
-        // Test that getter returns what was set
-        viewModel.updateImage(null);
-        expect(viewModel.imageFile, equals(null));
-      });
-    });
-
-    group('Image and Form Validation Combined', () {
-      test('form is valid even when image is null', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
-
-        expect(viewModel.isFormValid, isTrue);
-      });
-
-      test('image does not affect validation error states', () {
+      test('image does not affect optional-name validation', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
         viewModel.updateImage(null);
 
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.bothNamesRequired,
-        );
-
-        // Now add image and verify error still correct
-        viewModel.updateImage(null);
-        expect(
-          viewModel.error.type,
-          AddWisherDetailsErrorType.bothNamesRequired,
-        );
-      });
-
-      test('clearing image does not affect valid form', () {
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
         expect(viewModel.isFormValid, isTrue);
-
-        viewModel.updateImage(null);
-        expect(viewModel.isFormValid, isTrue);
-      });
-    });
-
-    group('Contract Image Tests', () {
-      test('contract imageFile getter works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        expect(contract.imageFile, isNull);
-
-        viewModel.updateImage(null);
-        expect(contract.imageFile, isNull);
-      });
-
-      test('contract updateImage method works', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-        contract.updateImage(null);
-        expect(viewModel.imageFile, isNull);
-      });
-
-      test('contract imageFile is accessible after form changes', () {
-        final contract = viewModel as AddWisherDetailsViewModelContract;
-
-        viewModel.updateFirstName('John');
-        viewModel.updateLastName('Doe');
-        viewModel.updateImage(null);
-
-        expect(contract.imageFile, isNull);
-        expect(contract.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
       });
     });
   });
+}
+
+class _RecordingWisherRepository extends MockWisherRepository {
+  _RecordingWisherRepository({required super.initialWishers});
+
+  int createCallCount = 0;
+
+  @override
+  Future<Result<Wisher>> createWisher({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    String? profilePicture,
+  }) {
+    createCallCount += 1;
+    return super.createWisher(
+      userId: userId,
+      firstName: firstName,
+      lastName: lastName,
+      profilePicture: profilePicture,
+    );
+  }
 }

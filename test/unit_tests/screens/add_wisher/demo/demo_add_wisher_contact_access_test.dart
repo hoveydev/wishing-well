@@ -4,18 +4,18 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
 import 'package:wishing_well/features/add_wisher/demo/demo_add_wisher_contact_access.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 void main() {
   group('DemoAddWisherContactAccess', () {
     late GlobalKey<NavigatorState> navigatorKey;
-    late LoadingController loadingController;
+    late StatusOverlayController loadingController;
     late DemoAddWisherContactAccess contactAccess;
     AddWisherContactAccessResult? result;
 
     setUp(() {
       navigatorKey = GlobalKey<NavigatorState>();
-      loadingController = LoadingController();
+      loadingController = StatusOverlayController();
       contactAccess = DemoAddWisherContactAccess(
         navigatorKey: navigatorKey,
         contacts: const [
@@ -42,7 +42,7 @@ void main() {
 
     Future<void> pumpAccessHarness(WidgetTester tester) async {
       await tester.pumpWidget(
-        ChangeNotifierProvider<LoadingController>.value(
+        ChangeNotifierProvider<StatusOverlayController>.value(
           value: loadingController,
           child: MaterialApp(
             navigatorKey: navigatorKey,

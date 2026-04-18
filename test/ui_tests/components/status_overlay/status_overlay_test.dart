@@ -7,17 +7,17 @@ import 'package:wishing_well/components/button/types/primary_button.dart';
 import 'package:wishing_well/components/button/types/secondary_button.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/theme/app_colors.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 void main() {
-  group('LoadingOverlay', () {
-    late LoadingController loadingController;
+  group('StatusOverlay', () {
+    late StatusOverlayController loadingController;
 
     setUp(() {
-      loadingController = LoadingController();
+      loadingController = StatusOverlayController();
     });
 
     tearDown(() {
@@ -31,7 +31,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(
+            child: const StatusOverlay(
               child: Screen(children: [Text('Test Content')]),
             ),
           ),
@@ -49,7 +49,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -66,7 +66,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -92,7 +92,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -122,7 +122,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -142,7 +142,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -164,7 +164,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -188,7 +188,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -210,7 +210,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -229,7 +229,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -257,7 +257,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -285,7 +285,7 @@ void main() {
           await tester.pumpWidget(
             createScreenTestWidget(
               loadingController: loadingController,
-              child: const LoadingOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -336,7 +336,7 @@ void main() {
           await tester.pumpWidget(
             createScreenTestWidget(
               loadingController: loadingController,
-              child: const LoadingOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -367,7 +367,7 @@ void main() {
           await tester.pumpWidget(
             createScreenTestWidget(
               loadingController: loadingController,
-              child: const LoadingOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -398,7 +398,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -421,7 +421,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -460,7 +460,7 @@ void main() {
           await tester.pumpWidget(
             createScreenTestWidget(
               loadingController: loadingController,
-              child: const LoadingOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -489,7 +489,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -509,7 +509,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -537,7 +537,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();
@@ -564,7 +564,7 @@ void main() {
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
-            child: const LoadingOverlay(child: Screen(children: [])),
+            child: const StatusOverlay(child: Screen(children: [])),
           ),
         );
         await tester.pump();

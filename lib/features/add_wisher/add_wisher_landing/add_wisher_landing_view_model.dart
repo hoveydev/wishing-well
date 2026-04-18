@@ -11,7 +11,7 @@ import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 abstract class AddWisherLandingViewModelContract
     implements ScreenViewModelContract {
@@ -42,7 +42,7 @@ class AddWisherLandingViewModel extends ChangeNotifier
   @override
   Future<void> tapAddFromContactsButton(BuildContext context) async {
     const logContext = 'AddWisherLandingViewModel.tapAddFromContactsButton';
-    final loading = context.read<LoadingController>();
+    final loading = context.read<StatusOverlayController>();
     final l10n = AppLocalizations.of(context)!;
 
     loading.show();
@@ -123,7 +123,7 @@ class AddWisherLandingViewModel extends ChangeNotifier
   }
 
   Future<bool> _confirmDuplicateImport({
-    required LoadingController loading,
+    required StatusOverlayController loading,
     required AppLocalizations l10n,
     required AddWisherContactDuplicateReport duplicateReport,
   }) {
@@ -178,7 +178,7 @@ class AddWisherLandingViewModel extends ChangeNotifier
 
   Future<void> _showFullSuccess({
     required BuildContext context,
-    required LoadingController loading,
+    required StatusOverlayController loading,
     required AppLocalizations l10n,
     required AddWisherContactImportResult result,
   }) async {

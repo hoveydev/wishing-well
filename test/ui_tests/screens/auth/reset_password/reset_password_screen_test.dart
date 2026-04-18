@@ -11,7 +11,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -29,11 +29,11 @@ Widget _resetPasswordScreenBuilder(BuildContext context, GoRouterState state) =>
 
 void main() {
   group('ResetPasswordScreen', () {
-    late LoadingController loadingController;
+    late StatusOverlayController loadingController;
     late MockAuthRepository mockAuthRepository;
 
     setUp(() {
-      loadingController = LoadingController();
+      loadingController = StatusOverlayController();
       mockAuthRepository = MockAuthRepository();
     });
 
@@ -46,7 +46,7 @@ void main() {
       AuthRepository? authRepository,
     }) => MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoadingController>.value(
+        ChangeNotifierProvider<StatusOverlayController>.value(
           value: loadingController,
         ),
         ListenableProvider<AuthRepository>.value(

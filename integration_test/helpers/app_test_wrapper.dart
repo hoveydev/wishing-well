@@ -6,8 +6,8 @@ import 'package:provider/single_child_widget.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 
 /// Wrapper for running the app in integration tests.
 ///
@@ -44,7 +44,7 @@ class AppTestWrapper {
       providers: customProviders ?? providersRemote,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-        builder: (_, child) => LoadingOverlay(child: child!),
+        builder: (_, child) => StatusOverlay(child: child!),
         theme: useDarkTheme ? AppTheme.darkTheme : AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         localizationsDelegates: const [
@@ -73,7 +73,7 @@ class _TestAppHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => LoadingController(),
+    create: (_) => StatusOverlayController(),
     child: const Scaffold(body: Center(child: Text('Test App'))),
   );
 }

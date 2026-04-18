@@ -18,6 +18,7 @@ const _excludePatterns = [
   'components/demo/demo_app.dart',
   'data/data_sources/',
   '/demo/',
+  'test_helpers/',
   // Note: Integration tests are NOT excluded - they count toward coverage
 ];
 

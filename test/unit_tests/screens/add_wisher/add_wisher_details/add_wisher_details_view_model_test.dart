@@ -14,7 +14,7 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 void main() {
@@ -146,7 +146,7 @@ void main() {
     });
 
     group('tapSaveButton duplicate flow', () {
-      late LoadingController loadingController;
+      late StatusOverlayController loadingController;
 
       setUpAll(() {
         // Initialize dotenv for AppConfig.profilePicturesBucket used in
@@ -158,7 +158,7 @@ void main() {
       });
 
       Widget buildTestWidget(AddWisherDetailsViewModel vm) =>
-          ChangeNotifierProvider<LoadingController>.value(
+          ChangeNotifierProvider<StatusOverlayController>.value(
             value: loadingController,
             child: MaterialApp(
               localizationsDelegates: const [
@@ -214,7 +214,7 @@ void main() {
           ],
         );
 
-        return ChangeNotifierProvider<LoadingController>.value(
+        return ChangeNotifierProvider<StatusOverlayController>.value(
           value: loadingController,
           child: MaterialApp.router(
             localizationsDelegates: const [
@@ -230,7 +230,7 @@ void main() {
       }
 
       setUp(() {
-        loadingController = LoadingController();
+        loadingController = StatusOverlayController();
       });
 
       testWidgets('empty names do not save and do not show loading overlay', (

@@ -12,7 +12,7 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 void main() {
@@ -105,7 +105,7 @@ void main() {
           GoRoute(
             path: '/t',
             builder: (context, state) => ChangeNotifierProvider(
-              create: (_) => LoadingController(),
+              create: (_) => StatusOverlayController(),
               child: Scaffold(
                 body: Builder(
                   builder: (context) => ElevatedButton(
@@ -158,7 +158,7 @@ void main() {
           GoRoute(
             path: '/t',
             builder: (context, state) => ChangeNotifierProvider(
-              create: (_) => LoadingController(),
+              create: (_) => StatusOverlayController(),
               child: Scaffold(
                 body: Builder(
                   builder: (context) => ElevatedButton(

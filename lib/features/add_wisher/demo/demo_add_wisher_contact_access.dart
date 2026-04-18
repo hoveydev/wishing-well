@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 class DemoAddWisherContact {
   const DemoAddWisherContact({
@@ -49,7 +49,10 @@ class DemoAddWisherContactAccess extends AddWisherContactAccess {
       );
     }
 
-    final loading = Provider.of<LoadingController>(context, listen: false);
+    final loading = Provider.of<StatusOverlayController>(
+      context,
+      listen: false,
+    );
     final shouldRestoreLoading = loading.isLoading;
 
     if (shouldRestoreLoading) {

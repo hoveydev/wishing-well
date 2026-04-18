@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide OverlayState;
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
@@ -9,7 +9,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 /// Animation duration for overlay show/hide transitions.
 ///
@@ -18,13 +18,13 @@ const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 
 /// A widget that wraps its child with a loading overlay.
 ///
-/// The overlay responds to [LoadingController] state changes and displays
+/// The overlay responds to [StatusOverlayController] state changes and displays
 /// different content based on the current state:
-/// - [LoadingState.idle]: No overlay (child is fully visible)
-/// - [LoadingState.loading]: Loading spinner with optional message
-/// - [LoadingState.success]: Success message with checkmark icon
-/// - [LoadingState.error]: Error message with error icon and OK button
-/// - [LoadingState.warning]: Warning message with confirm/cancel actions
+/// - [OverlayState.idle]: No overlay (child is fully visible)
+/// - [OverlayState.loading]: Loading spinner with optional message
+/// - [OverlayState.success]: Success message with checkmark icon
+/// - [OverlayState.error]: Error message with error icon and OK button
+/// - [OverlayState.warning]: Warning message with confirm/cancel actions
 ///
 /// The overlay is animated with a fade transition and automatically handles
 /// user acknowledgment for success/error states.
@@ -34,15 +34,15 @@ const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 /// Wrap any screen or widget that needs to show loading states:
 ///
 /// ```dart
-/// LoadingOverlay(
+/// StatusOverlay(
 ///   child: MyScreen(),
 /// )
 /// ```
 ///
-/// Then use the [LoadingController] to control the overlay:
+/// Then use the [StatusOverlayController] to control the overlay:
 ///
 /// ```dart
-/// final loading = context.read<LoadingController>();
+/// final loading = context.read<StatusOverlayController>();
 /// loading.show();           // Show loading spinner
 /// loading.showSuccess('Operation complete!');
 /// loading.showError('Something went wrong');
@@ -50,22 +50,22 @@ const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 ///
 /// ## Requirements
 ///
-/// - A [LoadingController] must be provided via a [ChangeNotifierProvider]
-///   ancestor (typically at the app level)
+/// - A [StatusOverlayController] must be provided via a
+///   [ChangeNotifierProvider] ancestor (typically at the app level)
 /// - The overlay displays over the child widget, blocking interaction
 ///   when visible
-class LoadingOverlay extends StatefulWidget {
-  const LoadingOverlay({required this.child, super.key});
+class StatusOverlay extends StatefulWidget {
+  const StatusOverlay({required this.child, super.key});
   final Widget child;
 
   @override
-  State<LoadingOverlay> createState() => _LoadingOverlayState();
+  State<StatusOverlay> createState() => _StatusOverlayState();
 }
 
-class _LoadingOverlayState extends State<LoadingOverlay>
+class _StatusOverlayState extends State<StatusOverlay>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  LoadingState? _previousState;
+  OverlayState? _previousState;
 
   @override
   void initState() {
@@ -83,10 +83,10 @@ class _LoadingOverlayState extends State<LoadingOverlay>
     super.dispose();
   }
 
-  void _handleStateChange(LoadingState newState) {
+  void _handleStateChange(OverlayState newState) {
     final wasVisible =
-        _previousState != null && _previousState != LoadingState.idle;
-    final isVisible = newState != LoadingState.idle;
+        _previousState != null && _previousState != OverlayState.idle;
+    final isVisible = newState != OverlayState.idle;
 
     if (!wasVisible && isVisible) {
       _controller.forward();
@@ -100,7 +100,7 @@ class _LoadingOverlayState extends State<LoadingOverlay>
   Widget build(BuildContext context) => Stack(
     children: [
       widget.child,
-      Consumer<LoadingController>(
+      Consumer<StatusOverlayController>(
         builder: (context, controller, _) {
           _handleStateChange(controller.state);
 
@@ -112,7 +112,7 @@ class _LoadingOverlayState extends State<LoadingOverlay>
             builder: (context, child) => Opacity(
               opacity: _controller.value,
               child: IgnorePointer(
-                ignoring: controller.state == LoadingState.idle,
+                ignoring: controller.state == OverlayState.idle,
                 child: Stack(
                   children: [
                     // Background
@@ -138,14 +138,14 @@ class _LoadingOverlayState extends State<LoadingOverlay>
 
   /// Builds the appropriate overlay content based on loading state.
   ///
-  /// Returns different widgets for each [LoadingState]:
-  /// - [LoadingState.loading]: Shows a centered throbber/spinner
-  /// - [LoadingState.success]: Shows success icon with message
-  /// - [LoadingState.error]: Shows error icon with message and OK button
-  /// - [LoadingState.warning]: Shows warning icon with message and two actions
-  /// - [LoadingState.idle]: Returns an empty SizedBox
+  /// Returns different widgets for each [OverlayState]:
+  /// - [OverlayState.loading]: Shows a centered throbber/spinner
+  /// - [OverlayState.success]: Shows success icon with message
+  /// - [OverlayState.error]: Shows error icon with message and OK button
+  /// - [OverlayState.warning]: Shows warning icon with message and two actions
+  /// - [OverlayState.idle]: Returns an empty SizedBox
   Widget _buildContent(
-    LoadingController controller,
+    StatusOverlayController controller,
     AppColorScheme? colorScheme,
     AppLocalizations l10n,
   ) {
@@ -207,7 +207,7 @@ class _OverlayContent extends StatelessWidget {
     required this.icon,
     required this.iconColor,
   });
-  final LoadingController controller;
+  final StatusOverlayController controller;
   final AppColorScheme? colorScheme;
   final IconData icon;
   final Color? iconColor;

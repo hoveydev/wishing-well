@@ -10,7 +10,7 @@ import 'package:wishing_well/features/home/home_screen.dart';
 import 'package:wishing_well/features/home/home_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'helpers/integration_test_groups.dart';
 import 'mocks/mocks.dart';
@@ -37,7 +37,7 @@ void main() {
           ),
         ],
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act - Render the home screen directly
       await tester.pumpWidget(
@@ -45,7 +45,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -85,7 +85,7 @@ void main() {
       final wisherMock = IntegrationMockWisherRepository(
         fetchDelay: const Duration(milliseconds: 500),
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
@@ -93,7 +93,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -139,7 +139,7 @@ void main() {
       final wisherMock = IntegrationMockWisherRepository(
         fetchWishersResult: Result.error(Exception('Network error')),
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
@@ -147,7 +147,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],

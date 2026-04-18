@@ -27,6 +27,9 @@ EXCLUDES=(
   "*/components/demo/demo_home.dart"
   "*/components/demo/demo_app.dart"
   "*/data/data_sources/*"
+  # ImageRepositoryImpl directly uses Supabase Storage + flutter_image_compress
+  # without a data-source abstraction, making it untestable at the unit level.
+  "*/data/repositories/image/image_repository_impl.dart"
   "*/test_helpers/*"
   "*/test/testing/*"
   "*/features/*/demo/*"

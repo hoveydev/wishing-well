@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 
 /// Mock implementation of [ImageRepository] for testing.
@@ -24,12 +26,19 @@ class MockImageRepository extends ImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     await Future.delayed(delay);
 
     // Return the configured result or a fake URL
     return uploadResult ??
         'https://example.com/storage/$bucketName/${folder ?? 'uploads'}/mock-image.jpg';
+  }
+
+  @override
+  Future<File?> compressImage(String filePath) async {
+    // No-op for mock — returns null (callers fall back to original file)
+    return null;
   }
 
   @override

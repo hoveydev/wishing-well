@@ -71,6 +71,7 @@ class EditWisherViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   String? _existingImageUrl;
+  Future<File?>? _compressionFuture;
 
   String _originalFirstName = '';
   String _originalLastName = '';
@@ -113,15 +114,33 @@ class EditWisherViewModel extends ChangeNotifier
 
   @override
   void updateImage(File? imageFile) {
+    _cleanupFutureFile(_compressionFuture);
     _imageFile = imageFile;
+    _compressionFuture = imageFile != null
+        ? _imageRepository.compressImage(imageFile.path)
+        : null;
     notifyListeners();
   }
 
   @override
   void clearImage() {
+    _cleanupFutureFile(_compressionFuture);
     _imageFile = null;
     _existingImageUrl = null;
+    _compressionFuture = null;
     notifyListeners();
+  }
+
+  // Attaches a fire-and-forget delete callback to a compression future so
+  // orphaned temp files are removed even if the result is never awaited.
+  void _cleanupFutureFile(Future<File?>? future) {
+    future
+        ?.then((file) {
+          try {
+            file?.deleteSync();
+          } catch (_) {}
+        })
+        .catchError((_) {});
   }
 
   @override
@@ -178,12 +197,18 @@ class EditWisherViewModel extends ChangeNotifier
           'Uploading updated profile picture...',
           context: 'EditWisherViewModel.tapSaveButton',
         );
+        File? precompressed;
         try {
+          precompressed = _compressionFuture != null
+              ? await _compressionFuture
+              : null;
           final uploadedProfilePictureUrl = await _imageRepository.uploadImage(
             filePath: _imageFile!.path,
             bucketName: AppConfig.profilePicturesBucket,
             folder: userId,
+            precompressedFile: precompressed,
           );
+
           if (uploadedProfilePictureUrl == null) {
             AppLogger.warning(
               'Failed to upload profile picture, continuing without it',
@@ -200,6 +225,12 @@ class EditWisherViewModel extends ChangeNotifier
           _error = const EditWisherError(EditWisherErrorType.invalidImage);
           loading.showError(e.message, onOk: clearError);
           return;
+        } finally {
+          if (precompressed != null) {
+            try {
+              precompressed.deleteSync();
+            } catch (_) {}
+          }
         }
       }
 
@@ -306,6 +337,7 @@ class EditWisherViewModel extends ChangeNotifier
   void dispose() {
     if (_isDisposed) return;
     _isDisposed = true;
+    _cleanupFutureFile(_compressionFuture);
     _wisherRepository.removeListener(_onRepositoryChanged);
     super.dispose();
   }

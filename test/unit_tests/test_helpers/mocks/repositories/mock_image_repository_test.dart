@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -85,11 +87,18 @@ void main() {
       );
 
       test(
-        'uploadImage accepts precompressedFile param without error',
+        'uploadImage accepts precompressedFile param and returns URL',
         () async {
+          final tmpFile = File(
+            '${Directory.systemTemp.path}/test_mock_precompressed.webp',
+          );
+          tmpFile.createSync();
+          addTearDown(tmpFile.deleteSync);
+
           final url = await repository.uploadImage(
             filePath: '/path/to/image.jpg',
             bucketName: 'profile-pictures',
+            precompressedFile: tmpFile,
           );
 
           expect(url, isNotNull);

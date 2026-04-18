@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -45,16 +47,23 @@ void main() {
         expect(result, isNotNull);
       });
 
-      test('accepts optional precompressedFile parameter', () async {
+      test('accepts precompressedFile and returns a URL', () async {
+        final tmpFile = File(
+          '${Directory.systemTemp.path}/test_precompressed.webp',
+        );
+        tmpFile.createSync();
+        addTearDown(tmpFile.deleteSync);
+
         final result = await repository.uploadImage(
           filePath: '/path/to/image.jpg',
           bucketName: 'profile-pictures',
+          precompressedFile: tmpFile,
         );
 
         expect(result, isNotNull);
       });
 
-      test('can return null to indicate failure', () async {
+      test('returns configured uploadResult URL', () async {
         const expectedUrl = 'https://example.com/mock.jpg';
         repository = MockImageRepository(uploadResult: expectedUrl);
 
@@ -64,6 +73,19 @@ void main() {
         );
 
         expect(result, expectedUrl);
+      });
+
+      test('can return null to signal upload failure', () async {
+        // Stub that always returns null simulates a failed upload.
+        final nullRepository = _NullUploadRepository();
+        addTearDown(nullRepository.dispose);
+
+        final result = await nullRepository.uploadImage(
+          filePath: '/path/to/image.jpg',
+          bucketName: 'profile-pictures',
+        );
+
+        expect(result, isNull);
       });
     });
 
@@ -112,4 +134,15 @@ void main() {
       });
     });
   });
+}
+
+/// Stub that returns null from [uploadImage] to exercise the failure path.
+class _NullUploadRepository extends MockImageRepository {
+  @override
+  Future<String?> uploadImage({
+    required String filePath,
+    required String bucketName,
+    String? folder,
+    File? precompressedFile,
+  }) async => null;
 }

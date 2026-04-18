@@ -268,6 +268,7 @@ class _RecordingImageRepository extends ImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     uploadCalls += 1;
     lastUpload = (filePath: filePath, bucketName: bucketName, folder: folder);
@@ -278,6 +279,9 @@ class _RecordingImageRepository extends ImageRepository {
 
     return uploadResult;
   }
+
+  @override
+  Future<File?> compressImage(String filePath) async => null;
 
   @override
   Future<bool> deleteImage({

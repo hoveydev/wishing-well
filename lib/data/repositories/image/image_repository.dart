@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 /// Abstract repository for managing image uploads to Supabase Storage.
@@ -10,13 +12,24 @@ abstract class ImageRepository extends ChangeNotifier {
   /// [filePath] is the local path to the file.
   /// [bucketName] is the name of the storage bucket.
   /// [folder] is an optional folder path within the bucket.
+  /// [precompressedFile] is an already-compressed file to upload directly,
+  /// skipping the internal compression step.
   ///
   /// Returns the public URL of the uploaded file, or null if upload fails.
   Future<String?> uploadImage({
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   });
+
+  /// Compresses a local image file to reduce its size before upload.
+  ///
+  /// [filePath] is the local path to the image file.
+  ///
+  /// Returns the compressed [File], or null if compression fails
+  /// (in which case the original file should be used).
+  Future<File?> compressImage(String filePath);
 
   /// Deletes a file from Supabase Storage.
   ///

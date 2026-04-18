@@ -63,6 +63,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   String _firstName = '';
   String _lastName = '';
   File? _imageFile;
+  Future<File?>? _compressionFuture;
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
@@ -94,8 +95,24 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   @override
   void updateImage(File? imageFile) {
+    _cleanupFutureFile(_compressionFuture);
     _imageFile = imageFile;
+    _compressionFuture = imageFile != null
+        ? _imageRepository.compressImage(imageFile.path)
+        : null;
     notifyListeners();
+  }
+
+  // Attaches a fire-and-forget delete callback to a compression future so
+  // orphaned temp files are removed even if the result is never awaited.
+  void _cleanupFutureFile(Future<File?>? future) {
+    future
+        ?.then((file) {
+          try {
+            file?.deleteSync();
+          } catch (_) {}
+        })
+        .catchError((_) {});
   }
 
   /// Getter for the selected image file
@@ -171,11 +188,16 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         context: 'AddWisherDetailsViewModel.tapSaveButton',
       );
 
+      File? precompressed;
       try {
+        precompressed = _compressionFuture != null
+            ? await _compressionFuture
+            : null;
         profilePictureUrl = await _imageRepository.uploadImage(
           filePath: _imageFile!.path,
           bucketName: AppConfig.profilePicturesBucket,
           folder: userId,
+          precompressedFile: precompressed,
         );
 
         if (profilePictureUrl == null) {
@@ -194,6 +216,12 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         );
         loading.showError(e.message, onOk: clearError);
         return;
+      } finally {
+        if (precompressed != null) {
+          try {
+            precompressed.deleteSync();
+          } catch (_) {}
+        }
       }
     }
 
@@ -280,5 +308,11 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     );
 
     return decision.future;
+  }
+
+  @override
+  void dispose() {
+    _cleanupFutureFile(_compressionFuture);
+    super.dispose();
   }
 }

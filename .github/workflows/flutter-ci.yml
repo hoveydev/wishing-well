@@ -1,0 +1,84 @@
+name: Flutter CI
+
+env:
+  FLUTTER_VERSION: "3.41.4"
+  FLUTTER_CHANNEL: "stable"
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  format:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Create placeholder env files
+        run: |
+          touch .env.local .env.development .env.test
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check dart format
+        run: dart format --set-exit-if-changed .
+
+  analyze:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Create placeholder env files
+        run: |
+          touch .env.local .env.development .env.test
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run analyzer
+        run: dart analyze --fatal-infos
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Create placeholder env files
+        run: |
+          touch .env.local .env.development .env.test
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test --no-pub --reporter=expanded

@@ -1,46 +1,46 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide OverlayState;
 import 'package:provider/provider.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
-class LoadingOverlayDemo extends StatelessWidget {
-  const LoadingOverlayDemo({super.key});
+class StatusOverlayDemo extends StatelessWidget {
+  const StatusOverlayDemo({super.key});
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => LoadingController(),
-    child: const _LoadingOverlayDemoContent(),
+    create: (_) => StatusOverlayController(),
+    child: const _StatusOverlayDemoContent(),
   );
 }
 
-class _LoadingOverlayDemoContent extends StatelessWidget {
-  const _LoadingOverlayDemoContent();
+class _StatusOverlayDemoContent extends StatelessWidget {
+  const _StatusOverlayDemoContent();
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<LoadingController>();
+    final controller = context.watch<StatusOverlayController>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Loading Overlay'),
+        title: const Text('Status Overlay'),
         backgroundColor: Colors.blue.withValues(alpha: 0.1),
       ),
-      body: LoadingOverlay(
+      body: StatusOverlay(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Loading Overlay Component',
+                'Status Overlay Component',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               const Text(
-                'The LoadingOverlay is a wrapper component that displays '
+                'The StatusOverlay is a wrapper component that displays '
                 'a full-screen overlay with loading, success, or error states. '
                 'It wraps any child widget and shows an overlay based on the '
-                'LoadingController state.',
+                'StatusOverlayController state.',
                 style: TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 24),
@@ -239,47 +239,47 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
     ],
   );
 
-  Color _getStateColor(LoadingState state) {
+  Color _getStateColor(OverlayState state) {
     switch (state) {
-      case LoadingState.idle:
+      case OverlayState.idle:
         return Colors.grey;
-      case LoadingState.loading:
+      case OverlayState.loading:
         return Colors.blue;
-      case LoadingState.success:
+      case OverlayState.success:
         return Colors.green;
-      case LoadingState.error:
+      case OverlayState.error:
         return Colors.red;
-      case LoadingState.warning:
+      case OverlayState.warning:
         return Colors.orange;
     }
   }
 
-  IconData _getStateIcon(LoadingState state) {
+  IconData _getStateIcon(OverlayState state) {
     switch (state) {
-      case LoadingState.idle:
+      case OverlayState.idle:
         return Icons.visibility_off;
-      case LoadingState.loading:
+      case OverlayState.loading:
         return Icons.hourglass_empty;
-      case LoadingState.success:
+      case OverlayState.success:
         return Icons.check_circle;
-      case LoadingState.error:
+      case OverlayState.error:
         return Icons.error;
-      case LoadingState.warning:
+      case OverlayState.warning:
         return Icons.warning_amber_outlined;
     }
   }
 
-  String _getStateText(LoadingState state) {
+  String _getStateText(OverlayState state) {
     switch (state) {
-      case LoadingState.idle:
+      case OverlayState.idle:
         return 'No overlay visible';
-      case LoadingState.loading:
+      case OverlayState.loading:
         return 'Loading...';
-      case LoadingState.success:
+      case OverlayState.success:
         return 'Success shown';
-      case LoadingState.error:
+      case OverlayState.error:
         return 'Error shown';
-      case LoadingState.warning:
+      case OverlayState.warning:
         return 'Warning shown';
     }
   }

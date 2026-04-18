@@ -12,7 +12,7 @@ import 'package:wishing_well/features/auth/forgot_password/forgot_password_scree
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'helpers/integration_test_groups.dart';
 import 'mocks/integration_mock_auth_repository.dart';
@@ -25,14 +25,14 @@ void main() {
     testWidgets('login screen renders correctly', (WidgetTester tester) async {
       // Arrange
       final authMock = IntegrationTestProviders.quickAuthMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -65,14 +65,14 @@ void main() {
       final authMock = IntegrationMockAuthRepository(
         loginResult: Result.error(Exception('Invalid credentials')),
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -117,14 +117,14 @@ void main() {
     ) async {
       // Arrange
       final authMock = IntegrationTestProviders.quickAuthMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -157,14 +157,14 @@ void main() {
       final authMock = IntegrationMockAuthRepository(
         createAccountResult: Result.error(Exception('Email already exists')),
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -211,14 +211,14 @@ void main() {
     ) async {
       // Arrange
       final authMock = IntegrationTestProviders.quickAuthMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],

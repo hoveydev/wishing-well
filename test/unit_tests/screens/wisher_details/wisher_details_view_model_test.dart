@@ -9,7 +9,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 void main() {
@@ -311,7 +311,7 @@ void main() {
     });
 
     group('tapDeleteWisher and tapEditWisher', () {
-      late LoadingController loadingController;
+      late StatusOverlayController loadingController;
 
       Widget buildRouterWidget(
         WisherDetailsViewModel viewModel, {
@@ -362,7 +362,7 @@ void main() {
           ],
         );
 
-        return ChangeNotifierProvider<LoadingController>.value(
+        return ChangeNotifierProvider<StatusOverlayController>.value(
           value: loadingController,
           child: MaterialApp.router(
             theme: AppTheme.lightTheme,
@@ -385,7 +385,7 @@ void main() {
       }
 
       setUp(() {
-        loadingController = LoadingController();
+        loadingController = StatusOverlayController();
       });
 
       testWidgets('tapDeleteWisher shows AlertDialog', (

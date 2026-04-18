@@ -38,7 +38,7 @@ import 'package:wishing_well/components/demo/demos/button_demo.dart';
 import 'package:wishing_well/components/demo/demos/checklist_demo.dart';
 import 'package:wishing_well/components/demo/demos/input_demo.dart';
 import 'package:wishing_well/components/demo/demos/inline_alert_demo.dart';
-import 'package:wishing_well/components/demo/demos/loading_overlay_demo.dart';
+import 'package:wishing_well/components/demo/demos/status_overlay_demo.dart';
 import 'package:wishing_well/components/demo/demos/logo_demo.dart';
 import 'package:wishing_well/components/demo/demos/screen_demo.dart';
 import 'package:wishing_well/components/demo/demos/spacer_demo.dart';
@@ -118,11 +118,13 @@ void registerAllDemos() {
   );
 
   ComponentDemoRegistry.register(
-    componentName: 'loading_overlay',
-    title: 'Loading Overlay',
+    componentName: 'status_overlay',
+    title: 'Status Overlay',
     icon: Icons.layers,
-    demoBuilder: (_) => const LoadingOverlayDemo(),
-    description: 'Full-screen overlay with loading, success, and error states',
+    demoBuilder: (_) => const StatusOverlayDemo(),
+    description:
+        'Full-screen overlay with loading, success, error, and '
+        'warning/confirmation states',
   );
 
   ComponentDemoRegistry.register(
@@ -225,7 +227,7 @@ void registerAllDemos() {
     'button', // Button components
     'checklist', // Checklist component
     'inline_alert', // Inline alert component
-    'loading_overlay', // Loading overlay component
+    'status_overlay', // Status overlay component
     'input', // Input fields
     'logo', // Logo component
     'screen', // Screen wrapper

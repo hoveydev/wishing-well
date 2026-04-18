@@ -5,7 +5,7 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -27,7 +27,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -58,7 +58,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -87,7 +87,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -117,7 +117,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -132,7 +132,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -149,7 +149,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -165,7 +165,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -191,7 +191,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -216,7 +216,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -252,7 +252,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -267,7 +267,7 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -289,7 +289,7 @@ void main() {
       testWidgets('initial state has no alert', (WidgetTester tester) async {
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: viewModel),
           ),
         );
@@ -301,7 +301,7 @@ void main() {
       testWidgets('displays loading state during login attempt', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
         await tester.pumpWidget(
           createScreenTestWidget(
             loadingController: loadingController,
@@ -328,7 +328,7 @@ void main() {
 
         await tester.pumpWidget(
           createScreenTestWidget(
-            loadingController: LoadingController(),
+            loadingController: StatusOverlayController(),
             child: LoginScreen(viewModel: testViewModel),
           ),
         );
@@ -338,10 +338,10 @@ void main() {
         expect(testViewModel.hasAlert, false);
       });
 
-      testWidgets('LoadingController showSuccess works correctly', (
+      testWidgets('StatusOverlayController showSuccess works correctly', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         // Verify initial state
         expect(loadingController.isSuccess, false);
@@ -369,10 +369,10 @@ void main() {
         expect(loadingController.state.name, 'idle');
       });
 
-      testWidgets('LoadingController showError works correctly', (
+      testWidgets('StatusOverlayController showError works correctly', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         // Verify initial state
         expect(loadingController.isError, false);
@@ -393,10 +393,10 @@ void main() {
         expect(loadingController.isError, false);
       });
 
-      testWidgets('LoadingController show with imageUrl works', (
+      testWidgets('StatusOverlayController show with imageUrl works', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         // Show success with image
         loadingController.showSuccess(
@@ -415,10 +415,10 @@ void main() {
         loadingController.dispose();
       });
 
-      testWidgets('LoadingController hide works correctly', (
+      testWidgets('StatusOverlayController hide works correctly', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         // Show and then hide
         loadingController.show();
@@ -430,25 +430,26 @@ void main() {
         expect(loadingController.isIdle, true);
       });
 
-      testWidgets('LoadingController onOk callback is called on acknowledge', (
-        WidgetTester tester,
-      ) async {
-        final loadingController = LoadingController();
-        bool callbackCalled = false;
+      testWidgets(
+        'StatusOverlayController onOk callback is called on acknowledge',
+        (WidgetTester tester) async {
+          final loadingController = StatusOverlayController();
+          bool callbackCalled = false;
 
-        loadingController.showSuccess(
-          'Test message',
-          onOk: () {
-            callbackCalled = true;
-          },
-        );
-        await TestHelpers.pumpAndSettle(tester);
+          loadingController.showSuccess(
+            'Test message',
+            onOk: () {
+              callbackCalled = true;
+            },
+          );
+          await TestHelpers.pumpAndSettle(tester);
 
-        loadingController.acknowledgeAndClear();
-        await TestHelpers.pumpAndSettle(tester);
+          loadingController.acknowledgeAndClear();
+          await TestHelpers.pumpAndSettle(tester);
 
-        expect(callbackCalled, true);
-      });
+          expect(callbackCalled, true);
+        },
+      );
     });
 
     group(TestGroups.errorHandling, () {
@@ -459,7 +460,7 @@ void main() {
           loginResult: Result.error(Exception('Invalid login credentials')),
         );
         final testViewModel = LoginViewModel(authRepository: mockRepo);
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         await tester.pumpWidget(
           createScreenTestWidget(
@@ -518,7 +519,7 @@ void main() {
           loginResult: Result.error(Exception('Invalid credentials')),
         );
         final testViewModel = LoginViewModel(authRepository: mockRepo);
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         await tester.pumpWidget(
           createScreenTestWidget(

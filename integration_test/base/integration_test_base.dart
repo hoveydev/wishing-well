@@ -7,8 +7,8 @@ import 'package:provider/single_child_widget.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 
 /// Base class for integration tests.
 ///
@@ -49,7 +49,7 @@ abstract class IntegrationTestBase {
       providers: customProviders ?? providersRemote,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-        builder: (_, child) => LoadingOverlay(child: child!),
+        builder: (_, child) => StatusOverlay(child: child!),
         theme: useDarkTheme ? AppTheme.darkTheme : AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         localizationsDelegates: const [
@@ -59,7 +59,7 @@ abstract class IntegrationTestBase {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        home: _TestHome(controller: LoadingController()),
+        home: _TestHome(controller: StatusOverlayController()),
       ),
     );
 
@@ -79,11 +79,11 @@ abstract class IntegrationTestBase {
 class _TestHome extends StatelessWidget {
   const _TestHome({required this.controller});
 
-  final LoadingController controller;
+  final StatusOverlayController controller;
 
   @override
   Widget build(BuildContext context) =>
-      ChangeNotifierProvider<LoadingController>.value(
+      ChangeNotifierProvider<StatusOverlayController>.value(
         value: controller,
         child: const Scaffold(body: Center(child: Text('Integration Test'))),
       );

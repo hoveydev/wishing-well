@@ -7,10 +7,10 @@ import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/home/demo/home_demo_providers.dart';
 import 'package:wishing_well/features/home/demo/home_demo_router.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 // Available scenarios:
 // - noWishers: Empty wishers list
@@ -48,9 +48,9 @@ class _DemoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => LoadingController(),
+    create: (_) => StatusOverlayController(),
     child: MaterialApp.router(
-      builder: (_, child) => LoadingOverlay(child: child!),
+      builder: (_, child) => StatusOverlay(child: child!),
       title: 'Home - Demo',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

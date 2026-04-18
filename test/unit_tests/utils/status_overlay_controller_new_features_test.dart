@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 void main() {
-  group('LoadingController - New Features', () {
-    late LoadingController controller;
+  group('StatusOverlayController - New Features', () {
+    late StatusOverlayController controller;
 
     setUp(() {
-      controller = LoadingController();
+      controller = StatusOverlayController();
     });
 
     tearDown(() {

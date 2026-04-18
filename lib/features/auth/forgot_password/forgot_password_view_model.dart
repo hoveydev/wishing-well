@@ -9,7 +9,7 @@ import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/auth_error.dart';
 import 'package:wishing_well/utils/input_validators.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class ForgotPasswordViewModelContract
@@ -105,7 +105,7 @@ class ForgotPasswordViewModel extends ChangeNotifier
 
   @override
   Future<void> tapSendResetLinkButton(BuildContext context) async {
-    final loading = context.read<LoadingController>();
+    final loading = context.read<StatusOverlayController>();
     if (!_isEmailValid()) {
       AppLogger.warning(
         'Email validation failed: $_authError',

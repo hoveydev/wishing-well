@@ -10,7 +10,7 @@ import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 GoRouter authDemoRouter(AuthRepository authRepository) => GoRouter(
   initialLocation: Routes.login.path,
@@ -110,7 +110,7 @@ class _DemoLoginScreenState extends State<_DemoLoginScreen> {
         _viewModel.clearAccountConfirmationQuery(context);
 
         // Show success message
-        final loading = context.read<LoadingController>();
+        final loading = context.read<StatusOverlayController>();
         loading.showSuccess(
           'Login was successful. '
           'In production, the app would navigate to home.',

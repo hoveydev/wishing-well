@@ -9,7 +9,7 @@ import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_d
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'helpers/integration_test_groups.dart';
 import 'mocks/mocks.dart';
 import 'providers/integration_test_providers.dart';
@@ -26,7 +26,7 @@ void main() {
         userId: 'test-user',
       );
       final wisherMock = IntegrationTestProviders.quickWisherMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act - render with imageUrl to trigger _buildImageAvatar path
       await tester.pumpWidget(
@@ -34,7 +34,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],

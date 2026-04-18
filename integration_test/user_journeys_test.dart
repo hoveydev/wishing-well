@@ -20,7 +20,7 @@ import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_conta
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 import 'helpers/integration_test_groups.dart';
 import 'mocks/mocks.dart';
@@ -38,7 +38,7 @@ void main() {
         userId: 'test-user',
       );
       final wisherMock = IntegrationTestProviders.quickWisherMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
@@ -46,7 +46,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -81,14 +81,14 @@ void main() {
     ) async {
       // Arrange
       final authMock = IntegrationTestProviders.quickAuthMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -139,14 +139,14 @@ void main() {
         logoutResult: const Result.ok(null),
       );
       authMock.simulateLoginSuccess(userId: 'test-user');
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -223,7 +223,7 @@ void main() {
           ),
         ],
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
@@ -231,7 +231,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -272,7 +272,7 @@ void main() {
         userId: 'test-user',
       );
       final wisherMock = IntegrationTestProviders.quickWisherMock();
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act - Test landing screen
       await tester.pumpWidget(
@@ -280,7 +280,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -318,7 +318,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],
@@ -368,7 +368,7 @@ void main() {
           ),
         ),
       );
-      final loadingController = LoadingController();
+      final loadingController = StatusOverlayController();
 
       // Act
       await tester.pumpWidget(
@@ -376,7 +376,7 @@ void main() {
           providers: [
             ChangeNotifierProvider<AuthRepository>.value(value: authMock),
             ChangeNotifierProvider<WisherRepository>.value(value: wisherMock),
-            ChangeNotifierProvider<LoadingController>.value(
+            ChangeNotifierProvider<StatusOverlayController>.value(
               value: loadingController,
             ),
           ],

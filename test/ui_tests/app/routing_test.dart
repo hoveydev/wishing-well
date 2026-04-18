@@ -7,7 +7,7 @@ import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -25,7 +25,9 @@ dynamic startAppWithLoginScreen(
     source: source,
   );
   final Widget app = MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => LoadingController())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => StatusOverlayController()),
+    ],
     child: MaterialApp.router(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

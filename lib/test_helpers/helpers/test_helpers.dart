@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 /// Standardized test wrapper for component tests
 Widget createComponentTestWidget(Widget child) => MaterialApp(
@@ -31,11 +31,11 @@ Widget createScreenComponentTestWidget(Widget child) => MaterialApp(
 /// Standardized test wrapper for screen tests with localization
 Widget createScreenTestWidget({
   required Widget child,
-  LoadingController? loadingController,
+  StatusOverlayController? loadingController,
 }) {
-  final controller = loadingController ?? LoadingController();
+  final controller = loadingController ?? StatusOverlayController();
 
-  return ChangeNotifierProvider<LoadingController>.value(
+  return ChangeNotifierProvider<StatusOverlayController>.value(
     value: controller,
     child: MaterialApp(
       theme: AppTheme.lightTheme,

@@ -7,7 +7,7 @@ import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/utils/app_logger.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class WisherDetailsViewModelContract
@@ -86,7 +86,7 @@ class WisherDetailsViewModel extends ChangeNotifier
 
     if (confirmed != true || !context.mounted) return;
 
-    final loading = context.read<LoadingController>();
+    final loading = context.read<StatusOverlayController>();
     loading.show();
 
     final result = await _wisherRepository.deleteWisher(_wisherId);

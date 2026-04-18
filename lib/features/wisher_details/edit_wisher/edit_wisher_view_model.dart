@@ -97,7 +97,7 @@ class EditWisherViewModel extends ChangeNotifier
   bool get hasAlert => _error.type != EditWisherErrorType.none;
 
   @override
-  bool get isFormValid => _firstName.isNotEmpty || _lastName.isNotEmpty;
+  bool get isFormValid => true;
 
   @override
   void updateFirstName(String firstName) {
@@ -140,8 +140,10 @@ class EditWisherViewModel extends ChangeNotifier
     final loading = context.read<LoadingController>();
     final l10n = AppLocalizations.of(context)!;
 
-    _validateForm();
-    if (!isFormValid) {
+    // Validate at save time: at least one name must be non-empty
+    if (_firstName.isEmpty && _lastName.isEmpty) {
+      _error = const EditWisherError(EditWisherErrorType.bothNamesRequired);
+      notifyListeners();
       AppLogger.warning(
         'Wisher update failed: $_error',
         context: 'EditWisherViewModel.tapSaveButton',
@@ -293,9 +295,7 @@ class EditWisherViewModel extends ChangeNotifier
 
   void _validateForm() {
     final previousError = _error;
-    _error = _firstName.isEmpty && _lastName.isEmpty
-        ? const EditWisherError(EditWisherErrorType.bothNamesRequired)
-        : const EditWisherError(EditWisherErrorType.none);
+    _error = const EditWisherError(EditWisherErrorType.none);
 
     if (previousError.type != _error.type) {
       notifyListeners();

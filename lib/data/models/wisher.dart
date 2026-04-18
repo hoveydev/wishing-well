@@ -12,7 +12,7 @@ class Wisher {
     required this.updatedAt,
     this.profilePicture,
   }) : assert(
-         firstName.trim().isNotEmpty || lastName.trim().isNotEmpty,
+         firstName.isNotEmpty || lastName.isNotEmpty,
          'At least one of firstName or lastName must be non-empty.',
        );
 

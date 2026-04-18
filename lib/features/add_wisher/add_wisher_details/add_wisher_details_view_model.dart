@@ -104,11 +104,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   void _validateForm() {
     final previousError = _error;
-    _error = _firstName.isEmpty && _lastName.isEmpty
-        ? const AddWisherDetailsError(
-            AddWisherDetailsErrorType.bothNamesRequired,
-          )
-        : const AddWisherDetailsError(AddWisherDetailsErrorType.none);
+    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
 
     if (previousError.type != _error.type) {
       notifyListeners();
@@ -116,7 +112,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   }
 
   @override
-  bool get isFormValid => _firstName.isNotEmpty || _lastName.isNotEmpty;
+  bool get isFormValid => true;
 
   @override
   void tapBackButton(BuildContext context) {
@@ -128,9 +124,12 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     final loading = context.read<LoadingController>();
     final l10n = AppLocalizations.of(context)!;
 
-    // Validate form before proceeding
-    _validateForm();
-    if (!isFormValid) {
+    // Validate at save time: at least one name must be non-empty
+    if (_firstName.isEmpty && _lastName.isEmpty) {
+      _error = const AddWisherDetailsError(
+        AddWisherDetailsErrorType.bothNamesRequired,
+      );
+      notifyListeners();
       AppLogger.warning(
         'Wisher creation failed: $_error',
         context: 'AddWisherDetailsViewModel.tapSaveButton',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -73,6 +74,13 @@ void main() {
     });
 
     group(TestGroups.behavior, () {
+      setUpAll(() {
+        dotenv.loadFromString(
+          mergeWith: {'STORAGE_PROFILE_PICTURES_BUCKET': 'test-bucket'},
+          isOptional: true,
+        );
+      });
+
       testWidgets('navigates to forgot password', (WidgetTester tester) async {
         final goRouter = router();
         await tester.pumpWidget(startAppWithRouter(goRouter));

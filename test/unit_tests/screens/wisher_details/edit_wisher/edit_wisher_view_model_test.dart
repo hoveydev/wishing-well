@@ -113,11 +113,11 @@ void main() {
     });
 
     group(TestGroups.errorHandling, () {
-      test('shows bothNamesRequired when both names are empty', () {
+      test('clears error when both names are empty (no inline validation)', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.error.type, EditWisherErrorType.bothNamesRequired);
-        expect(viewModel.hasAlert, isTrue);
+        expect(viewModel.error.type, EditWisherErrorType.none);
+        expect(viewModel.hasAlert, isFalse);
       });
 
       test(
@@ -135,10 +135,10 @@ void main() {
         expect(viewModel.error.type, EditWisherErrorType.none);
       });
 
-      test('keeps error clear when names change', () {
+      test('no alert when names change', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isTrue);
+        expect(viewModel.hasAlert, isFalse);
 
         viewModel.updateFirstName('John');
         viewModel.updateLastName('Doe');
@@ -149,7 +149,7 @@ void main() {
       test('clearError resets error state', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isTrue);
+        expect(viewModel.hasAlert, isFalse);
 
         viewModel.clearError();
         expect(viewModel.hasAlert, isFalse);

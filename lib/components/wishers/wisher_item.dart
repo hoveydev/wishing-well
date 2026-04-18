@@ -31,7 +31,7 @@ class WisherItem extends StatelessWidget {
             ),
           ),
           const AppSpacer.xsmall(),
-          Text(wisher.firstName, style: textTheme.bodySmall),
+          Text(wisher.name, style: textTheme.bodySmall),
         ],
       ),
     );

@@ -15,6 +15,7 @@ class SecondaryButton extends StatelessWidget {
     this.isLoading = false,
     this.iconSize,
     this.fontWeight,
+    this.color,
   }) : _secondaryButtonContentType = secondaryButtonContentType;
 
   const SecondaryButton.icon({
@@ -24,6 +25,7 @@ class SecondaryButton extends StatelessWidget {
     bool isLoading = false,
     double? iconSize,
     FontWeight? fontWeight,
+    Color? color,
   }) : this._(
          key: key,
          icon: icon,
@@ -32,6 +34,7 @@ class SecondaryButton extends StatelessWidget {
          secondaryButtonContentType: _SecondaryButtonContentType.icon,
          iconSize: iconSize,
          fontWeight: fontWeight,
+         color: color,
        );
 
   const SecondaryButton.label({
@@ -40,6 +43,7 @@ class SecondaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     FontWeight? fontWeight,
+    Color? color,
   }) : this._(
          key: key,
          label: label,
@@ -47,6 +51,7 @@ class SecondaryButton extends StatelessWidget {
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.label,
          fontWeight: fontWeight,
+         color: color,
        );
 
   const SecondaryButton.labelWithIcon({
@@ -56,6 +61,7 @@ class SecondaryButton extends StatelessWidget {
     Key? key,
     bool isLoading = false,
     FontWeight? fontWeight,
+    Color? color,
   }) : this._(
          key: key,
          icon: icon,
@@ -64,6 +70,7 @@ class SecondaryButton extends StatelessWidget {
          isLoading: isLoading,
          secondaryButtonContentType: _SecondaryButtonContentType.labelWithIcon,
          fontWeight: fontWeight,
+         color: color,
        );
   final IconData? icon;
   final String? label;
@@ -72,6 +79,7 @@ class SecondaryButton extends StatelessWidget {
   final _SecondaryButtonContentType _secondaryButtonContentType;
   final double? iconSize;
   final FontWeight? fontWeight;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +89,7 @@ class SecondaryButton extends StatelessWidget {
       style: ButtonFeedbackStyle.secondary(
         context: context,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        color: color,
       ),
       onPressed: onPressHandler,
       child: _buildContent(context),

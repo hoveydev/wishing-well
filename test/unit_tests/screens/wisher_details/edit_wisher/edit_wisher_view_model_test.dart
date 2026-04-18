@@ -86,7 +86,7 @@ void main() {
     group(TestGroups.validation, () {
       test('updateFirstName updates form validity', () {
         viewModel.updateFirstName('');
-        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.isFormValid, isTrue);
 
         viewModel.updateFirstName('NewName');
         expect(viewModel.isFormValid, isTrue);
@@ -94,7 +94,7 @@ void main() {
 
       test('updateLastName updates form validity', () {
         viewModel.updateLastName('');
-        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.isFormValid, isTrue);
 
         viewModel.updateLastName('NewName');
         expect(viewModel.isFormValid, isTrue);
@@ -106,36 +106,39 @@ void main() {
         expect(viewModel.isFormValid, isTrue);
       });
 
-      test('whitespace-only firstName is invalid', () {
+      test('whitespace-only firstName is treated as empty but still valid', () {
         viewModel.updateFirstName('   ');
-        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.isFormValid, isTrue);
       });
     });
 
     group(TestGroups.errorHandling, () {
-      test('shows bothNamesRequired when both are empty', () {
+      test('clears error when both names are empty (no inline validation)', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.error.type, EditWisherErrorType.bothNamesRequired);
-        expect(viewModel.hasAlert, isTrue);
+        expect(viewModel.error.type, EditWisherErrorType.none);
+        expect(viewModel.hasAlert, isFalse);
       });
 
-      test('shows firstNameRequired when only first name is empty', () {
-        viewModel.updateFirstName('');
-        viewModel.updateLastName('Doe');
-        expect(viewModel.error.type, EditWisherErrorType.firstNameRequired);
-      });
+      test(
+        'does not show a validation error when only first name is empty',
+        () {
+          viewModel.updateFirstName('');
+          viewModel.updateLastName('Doe');
+          expect(viewModel.error.type, EditWisherErrorType.none);
+        },
+      );
 
-      test('shows lastNameRequired when only last name is empty', () {
+      test('does not show a validation error when only last name is empty', () {
         viewModel.updateFirstName('John');
         viewModel.updateLastName('');
-        expect(viewModel.error.type, EditWisherErrorType.lastNameRequired);
+        expect(viewModel.error.type, EditWisherErrorType.none);
       });
 
-      test('clears error when both names are valid', () {
+      test('no alert when names change', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isTrue);
+        expect(viewModel.hasAlert, isFalse);
 
         viewModel.updateFirstName('John');
         viewModel.updateLastName('Doe');
@@ -145,7 +148,8 @@ void main() {
 
       test('clearError resets error state', () {
         viewModel.updateFirstName('');
-        expect(viewModel.hasAlert, isTrue);
+        viewModel.updateLastName('');
+        expect(viewModel.hasAlert, isFalse);
 
         viewModel.clearError();
         expect(viewModel.hasAlert, isFalse);
@@ -289,13 +293,13 @@ void main() {
       test('contract updateFirstName method works', () {
         final contract = viewModel as EditWisherViewModelContract;
         contract.updateFirstName('');
-        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.isFormValid, isTrue);
       });
 
       test('contract updateLastName method works', () {
         final contract = viewModel as EditWisherViewModelContract;
         contract.updateLastName('');
-        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.isFormValid, isTrue);
       });
 
       test('contract updateImage method works', () {
@@ -314,7 +318,7 @@ void main() {
       test('contract clearError method works', () {
         viewModel.updateFirstName('');
         final contract = viewModel as EditWisherViewModelContract;
-        expect(contract.hasAlert, isTrue);
+        expect(contract.hasAlert, isFalse);
         contract.clearError();
         expect(contract.hasAlert, isFalse);
       });
@@ -370,7 +374,7 @@ void main() {
         loadingController = LoadingController();
       });
 
-      testWidgets('with invalid form does not call updateWisher', (
+      testWidgets('with empty names blocks save with validation error', (
         WidgetTester tester,
       ) async {
         final vm = EditWisherViewModel(
@@ -380,13 +384,9 @@ void main() {
         );
         addTearDown(vm.dispose);
 
-        // Make form invalid
+        // Clear names entirely before saving.
         vm.updateFirstName('');
         vm.updateLastName('');
-
-        final initialWishers = mockRepository.wishers
-            .map((w) => w.firstName)
-            .toList();
 
         await tester.pumpWidget(buildTestWidget(vm));
         await TestHelpers.pumpAndSettle(tester);
@@ -394,12 +394,10 @@ void main() {
         await tester.tap(find.text('Save'));
         await tester.pumpAndSettle();
 
-        // Wishers should be unchanged
-        expect(
-          mockRepository.wishers.map((w) => w.firstName).toList(),
-          initialWishers,
-        );
+        expect(vm.error.type, EditWisherErrorType.bothNamesRequired);
         expect(loadingController.isIdle, isTrue);
+        expect(mockRepository.wishers.first.firstName, 'Alice');
+        expect(mockRepository.wishers.first.lastName, 'Test');
       });
 
       testWidgets('with no changes sets noChanges error without loading', (

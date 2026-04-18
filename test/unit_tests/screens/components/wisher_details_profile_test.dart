@@ -31,6 +31,28 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
         expect(find.text('Alice Smith'), findsOneWidget);
       });
+
+      testWidgets('renders single-name wisher when only last name is set', (
+        WidgetTester tester,
+      ) async {
+        final wisherWithOnlyLastName = Wisher(
+          id: '2',
+          userId: 'user1',
+          firstName: '',
+          lastName: 'Brown',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        await tester.pumpWidget(
+          buildMaterialAppHome(
+            WisherDetailsProfile(wisher: wisherWithOnlyLastName),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('Brown'), findsOneWidget);
+      });
     });
   });
 }

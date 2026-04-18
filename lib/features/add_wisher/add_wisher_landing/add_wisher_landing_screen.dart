@@ -32,6 +32,8 @@ class _AddWisherLandingScreenState extends State<AddWisherLandingScreen> {
     children: [
       const AddWisherLandingHeader(),
       AddWisherLandingButtons(
+        onAddFromContacts: () =>
+            widget.viewModel.tapAddFromContactsButton(context),
         onAddManually: () => widget.viewModel.tapAddManuallyButton(context),
       ),
     ],

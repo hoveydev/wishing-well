@@ -163,10 +163,21 @@ class ProfileAvatar extends StatelessWidget {
   bool get hasImage => imageUrl != null && imageUrl!.isNotEmpty;
 
   /// The full name for display
-  String get name => '$firstName $lastName'.trim();
+  String get name => [
+    firstName,
+    lastName,
+  ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
 
   /// The initial letter to display
-  String get initial => firstName.isNotEmpty ? firstName[0].toUpperCase() : '?';
+  String get initial {
+    final firstAvailableNamePart = [firstName, lastName]
+        .map((part) => part.trim())
+        .firstWhere((part) => part.isNotEmpty, orElse: () => '');
+
+    return firstAvailableNamePart.isEmpty
+        ? '?'
+        : firstAvailableNamePart[0].toUpperCase();
+  }
 
   @override
   Widget build(BuildContext context) {

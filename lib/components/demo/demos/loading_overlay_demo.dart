@@ -101,6 +101,15 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _DemoButton(
+                  label: 'Show Warning',
+                  onPressed: () => controller.showWarning(
+                    'A duplicate was found. Continue anyway?',
+                    primaryActionLabel: 'Continue',
+                    secondaryActionLabel: 'Cancel',
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _DemoButton(
                   label: 'Hide Overlay',
                   onPressed: () => controller.hide(),
                 ),
@@ -136,6 +145,29 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('User acknowledged the error!'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _DemoButton(
+                  label: 'Warning with Callbacks',
+                  onPressed: () => controller.showWarning(
+                    'This action may create duplicates. Continue?',
+                    primaryActionLabel: 'Continue',
+                    secondaryActionLabel: 'Cancel',
+                    onPrimaryAction: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('User chose to continue!'),
+                        ),
+                      );
+                    },
+                    onSecondaryAction: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('User cancelled the warning.'),
                         ),
                       );
                     },
@@ -217,6 +249,8 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
         return Colors.green;
       case LoadingState.error:
         return Colors.red;
+      case LoadingState.warning:
+        return Colors.orange;
     }
   }
 
@@ -230,6 +264,8 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
         return Icons.check_circle;
       case LoadingState.error:
         return Icons.error;
+      case LoadingState.warning:
+        return Icons.warning_amber_outlined;
     }
   }
 
@@ -243,6 +279,8 @@ class _LoadingOverlayDemoContent extends StatelessWidget {
         return 'Success shown';
       case LoadingState.error:
         return 'Error shown';
+      case LoadingState.warning:
+        return 'Warning shown';
     }
   }
 }

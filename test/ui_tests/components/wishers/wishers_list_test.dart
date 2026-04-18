@@ -71,33 +71,37 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Should have 1 AddWisherItem + 8 WisherItem = 9 total items
+        // The horizontal ListView lazily builds visible children, so assert
+        // the list structure instead of the exact visible child count.
         TestHelpers.expectWidgetOnce(AddWisherItem);
-        expect(find.byType(WisherItem), findsNWidgets(8));
+        expect(find.byType(WisherItem), findsWidgets);
+        expect(
+          tester.widget<ListView>(find.byType(ListView)).semanticChildCount,
+          9,
+        );
       });
 
       testWidgets('renders specific wisher first names', (
         WidgetTester tester,
       ) async {
+        final visibleWishers = createTestWishers(3);
+
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            createWishersList(wishers: defaultTestWishers),
+            createWishersList(wishers: visibleWishers),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Check for specific wisher names
-        // (each appears twice in the 8-item list)
-        TestHelpers.expectTextTimes('Alice', 2);
-        TestHelpers.expectTextTimes('Bob', 2);
-        TestHelpers.expectTextTimes('Charlie', 2);
-        TestHelpers.expectTextTimes('Diana', 2);
+        // Check for specific visible wisher names
+        TestHelpers.expectTextOnce('Alice Test');
+        TestHelpers.expectTextOnce('Bob Test');
+        TestHelpers.expectTextOnce('Charlie Test');
 
         // Check for correct initials
-        TestHelpers.expectTextTimes('A', 2); // Alice
-        TestHelpers.expectTextTimes('B', 2); // Bob
-        TestHelpers.expectTextTimes('C', 2); // Charlie
-        TestHelpers.expectTextTimes('D', 2); // Diana
+        TestHelpers.expectTextOnce('A');
+        TestHelpers.expectTextOnce('B');
+        TestHelpers.expectTextOnce('C');
       });
 
       testWidgets('renders AddWisherItem as first item', (
@@ -113,10 +117,11 @@ void main() {
         // Verify the list structure exists and has correct items
         TestHelpers.expectWidgetOnce(ListView);
         TestHelpers.expectWidgetOnce(AddWisherItem);
+        expect(find.byType(WisherItem), findsWidgets);
         expect(
-          find.byType(WisherItem),
-          findsNWidgets(8),
-        ); // Total: 1 AddWisherItem + 8 WisherItem = 9 items
+          tester.widget<ListView>(find.byType(ListView)).semanticChildCount,
+          9,
+        );
       });
 
       testWidgets('has correct layout structure', (WidgetTester tester) async {
@@ -289,15 +294,15 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Initially should see all items
-        expect(find.byType(WisherItem), findsNWidgets(8));
+        // Initially should render visible items without throwing
+        expect(find.byType(WisherItem), findsWidgets);
 
         // Scroll horizontally
         await tester.fling(find.byType(ListView), const Offset(-300, 0), 1000);
         await TestHelpers.pumpAndSettle(tester);
 
-        // Should still find all items after scrolling
-        expect(find.byType(WisherItem), findsNWidgets(8));
+        // Should still render visible items after scrolling
+        expect(find.byType(WisherItem), findsWidgets);
       });
 
       testWidgets('calls onRetry when retry button is tapped', (
@@ -388,9 +393,20 @@ void main() {
       testWidgets('last item has no right padding', (
         WidgetTester tester,
       ) async {
+        final singleWisher = [
+          Wisher(
+            id: 'single-padding',
+            userId: 'test-user',
+            firstName: 'Only',
+            lastName: 'One',
+            createdAt: DateTime(2026),
+            updatedAt: DateTime(2026),
+          ),
+        ];
+
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            createWishersList(wishers: defaultTestWishers),
+            createWishersList(wishers: singleWisher),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -426,7 +442,11 @@ void main() {
         expect(listViews, findsOneWidget);
 
         TestHelpers.expectWidgetOnce(AddWisherItem);
-        expect(find.byType(WisherItem), findsNWidgets(8));
+        expect(find.byType(WisherItem), findsWidgets);
+        expect(
+          tester.widget<ListView>(find.byType(ListView)).semanticChildCount,
+          9,
+        );
       });
 
       testWidgets('renders single wisher correctly', (
@@ -451,7 +471,7 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(WisherItem), findsOneWidget);
-        TestHelpers.expectTextOnce('Only');
+        TestHelpers.expectTextOnce('Only One');
         TestHelpers.expectTextOnce('O');
       });
     });

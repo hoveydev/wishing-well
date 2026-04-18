@@ -5,8 +5,13 @@ import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 
 class AddWisherLandingButtons extends StatelessWidget {
-  const AddWisherLandingButtons({required this.onAddManually, super.key});
+  const AddWisherLandingButtons({
+    required this.onAddFromContacts,
+    required this.onAddManually,
+    super.key,
+  });
 
+  final VoidCallback onAddFromContacts;
   final VoidCallback onAddManually;
 
   @override
@@ -16,13 +21,10 @@ class AddWisherLandingButtons extends StatelessWidget {
     return Column(
       spacing: AppSpacerSize.small,
       children: [
-        // TODO: Implement contacts picker integration
-        // Currently disabled - will be enabled when contacts feature is added
         AppButton.label(
           label: l10n.addFromContacts,
-          onPressed: () {},
+          onPressed: onAddFromContacts,
           type: AppButtonType.primary,
-          isLoading: true,
         ),
         AppButton.label(
           label: l10n.addManually,

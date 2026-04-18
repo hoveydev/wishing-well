@@ -3,7 +3,7 @@
 /// Wishers are associated with a specific user and contain basic
 /// profile information like name and optional profile picture.
 class Wisher {
-  const Wisher({
+  Wisher({
     required this.id,
     required this.userId,
     required this.firstName,
@@ -11,7 +11,10 @@ class Wisher {
     required this.createdAt,
     required this.updatedAt,
     this.profilePicture,
-  });
+  }) : assert(
+         firstName.isNotEmpty || lastName.isNotEmpty,
+         'At least one of firstName or lastName must be non-empty.',
+       );
 
   /// Creates a Wisher from a JSON map (from Supabase)
   factory Wisher.fromJson(Map<String, dynamic> json) => Wisher(
@@ -45,11 +48,22 @@ class Wisher {
   /// When this wisher was last updated
   final DateTime updatedAt;
 
-  /// Convenience getter for full name
-  String get name => '$firstName $lastName';
+  /// Convenience getter for a display-safe full name.
+  String get name => [
+    firstName,
+    lastName,
+  ].map((part) => part.trim()).where((part) => part.isNotEmpty).join(' ');
 
-  /// Convenience getter for display initial (first letter of first name)
-  String get initial => firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
+  /// Convenience getter for display initial.
+  String get initial {
+    final firstAvailableNamePart = [firstName, lastName]
+        .map((part) => part.trim())
+        .firstWhere((part) => part.isNotEmpty, orElse: () => '');
+
+    return firstAvailableNamePart.isEmpty
+        ? ''
+        : firstAvailableNamePart[0].toUpperCase();
+  }
 
   /// Converts Wisher to a JSON map (for Supabase)
   Map<String, dynamic> toJson() => {

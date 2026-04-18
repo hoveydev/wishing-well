@@ -10,6 +10,7 @@ void main() {
         expect(controller.isLoading, false);
         expect(controller.isSuccess, false);
         expect(controller.isError, false);
+        expect(controller.isWarning, false);
         expect(controller.isIdle, true);
         expect(controller.hasOverlay, false);
         expect(controller.message, null);
@@ -23,6 +24,7 @@ void main() {
         expect(controller.isLoading, true);
         expect(controller.isSuccess, false);
         expect(controller.isError, false);
+        expect(controller.isWarning, false);
         expect(controller.isIdle, false);
         expect(controller.hasOverlay, true);
       });
@@ -117,6 +119,7 @@ void main() {
         expect(controller.isSuccess, true);
         expect(controller.isLoading, false);
         expect(controller.isError, false);
+        expect(controller.isWarning, false);
         expect(controller.hasOverlay, true);
         expect(controller.message, 'Operation completed!');
       });
@@ -146,6 +149,43 @@ void main() {
         // Callback should be stored but not called yet
         expect(callbackCalled, false);
       });
+
+      test('showSuccess cleanup runs when overlay is hidden', () async {
+        final controller = LoadingController();
+        var cleanupCalled = false;
+
+        controller.showSuccess(
+          'Success!',
+          onHide: () {
+            cleanupCalled = true;
+          },
+        );
+
+        controller.hide();
+        await Future<void>.delayed(const Duration(milliseconds: 150));
+
+        expect(cleanupCalled, true);
+        expect(controller.isIdle, true);
+      });
+
+      test('showSuccess cleanup runs after replacing overlay state', () async {
+        final controller = LoadingController();
+        var cleanupCalled = false;
+
+        controller.showSuccess(
+          'Success!',
+          onHide: () {
+            cleanupCalled = true;
+          },
+        );
+
+        controller.showError('Error!');
+        expect(cleanupCalled, false);
+        await Future<void>.delayed(const Duration(milliseconds: 150));
+
+        expect(cleanupCalled, true);
+        expect(controller.isError, true);
+      });
     });
 
     group('showError', () {
@@ -156,6 +196,7 @@ void main() {
         expect(controller.isError, true);
         expect(controller.isLoading, false);
         expect(controller.isSuccess, false);
+        expect(controller.isWarning, false);
         expect(controller.hasOverlay, true);
         expect(controller.message, 'Something went wrong');
       });
@@ -233,6 +274,82 @@ void main() {
       });
     });
 
+    group('showWarning', () {
+      test('showWarning sets state to warning with action labels', () {
+        final controller = LoadingController();
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+
+        expect(controller.isWarning, true);
+        expect(controller.isLoading, false);
+        expect(controller.isSuccess, false);
+        expect(controller.isError, false);
+        expect(controller.hasOverlay, true);
+        expect(controller.message, 'Duplicates found');
+        expect(controller.primaryActionLabel, 'Continue');
+        expect(controller.secondaryActionLabel, 'Cancel');
+      });
+
+      test('showWarning notifies listeners', () {
+        final controller = LoadingController();
+        int notifyCount = 0;
+        controller.addListener(() {
+          notifyCount++;
+        });
+
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+
+        expect(notifyCount, 1);
+      });
+    });
+
+    group('warning actions', () {
+      test('primaryActionAndClear calls callback and hides overlay', () {
+        final controller = LoadingController();
+        bool callbackCalled = false;
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+          onPrimaryAction: () {
+            callbackCalled = true;
+          },
+        );
+
+        controller.primaryActionAndClear();
+
+        expect(callbackCalled, true);
+        expect(controller.isIdle, true);
+        expect(controller.hasOverlay, false);
+      });
+
+      test('secondaryActionAndClear calls callback and hides overlay', () {
+        final controller = LoadingController();
+        bool callbackCalled = false;
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+          onSecondaryAction: () {
+            callbackCalled = true;
+          },
+        );
+
+        controller.secondaryActionAndClear();
+
+        expect(callbackCalled, true);
+        expect(controller.isIdle, true);
+        expect(controller.hasOverlay, false);
+      });
+    });
+
     group('hide', () {
       test('hide clears message and callback', () {
         final controller = LoadingController();
@@ -263,6 +380,17 @@ void main() {
         controller.show();
         controller.hide();
         expect(controller.isIdle, true);
+
+        // From warning
+        controller.showWarning(
+          'Warning',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+        controller.hide();
+        expect(controller.isIdle, true);
+        expect(controller.primaryActionLabel, isNull);
+        expect(controller.secondaryActionLabel, isNull);
       });
     });
   });

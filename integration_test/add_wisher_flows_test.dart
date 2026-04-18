@@ -10,6 +10,8 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
@@ -49,7 +51,7 @@ void main() {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             home: AddWisherLandingScreen(
-              viewModel: AddWisherLandingViewModel(),
+              viewModel: _createLandingViewModel(authMock),
             ),
           ),
         ),
@@ -103,7 +105,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert - verify form fields are present (first name, last name)
-      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(TextField), findsNWidgets(2));
     });
 
     testWidgets('add wisher details creates new wisher when submitted', (
@@ -160,18 +162,52 @@ void main() {
       await tester.pumpAndSettle();
 
       // Fill form
-      final textFields = find.byType(TextFormField);
-      await tester.enterText(textFields.first, 'New');
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(AddWisherDetailsScreen)),
+      )!;
+      final firstNameField = find.descendant(
+        of: find.bySemanticsLabel(l10n.firstName),
+        matching: find.byType(TextField),
+      );
+      final lastNameField = find.descendant(
+        of: find.bySemanticsLabel(l10n.lastName),
+        matching: find.byType(TextField),
+      );
+      await tester.enterText(firstNameField, 'New');
       await tester.pumpAndSettle();
-      await tester.enterText(textFields.last, 'Wisher');
+      await tester.enterText(lastNameField, 'Wisher');
       await tester.pumpAndSettle();
 
-      // Tap submit (ElevatedButton)
-      await tester.tap(find.byType(ElevatedButton));
+      // Tap submit
+      await tester.tap(find.text(l10n.save));
       await tester.pumpAndSettle();
 
       // Verify create wisher was called
       expect(wisherMock.createWisherCallCount, 1);
     });
   });
+}
+
+AddWisherLandingViewModel _createLandingViewModel(
+  AuthRepository authRepository,
+) => AddWisherLandingViewModel(
+  contactAccess: _IntegrationTestContactAccess(),
+  contactBatchImporter: AddWisherContactBatchImporter(
+    authRepository: authRepository,
+    imageRepository: IntegrationMockImageRepository(),
+    wisherRepository: IntegrationTestProviders.quickWisherMock(),
+  ),
+);
+
+class _IntegrationTestContactAccess extends AddWisherContactAccess {
+  _IntegrationTestContactAccess()
+    : super(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      );
+
+  @override
+  Future<AddWisherContactAccessResult> selectContacts() async =>
+      const AddWisherContactAccessCancelled();
 }

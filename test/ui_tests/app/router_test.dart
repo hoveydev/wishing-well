@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -34,6 +36,13 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
     ),
     ChangeNotifierProvider<ImageRepository>(
       create: (_) => MockImageRepository(),
+    ),
+    Provider<AddWisherContactAccess>(
+      create: (_) => AddWisherContactAccess(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      ),
     ),
     ChangeNotifierProvider<LoadingController>(
       create: (_) => LoadingController(),
@@ -65,6 +74,13 @@ void main() {
     });
 
     group(TestGroups.behavior, () {
+      setUpAll(() {
+        dotenv.loadFromString(
+          mergeWith: {'STORAGE_PROFILE_PICTURES_BUCKET': 'test-bucket'},
+          isOptional: true,
+        );
+      });
+
       testWidgets('navigates to forgot password', (WidgetTester tester) async {
         final goRouter = router();
         await tester.pumpWidget(startAppWithRouter(goRouter));

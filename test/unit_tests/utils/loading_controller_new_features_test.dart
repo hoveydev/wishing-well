@@ -19,6 +19,8 @@ void main() {
         expect(controller.name, isNull);
         expect(controller.imageUrl, isNull);
         expect(controller.localImageFile, isNull);
+        expect(controller.primaryActionLabel, isNull);
+        expect(controller.secondaryActionLabel, isNull);
       });
     });
 
@@ -83,15 +85,48 @@ void main() {
       });
     });
 
+    group('showWarning stores new properties', () {
+      test('showWarning stores action labels', () {
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+
+        expect(controller.primaryActionLabel, 'Continue');
+        expect(controller.secondaryActionLabel, 'Cancel');
+        expect(controller.isWarning, true);
+      });
+
+      test('showWarning clears success-only properties', () {
+        controller.showSuccess('Success', name: 'John', imageUrl: 'url');
+
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+
+        expect(controller.name, isNull);
+        expect(controller.imageUrl, isNull);
+        expect(controller.localImageFile, isNull);
+      });
+    });
+
     group('hide clears new properties', () {
       test('hide clears all new properties', () {
-        controller.showSuccess('Success', name: 'John', imageUrl: 'url');
-        expect(controller.name, 'John');
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
 
         controller.hide();
         expect(controller.name, isNull);
         expect(controller.imageUrl, isNull);
         expect(controller.localImageFile, isNull);
+        expect(controller.primaryActionLabel, isNull);
+        expect(controller.secondaryActionLabel, isNull);
       });
     });
 
@@ -125,6 +160,19 @@ void main() {
       test('error -> success sets new properties', () {
         controller.showError('Error');
         controller.showSuccess('Done', name: 'Jane');
+        expect(controller.name, 'Jane');
+      });
+
+      test('warning -> success clears action labels', () {
+        controller.showWarning(
+          'Duplicates found',
+          primaryActionLabel: 'Continue',
+          secondaryActionLabel: 'Cancel',
+        );
+        controller.showSuccess('Done', name: 'Jane');
+
+        expect(controller.primaryActionLabel, isNull);
+        expect(controller.secondaryActionLabel, isNull);
         expect(controller.name, 'Jane');
       });
     });

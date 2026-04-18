@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
 import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/app_config.dart';
@@ -102,21 +104,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   void _validateForm() {
     final previousError = _error;
-    if (_firstName.isEmpty && _lastName.isEmpty) {
-      _error = const AddWisherDetailsError(
-        AddWisherDetailsErrorType.bothNamesRequired,
-      );
-    } else if (_firstName.isEmpty) {
-      _error = const AddWisherDetailsError(
-        AddWisherDetailsErrorType.firstNameRequired,
-      );
-    } else if (_lastName.isEmpty) {
-      _error = const AddWisherDetailsError(
-        AddWisherDetailsErrorType.lastNameRequired,
-      );
-    } else {
-      _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
-    }
+    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
 
     if (previousError.type != _error.type) {
       notifyListeners();
@@ -124,7 +112,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   }
 
   @override
-  bool get isFormValid => _firstName.isNotEmpty && _lastName.isNotEmpty;
+  bool get isFormValid => true;
 
   @override
   void tapBackButton(BuildContext context) {
@@ -136,17 +124,18 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     final loading = context.read<LoadingController>();
     final l10n = AppLocalizations.of(context)!;
 
-    // Validate form before proceeding
-    _validateForm();
-    if (!isFormValid) {
+    // Validate at save time: at least one name must be non-empty
+    if (_firstName.isEmpty && _lastName.isEmpty) {
+      _error = const AddWisherDetailsError(
+        AddWisherDetailsErrorType.bothNamesRequired,
+      );
+      notifyListeners();
       AppLogger.warning(
         'Wisher creation failed: $_error',
         context: 'AddWisherDetailsViewModel.tapSaveButton',
       );
       return;
     }
-
-    loading.show();
 
     // Try auth repository first, then fall back to Supabase
     final userId =
@@ -161,6 +150,18 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       loading.showError(l10n.errorUnknown, onOk: clearError);
       return;
     }
+
+    final duplicateWisher = _findDuplicateWisher();
+    if (duplicateWisher != null &&
+        !await _confirmDuplicateSave(
+          loading: loading,
+          l10n: l10n,
+          duplicateName: duplicateWisher.name,
+        )) {
+      return;
+    }
+
+    loading.show();
 
     // Upload the profile picture to Supabase Storage if an image was selected
     String? profilePictureUrl;
@@ -236,5 +237,48 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         _error = const AddWisherDetailsError(AddWisherDetailsErrorType.unknown);
         loading.showError(l10n.errorUnknown, onOk: clearError);
     }
+  }
+
+  Wisher? _findDuplicateWisher() {
+    final normalizedName = AddWisherContactNormalizedFullName.maybeFromParts(
+      firstName: _firstName,
+      lastName: _lastName,
+    );
+    if (normalizedName == null) return null;
+
+    for (final wisher in _wisherRepository.wishers) {
+      if (AddWisherContactNormalizedFullName.maybeFromWisher(wisher) ==
+          normalizedName) {
+        return wisher;
+      }
+    }
+
+    return null;
+  }
+
+  Future<bool> _confirmDuplicateSave({
+    required LoadingController loading,
+    required AppLocalizations l10n,
+    required String duplicateName,
+  }) {
+    final decision = Completer<bool>();
+
+    loading.showWarning(
+      l10n.contactImportDuplicateWarningSingle(duplicateName),
+      primaryActionLabel: l10n.continueAction,
+      secondaryActionLabel: l10n.cancel,
+      onPrimaryAction: () {
+        if (!decision.isCompleted) {
+          decision.complete(true);
+        }
+      },
+      onSecondaryAction: () {
+        if (!decision.isCompleted) {
+          decision.complete(false);
+        }
+      },
+    );
+
+    return decision.future;
   }
 }

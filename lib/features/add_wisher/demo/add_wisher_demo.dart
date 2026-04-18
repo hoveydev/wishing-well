@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_providers.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo_router.dart';
 import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
@@ -13,10 +14,11 @@ import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
 // Available scenarios:
-// - success: Creates wisher with image (shows in success overlay)
-// - error: Shows error on save
+// - success: Imports a selected contact and preserves photo when available
+// - error: Includes a demo contact that fails during import
 // - loading: Shows loading state during save
-const AddWisherDemoScenario _scenario = AddWisherDemoScenario.success;
+// - duplicate: Includes a contact that matches an existing demo wisher
+const AddWisherDemoScenario _scenario = AddWisherDemoScenario.duplicate;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +30,15 @@ Future<void> main() async {
           final authRepo = context.read<AuthRepository>();
           final wisherRepo = context.read<WisherRepository>();
           final imageRepo = context.read<ImageRepository>();
-          final router = addWisherDemoRouter(authRepo, wisherRepo, imageRepo);
+          final contactAccess = context.read<AddWisherContactAccess>();
+          final navigatorKey = context.read<GlobalKey<NavigatorState>>();
+          final router = addWisherDemoRouter(
+            authRepo,
+            wisherRepo,
+            imageRepo,
+            contactAccess,
+            navigatorKey,
+          );
           return _DemoApp(router: router);
         },
       ),

@@ -3,12 +3,19 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
+import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_view_model.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/components/add_wisher_landing_buttons.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/components/add_wisher_landing_description.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/components/add_wisher_landing_header.dart';
+import 'package:wishing_well/routing/routes.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
+import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/loading_controller.dart';
 
@@ -21,7 +28,7 @@ void main() {
     late GoRouter router;
 
     setUp(() {
-      viewModel = AddWisherLandingViewModel();
+      viewModel = _createViewModel();
       loadingController = LoadingController();
       router = GoRouter(
         initialLocation: '/add-wisher',
@@ -30,11 +37,14 @@ void main() {
             path: '/add-wisher',
             builder: (context, state) =>
                 AddWisherLandingScreen(viewModel: viewModel),
-          ),
-          GoRoute(
-            path: '/add-wisher/manual',
-            builder: (context, state) =>
-                const Scaffold(body: Text('Manual Add Wisher')),
+            routes: [
+              GoRoute(
+                path: 'details',
+                name: Routes.addWisherDetails.name,
+                builder: (context, state) =>
+                    const Scaffold(body: Text('Manual Add Wisher')),
+              ),
+            ],
           ),
         ],
       );
@@ -117,7 +127,7 @@ void main() {
       testWidgets('can be instantiated with custom ViewModel', (
         WidgetTester tester,
       ) async {
-        final customViewModel = AddWisherLandingViewModel();
+        final customViewModel = _createViewModel();
         final customRouter = GoRouter(
           initialLocation: '/add-wisher',
           routes: [
@@ -125,11 +135,14 @@ void main() {
               path: '/add-wisher',
               builder: (context, state) =>
                   AddWisherLandingScreen(viewModel: customViewModel),
-            ),
-            GoRoute(
-              path: '/add-wisher/manual',
-              builder: (context, state) =>
-                  const Scaffold(body: Text('Manual Add Wisher')),
+              routes: [
+                GoRoute(
+                  path: 'details',
+                  name: Routes.addWisherDetails.name,
+                  builder: (context, state) =>
+                      const Scaffold(body: Text('Manual Add Wisher')),
+                ),
+              ],
             ),
           ],
         );
@@ -168,6 +181,65 @@ void main() {
         // Dispose should not cause issues
         await tester.pumpWidget(Container());
       });
+
+      testWidgets('tapping Add Manually still routes to details', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(createTestWidget());
+        await TestHelpers.pumpAndSettle(tester);
+
+        await TestHelpers.tapAndSettle(tester, find.text('Add Manually'));
+
+        expect(find.text('Manual Add Wisher'), findsOneWidget);
+      });
+
+      testWidgets(
+        'tapping Add From Contacts stays neutral when picker is cancelled',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(createTestWidget());
+          await TestHelpers.pumpAndSettle(tester);
+
+          await TestHelpers.tapAndSettle(
+            tester,
+            find.text('Add From Contacts'),
+          );
+
+          expect(loadingController.isIdle, isTrue);
+          expect(find.byType(AddWisherLandingScreen), findsOneWidget);
+        },
+      );
     });
   });
+}
+
+AddWisherLandingViewModel _createViewModel() => AddWisherLandingViewModel(
+  contactAccess: _ScreenTestContactAccess(),
+  contactBatchImporter: _ScreenTestBatchImporter(),
+);
+
+class _ScreenTestContactAccess extends AddWisherContactAccess {
+  _ScreenTestContactAccess()
+    : super(
+        requestPermission: () async => true,
+        pickContactId: () async => null,
+        loadContact: (_) async => null,
+      );
+
+  @override
+  Future<AddWisherContactAccessResult> selectContacts() async =>
+      const AddWisherContactAccessCancelled();
+}
+
+class _ScreenTestBatchImporter extends AddWisherContactBatchImporter {
+  _ScreenTestBatchImporter()
+    : super(
+        authRepository: MockAuthRepository(),
+        imageRepository: MockImageRepository(),
+        wisherRepository: MockWisherRepository(),
+      );
+
+  @override
+  Future<AddWisherContactImportResult> importDrafts(
+    List<AddWisherContactImportDraft> drafts,
+  ) async => AddWisherContactImportResult(entries: const []);
 }

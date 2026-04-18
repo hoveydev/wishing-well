@@ -13,7 +13,10 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            AddWisherLandingButtons(onAddManually: () {}),
+            AddWisherLandingButtons(
+              onAddFromContacts: () {},
+              onAddManually: () {},
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -28,19 +31,22 @@ void main() {
     });
 
     group(TestGroups.interaction, () {
-      testWidgets('calls onAddManually when primary button is tapped', (
+      testWidgets('calls onAddFromContacts when primary button is tapped', (
         WidgetTester tester,
       ) async {
         var wasCalled = false;
 
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            AddWisherLandingButtons(onAddManually: () => wasCalled = true),
+            AddWisherLandingButtons(
+              onAddFromContacts: () => wasCalled = true,
+              onAddManually: () {},
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await TestHelpers.tapAndSettle(tester, find.text('Add Manually'));
+        await TestHelpers.tapAndSettle(tester, find.text('Add From Contacts'));
         expect(wasCalled, isTrue);
       });
 
@@ -51,7 +57,10 @@ void main() {
 
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            AddWisherLandingButtons(onAddManually: () => wasCalled = true),
+            AddWisherLandingButtons(
+              onAddFromContacts: () {},
+              onAddManually: () => wasCalled = true,
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -67,7 +76,10 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            AddWisherLandingButtons(onAddManually: () {}),
+            AddWisherLandingButtons(
+              onAddFromContacts: () {},
+              onAddManually: () {},
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
@@ -91,7 +103,10 @@ void main() {
         WidgetTester tester,
       ) async {
         expect(
-          () => AddWisherLandingButtons(onAddManually: () {}),
+          () => AddWisherLandingButtons(
+            onAddFromContacts: () {},
+            onAddManually: () {},
+          ),
           returnsNormally,
         );
       });

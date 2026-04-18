@@ -24,6 +24,7 @@ const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 /// - [LoadingState.loading]: Loading spinner with optional message
 /// - [LoadingState.success]: Success message with checkmark icon
 /// - [LoadingState.error]: Error message with error icon and OK button
+/// - [LoadingState.warning]: Warning message with confirm/cancel actions
 ///
 /// The overlay is animated with a fade transition and automatically handles
 /// user acknowledgment for success/error states.
@@ -141,6 +142,7 @@ class _LoadingOverlayState extends State<LoadingOverlay>
   /// - [LoadingState.loading]: Shows a centered throbber/spinner
   /// - [LoadingState.success]: Shows success icon with message
   /// - [LoadingState.error]: Shows error icon with message and OK button
+  /// - [LoadingState.warning]: Shows warning icon with message and two actions
   /// - [LoadingState.idle]: Returns an empty SizedBox
   Widget _buildContent(
     LoadingController controller,
@@ -178,15 +180,25 @@ class _LoadingOverlayState extends State<LoadingOverlay>
       );
     }
 
+    if (controller.isWarning) {
+      return _OverlayContent(
+        key: const ValueKey('warning'),
+        controller: controller,
+        colorScheme: colorScheme,
+        icon: Icons.warning_amber_outlined,
+        iconColor: colorScheme?.warning,
+      );
+    }
+
     return const SizedBox(key: ValueKey('empty'));
   }
 }
 
-/// Internal widget that displays success or error overlay content.
+/// Internal widget that displays non-loading overlay content.
 ///
-/// Shows an icon (success checkmark or error), a message, and optionally
-/// an image or name for success states. Includes an OK button that calls
-/// [LoadingController.acknowledgeAndClear] to dismiss the overlay.
+/// Shows an icon, a message, and optionally an image or name for success
+/// states. Success and error states include an OK button, while warning
+/// states include primary and secondary confirmation actions.
 class _OverlayContent extends StatelessWidget {
   const _OverlayContent({
     required super.key,
@@ -207,12 +219,14 @@ class _OverlayContent extends StatelessWidget {
     final name = controller.name;
     final imageUrl = controller.imageUrl;
     final localImageFile = controller.localImageFile;
-    final buttonColor = controller.isError
+    final messageColor = controller.isError
         ? colorScheme?.error
+        : controller.isWarning
+        ? colorScheme?.primary
         : colorScheme?.success;
     final textStyle = Theme.of(
       context,
-    ).textTheme.titleMedium?.copyWith(color: buttonColor);
+    ).textTheme.titleMedium?.copyWith(color: messageColor);
 
     return Center(
       child: Padding(
@@ -235,34 +249,72 @@ class _OverlayContent extends StatelessWidget {
                 color: iconColor,
               ),
             const AppSpacer.large(),
-            // Bold just the name in success, otherwise regular text
-            // Note: name substitution assumes it's at the start of message
-            // based on the wisherCreatedSuccess localization pattern
             controller.isSuccess && name != null
-                ? RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: textStyle,
-                      children: [
-                        TextSpan(
-                          text: name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: message.substring(name.length)),
-                      ],
-                    ),
+                ? _buildPersonalizedMessage(
+                    message: message,
+                    name: name,
+                    textStyle: textStyle,
                   )
                 : Text(message, textAlign: TextAlign.center, style: textStyle),
             const AppSpacer.medium(),
-            AppButton.label(
-              label: l10n.ok,
-              onPressed: controller.acknowledgeAndClear,
-              type: AppButtonType.tertiary,
-              color: buttonColor,
-              fontWeight: FontWeight.bold,
-            ),
+            if (controller.isWarning)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppButton.label(
+                    label: controller.primaryActionLabel ?? l10n.ok,
+                    onPressed: controller.primaryActionAndClear,
+                    type: AppButtonType.primary,
+                    backgroundColor: colorScheme?.primary,
+                  ),
+                  const SizedBox(height: AppSpacing.wisherSpacing),
+                  AppButton.label(
+                    label: controller.secondaryActionLabel ?? l10n.ok,
+                    onPressed: controller.secondaryActionAndClear,
+                    type: AppButtonType.secondary,
+                    color: colorScheme?.error,
+                  ),
+                ],
+              )
+            else
+              AppButton.label(
+                label: l10n.ok,
+                onPressed: controller.acknowledgeAndClear,
+                type: AppButtonType.tertiary,
+                color: messageColor,
+                fontWeight: FontWeight.bold,
+              ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPersonalizedMessage({
+    required String message,
+    required String name,
+    required TextStyle? textStyle,
+  }) {
+    final matchIndex = message.indexOf(name);
+    if (name.isEmpty || matchIndex < 0) {
+      return Text(message, textAlign: TextAlign.center, style: textStyle);
+    }
+
+    final prefix = message.substring(0, matchIndex);
+    final suffix = message.substring(matchIndex + name.length);
+
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: textStyle,
+        children: [
+          if (prefix.isNotEmpty) TextSpan(text: prefix),
+          TextSpan(
+            text: name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          if (suffix.isNotEmpty) TextSpan(text: suffix),
+        ],
       ),
     );
   }

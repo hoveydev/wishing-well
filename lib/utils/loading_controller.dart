@@ -17,6 +17,9 @@ enum LoadingState { idle, loading, success, error, warning }
 /// loading.showSuccess('Operation complete!', name: 'User');
 /// ```
 class LoadingController extends ChangeNotifier {
+  // LoadingOverlay uses a 100ms AnimatedSwitcher/fade transition.
+  // Delay onHide cleanup slightly beyond that so temporary files are not
+  // deleted while the previous success frame may still be painting.
   static const Duration _onHideCallbackDelay = Duration(milliseconds: 120);
 
   LoadingState _state = LoadingState.idle;

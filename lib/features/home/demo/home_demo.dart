@@ -18,6 +18,7 @@ import 'package:wishing_well/utils/loading_controller.dart';
 // - defaultWishers: 5 wishers (mix of with/without images)
 // - manyWishers: 50 wishers (some with images)
 // - brokenImages: Wishers with broken/invalid image URLs
+// - longNames: 3 wishers with notably long names (tests truncation)
 // - failure: Empty with error handling
 const HomeDemoScenario _scenario = HomeDemoScenario.defaultWishers;
 

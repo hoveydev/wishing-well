@@ -15,6 +15,7 @@ enum HomeDemoScenario {
   defaultWishers,
   manyWishers,
   brokenImages,
+  longNames,
   failure,
 }
 
@@ -159,6 +160,39 @@ List<SingleChildWidget> getHomeDemoProviders({
           firstName: 'Charlie',
           lastName: 'Test',
           // No image - will show initial (fallback for broken)
+          createdAt: DateTime(2024, 1, 3),
+          updatedAt: DateTime(2024, 1, 3),
+        ),
+      ];
+      fetchWishersResult = null;
+
+    case HomeDemoScenario.longNames:
+      // Wishers with notably long names to demonstrate name truncation
+      initialWishers = [
+        Wisher(
+          id: '1',
+          userId: 'test-user',
+          firstName: 'Christopher',
+          lastName: 'Alexander Pemberton',
+          profilePicture: _sampleProfilePictures[0],
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024),
+        ),
+        Wisher(
+          id: '2',
+          userId: 'test-user',
+          firstName: 'Bartholomew',
+          lastName: 'Featherstonehaugh',
+          // No image - will show initial
+          createdAt: DateTime(2024, 1, 2),
+          updatedAt: DateTime(2024, 1, 2),
+        ),
+        Wisher(
+          id: '3',
+          userId: 'test-user',
+          firstName: 'Maximilian',
+          lastName: 'Worthington-Clarke',
+          profilePicture: _sampleProfilePictures[1],
           createdAt: DateTime(2024, 1, 3),
           updatedAt: DateTime(2024, 1, 3),
         ),

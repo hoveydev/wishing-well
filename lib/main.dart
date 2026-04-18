@@ -8,9 +8,9 @@ import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/routing/router.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo.dart'
@@ -129,9 +129,9 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => LoadingController(),
+    create: (_) => StatusOverlayController(),
     child: MaterialApp.router(
-      builder: (_, child) => LoadingOverlay(child: child!),
+      builder: (_, child) => StatusOverlay(child: child!),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       localizationsDelegates: const [

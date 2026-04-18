@@ -21,7 +21,7 @@ import 'package:wishing_well/features/auth/login/login_screen.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
@@ -44,8 +44,8 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
         loadContact: (_) async => null,
       ),
     ),
-    ChangeNotifierProvider<LoadingController>(
-      create: (_) => LoadingController(),
+    ChangeNotifierProvider<StatusOverlayController>(
+      create: (_) => StatusOverlayController(),
     ),
   ],
   child: MaterialApp.router(

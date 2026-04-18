@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/features/auth/reset_password/components/reset_password_button.dart';
 import 'package:wishing_well/features/auth/reset_password/components/reset_password_header.dart';
@@ -23,7 +23,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => LoadingOverlay(
+  Widget build(BuildContext context) => StatusOverlay(
     child: Screen(
       appBar: AppMenuBar(
         action: () => widget.viewModel.tapCloseButton(context),

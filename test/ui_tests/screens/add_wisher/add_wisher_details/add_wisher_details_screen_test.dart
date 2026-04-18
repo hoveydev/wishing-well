@@ -16,12 +16,12 @@ import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repositor
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 void main() {
   group('AddWisherDetailsScreen', () {
     late AddWisherDetailsViewModel viewModel;
-    late LoadingController loadingController;
+    late StatusOverlayController loadingController;
     late GoRouter router;
 
     setUp(() {
@@ -30,7 +30,7 @@ void main() {
         authRepository: MockAuthRepository(),
         imageRepository: MockImageRepository(),
       );
-      loadingController = LoadingController();
+      loadingController = StatusOverlayController();
       router = GoRouter(
         initialLocation: '/add-wisher/manual',
         routes: [
@@ -44,7 +44,7 @@ void main() {
     });
 
     Widget createTestWidget() =>
-        ChangeNotifierProvider<LoadingController>.value(
+        ChangeNotifierProvider<StatusOverlayController>.value(
           value: loadingController,
           child: MaterialApp.router(
             theme: AppTheme.lightTheme,

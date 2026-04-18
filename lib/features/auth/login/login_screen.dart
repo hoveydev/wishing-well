@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:wishing_well/components/loading_overlay/loading_overlay.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/features/auth/login/components/login_buttons.dart';
@@ -9,7 +9,7 @@ import 'package:wishing_well/features/auth/login/components/login_header.dart';
 import 'package:wishing_well/features/auth/login/components/login_inputs.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.viewModel, super.key});
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // Show success overlay after the first frame renders
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
-          final loading = context.read<LoadingController>();
+          final loading = context.read<StatusOverlayController>();
           final l10n = AppLocalizations.of(context)!;
           loading.showSuccess(l10n.accountConfirmationMessage, onOk: () {});
           // Remove the query parameter to prevent showing again on rebuild
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => LoadingOverlay(
+  Widget build(BuildContext context) => StatusOverlay(
     child: GestureDetector(
       onTap: () => _dismissKeyboard(context),
       child: Screen(

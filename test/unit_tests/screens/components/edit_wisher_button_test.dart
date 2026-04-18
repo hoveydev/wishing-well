@@ -11,7 +11,7 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 void main() {
   group('EditWisherButton', () {
@@ -101,7 +101,7 @@ void main() {
       testWidgets('tapping Save Changes button calls tapSaveButton', (
         WidgetTester tester,
       ) async {
-        final loadingController = LoadingController();
+        final loadingController = StatusOverlayController();
 
         // Make a change so noChanges check does not short-circuit
         viewModel.updateFirstName('NewName');
@@ -118,7 +118,7 @@ void main() {
         );
 
         await tester.pumpWidget(
-          ChangeNotifierProvider<LoadingController>.value(
+          ChangeNotifierProvider<StatusOverlayController>.value(
             value: loadingController,
             child: MaterialApp.router(
               theme: AppTheme.lightTheme,

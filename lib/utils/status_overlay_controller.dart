@@ -2,27 +2,27 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-enum LoadingState { idle, loading, success, error, warning }
+enum OverlayState { idle, loading, success, error, warning }
 
-/// Controller for managing loading overlay state.
+/// Controller for managing [StatusOverlay] state.
 ///
-/// Provides methods to show loading, success, and error states with optional
-/// callback handlers for user acknowledgment.
+/// Provides methods to show loading, success, error, and warning states
+/// with optional callback handlers for user acknowledgment.
 ///
 /// Example usage:
 /// ```dart
-/// final loading = context.read<LoadingController>();
+/// final loading = context.read<StatusOverlayController>();
 /// loading.show();
 /// // ... perform async operation ...
 /// loading.showSuccess('Operation complete!', name: 'User');
 /// ```
-class LoadingController extends ChangeNotifier {
-  // LoadingOverlay uses a 100ms AnimatedSwitcher/fade transition.
+class StatusOverlayController extends ChangeNotifier {
+  // StatusOverlay uses a 100ms AnimatedSwitcher/fade transition.
   // Keep a small 20ms buffer beyond that transition so temporary files are not
   // deleted while the previous success frame may still be painting.
   static const Duration _onHideCallbackDelay = Duration(milliseconds: 120);
 
-  LoadingState _state = LoadingState.idle;
+  OverlayState _state = OverlayState.idle;
   String? _message;
 
   /// Optional name to display in success overlays.
@@ -46,7 +46,7 @@ class LoadingController extends ChangeNotifier {
   VoidCallback? _onPrimaryActionPressed;
   VoidCallback? _onSecondaryActionPressed;
 
-  LoadingState get state => _state;
+  OverlayState get state => _state;
   String? get message => _message;
 
   /// The name to display in success overlays.
@@ -60,19 +60,19 @@ class LoadingController extends ChangeNotifier {
   String? get primaryActionLabel => _primaryActionLabel;
   String? get secondaryActionLabel => _secondaryActionLabel;
 
-  bool get isLoading => _state == LoadingState.loading;
-  bool get isSuccess => _state == LoadingState.success;
-  bool get isError => _state == LoadingState.error;
-  bool get isWarning => _state == LoadingState.warning;
-  bool get isIdle => _state == LoadingState.idle;
-  bool get hasOverlay => _state != LoadingState.idle;
+  bool get isLoading => _state == OverlayState.loading;
+  bool get isSuccess => _state == OverlayState.success;
+  bool get isError => _state == OverlayState.error;
+  bool get isWarning => _state == OverlayState.warning;
+  bool get isIdle => _state == OverlayState.idle;
+  bool get hasOverlay => _state != OverlayState.idle;
 
-  /// Shows the loading overlay with a loading spinner.
+  /// Shows the status overlay with a loading spinner.
   ///
-  /// Clears any previous success/error properties.
+  /// Clears any previous state properties.
   void show() {
     final previousOnHide = _onHide;
-    _state = LoadingState.loading;
+    _state = OverlayState.loading;
     _message = null;
     _name = null;
     _imageUrl = null;
@@ -103,7 +103,7 @@ class LoadingController extends ChangeNotifier {
     VoidCallback? onHide,
   }) {
     final previousOnHide = _onHide;
-    _state = LoadingState.success;
+    _state = OverlayState.success;
     _message = message;
     _name = name;
     _imageUrl = imageUrl;
@@ -124,7 +124,7 @@ class LoadingController extends ChangeNotifier {
   /// [onOk] - Optional callback when the OK button is pressed.
   void showError(String message, {VoidCallback? onOk}) {
     final previousOnHide = _onHide;
-    _state = LoadingState.error;
+    _state = OverlayState.error;
     _message = message;
     _name = null;
     _imageUrl = null;
@@ -155,7 +155,7 @@ class LoadingController extends ChangeNotifier {
     VoidCallback? onSecondaryAction,
   }) {
     final previousOnHide = _onHide;
-    _state = LoadingState.warning;
+    _state = OverlayState.warning;
     _message = message;
     _name = null;
     _imageUrl = null;
@@ -172,7 +172,7 @@ class LoadingController extends ChangeNotifier {
 
   void hide() {
     final previousOnHide = _onHide;
-    _state = LoadingState.idle;
+    _state = OverlayState.idle;
     _message = null;
     _name = null;
     _imageUrl = null;

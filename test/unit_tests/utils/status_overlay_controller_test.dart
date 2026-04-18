@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 void main() {
-  group('LoadingController', () {
+  group('StatusOverlayController', () {
     group(TestGroups.initialState, () {
       test('initial state is not loading', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         expect(controller.isLoading, false);
         expect(controller.isSuccess, false);
         expect(controller.isError, false);
@@ -19,7 +19,7 @@ void main() {
 
     group(TestGroups.behavior, () {
       test('show sets isLoading to true', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.show();
         expect(controller.isLoading, true);
         expect(controller.isSuccess, false);
@@ -30,7 +30,7 @@ void main() {
       });
 
       test('hide sets isLoading to false', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.show();
         expect(controller.isLoading, true);
         controller.hide();
@@ -40,7 +40,7 @@ void main() {
       });
 
       test('show does nothing when already loading', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool notified = false;
         controller.addListener(() {
           notified = true;
@@ -58,7 +58,7 @@ void main() {
       });
 
       test('hide does nothing when not loading', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool notified = false;
         controller.addListener(() {
           notified = true;
@@ -71,7 +71,7 @@ void main() {
       });
 
       test('show/hide notifies listeners', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         int notifyCount = 0;
         controller.addListener(() {
           notifyCount++;
@@ -88,7 +88,7 @@ void main() {
       });
 
       test('multiple show/hide cycles work correctly', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         expect(controller.isLoading, false);
 
         controller.show();
@@ -113,7 +113,7 @@ void main() {
 
     group('showSuccess', () {
       test('showSuccess sets state to success with message', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.showSuccess('Operation completed!');
 
         expect(controller.isSuccess, true);
@@ -125,7 +125,7 @@ void main() {
       });
 
       test('showSuccess notifies listeners', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         int notifyCount = 0;
         controller.addListener(() {
           notifyCount++;
@@ -136,7 +136,7 @@ void main() {
       });
 
       test('showSuccess with callback stores callback', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showSuccess(
           'Success!',
@@ -151,7 +151,7 @@ void main() {
       });
 
       test('showSuccess cleanup runs when overlay is hidden', () async {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         var cleanupCalled = false;
 
         controller.showSuccess(
@@ -169,7 +169,7 @@ void main() {
       });
 
       test('showSuccess cleanup runs after replacing overlay state', () async {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         var cleanupCalled = false;
 
         controller.showSuccess(
@@ -190,7 +190,7 @@ void main() {
 
     group('showError', () {
       test('showError sets state to error with message', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.showError('Something went wrong');
 
         expect(controller.isError, true);
@@ -202,7 +202,7 @@ void main() {
       });
 
       test('showError notifies listeners', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         int notifyCount = 0;
         controller.addListener(() {
           notifyCount++;
@@ -213,7 +213,7 @@ void main() {
       });
 
       test('showError with callback stores callback', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showError(
           'Error!',
@@ -230,7 +230,7 @@ void main() {
 
     group('acknowledgeAndClear', () {
       test('acknowledgeAndClear calls callback and hides overlay', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showSuccess(
           'Success!',
@@ -247,7 +247,7 @@ void main() {
       });
 
       test('acknowledgeAndClear works without callback', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.showSuccess('Success!');
 
         // Should not throw
@@ -258,7 +258,7 @@ void main() {
       });
 
       test('acknowledgeAndClear works for error state', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showError(
           'Error!',
@@ -276,7 +276,7 @@ void main() {
 
     group('showWarning', () {
       test('showWarning sets state to warning with action labels', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.showWarning(
           'Duplicates found',
           primaryActionLabel: 'Continue',
@@ -294,7 +294,7 @@ void main() {
       });
 
       test('showWarning notifies listeners', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         int notifyCount = 0;
         controller.addListener(() {
           notifyCount++;
@@ -312,7 +312,7 @@ void main() {
 
     group('warning actions', () {
       test('primaryActionAndClear calls callback and hides overlay', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showWarning(
           'Duplicates found',
@@ -331,7 +331,7 @@ void main() {
       });
 
       test('secondaryActionAndClear calls callback and hides overlay', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         bool callbackCalled = false;
         controller.showWarning(
           'Duplicates found',
@@ -352,7 +352,7 @@ void main() {
 
     group('hide', () {
       test('hide clears message and callback', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
         controller.showSuccess('Message', onOk: () {});
 
         expect(controller.message, 'Message');
@@ -364,7 +364,7 @@ void main() {
       });
 
       test('hide works from any state', () {
-        final controller = LoadingController();
+        final controller = StatusOverlayController();
 
         // From success
         controller.showSuccess('Success');

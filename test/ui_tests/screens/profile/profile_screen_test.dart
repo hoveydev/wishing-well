@@ -10,7 +10,7 @@ import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/features/profile/profile_screen.dart';
 import 'package:wishing_well/features/profile/profile_view_model.dart';
 import 'package:wishing_well/theme/app_theme.dart';
-import 'package:wishing_well/utils/loading_controller.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -25,10 +25,10 @@ Widget _loginScreenBuilder(BuildContext context, GoRouterState state) =>
 
 void main() {
   group('ProfileScreen', () {
-    late LoadingController loadingController;
+    late StatusOverlayController loadingController;
 
     setUp(() {
-      loadingController = LoadingController();
+      loadingController = StatusOverlayController();
     });
 
     tearDown(() {
@@ -40,7 +40,7 @@ void main() {
 
       return MultiProvider(
         providers: [
-          ChangeNotifierProvider<LoadingController>.value(
+          ChangeNotifierProvider<StatusOverlayController>.value(
             value: loadingController,
           ),
           ListenableProvider<AuthRepository>.value(value: repo),

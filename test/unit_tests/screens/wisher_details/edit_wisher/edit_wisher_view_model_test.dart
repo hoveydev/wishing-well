@@ -182,6 +182,115 @@ void main() {
         viewModel.clearImage();
         expect(count, greaterThan(0));
       });
+
+      test(
+        'compressImage is called when updateImage receives a non-null file',
+        () {
+          final repo = _RecordingCompressRepository();
+          final vm = EditWisherViewModel(
+            wisherRepository: mockRepository,
+            imageRepository: repo,
+            wisherId: '1',
+          );
+          addTearDown(vm.dispose);
+
+          vm.updateImage(File('/tmp/test.jpg'));
+
+          expect(repo.compressCallCount, 1);
+        },
+      );
+
+      test('compressImage is not called when updateImage receives null', () {
+        final repo = _RecordingCompressRepository();
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: repo,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        vm.updateImage(null);
+
+        expect(repo.compressCallCount, 0);
+      });
+    });
+
+    group('Deferred Compression Cleanup', () {
+      test('clearImage cleans up the previous compression result', () async {
+        final compressedFile = File(
+          '${Directory.systemTemp.path}/edit_wisher_cleanup_clear.webp',
+        );
+        await compressedFile.writeAsBytes([]);
+        addTearDown(() {
+          if (compressedFile.existsSync()) compressedFile.deleteSync();
+        });
+
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: _PrecompressedFileRepository(compressedFile),
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        vm.updateImage(File('/tmp/image_before_clear.jpg'));
+        vm.clearImage();
+
+        await Future.delayed(Duration.zero);
+
+        expect(compressedFile.existsSync(), isFalse);
+      });
+
+      test(
+        'updating with a new image cleans up the previous compression result',
+        () async {
+          final firstCompressedFile = File(
+            '${Directory.systemTemp.path}/edit_wisher_cleanup_first.webp',
+          );
+          await firstCompressedFile.writeAsBytes([]);
+          addTearDown(() {
+            if (firstCompressedFile.existsSync()) {
+              firstCompressedFile.deleteSync();
+            }
+          });
+
+          final vm = EditWisherViewModel(
+            wisherRepository: mockRepository,
+            imageRepository: _PrecompressedFileRepository(firstCompressedFile),
+            wisherId: '1',
+          );
+          addTearDown(vm.dispose);
+
+          vm.updateImage(File('/tmp/image_1.jpg'));
+          vm.updateImage(File('/tmp/image_2.jpg'));
+
+          await Future.delayed(Duration.zero);
+
+          expect(firstCompressedFile.existsSync(), isFalse);
+        },
+      );
+
+      test('dispose cleans up an outstanding compression result', () async {
+        final compressedFile = File(
+          '${Directory.systemTemp.path}/edit_wisher_cleanup_dispose.webp',
+        );
+        await compressedFile.writeAsBytes([]);
+        addTearDown(() {
+          if (compressedFile.existsSync()) compressedFile.deleteSync();
+        });
+
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: _PrecompressedFileRepository(compressedFile),
+          wisherId: '1',
+        );
+
+        vm.updateImage(File('/tmp/image_dispose.jpg'));
+        vm.dispose();
+
+        await Future.delayed(Duration.zero);
+
+        expect(compressedFile.existsSync(), isFalse);
+      });
     });
 
     group('Repository Integration', () {
@@ -646,6 +755,73 @@ void main() {
           expect(vm.error.type, EditWisherErrorType.unknown);
         },
       );
+
+      testWidgets(
+        'pre-compressed file is passed to uploadImage and deleted after save',
+        (WidgetTester tester) async {
+          final compressedFile = File(
+            '${Directory.systemTemp.path}/edit_wisher_precompressed.webp',
+          );
+          compressedFile.createSync();
+          addTearDown(() {
+            if (compressedFile.existsSync()) compressedFile.deleteSync();
+          });
+
+          final imageRepo = _PrecompressedFileRepository(compressedFile);
+          final vm = EditWisherViewModel(
+            wisherRepository: mockRepository,
+            imageRepository: imageRepo,
+            wisherId: '1',
+          );
+          addTearDown(vm.dispose);
+
+          vm.updateImage(File('${Directory.systemTemp.path}/original_pre.jpg'));
+
+          await tester.pumpWidget(buildTestWidget(vm));
+          await TestHelpers.pumpAndSettle(tester);
+
+          await tester.tap(find.text('Save'));
+          await TestHelpers.pumpAndSettle(tester);
+
+          expect(
+            imageRepo.capturedPrecompressedFile?.path,
+            compressedFile.path,
+          );
+          expect(compressedFile.existsSync(), isFalse);
+          expect(loadingController.isSuccess, isTrue);
+        },
+      );
+
+      testWidgets('pre-compressed file is deleted even when '
+          'ImageValidationException is thrown', (WidgetTester tester) async {
+        final compressedFile = File(
+          '${Directory.systemTemp.path}/edit_wisher_precompressed_throw.webp',
+        );
+        compressedFile.createSync();
+        addTearDown(() {
+          if (compressedFile.existsSync()) compressedFile.deleteSync();
+        });
+
+        final imageRepo = _ThrowingPrecompressedRepository(compressedFile);
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: imageRepo,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        vm.updateImage(File('${Directory.systemTemp.path}/original_throw.jpg'));
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(loadingController.isError, isTrue);
+        expect(vm.error.type, EditWisherErrorType.invalidImage);
+        expect(compressedFile.existsSync(), isFalse);
+      });
     });
   });
 }
@@ -657,6 +833,7 @@ class _NullUploadImageRepository extends MockImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async => null;
 }
 
@@ -667,6 +844,7 @@ class _ThrowingImageRepository extends MockImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     throw ImageValidationException('Invalid image format for testing');
   }
@@ -679,7 +857,64 @@ class _UnexpectedThrowingImageRepository extends MockImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     throw Exception('Unexpected network error');
+  }
+}
+
+/// Tracks calls to compressImage without returning a real file.
+class _RecordingCompressRepository extends MockImageRepository {
+  int compressCallCount = 0;
+
+  @override
+  Future<File?> compressImage(String filePath) async {
+    compressCallCount++;
+    return null;
+  }
+}
+
+/// Returns a pre-built [File] from compressImage to exercise the deferred
+/// compression path end-to-end, including the finally-block cleanup.
+class _PrecompressedFileRepository extends MockImageRepository {
+  _PrecompressedFileRepository(this._compressResult);
+
+  final File _compressResult;
+  File? capturedPrecompressedFile;
+
+  @override
+  Future<File?> compressImage(String filePath) async => _compressResult;
+
+  @override
+  Future<String?> uploadImage({
+    required String filePath,
+    required String bucketName,
+    String? folder,
+    File? precompressedFile,
+  }) async {
+    capturedPrecompressedFile = precompressedFile;
+    return 'https://example.com/mock-upload.jpg';
+  }
+}
+
+/// Returns a pre-built [File] from compressImage but throws
+/// [ImageValidationException] on upload, to verify the finally block still
+/// cleans up the temp file on error.
+class _ThrowingPrecompressedRepository extends MockImageRepository {
+  _ThrowingPrecompressedRepository(this._compressResult);
+
+  final File _compressResult;
+
+  @override
+  Future<File?> compressImage(String filePath) async => _compressResult;
+
+  @override
+  Future<String?> uploadImage({
+    required String filePath,
+    required String bucketName,
+    String? folder,
+    File? precompressedFile,
+  }) async {
+    throw ImageValidationException('Test validation error');
   }
 }

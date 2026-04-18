@@ -14,7 +14,7 @@ const _allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 const _maxFileSizeBytes = 5 * 1024 * 1024; // 5MB
 
 /// Target width for image compression (maintains aspect ratio)
-const _targetWidth = 800;
+const _targetWidth = 512;
 
 /// Compression quality (0-100)
 const _compressQuality = 80;
@@ -72,33 +72,22 @@ class ImageRepositoryImpl extends ImageRepository {
   }
 
   /// Compresses an image file to reduce file size while maintaining quality.
-  /// Returns the path to the compressed file
-  /// (or original if compression fails).
-  Future<File?> _compressImage(String filePath) async {
+  /// Returns the compressed [File], or null if compression fails.
+  @override
+  Future<File?> compressImage(String filePath) async {
     try {
-      final extension = filePath.split('.').last.toLowerCase();
-
-      // Determine output format
-      CompressFormat format;
-      switch (extension) {
-        case 'png':
-          format = CompressFormat.png;
-          break;
-        case 'webp':
-          format = CompressFormat.webp;
-          break;
-        default:
-          format = CompressFormat.jpeg;
-      }
+      // Always convert to WebP for best compression across all input formats
+      const outputExtension = 'webp';
+      const format = CompressFormat.webp;
 
       AppLogger.debug(
         'Compressing image: $filePath',
-        context: 'ImageRepositoryImpl._compressImage',
+        context: 'ImageRepositoryImpl.compressImage',
       );
 
       final result = await FlutterImageCompress.compressAndGetFile(
         filePath,
-        '${filePath}_compressed.$extension',
+        '${filePath}_compressed.$outputExtension',
         quality: _compressQuality,
         minWidth: _targetWidth,
         minHeight: _targetWidth,
@@ -113,10 +102,10 @@ class ImageRepositoryImpl extends ImageRepository {
         final reductionPercent = ((1 - compressedSize / originalSize) * 100)
             .toStringAsFixed(0);
         AppLogger.info(
-          'Image compressed: ${(originalSize / 1024).toStringAsFixed(1)}KB -> '
-          '${(compressedSize / 1024).toStringAsFixed(1)}KB '
-          '($reductionPercent% reduction)',
-          context: 'ImageRepositoryImpl._compressImage',
+          'Image compressed: ${(originalSize / 1024).toStringAsFixed(1)}KB'
+          ' -> ${(compressedSize / 1024).toStringAsFixed(1)}KB'
+          ' ($reductionPercent% reduction)',
+          context: 'ImageRepositoryImpl.compressImage',
         );
 
         return compressedFile;
@@ -126,7 +115,7 @@ class ImageRepositoryImpl extends ImageRepository {
     } catch (e) {
       AppLogger.warning(
         'Image compression failed: $e',
-        context: 'ImageRepositoryImpl._compressImage',
+        context: 'ImageRepositoryImpl.compressImage',
       );
       return null;
     }
@@ -137,6 +126,7 @@ class ImageRepositoryImpl extends ImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     try {
       // Validate file before upload
@@ -151,15 +141,21 @@ class ImageRepositoryImpl extends ImageRepository {
         return null;
       }
 
-      // Compress the image before upload
-      final compressedFile = await _compressImage(filePath);
-      if (compressedFile != null) {
-        file = compressedFile;
+      // Use pre-compressed file if provided, otherwise compress now
+      File? compressedFile;
+      if (precompressedFile != null) {
+        file = precompressedFile;
+      } else {
+        compressedFile = await compressImage(filePath);
+        if (compressedFile != null) {
+          file = compressedFile;
+        }
       }
 
       // Generate a unique filename to avoid collisions
+      // Use the actual file's extension (may differ if converted to webp)
       final fileName = _uuid.v4();
-      final extension = filePath.split('.').last.toLowerCase();
+      final extension = file.path.split('.').last.toLowerCase();
       final fullPath = folder != null
           ? '$folder/$fileName.$extension'
           : '$fileName.$extension';
@@ -182,7 +178,7 @@ class ImageRepositoryImpl extends ImageRepository {
         return null;
       }
 
-      // Clean up compressed file if it was created
+      // Clean up internally-compressed file if one was created here
       if (compressedFile != null) {
         try {
           await compressedFile.delete();

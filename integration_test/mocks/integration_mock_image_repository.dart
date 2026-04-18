@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 
 /// Integration test mock for [ImageRepository].
@@ -24,6 +26,7 @@ class IntegrationMockImageRepository extends ImageRepository {
     required String filePath,
     required String bucketName,
     String? folder,
+    File? precompressedFile,
   }) async {
     await Future.delayed(delay);
 
@@ -31,6 +34,9 @@ class IntegrationMockImageRepository extends ImageRepository {
     return uploadResult ??
         'https://example.com/storage/$bucketName/${folder ?? 'uploads'}/test-image.jpg';
   }
+
+  @override
+  Future<File?> compressImage(String filePath) async => null;
 
   @override
   Future<bool> deleteImage({

@@ -16,7 +16,7 @@ import 'package:wishing_well/utils/status_overlay_controller.dart';
 /// Used for both the fade animation and content switcher transitions.
 const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 
-/// A widget that wraps its child with a loading overlay.
+/// A widget that wraps its child with a full-screen status overlay.
 ///
 /// The overlay responds to [StatusOverlayController] state changes and displays
 /// different content based on the current state:
@@ -31,7 +31,7 @@ const Duration _overlayAnimationDuration = Duration(milliseconds: 100);
 ///
 /// ## Usage
 ///
-/// Wrap any screen or widget that needs to show loading states:
+/// Wrap any screen or widget that needs to show status overlays:
 ///
 /// ```dart
 /// StatusOverlay(

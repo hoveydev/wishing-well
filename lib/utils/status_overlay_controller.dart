@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 
 enum OverlayState { idle, loading, success, error, warning }
 
-/// Controller for managing loading overlay state.
+/// Controller for managing [StatusOverlay] state.
 ///
-/// Provides methods to show loading, success, and error states with optional
-/// callback handlers for user acknowledgment.
+/// Provides methods to show loading, success, error, and warning states
+/// with optional callback handlers for user acknowledgment.
 ///
 /// Example usage:
 /// ```dart
@@ -67,9 +67,9 @@ class StatusOverlayController extends ChangeNotifier {
   bool get isIdle => _state == OverlayState.idle;
   bool get hasOverlay => _state != OverlayState.idle;
 
-  /// Shows the loading overlay with a loading spinner.
+  /// Shows the status overlay with a loading spinner.
   ///
-  /// Clears any previous success/error properties.
+  /// Clears any previous state properties.
   void show() {
     final previousOnHide = _onHide;
     _state = OverlayState.loading;

@@ -119,10 +119,12 @@ void registerAllDemos() {
 
   ComponentDemoRegistry.register(
     componentName: 'status_overlay',
-    title: 'Loading Overlay',
+    title: 'Status Overlay',
     icon: Icons.layers,
     demoBuilder: (_) => const StatusOverlayDemo(),
-    description: 'Full-screen overlay with loading, success, and error states',
+    description:
+        'Full-screen overlay with loading, success, error, and '
+        'warning/confirmation states',
   );
 
   ComponentDemoRegistry.register(

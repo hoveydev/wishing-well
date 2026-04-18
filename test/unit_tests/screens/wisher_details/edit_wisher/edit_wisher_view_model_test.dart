@@ -113,11 +113,11 @@ void main() {
     });
 
     group(TestGroups.errorHandling, () {
-      test('does not show a validation error when both names are empty', () {
+      test('shows bothNamesRequired when both names are empty', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.error.type, EditWisherErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.error.type, EditWisherErrorType.bothNamesRequired);
+        expect(viewModel.hasAlert, isTrue);
       });
 
       test(
@@ -138,7 +138,7 @@ void main() {
       test('keeps error clear when names change', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
-        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.hasAlert, isTrue);
 
         viewModel.updateFirstName('John');
         viewModel.updateLastName('Doe');
@@ -148,7 +148,8 @@ void main() {
 
       test('clearError resets error state', () {
         viewModel.updateFirstName('');
-        expect(viewModel.hasAlert, isFalse);
+        viewModel.updateLastName('');
+        expect(viewModel.hasAlert, isTrue);
 
         viewModel.clearError();
         expect(viewModel.hasAlert, isFalse);
@@ -373,7 +374,7 @@ void main() {
         loadingController = LoadingController();
       });
 
-      testWidgets('with empty names updates wisher successfully', (
+      testWidgets('with empty names blocks save with validation error', (
         WidgetTester tester,
       ) async {
         final vm = EditWisherViewModel(
@@ -393,9 +394,10 @@ void main() {
         await tester.tap(find.text('Save'));
         await tester.pumpAndSettle();
 
-        expect(loadingController.isSuccess, isTrue);
-        expect(mockRepository.wishers.first.firstName, '');
-        expect(mockRepository.wishers.first.lastName, '');
+        expect(vm.error.type, EditWisherErrorType.bothNamesRequired);
+        expect(loadingController.isIdle, isTrue);
+        expect(mockRepository.wishers.first.firstName, 'Alice');
+        expect(mockRepository.wishers.first.lastName, 'Test');
       });
 
       testWidgets('with no changes sets noChanges error without loading', (

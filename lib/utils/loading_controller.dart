@@ -17,6 +17,8 @@ enum LoadingState { idle, loading, success, error, warning }
 /// loading.showSuccess('Operation complete!', name: 'User');
 /// ```
 class LoadingController extends ChangeNotifier {
+  static const Duration _onHideCallbackDelay = Duration(milliseconds: 120);
+
   LoadingState _state = LoadingState.idle;
   String? _message;
 
@@ -79,7 +81,7 @@ class LoadingController extends ChangeNotifier {
     _onPrimaryActionPressed = null;
     _onSecondaryActionPressed = null;
     notifyListeners();
-    previousOnHide?.call();
+    _callOnHideAfterTransition(previousOnHide);
   }
 
   /// Shows a success overlay with an optional name and image.
@@ -110,7 +112,7 @@ class LoadingController extends ChangeNotifier {
     _onPrimaryActionPressed = null;
     _onSecondaryActionPressed = null;
     notifyListeners();
-    previousOnHide?.call();
+    _callOnHideAfterTransition(previousOnHide);
   }
 
   /// Shows an error overlay.
@@ -131,7 +133,7 @@ class LoadingController extends ChangeNotifier {
     _onPrimaryActionPressed = null;
     _onSecondaryActionPressed = null;
     notifyListeners();
-    previousOnHide?.call();
+    _callOnHideAfterTransition(previousOnHide);
   }
 
   /// Shows a warning overlay with primary and secondary confirmation actions.
@@ -162,7 +164,7 @@ class LoadingController extends ChangeNotifier {
     _onPrimaryActionPressed = onPrimaryAction;
     _onSecondaryActionPressed = onSecondaryAction;
     notifyListeners();
-    previousOnHide?.call();
+    _callOnHideAfterTransition(previousOnHide);
   }
 
   void hide() {
@@ -179,7 +181,12 @@ class LoadingController extends ChangeNotifier {
     _onPrimaryActionPressed = null;
     _onSecondaryActionPressed = null;
     notifyListeners();
-    previousOnHide?.call();
+    _callOnHideAfterTransition(previousOnHide);
+  }
+
+  void _callOnHideAfterTransition(VoidCallback? callback) {
+    if (callback == null) return;
+    Future<void>.delayed(_onHideCallbackDelay, callback);
   }
 
   /// Hides the overlay and calls the OK callback if one was provided.

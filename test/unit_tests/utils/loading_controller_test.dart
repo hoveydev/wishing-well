@@ -150,7 +150,7 @@ void main() {
         expect(callbackCalled, false);
       });
 
-      test('showSuccess cleanup runs when overlay is hidden', () {
+      test('showSuccess cleanup runs when overlay is hidden', () async {
         final controller = LoadingController();
         var cleanupCalled = false;
 
@@ -162,12 +162,13 @@ void main() {
         );
 
         controller.hide();
+        await Future<void>.delayed(const Duration(milliseconds: 150));
 
         expect(cleanupCalled, true);
         expect(controller.isIdle, true);
       });
 
-      test('showSuccess cleanup runs before replacing overlay state', () {
+      test('showSuccess cleanup runs after replacing overlay state', () async {
         final controller = LoadingController();
         var cleanupCalled = false;
 
@@ -179,6 +180,8 @@ void main() {
         );
 
         controller.showError('Error!');
+        expect(cleanupCalled, false);
+        await Future<void>.delayed(const Duration(milliseconds: 150));
 
         expect(cleanupCalled, true);
         expect(controller.isError, true);

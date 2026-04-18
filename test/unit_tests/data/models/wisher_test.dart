@@ -65,9 +65,13 @@ void main() {
         expect(wisher.name, 'Doe');
       });
 
-      test('throws when both names are blank', () {
+      test('throws when both names are blank or whitespace', () {
         expect(
           () => createTestWisher(firstName: '', lastName: ''),
+          throwsA(isA<AssertionError>()),
+        );
+        expect(
+          () => createTestWisher(firstName: '   ', lastName: ' '),
           throwsA(isA<AssertionError>()),
         );
       });

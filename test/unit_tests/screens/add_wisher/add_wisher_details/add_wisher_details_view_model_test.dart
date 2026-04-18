@@ -35,8 +35,8 @@ void main() {
         expect(viewModel, isA<AddWisherDetailsViewModelContract>());
       });
 
-      test('starts valid with optional names', () {
-        expect(viewModel.isFormValid, isTrue);
+      test('starts invalid until one name is provided', () {
+        expect(viewModel.isFormValid, isFalse);
         expect(viewModel.error.type, AddWisherDetailsErrorType.none);
         expect(viewModel.hasAlert, isFalse);
       });
@@ -61,23 +61,29 @@ void main() {
         expect(viewModel.hasAlert, isFalse);
       });
 
-      test('whitespace-only names are trimmed to empty without error', () {
+      test('whitespace-only names are trimmed to empty and invalid', () {
         viewModel.updateFirstName('   ');
         viewModel.updateLastName('   ');
 
-        expect(viewModel.isFormValid, isTrue);
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.isFormValid, isFalse);
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.bothNamesRequired,
+        );
+        expect(viewModel.hasAlert, isTrue);
       });
     });
 
     group(TestGroups.errorHandling, () {
-      test('clearing names does not create a validation error', () {
+      test('clearing names sets bothNamesRequired error', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
 
-        expect(viewModel.error.type, AddWisherDetailsErrorType.none);
-        expect(viewModel.hasAlert, isFalse);
+        expect(
+          viewModel.error.type,
+          AddWisherDetailsErrorType.bothNamesRequired,
+        );
+        expect(viewModel.hasAlert, isTrue);
       });
 
       test('clearError is safe when there is no validation error', () {
@@ -164,6 +170,35 @@ void main() {
 
       setUp(() {
         loadingController = LoadingController();
+      });
+
+      testWidgets('empty names do not save and do not show loading overlay', (
+        WidgetTester tester,
+      ) async {
+        final authRepository = MockAuthRepository(userId: 'user-1');
+        await authRepository.login(email: 'test@example.com', password: 'pw');
+        final repository = _RecordingWisherRepository(initialWishers: []);
+        final vm = AddWisherDetailsViewModel(
+          wisherRepository: repository,
+          authRepository: authRepository,
+          imageRepository: MockImageRepository(),
+        );
+        addTearDown(vm.dispose);
+        addTearDown(authRepository.dispose);
+        addTearDown(repository.dispose);
+
+        vm.updateFirstName('');
+        vm.updateLastName('');
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pumpAndSettle();
+
+        expect(vm.error.type, AddWisherDetailsErrorType.bothNamesRequired);
+        expect(loadingController.isIdle, isTrue);
+        expect(repository.createCallCount, 0);
       });
 
       testWidgets('cancel keeps manual add flow on details screen', (
@@ -268,14 +303,14 @@ void main() {
     });
 
     group('ViewModel Contract Implementation', () {
-      test('contract update methods allow partial or empty names', () {
+      test('contract update methods require at least one name', () {
         final contract = viewModel as AddWisherDetailsViewModelContract;
 
         contract.updateFirstName('');
         contract.updateLastName('');
 
-        expect(contract.isFormValid, isTrue);
-        expect(contract.hasAlert, isFalse);
+        expect(contract.isFormValid, isFalse);
+        expect(contract.hasAlert, isTrue);
       });
 
       test('contract imageFile getter works', () {
@@ -291,13 +326,13 @@ void main() {
         expect(viewModel.imageFile, isNull);
       });
 
-      test('image does not affect optional-name validation', () {
+      test('image does not bypass name validation', () {
         viewModel.updateFirstName('');
         viewModel.updateLastName('');
         viewModel.updateImage(null);
 
-        expect(viewModel.isFormValid, isTrue);
-        expect(viewModel.hasAlert, isFalse);
+        expect(viewModel.isFormValid, isFalse);
+        expect(viewModel.hasAlert, isTrue);
       });
     });
   });

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -215,6 +216,42 @@ void main() {
         expect(loadingController.isIdle, isTrue);
         expect(importer.callCount, 0);
       });
+
+      testWidgets(
+        'aborts overlay updates if screen is unmounted after picker returns',
+        (WidgetTester tester) async {
+          final selectionCompleter = Completer<AddWisherContactAccessResult>();
+          final importer = _FakeBatchImporter(
+            result: AddWisherContactImportResult(entries: const []),
+          );
+          final viewModel = createViewModel(
+            contactAccess: _FakeContactAccess(
+              pendingResult: selectionCompleter.future,
+            ),
+            contactBatchImporter: importer,
+          );
+          addTearDown(viewModel.dispose);
+
+          await openLanding(tester, viewModel);
+
+          await tester.tap(find.byKey(const Key('contacts-btn')));
+          await tester.pump();
+          expect(loadingController.isLoading, isTrue);
+
+          final landingContext = tester.element(
+            find.byKey(const Key('manual-btn')),
+          );
+          GoRouter.of(landingContext).pop();
+          await TestHelpers.pumpAndSettle(tester);
+
+          selectionCompleter.complete(const AddWisherContactAccessCancelled());
+          await TestHelpers.pumpAndSettle(tester);
+
+          expect(find.text('Open Landing'), findsOneWidget);
+          expect(loadingController.isIdle, isTrue);
+          expect(importer.callCount, 0);
+        },
+      );
 
       testWidgets('cancels duplicate import when warning is dismissed', (
         WidgetTester tester,
@@ -640,6 +677,7 @@ void main() {
 
         loadingController.hide();
         await TestHelpers.pumpAndSettle(tester);
+        await tester.pump(const Duration(milliseconds: 150));
 
         expect(
           photoFileBridge.lastDeletedFile?.path,
@@ -834,7 +872,7 @@ void main() {
 }
 
 class _FakeContactAccess extends AddWisherContactAccess {
-  _FakeContactAccess({this.result, this.exception})
+  _FakeContactAccess({this.result, this.exception, this.pendingResult})
     : super(
         requestPermission: () async => true,
         pickContactId: () async => null,
@@ -843,6 +881,7 @@ class _FakeContactAccess extends AddWisherContactAccess {
 
   final AddWisherContactAccessResult? result;
   final AddWisherContactAccessException? exception;
+  final Future<AddWisherContactAccessResult>? pendingResult;
   int callCount = 0;
 
   @override
@@ -851,6 +890,10 @@ class _FakeContactAccess extends AddWisherContactAccess {
 
     if (exception != null) {
       throw exception!;
+    }
+
+    if (pendingResult != null) {
+      return pendingResult!;
     }
 
     return result!;

@@ -104,7 +104,11 @@ class AddWisherDetailsViewModel extends ChangeNotifier
 
   void _validateForm() {
     final previousError = _error;
-    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
+    _error = _firstName.isEmpty && _lastName.isEmpty
+        ? const AddWisherDetailsError(
+            AddWisherDetailsErrorType.bothNamesRequired,
+          )
+        : const AddWisherDetailsError(AddWisherDetailsErrorType.none);
 
     if (previousError.type != _error.type) {
       notifyListeners();
@@ -112,7 +116,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   }
 
   @override
-  bool get isFormValid => true;
+  bool get isFormValid => _firstName.isNotEmpty || _lastName.isNotEmpty;
 
   @override
   void tapBackButton(BuildContext context) {

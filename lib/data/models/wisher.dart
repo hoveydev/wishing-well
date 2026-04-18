@@ -3,7 +3,7 @@
 /// Wishers are associated with a specific user and contain basic
 /// profile information like name and optional profile picture.
 class Wisher {
-  const Wisher({
+  Wisher({
     required this.id,
     required this.userId,
     required this.firstName,
@@ -12,7 +12,7 @@ class Wisher {
     required this.updatedAt,
     this.profilePicture,
   }) : assert(
-         firstName != '' || lastName != '',
+         firstName.trim().isNotEmpty || lastName.trim().isNotEmpty,
          'At least one of firstName or lastName must be non-empty.',
        );
 

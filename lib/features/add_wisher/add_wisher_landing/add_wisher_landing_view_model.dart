@@ -49,6 +49,10 @@ class AddWisherLandingViewModel extends ChangeNotifier
 
     try {
       final accessResult = await _contactAccess.selectContacts();
+      if (!context.mounted) {
+        loading.hide();
+        return;
+      }
 
       switch (accessResult) {
         case AddWisherContactAccessPermissionDenied():

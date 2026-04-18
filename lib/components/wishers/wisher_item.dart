@@ -3,6 +3,7 @@ import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/theme/app_spacing.dart';
 
 /// Wisher avatar component that displays profile pictures.
 ///
@@ -32,7 +33,7 @@ class WisherItem extends StatelessWidget {
           ),
           const AppSpacer.xsmall(),
           SizedBox(
-            width: 60,
+            width: AppSpacing.wisherAvatarDiameter,
             child: Text(
               wisher.name,
               style: textTheme.bodySmall,

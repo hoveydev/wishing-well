@@ -677,6 +677,7 @@ void main() {
 
         loadingController.hide();
         await TestHelpers.pumpAndSettle(tester);
+        // Wait slightly longer than the controller's 120ms cleanup delay.
         await tester.pump(const Duration(milliseconds: 150));
 
         expect(

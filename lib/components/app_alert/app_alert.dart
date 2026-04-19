@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_alert/app_alert_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
-import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 const double _dialogBorderRadius = 20.0;
 const double _dialogPadding = 28.0;
 const double _buttonSpacing = 10.0;
-const double _iconTitleSpacing = 8.0;
-const double _messageTopSpacing = 10.0;
-const double _actionsTopSpacing = 28.0;
+const double _messageTopSpacing = 8.0;
+const double _actionsTopSpacing = 36.0;
 
 /// A flexible app-modal alert dialog supporting both single-action (1-button)
 /// and confirmation (2-button) modes.
@@ -110,23 +108,12 @@ class AppAlert extends StatelessWidget {
           children: [
             Semantics(
               label: title,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    _getIcon(),
-                    size: const AppIconSize().medium,
-                    color: theme.colorScheme.onSurface,
-                    semanticLabel: _getSemanticLabel(),
-                  ),
-                  const SizedBox(width: _iconTitleSpacing),
-                  Text(
-                    title,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              child: Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: _messageTopSpacing),
@@ -158,32 +145,6 @@ class AppAlert extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  IconData _getIcon() {
-    switch (type) {
-      case AppAlertType.error:
-        return Icons.error_outline;
-      case AppAlertType.warning:
-        return Icons.warning_amber_outlined;
-      case AppAlertType.success:
-        return Icons.check_circle_outline;
-      case AppAlertType.info:
-        return Icons.info_outline;
-    }
-  }
-
-  String _getSemanticLabel() {
-    switch (type) {
-      case AppAlertType.error:
-        return 'Error';
-      case AppAlertType.warning:
-        return 'Warning';
-      case AppAlertType.success:
-        return 'Success';
-      case AppAlertType.info:
-        return 'Information';
-    }
   }
 }
 

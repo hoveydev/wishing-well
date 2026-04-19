@@ -49,7 +49,6 @@ void main() {
         TestHelpers.expectTextOnce('Error Title');
         TestHelpers.expectTextOnce('errorMessage');
         TestHelpers.expectTextOnce('OK');
-        expect(find.byIcon(Icons.error_outline), findsOneWidget);
       });
 
       testWidgets('renders warning alert correctly', (
@@ -69,7 +68,6 @@ void main() {
         TestHelpers.expectTextOnce('Warning Title');
         TestHelpers.expectTextOnce('warningMessage');
         TestHelpers.expectTextOnce('Continue');
-        expect(find.byIcon(Icons.warning_amber_outlined), findsOneWidget);
       });
 
       testWidgets('renders success alert correctly', (
@@ -89,7 +87,6 @@ void main() {
         TestHelpers.expectTextOnce('Success Title');
         TestHelpers.expectTextOnce('successMessage');
         TestHelpers.expectTextOnce('Great');
-        expect(find.byIcon(Icons.check_circle_outline), findsOneWidget);
       });
 
       testWidgets('renders info alert correctly', (WidgetTester tester) async {
@@ -107,7 +104,6 @@ void main() {
         TestHelpers.expectTextOnce('Info Title');
         TestHelpers.expectTextOnce('infoMessage');
         TestHelpers.expectTextOnce('Got it');
-        expect(find.byIcon(Icons.info_outline), findsOneWidget);
       });
 
       testWidgets('renders cancel button when cancelLabel is provided', (
@@ -220,25 +216,11 @@ void main() {
         await tester.tap(find.text('Open'));
         await TestHelpers.pumpAndSettle(tester);
 
+        final titleText = tester.widget<Text>(find.text('Title'));
+        expect(titleText.textAlign, TextAlign.center);
+
         final messageText = tester.widget<Text>(find.text('Message'));
         expect(messageText.textAlign, TextAlign.center);
-      });
-
-      testWidgets('renders icon inline with title', (
-        WidgetTester tester,
-      ) async {
-        await tester.pumpWidget(
-          buildInDialog(title: 'Title', message: 'Message'),
-        );
-        await tester.tap(find.text('Open'));
-        await TestHelpers.pumpAndSettle(tester);
-
-        final row = tester.widget<Row>(
-          find
-              .ancestor(of: find.text('Title'), matching: find.byType(Row))
-              .first,
-        );
-        expect(row.mainAxisAlignment, MainAxisAlignment.center);
       });
     });
 

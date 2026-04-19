@@ -6,12 +6,10 @@ import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
-const double _iconBadgeSize = 48.0;
-const double _iconBadgeOpacity = 0.12;
 const double _dialogBorderRadius = 20.0;
 const double _dialogPadding = 28.0;
 const double _buttonSpacing = 10.0;
-const double _titleTopSpacing = 20.0;
+const double _iconTitleSpacing = 8.0;
 const double _messageTopSpacing = 10.0;
 const double _actionsTopSpacing = 28.0;
 
@@ -99,7 +97,6 @@ class AppAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final theme = Theme.of(context);
-    final typeColor = _getColor(colorScheme);
 
     return Dialog(
       backgroundColor: colorScheme.surfaceGray,
@@ -111,20 +108,25 @@ class AppAlert extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _IconBadge(
-              icon: _getIcon(),
-              color: typeColor,
-              semanticLabel: _getSemanticLabel(),
-            ),
-            const SizedBox(height: _titleTopSpacing),
             Semantics(
               label: title,
-              child: Text(
-                title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _getIcon(),
+                    size: const AppIconSize().medium,
+                    color: theme.colorScheme.onSurface,
+                    semanticLabel: _getSemanticLabel(),
+                  ),
+                  const SizedBox(width: _iconTitleSpacing),
+                  Text(
+                    title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: _messageTopSpacing),
@@ -183,48 +185,6 @@ class AppAlert extends StatelessWidget {
         return 'Information';
     }
   }
-
-  Color _getColor(AppColorScheme colorScheme) {
-    switch (type) {
-      case AppAlertType.error:
-        return colorScheme.error!;
-      case AppAlertType.warning:
-        return colorScheme.warning!;
-      case AppAlertType.success:
-        return colorScheme.success!;
-      case AppAlertType.info:
-        return colorScheme.primary!;
-    }
-  }
-}
-
-class _IconBadge extends StatelessWidget {
-  const _IconBadge({
-    required this.icon,
-    required this.color,
-    required this.semanticLabel,
-  });
-
-  final IconData icon;
-  final Color color;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    width: _iconBadgeSize,
-    height: _iconBadgeSize,
-    alignment: Alignment.center,
-    decoration: BoxDecoration(
-      color: color.withValues(alpha: _iconBadgeOpacity),
-      shape: BoxShape.circle,
-    ),
-    child: Icon(
-      icon,
-      color: color,
-      size: const AppIconSize().large,
-      semanticLabel: semanticLabel,
-    ),
-  );
 }
 
 class _Actions extends StatelessWidget {

@@ -220,11 +220,25 @@ void main() {
         await tester.tap(find.text('Open'));
         await TestHelpers.pumpAndSettle(tester);
 
-        final titleText = tester.widget<Text>(find.text('Title'));
-        expect(titleText.textAlign, TextAlign.center);
-
         final messageText = tester.widget<Text>(find.text('Message'));
         expect(messageText.textAlign, TextAlign.center);
+      });
+
+      testWidgets('renders icon inline with title', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          buildInDialog(title: 'Title', message: 'Message'),
+        );
+        await tester.tap(find.text('Open'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        final row = tester.widget<Row>(
+          find
+              .ancestor(of: find.text('Title'), matching: find.byType(Row))
+              .first,
+        );
+        expect(row.mainAxisAlignment, MainAxisAlignment.center);
       });
     });
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
-import 'package:wishing_well/components/app_alert/app_alert_type.dart';
 
 class AppAlertDialog extends StatefulWidget {
   const AppAlertDialog({super.key});
@@ -10,32 +9,39 @@ class AppAlertDialog extends StatefulWidget {
 }
 
 class _AppAlertDialogState extends State<AppAlertDialog> {
-  void _showAlert({
+  String _lastResult = '';
+
+  Future<void> _showAlert({
     required String title,
     required String message,
     required String confirmLabel,
-    required AppAlertType type,
-  }) {
-    showDialog(
+    String? cancelLabel,
+    bool isDestructive = false,
+  }) async {
+    final result = await AppAlert.show(
       context: context,
-      builder: (context) => AppAlert(
-        title: title,
-        message: message,
-        confirmLabel: confirmLabel,
-        type: type,
-        onConfirm: () {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('${type.name} confirmed')));
-        },
-      ),
+      title: title,
+      message: message,
+      confirmLabel: confirmLabel,
+      cancelLabel: cancelLabel,
+      isDestructive: isDestructive,
     );
+
+    if (!mounted) return;
+
+    final outcome = switch (result) {
+      true => 'Confirmed',
+      false => 'Cancelled',
+      _ => 'Dismissed',
+    };
+
+    setState(() => _lastResult = outcome);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: const Text('Alert Components'),
+      title: const Text('Alert Component'),
       backgroundColor: Colors.orange.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
@@ -43,93 +49,97 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Error Alerts
-          _buildSection('Error Alerts', [
-            _buildAlertButton(
+          if (_lastResult.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Card(
+                color: Colors.green.withValues(alpha: 0.08),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    'Last result: $_lastResult',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+
+          _buildSection('1-Button Alerts', [
+            _buildTriggerButton(
               title: 'Error Alert',
-              subtitle: 'Shows an error dialog',
+              subtitle: 'Single confirm button',
               icon: Icons.error_outline,
               color: Colors.red,
               onTap: () => _showAlert(
-                title: 'Error',
+                title: 'Something went wrong',
                 message:
-                    'An error occurred while processing '
-                    'your request. Please try again.',
+                    'An error occurred while processing your request. '
+                    'Please try again.',
                 confirmLabel: 'OK',
-                type: AppAlertType.error,
               ),
             ),
-          ]),
-
-          // Warning Alerts
-          _buildSection('Warning Alerts', [
-            _buildAlertButton(
+            _buildTriggerButton(
               title: 'Warning Alert',
-              subtitle: 'Shows a warning dialog',
+              subtitle: 'Single confirm button',
               icon: Icons.warning_amber_outlined,
               color: Colors.orange,
               onTap: () => _showAlert(
-                title: 'Warning',
-                message:
-                    'This action cannot be undone. '
-                    'Are you sure you want to proceed?',
-                confirmLabel: 'Proceed',
-                type: AppAlertType.warning,
+                title: 'Heads up',
+                message: 'This action may have unintended side effects.',
+                confirmLabel: 'Got it',
               ),
             ),
-          ]),
-
-          // Success Alerts
-          _buildSection('Success Alerts', [
-            _buildAlertButton(
+            _buildTriggerButton(
               title: 'Success Alert',
-              subtitle: 'Shows a success dialog',
+              subtitle: 'Single confirm button',
               icon: Icons.check_circle_outline,
               color: Colors.green,
               onTap: () => _showAlert(
-                title: 'Success',
+                title: 'All done!',
                 message: 'Your changes have been saved successfully.',
                 confirmLabel: 'Great!',
-                type: AppAlertType.success,
               ),
             ),
-          ]),
-
-          // Info Alerts
-          _buildSection('Info Alerts', [
-            _buildAlertButton(
+            _buildTriggerButton(
               title: 'Info Alert',
-              subtitle: 'Shows an information dialog',
+              subtitle: 'Single confirm button',
               icon: Icons.info_outline,
               color: Colors.blue,
               onTap: () => _showAlert(
-                title: 'Information',
+                title: 'Did you know?',
                 message: 'This is an informational message for the user.',
                 confirmLabel: 'Got it',
-                type: AppAlertType.info,
               ),
             ),
           ]),
 
-          // Features Section
-          _buildSection('Alert Features', [
-            const FeatureBulletPoint(
-              text: 'Four alert types: error, warning, success, and info',
+          _buildSection('2-Button Alerts (Confirmation)', [
+            _buildTriggerButton(
+              title: 'Standard Confirmation',
+              subtitle: 'Cancel and Confirm buttons',
+              icon: Icons.check_circle_outline,
+              color: Colors.blue,
+              onTap: () => _showAlert(
+                title: 'Confirm Action',
+                message: 'Are you sure you want to proceed with this action?',
+                confirmLabel: 'Confirm',
+                cancelLabel: 'Cancel',
+              ),
             ),
-            const FeatureBulletPoint(
-              text: 'Color-coded icons for visual distinction',
-            ),
-            const FeatureBulletPoint(
-              text: 'Accessible with semantic labels for screen readers',
-            ),
-            const FeatureBulletPoint(
-              text: 'Live region support for announcements',
-            ),
-            const FeatureBulletPoint(
-              text: 'Customizable title, message, and confirm button label',
-            ),
-            const FeatureBulletPoint(
-              text: 'Automatic dialog dismissal on confirmation',
+            _buildTriggerButton(
+              title: 'Destructive Confirmation',
+              subtitle: 'Cancel and Delete buttons (destructive styling)',
+              icon: Icons.delete_outline,
+              color: Colors.red,
+              onTap: () => _showAlert(
+                title: 'Delete Item?',
+                message:
+                    'Are you sure you want to delete this item? '
+                    'This cannot be undone.',
+                confirmLabel: 'Delete',
+                cancelLabel: 'Cancel',
+                isDestructive: true,
+              ),
             ),
           ]),
         ],
@@ -150,7 +160,7 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
     ],
   );
 
-  Widget _buildAlertButton({
+  Widget _buildTriggerButton({
     required String title,
     required String subtitle,
     required IconData icon,
@@ -163,27 +173,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
-    ),
-  );
-}
-
-class FeatureBulletPoint extends StatelessWidget {
-  const FeatureBulletPoint({required this.text, super.key});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '• ',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
-      ],
     ),
   );
 }

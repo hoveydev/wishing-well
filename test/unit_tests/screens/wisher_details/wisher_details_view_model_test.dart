@@ -388,9 +388,7 @@ void main() {
         loadingController = StatusOverlayController();
       });
 
-      testWidgets('tapDeleteWisher shows AlertDialog', (
-        WidgetTester tester,
-      ) async {
+      testWidgets('tapDeleteWisher shows Dialog', (WidgetTester tester) async {
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
@@ -404,7 +402,7 @@ void main() {
         await tester.tap(find.byKey(const Key('delete-btn')));
         await tester.pumpAndSettle();
 
-        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
       });
 
       testWidgets('tapDeleteWisher cancel does not delete wisher', (
@@ -429,7 +427,7 @@ void main() {
         await tester.tap(find.text('Cancel'));
         await tester.pumpAndSettle();
 
-        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(Dialog), findsNothing);
         expect(mockWisherRepository.wishers.length, initialCount);
       });
 

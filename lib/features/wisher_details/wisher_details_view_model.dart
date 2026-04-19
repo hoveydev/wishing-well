@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:wishing_well/components/app_confirmation_dialogue/app_confirmation_dialogue.dart';
+import 'package:wishing_well/components/app_alert/app_alert.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
@@ -60,7 +60,7 @@ class WisherDetailsViewModel extends ChangeNotifier
     final l10n = AppLocalizations.of(context)!;
     final wisherName = _wisher?.name ?? '';
 
-    final confirmed = await AppConfirmationDialogue.show(
+    final confirmed = await AppAlert.show(
       context: context,
       title: l10n.wisherDeleteConfirmTitle,
       message: l10n.wisherDeleteConfirmMessage(wisherName),

@@ -48,7 +48,6 @@ import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
 import 'package:wishing_well/components/demo/demos/profile_image_demo.dart';
-import 'package:wishing_well/components/demo/demos/app_confirmation_dialogue_demo.dart';
 
 /// Registers all component demos with the registry.
 ///
@@ -210,14 +209,6 @@ void registerAllDemos() {
         'Reusable profile image component with auth support for private bucket',
   );
 
-  ComponentDemoRegistry.register(
-    componentName: 'app_confirmation_dialogue',
-    title: 'Confirmation Dialogue',
-    icon: Icons.star,
-    demoBuilder: (_) => const AppConfirmationDialogueDemo(),
-    description: 'dialogue component used to show alert and info modals',
-  );
-
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -247,7 +238,6 @@ void registerAllDemos() {
     'image_picker_circle', // Image picker component
     'image_source_menu', // Image source menu component
     'profile_image', // Profile image component with auth support
-    'app_confirmation_dialogue', // Confirmation Dialogue
   ];
 
   // Verify that all required components have been registered

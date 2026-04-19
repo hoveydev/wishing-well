@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
-import 'package:wishing_well/components/app_alert/app_alert_type.dart';
 
 class AppAlertDialog extends StatefulWidget {
   const AppAlertDialog({super.key});
@@ -16,7 +15,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
     required String title,
     required String message,
     required String confirmLabel,
-    required AppAlertType type,
     String? cancelLabel,
     bool isDestructive = false,
   }) async {
@@ -25,7 +23,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
       title: title,
       message: message,
       confirmLabel: confirmLabel,
-      type: type,
       cancelLabel: cancelLabel,
       isDestructive: isDestructive,
     );
@@ -79,7 +76,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                     'An error occurred while processing your request. '
                     'Please try again.',
                 confirmLabel: 'OK',
-                type: AppAlertType.error,
               ),
             ),
             _buildTriggerButton(
@@ -91,7 +87,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                 title: 'Heads up',
                 message: 'This action may have unintended side effects.',
                 confirmLabel: 'Got it',
-                type: AppAlertType.warning,
               ),
             ),
             _buildTriggerButton(
@@ -103,7 +98,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                 title: 'All done!',
                 message: 'Your changes have been saved successfully.',
                 confirmLabel: 'Great!',
-                type: AppAlertType.success,
               ),
             ),
             _buildTriggerButton(
@@ -115,7 +109,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                 title: 'Did you know?',
                 message: 'This is an informational message for the user.',
                 confirmLabel: 'Got it',
-                type: AppAlertType.info,
               ),
             ),
           ]),
@@ -131,7 +124,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                 message: 'Are you sure you want to proceed with this action?',
                 confirmLabel: 'Confirm',
                 cancelLabel: 'Cancel',
-                type: AppAlertType.info,
               ),
             ),
             _buildTriggerButton(
@@ -146,7 +138,6 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
                     'This cannot be undone.',
                 confirmLabel: 'Delete',
                 cancelLabel: 'Cancel',
-                type: AppAlertType.warning,
                 isDestructive: true,
               ),
             ),

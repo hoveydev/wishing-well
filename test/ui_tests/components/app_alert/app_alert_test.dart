@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
-import 'package:wishing_well/components/app_alert/app_alert_type.dart';
 import 'package:wishing_well/test_helpers/helpers/create_test_widget.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -11,7 +10,6 @@ void main() {
       String title = 'Test Title',
       String message = 'Test message',
       String confirmLabel = 'OK',
-      AppAlertType type = AppAlertType.error,
       String? cancelLabel,
       bool isDestructive = false,
       VoidCallback? onConfirm,
@@ -25,7 +23,6 @@ void main() {
               title: title,
               message: message,
               confirmLabel: confirmLabel,
-              type: type,
               cancelLabel: cancelLabel,
               isDestructive: isDestructive,
               onConfirm: onConfirm,
@@ -59,7 +56,6 @@ void main() {
             title: 'Warning Title',
             message: 'warningMessage',
             confirmLabel: 'Continue',
-            type: AppAlertType.warning,
           ),
         );
         await tester.tap(find.text('Open'));
@@ -78,7 +74,6 @@ void main() {
             title: 'Success Title',
             message: 'successMessage',
             confirmLabel: 'Great',
-            type: AppAlertType.success,
           ),
         );
         await tester.tap(find.text('Open'));
@@ -95,7 +90,6 @@ void main() {
             title: 'Info Title',
             message: 'infoMessage',
             confirmLabel: 'Got it',
-            type: AppAlertType.info,
           ),
         );
         await tester.tap(find.text('Open'));
@@ -110,11 +104,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          buildInDialog(
-            cancelLabel: 'Cancel',
-            confirmLabel: 'Confirm',
-            type: AppAlertType.warning,
-          ),
+          buildInDialog(cancelLabel: 'Cancel', confirmLabel: 'Confirm'),
         );
         await tester.tap(find.text('Open'));
         await TestHelpers.pumpAndSettle(tester);
@@ -236,7 +226,6 @@ void main() {
                   message: 'Proceed?',
                   confirmLabel: 'Yes',
                   cancelLabel: 'No',
-                  type: AppAlertType.warning,
                 ),
                 child: const Text('Open'),
               ),

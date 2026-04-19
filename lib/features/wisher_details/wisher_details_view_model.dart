@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
-import 'package:wishing_well/components/app_alert/app_alert_type.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
@@ -67,7 +66,6 @@ class WisherDetailsViewModel extends ChangeNotifier
       message: l10n.wisherDeleteConfirmMessage(wisherName),
       confirmLabel: l10n.delete,
       cancelLabel: l10n.cancel,
-      type: AppAlertType.warning,
       isDestructive: true,
     );
 

@@ -23,6 +23,7 @@ const _excludePatterns = [
   'data/repositories/image/image_repository_impl',
   '/demo/',
   'test_helpers/',
+  'lib/testing/',
   // Note: Integration tests are NOT excluded - they count toward coverage
 ];
 

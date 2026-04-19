@@ -6,7 +6,7 @@ import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
-const double _iconBadgeSize = 64.0;
+const double _iconBadgeSize = 48.0;
 const double _iconBadgeOpacity = 0.12;
 const double _dialogBorderRadius = 20.0;
 const double _dialogPadding = 28.0;
@@ -213,6 +213,7 @@ class _IconBadge extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     width: _iconBadgeSize,
     height: _iconBadgeSize,
+    alignment: Alignment.center,
     decoration: BoxDecoration(
       color: color.withValues(alpha: _iconBadgeOpacity),
       shape: BoxShape.circle,
@@ -220,7 +221,7 @@ class _IconBadge extends StatelessWidget {
     child: Icon(
       icon,
       color: color,
-      size: const AppIconSize().xxlarge,
+      size: const AppIconSize().large,
       semanticLabel: semanticLabel,
     ),
   );

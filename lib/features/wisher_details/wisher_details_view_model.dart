@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/components/app_confirmation_dialogue/app_confirmation_dialogue.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
@@ -59,29 +60,13 @@ class WisherDetailsViewModel extends ChangeNotifier
     final l10n = AppLocalizations.of(context)!;
     final wisherName = _wisher?.name ?? '';
 
-    // TODO(hoveydev): Replace this with the shared custom confirm dialog
-    // component once that follow-up story lands.
-    final confirmed = await showDialog<bool>(
+    final confirmed = await AppConfirmationDialogue.show(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.wisherDeleteConfirmTitle),
-        content: Text(l10n.wisherDeleteConfirmMessage(wisherName)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(
-              l10n.delete,
-              style: TextStyle(
-                color: Theme.of(dialogContext).colorScheme.error,
-              ),
-            ),
-          ),
-        ],
-      ),
+      title: l10n.wisherDeleteConfirmTitle,
+      message: l10n.wisherDeleteConfirmMessage(wisherName),
+      confirmLabel: l10n.delete,
+      cancelLabel: l10n.cancel,
+      isDestructive: true,
     );
 
     if (confirmed != true || !context.mounted) return;

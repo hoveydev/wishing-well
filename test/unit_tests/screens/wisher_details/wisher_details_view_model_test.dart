@@ -388,9 +388,7 @@ void main() {
         loadingController = StatusOverlayController();
       });
 
-      testWidgets('tapDeleteWisher shows Dialog', (
-        WidgetTester tester,
-      ) async {
+      testWidgets('tapDeleteWisher shows Dialog', (WidgetTester tester) async {
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',

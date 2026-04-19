@@ -133,9 +133,7 @@ class AppAlert extends StatelessWidget {
               liveRegion: true,
               child: Text(
                 message,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: typeColor.withValues(alpha: 0.75),
-                ),
+                style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -144,7 +142,6 @@ class AppAlert extends StatelessWidget {
               confirmLabel: confirmLabel,
               cancelLabel: cancelLabel,
               isDestructive: isDestructive,
-              typeColor: typeColor,
               colorScheme: colorScheme,
               onConfirmPressed: () {
                 onConfirm?.call();
@@ -234,7 +231,6 @@ class _Actions extends StatelessWidget {
     required this.confirmLabel,
     required this.cancelLabel,
     required this.isDestructive,
-    required this.typeColor,
     required this.colorScheme,
     required this.onConfirmPressed,
     required this.onCancelPressed,
@@ -243,7 +239,6 @@ class _Actions extends StatelessWidget {
   final String confirmLabel;
   final String? cancelLabel;
   final bool isDestructive;
-  final Color typeColor;
   final AppColorScheme colorScheme;
   final VoidCallback onConfirmPressed;
   final VoidCallback onCancelPressed;
@@ -253,9 +248,8 @@ class _Actions extends StatelessWidget {
     final confirmButton = AppButton.label(
       label: confirmLabel,
       onPressed: onConfirmPressed,
-      type: isDestructive ? AppButtonType.tertiary : AppButtonType.primary,
+      type: AppButtonType.secondary,
       color: isDestructive ? colorScheme.error : null,
-      fontWeight: FontWeight.bold,
     );
 
     if (cancelLabel == null) {

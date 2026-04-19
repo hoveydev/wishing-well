@@ -40,10 +40,7 @@ void main() {
     group(TestGroups.rendering, () {
       testWidgets('renders error alert correctly', (WidgetTester tester) async {
         await tester.pumpWidget(
-          buildInDialog(
-            title: 'Error Title',
-            message: 'errorMessage',
-          ),
+          buildInDialog(title: 'Error Title', message: 'errorMessage'),
         );
         await tester.tap(find.text('Open'));
         await TestHelpers.pumpAndSettle(tester);

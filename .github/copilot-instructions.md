@@ -135,6 +135,97 @@ For routes with parameters, use the `buildPath()` helper: `Routes.wisherDetails.
 - Tests organized with `group()` blocks and descriptive names
 - Coverage thresholds: **95% on changed files** (enforced by pre-commit hook), **90% full repo** (`./scripts/test_coverage.sh`)
 
+## Feature Development Workflow
+
+Every plan **must** include todos that cover all six phases below. Do not skip phases or merge them.
+Quality gates in Phase 3 must pass before proceeding to Phase 4.
+
+### Phase 1 – Plan
+- Analyze the relevant codebase areas before proposing a solution
+- Clarify ambiguous requirements with the user before writing code
+- Create a structured plan with all six phases represented as explicit todos
+
+### Phase 2 – Implement
+- Write code following all architecture patterns (MVVM, Repository, Component Action)
+- Keep changes focused; follow naming conventions and code style
+- Use `dart format .` after changes
+
+### Phase 3 – Quality Gates *(must pass before Phase 4)*
+- `dart analyze --fatal-infos` — zero warnings or errors
+- `flutter test` — all tests pass
+- 95% coverage on changed files (enforced by pre-commit hook)
+
+### Phase 4 – Testing Checkpoint
+- Unit tests added/updated for all new ViewModel and Repository logic
+- UI tests added/updated for all new/changed screens and components
+- Integration tests updated if any user-facing flows changed
+- Run `./scripts/test_coverage.sh` to verify full-repo 90% threshold
+
+### Phase 5 – Self Code Review
+The goal of this phase is **zero comments from the PR reviewer**. Check every item:
+
+**Architecture & MVVM**
+- No business logic in components — all actions passed as callbacks from ViewModel
+- Navigation delegated to ViewModel methods; never called directly from UI
+- Screens do not instantiate ViewModels
+- ViewModel lifecycle managed correctly (`dispose()` called; controllers/nodes disposed in ViewModel)
+- Repository pattern correct: `Result<T>` returned; no direct Supabase/API calls in ViewModel
+- New dependencies injected via Provider in `lib/config/dependencies.dart`
+
+**Memory & Resource Leaks**
+- Every `TextEditingController` disposed
+- Every `FocusNode` disposed
+- Every stream subscription cancelled in `dispose()`
+- `context.mounted` checked before navigation or `setState` after every `await`
+- `unawaited()` used for intentional fire-and-forget operations
+
+**Error & Edge Case Handling**
+- All `Result.error` branches handled with user-visible feedback (no silent failures)
+- Empty state displayed when lists or data are empty
+- Loading state shown during all async operations
+- Network/API errors surfaced gracefully (use `LoadingController`)
+- No unguarded `!` null assertions — use proper null-safe handling
+
+**Code Style & Quality**
+- No hardcoded colors — use `AppColorScheme` extension
+- No hardcoded text styles — use `Theme.of(context).textTheme`
+- No hardcoded spacing or sizes — use `AppSpacing` and `AppIconSize`
+- All imports use `package:` (no relative imports)
+- Lines ≤ 80 characters
+- `const` constructors used wherever possible
+- `SizedBox` used for whitespace (not `Container`)
+- No debug code, commented-out code, or stray TODO comments left behind
+
+**Accessibility**
+- `TextOverflow.ellipsis` on all potentially long text in constrained layouts
+- `Flexible` wrapping applied to secondary/optional text in rows
+- Fixed-height containers are generous enough for large text scaling
+- Buttons use `minimumSize` where applicable
+
+**Security & Logging**
+- Sensitive/user data only logged via `AppLogger.safe()`
+- All log calls include `context: 'ClassName.method'`
+- Appropriate log level used: `debug` / `info` / `warning` / `error`
+- No credentials or secrets in source code
+
+**Localization**
+- All user-visible strings use l10n keys (no raw string literals in UI)
+- New strings added to `lib/l10n/app_en.arb` with `@` descriptions
+- `flutter gen-l10n` run after any ARB file changes
+
+**Testing Completeness** *(cross-check with Phase 4)*
+- All ViewModel public methods covered by unit tests
+- All states (initial, loading, success, error, empty) tested
+- Every edge case and error branch has a test
+- No coverage gaps on new/changed files (95% threshold met)
+
+### Phase 6 – PR Readiness
+- Branch is rebased on main if needed; no merge conflicts
+- Commit messages are clear and descriptive
+- Open PR using the PR template (`.github/pull_request_template.md`)
+
+---
+
 ## Detailed Documentation
 
 - Full architecture and style guide: `docs/AGENTS.md`

@@ -360,7 +360,7 @@ void main() {
         expect(find.text('Edit Screen'), findsOneWidget);
       });
 
-      testWidgets('tapping delete button shows AlertDialog', (
+      testWidgets('tapping delete button shows Dialog', (
         WidgetTester tester,
       ) async {
         final viewModel = WisherDetailsViewModel(
@@ -373,7 +373,7 @@ void main() {
         await tester.tap(find.text('Delete Wisher'));
         await tester.pumpAndSettle();
 
-        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
       });
     });
   });

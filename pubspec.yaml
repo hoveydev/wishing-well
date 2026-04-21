@@ -46,3 +46,4 @@ flutter:
     - .env.local
     - .env.development
     - .env.test
+    - .env.prod

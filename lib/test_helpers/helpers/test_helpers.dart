@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
@@ -32,8 +34,11 @@ Widget createScreenComponentTestWidget(Widget child) => MaterialApp(
 Widget createScreenTestWidget({
   required Widget child,
   StatusOverlayController? loadingController,
+  bool wrapWithStatusOverlay = true,
 }) {
   final controller = loadingController ?? StatusOverlayController();
+  final wrappedChild =
+      wrapWithStatusOverlay ? StatusOverlay(child: child) : child;
 
   return ChangeNotifierProvider<StatusOverlayController>.value(
     value: controller,
@@ -47,7 +52,7 @@ Widget createScreenTestWidget({
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: child,
+      home: wrappedChild,
     ),
   );
 }

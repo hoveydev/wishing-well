@@ -290,14 +290,14 @@ void main() {
     });
 
     group('Error Handling', () {
-      test('throws when wisher ID does not exist', () {
-        expect(
-          () => WisherDetailsViewModel(
-            wisherRepository: mockWisherRepository,
-            wisherId: 'invalid-id-that-does-not-exist',
-          ),
-          throwsStateError,
+      test('wisher is null when ID does not exist', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: 'invalid-id-that-does-not-exist',
         );
+        expect(viewModel.wisher, isNull);
+        expect(viewModel.isLoading, isFalse);
+        viewModel.dispose();
       });
     });
 

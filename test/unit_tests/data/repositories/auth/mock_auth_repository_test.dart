@@ -60,7 +60,6 @@ void main() {
           mockRepository.resetUserPassword(
             email: 'any@email.com',
             newPassword: 'any',
-            token: 'any',
           ),
           isA<Future<Result<void>>>(),
         );
@@ -305,7 +304,6 @@ void main() {
         final result = await mockRepository.resetUserPassword(
           email: 'any@email.com',
           newPassword: 'any',
-          token: 'any',
         );
 
         expect(result, isA<Ok<void>>());
@@ -324,7 +322,6 @@ void main() {
         final result = await mockRepository.resetUserPassword(
           email: 'any@email.com',
           newPassword: 'any',
-          token: 'any',
         );
 
         expect(result, isA<Error<void>>());
@@ -339,7 +336,6 @@ void main() {
         final result1 = await mockRepository.resetUserPassword(
           email: 'any@email.com',
           newPassword: 'any',
-          token: 'any',
         );
         expect(result1, isA<Ok<void>>());
 
@@ -348,7 +344,6 @@ void main() {
         final result2 = await mockRepository.resetUserPassword(
           email: 'any@email.com',
           newPassword: 'any',
-          token: 'any',
         );
         expect(result2, isA<Ok<void>>());
       });

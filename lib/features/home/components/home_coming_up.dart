@@ -25,13 +25,17 @@ class HomeComingUp extends StatelessWidget {
             style: textTheme.titleMedium,
             textAlign: TextAlign.left,
           ),
-          _comingUpCards(textTheme, colorScheme),
+          _comingUpCards(textTheme, colorScheme, l10n),
         ],
       ),
     );
   }
 
-  Widget _comingUpCards(TextTheme textTheme, AppColorScheme colorScheme) =>
+  Widget _comingUpCards(
+    TextTheme textTheme,
+    AppColorScheme colorScheme,
+    AppLocalizations l10n,
+  ) =>
       SizedBox(
         width: double.infinity,
         child: Card(
@@ -45,8 +49,7 @@ class HomeComingUp extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
-              // will change to a calendar component
-              child: Text('Nothing yet :)', style: textTheme.bodySmall),
+              child: Text(l10n.homeComingUpEmpty, style: textTheme.bodySmall),
             ),
           ),
         ),

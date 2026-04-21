@@ -46,10 +46,9 @@ class DeepLinkHandler {
         } else {
           AppLogger.warning(
             'Unrecognized type parameter (or it may not exist) - '
-            'routed to unknown route',
+            'not navigating',
             context: 'DeepLinkHandler._navigateFromUri',
           );
-          navigate('unknown', null);
         }
         break;
       case 'password-reset':

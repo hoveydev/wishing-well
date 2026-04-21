@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
-import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/components/forgot_password_button.dart';
 import 'package:wishing_well/features/auth/forgot_password/components/forgot_password_header.dart';
@@ -24,18 +23,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => StatusOverlay(
-    child: Screen(
-      appBar: AppMenuBar(
-        action: () => widget.viewModel.tapDismissButton(context),
-        type: AppMenuBarType.dismiss,
-      ),
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ForgotPasswordHeader(viewModel: widget.viewModel),
-        ForgotPasswordButton(viewModel: widget.viewModel),
-      ],
+  Widget build(BuildContext context) => Screen(
+    appBar: AppMenuBar(
+      action: () => widget.viewModel.tapDismissButton(context),
+      type: AppMenuBarType.dismiss,
     ),
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      ForgotPasswordHeader(viewModel: widget.viewModel),
+      ForgotPasswordButton(viewModel: widget.viewModel),
+    ],
   );
 }

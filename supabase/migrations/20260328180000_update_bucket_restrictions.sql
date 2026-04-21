@@ -1,16 +1,19 @@
--- Note: File size and mime type restrictions cannot be added via SQL 
--- because the storage.buckets table is managed by Supabase.
--- These restrictions must be set via the Supabase Dashboard or Storage API.
-
--- Current bucket configuration (unrestricted):
--- - No file size limit
--- - Any file type allowed
-
--- To add restrictions:
--- 1. Go to Supabase Dashboard > Storage
--- 2. Click on "profile-pictures" bucket
--- 3. Edit bucket settings to add:
---    - File size limit: 5MB
---    - Allowed mime types: image/jpeg, image/png, image/gif, image/webp
-
--- For now, this bucket accepts any file type with any size.
+-- Note: File size and mime type restrictions cannot be set via SQL migration
+-- because the storage.buckets table is managed internally by Supabase.
+-- These restrictions must be configured via the Supabase Dashboard or Storage API.
+--
+-- Recommended configuration for the profile-pictures bucket:
+--   File size limit: 5 MB (5242880 bytes)
+--   Allowed MIME types: image/jpeg, image/png, image/webp, image/heic
+--
+-- Steps to apply:
+--   1. Go to Supabase Dashboard > Storage
+--   2. Click on the "profile-pictures" bucket > Edit
+--   3. Set:
+--      - File size limit: 5242880
+--      - Allowed MIME types: image/jpeg,image/png,image/webp,image/heic
+--
+-- Client-side enforcement already exists via ImageSourcePicker._allowedExtensions.
+-- Server-side enforcement is required to prevent upload abuse.
+--
+-- Current status: PENDING — restrictions have not yet been applied via Dashboard.

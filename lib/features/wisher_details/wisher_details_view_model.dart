@@ -113,10 +113,6 @@ class WisherDetailsViewModel extends ChangeNotifier
 
     final wishers = _wisherRepository.wishers;
     _wisher = wishers.where((w) => w.id == _wisherId).firstOrNull;
-    if (_wisher == null) {
-      throw StateError('Wisher $_wisherId not found');
-    }
-
     _isLoading = false;
     notifyListeners();
   }

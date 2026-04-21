@@ -146,7 +146,6 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Result<void>> resetUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   }) async {
     AppLogger.debug(
       'Resetting password for: $email',
@@ -157,7 +156,6 @@ class AuthRepositoryImpl extends AuthRepository {
       await _dataSource.updateUserPassword(
         email: email,
         newPassword: newPassword,
-        token: token,
       );
       AppLogger.info('Password reset successful', context: 'AuthRepository');
       return const Result.ok(null);

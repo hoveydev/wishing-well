@@ -82,7 +82,7 @@ lib/
 
 3. Set up environment variables:
    - Copy `.env.development` or `.env.test` to configure your environment
-   - Required variables: `SUPABASE_URL`, `SUPABASE_SECRET`, `ACCOUNT_CONFIRM_URL`, `PASSWORD_RESET_URL`
+   - Required variables: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `ACCOUNT_CONFIRM_URL`, `PASSWORD_RESET_URL`
 
 4. Run the app:
    ```console

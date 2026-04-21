@@ -53,7 +53,7 @@ Widget _buildApp() => MultiProvider(
   child: MaterialApp.router(
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
-    routerConfig: router(),
+    routerConfig: router(authRepository: MockAuthRepository()),
     localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
@@ -67,26 +67,26 @@ Widget _buildApp() => MultiProvider(
 void main() {
   group('Router', () {
     group(TestGroups.initialState, () {
-      test('router() returns a non-null GoRouter', () {
-        final goRouter = router();
+      test('router(authRepository:) returns a non-null GoRouter', () {
+        final goRouter = router(authRepository: MockAuthRepository());
         expect(goRouter, isNotNull);
       });
 
       test('router has routes registered', () {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         expect(goRouter.configuration.routes, isNotEmpty);
       });
     });
 
     group(TestGroups.behavior, () {
       test('all routes have names registered', () {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         final routeConfig = goRouter.routerDelegate.currentConfiguration;
         expect(routeConfig, isNotNull);
       });
 
       test('router can navigate to editWisher route', () {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         expect(
           () => goRouter.go(Routes.editWisher.buildPath(id: '1')),
           returnsNormally,
@@ -94,7 +94,7 @@ void main() {
       });
 
       test('router can navigate to wisherDetails route', () {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         expect(
           () => goRouter.go(Routes.wisherDetails.buildPath(id: '1')),
           returnsNormally,
@@ -121,7 +121,7 @@ void main() {
       testWidgets('navigates to forgot password route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -164,7 +164,7 @@ void main() {
       testWidgets('navigates to create account route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -205,7 +205,9 @@ void main() {
       });
 
       testWidgets('navigates to home route', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -248,7 +250,9 @@ void main() {
       testWidgets('navigates to reset password route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -292,7 +296,9 @@ void main() {
       });
 
       testWidgets('navigates to profile route', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -335,7 +341,9 @@ void main() {
       testWidgets('navigates to wisher details route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -381,7 +389,9 @@ void main() {
       testWidgets('navigates to edit wisher route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -422,7 +432,9 @@ void main() {
       });
 
       testWidgets('navigates to add wisher route', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -465,7 +477,9 @@ void main() {
       testWidgets('navigates to add wisher details route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [

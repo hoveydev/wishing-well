@@ -11,7 +11,6 @@ class MockResetPasswordViewModel extends ResetPasswordViewModel {
     : super(
         authRepository: MockAuthRepository(),
         email: 'test@example.com',
-        token: 'test-token',
       );
 
   bool _buttonTapped = false;

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/routing/transitions.dart';
@@ -26,8 +27,33 @@ import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart'
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
 import 'package:wishing_well/utils/app_config.dart';
 
-GoRouter router() => GoRouter(
+GoRouter router({required AuthRepository authRepository}) => GoRouter(
   initialLocation: '/login',
+  refreshListenable: authRepository,
+  redirect: (context, state) {
+    final isAuthenticated = authRepository.isAuthenticated;
+    final loc = state.matchedLocation;
+    final isGoingToLogin = loc == '/login';
+    final isGoingToCreateAccount = loc == '/create-account';
+    final isGoingToForgotPassword = loc == '/forgot-password';
+    final isGoingToResetPassword =
+        loc.startsWith('/forgot-password/reset-password');
+
+    // Auth-only screens (skip if already authenticated)
+    final isRedirectableAuthScreen =
+        isGoingToLogin || isGoingToCreateAccount || isGoingToForgotPassword;
+
+    // Public screens accessible by all (no auth required, no redirect)
+    final isPublicScreen = isRedirectableAuthScreen || isGoingToResetPassword;
+
+    if (isAuthenticated && isRedirectableAuthScreen) {
+      return '/home';
+    }
+    if (!isAuthenticated && !isPublicScreen) {
+      return '/login';
+    }
+    return null;
+  },
   routes: [
     GoRoute(
       path: Routes.login.path,
@@ -57,7 +83,6 @@ GoRouter router() => GoRouter(
               viewModel: ResetPasswordViewModel(
                 authRepository: context.read(),
                 email: state.uri.queryParameters['email'] ?? '',
-                token: state.uri.queryParameters['token'] ?? '',
               ),
             ),
             transitionDuration: Duration.zero,
@@ -111,10 +136,6 @@ GoRouter router() => GoRouter(
               '${Routes.wisherDetails.path}',
             ));
         final wisherRepository = context.read<WisherRepository>();
-        final hasWisher = wisherRepository.wishers.any((w) => w.id == wisherId);
-        if (!hasWisher) {
-          throw StateError('Wisher $wisherId not found');
-        }
 
         return CustomTransitionPage(
           child: WisherDetailsScreen(

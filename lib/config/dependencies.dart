@@ -39,3 +39,25 @@ List<SingleChildWidget> get providersRemote => [
     create: (_) => AddWisherContactAccess.platform(),
   ),
 ];
+
+/// Providers that accept an existing [AuthRepository] instance.
+///
+/// Use this when you need to share the same [AuthRepository] with the
+/// router (e.g. for redirect guards) and the provider tree.
+List<SingleChildWidget> providersRemoteWith({
+  required AuthRepository authRepository,
+}) => [
+  Provider(create: (_) => Supabase.instance.client),
+  ChangeNotifierProvider<AuthRepository>.value(value: authRepository),
+  ChangeNotifierProvider<WisherRepository>(
+    create: (context) => WisherRepositoryImpl(
+      dataSource: WisherDataSourceSupabase(supabase: context.read()),
+    ),
+  ),
+  ChangeNotifierProvider<ImageRepository>(
+    create: (context) => ImageRepositoryImpl(supabase: context.read()),
+  ),
+  Provider<AddWisherContactAccess>(
+    create: (_) => AddWisherContactAccess.platform(),
+  ),
+];

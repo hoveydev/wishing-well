@@ -66,7 +66,7 @@ void main() {
   group('Router', () {
     group(TestGroups.initialState, () {
       testWidgets('starts on login route', (WidgetTester tester) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(LoginScreen), findsOneWidget);
@@ -82,7 +82,7 @@ void main() {
       });
 
       testWidgets('navigates to forgot password', (WidgetTester tester) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.forgotPassword.name);
@@ -91,7 +91,7 @@ void main() {
       });
 
       testWidgets('navigates to sign up', (WidgetTester tester) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.createAccount.name);
@@ -100,7 +100,13 @@ void main() {
       });
 
       testWidgets('navigates to home', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        // Simulate authenticated to bypass redirect
+        await mockAuth.login(
+          email: 'test@test.com',
+          password: 'password',
+        );
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.home.name);
@@ -109,7 +115,7 @@ void main() {
       });
 
       testWidgets('navigates to reset password', (WidgetTester tester) async {
-        final goRouter = router();
+        final goRouter = router(authRepository: MockAuthRepository());
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(
@@ -121,7 +127,12 @@ void main() {
       });
 
       testWidgets('navigates to profile', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(
+          email: 'test@test.com',
+          password: 'password',
+        );
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.profile.name);
@@ -130,7 +141,12 @@ void main() {
       });
 
       testWidgets('navigates to add wisher', (WidgetTester tester) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(
+          email: 'test@test.com',
+          password: 'password',
+        );
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.addWisher.name);
@@ -141,7 +157,12 @@ void main() {
       testWidgets('navigates to add wisher details', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(
+          email: 'test@test.com',
+          password: 'password',
+        );
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(startAppWithRouter(goRouter));
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.addWisherDetails.name);

@@ -9,7 +9,6 @@ import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
-import 'package:wishing_well/utils/app_logger.dart';
 
 class WishersList extends StatefulWidget {
   const WishersList({
@@ -91,16 +90,10 @@ class _WishersListState extends State<WishersList> {
                 children: [
                   Text(l10n.wishers, style: textTheme.titleLarge),
                   Flexible(
-                    child: GestureDetector(
-                      onTap: () => AppLogger.debug(
-                        'View All tapped',
-                        context: 'WishersList',
-                      ),
-                      child: Text(
-                        l10n.viewAll,
-                        style: textTheme.bodySmall,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    child: Text(
+                      l10n.viewAll,
+                      style: textTheme.bodySmall,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

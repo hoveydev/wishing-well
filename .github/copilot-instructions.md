@@ -21,7 +21,7 @@ Each demo runs in isolation without needing authentication or a full backend.
 
 ### Environment Setup
 Copy `.env.development` or `.env.test` and configure:
-- `SUPABASE_URL`, `SUPABASE_SECRET` - Supabase backend
+- `SUPABASE_URL`, `SUPABASE_ANON_KEY` - Supabase backend
 - `ACCOUNT_CONFIRM_URL`, `PASSWORD_RESET_URL` - Auth redirect URLs
 
 ```bash

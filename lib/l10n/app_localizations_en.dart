@@ -319,4 +319,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorNoChanges => 'No changes were made.';
+
+  @override
+  String get homeComingUpEmpty => 'Nothing yet';
+
+  @override
+  String get appBarBack => 'Back';
 }

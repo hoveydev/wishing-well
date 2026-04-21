@@ -173,7 +173,6 @@ class IntegrationMockAuthRepository extends AuthRepository {
   Future<Result<void>> resetUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   }) async {
     notifyListeners();
     return _resetUserPasswordResult;

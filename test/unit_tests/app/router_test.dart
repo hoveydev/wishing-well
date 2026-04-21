@@ -36,33 +36,36 @@ Provider<AddWisherContactAccess> _contactAccessProvider() =>
       ),
     );
 
-Widget _buildApp() => MultiProvider(
-  providers: [
-    ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
-    ChangeNotifierProvider<WisherRepository>(
-      create: (_) => MockWisherRepository(),
-    ),
-    ChangeNotifierProvider<ImageRepository>(
-      create: (_) => MockImageRepository(),
-    ),
-    _contactAccessProvider(),
-    ChangeNotifierProvider<StatusOverlayController>(
-      create: (_) => StatusOverlayController(),
-    ),
-  ],
-  child: MaterialApp.router(
-    theme: AppTheme.lightTheme,
-    darkTheme: AppTheme.darkTheme,
-    routerConfig: router(authRepository: MockAuthRepository()),
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
+Widget _buildApp({MockAuthRepository? authRepository}) {
+  final auth = authRepository ?? MockAuthRepository();
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AuthRepository>.value(value: auth),
+      ChangeNotifierProvider<WisherRepository>(
+        create: (_) => MockWisherRepository(),
+      ),
+      ChangeNotifierProvider<ImageRepository>(
+        create: (_) => MockImageRepository(),
+      ),
+      _contactAccessProvider(),
+      ChangeNotifierProvider<StatusOverlayController>(
+        create: (_) => StatusOverlayController(),
+      ),
     ],
-    supportedLocales: AppLocalizations.supportedLocales,
-  ),
-);
+    child: MaterialApp.router(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      routerConfig: router(authRepository: auth),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+    ),
+  );
+}
 
 void main() {
   group('Router', () {
@@ -121,13 +124,12 @@ void main() {
       testWidgets('navigates to forgot password route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router(authRepository: MockAuthRepository());
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -164,13 +166,12 @@ void main() {
       testWidgets('navigates to create account route', (
         WidgetTester tester,
       ) async {
-        final goRouter = router(authRepository: MockAuthRepository());
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -211,9 +212,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -256,9 +255,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -302,9 +299,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -347,9 +342,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -395,9 +388,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -438,9 +429,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),
@@ -483,9 +472,7 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider<AuthRepository>(
-                create: (_) => MockAuthRepository(),
-              ),
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
               ChangeNotifierProvider<WisherRepository>(
                 create: (_) => MockWisherRepository(),
               ),

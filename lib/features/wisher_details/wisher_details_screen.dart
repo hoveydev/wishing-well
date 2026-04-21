@@ -63,7 +63,7 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
           else if (widget.viewModel.wisher != null)
             WisherDetailsProfile(wisher: widget.viewModel.wisher!)
           else
-            const SizedBox.shrink(),
+            Center(child: Text(l10n.errorUnknown)),
           if (!widget.viewModel.isLoading && hasWisher)
             WisherDetailsDeleteButton(
               onPressed: () => widget.viewModel.tapDeleteWisher(context),

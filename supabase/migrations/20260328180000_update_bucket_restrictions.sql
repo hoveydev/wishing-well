@@ -4,16 +4,18 @@
 --
 -- Recommended configuration for the profile-pictures bucket:
 --   File size limit: 5 MB (5242880 bytes)
---   Allowed MIME types: image/jpeg, image/png, image/webp, image/heic
+--   Allowed MIME types: image/jpeg, image/png, image/gif, image/webp
+--   (Note: heic/heif are accepted by the file picker but are converted to webp
+--    before upload, so the bucket only needs to accept the output types above.)
 --
 -- Steps to apply:
 --   1. Go to Supabase Dashboard > Storage
 --   2. Click on the "profile-pictures" bucket > Edit
 --   3. Set:
 --      - File size limit: 5242880
---      - Allowed MIME types: image/jpeg,image/png,image/webp,image/heic
+--      - Allowed MIME types: image/jpeg,image/png,image/gif,image/webp
 --
--- Client-side enforcement already exists via ImageSourcePicker._allowedExtensions.
--- Server-side enforcement is required to prevent upload abuse.
+-- Client-side enforcement: ImageRepositoryImpl validates jpg/jpeg/png/gif/webp
+-- before upload. Server-side enforcement is required to prevent upload abuse.
 --
 -- Current status: PENDING — restrictions have not yet been applied via Dashboard.

@@ -30,11 +30,13 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
     listenable: widget.viewModel,
     builder: (context, _) {
       final l10n = AppLocalizations.of(context)!;
+      final hasWisher = widget.viewModel.wisher != null;
+
       return Screen(
         appBar: AppMenuBar(
           action: () => widget.viewModel.tapCloseButton(context),
           type: AppMenuBarType.close,
-          additionalActions: !widget.viewModel.isLoading
+          additionalActions: !widget.viewModel.isLoading && hasWisher
               ? [
                   Builder(
                     builder: (context) => Semantics(
@@ -62,7 +64,7 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
             WisherDetailsProfile(wisher: widget.viewModel.wisher!)
           else
             const SizedBox.shrink(),
-          if (!widget.viewModel.isLoading)
+          if (!widget.viewModel.isLoading && hasWisher)
             WisherDetailsDeleteButton(
               onPressed: () => widget.viewModel.tapDeleteWisher(context),
             ),

@@ -71,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           onWisherTap: (wisher) =>
               widget.viewModel.tapWisherItem(context, wisher),
           onRetry: widget.viewModel.fetchWishers,
+          onViewAllTap: () => widget.viewModel.tapViewAllWishers(context),
         ),
       ],
     ),

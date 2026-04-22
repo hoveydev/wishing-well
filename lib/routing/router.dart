@@ -8,6 +8,8 @@ import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_l
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
+import 'package:wishing_well/features/all_wishers/all_wishers_screen.dart';
+import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
@@ -88,6 +90,18 @@ GoRouter router() => GoRouter(
           ),
         ),
         transitionsBuilder: noTransition,
+      ),
+    ),
+    GoRoute(
+      path: Routes.allWishers.path,
+      name: Routes.allWishers.name,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: AllWishersScreen(
+          viewModel: AllWishersViewModel(
+            wisherRepository: context.read(),
+          ),
+        ),
+        transitionsBuilder: slideUpWithParallaxTransition,
       ),
     ),
     GoRoute(

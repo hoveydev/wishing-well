@@ -423,5 +423,13 @@
     "errorNoChanges": "No changes were made.",
     "@errorNoChanges": {
         "description": "Error message when no changes were made to wisher"
+    },
+    "allWishersTitle": "All Wishers",
+    "@allWishersTitle": {
+        "description": "Title for the all wishers screen"
+    },
+    "allWishersEmpty": "No wishers yet",
+    "@allWishersEmpty": {
+        "description": "Message shown when there are no wishers on the all wishers screen"
     }
 }

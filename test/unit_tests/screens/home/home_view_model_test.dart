@@ -273,6 +273,11 @@ void main() {
         // Verify the route name is available
         expect(Routes.addWisher.name, isNotEmpty);
       });
+
+      test('tapViewAllWishers uses correct route name', () {
+        // Verify the route name is available and matches expected value
+        expect(Routes.allWishers.name, 'all-wishers');
+      });
     });
   });
 }

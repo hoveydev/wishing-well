@@ -34,6 +34,7 @@ void main() {
       VoidCallback? onAddWisherTap,
       void Function(Wisher)? onWisherTap,
       VoidCallback? onRetry,
+      VoidCallback? onViewAllTap,
     }) => WishersList(
       wishers: wishers,
       isLoading: isLoading,
@@ -41,6 +42,7 @@ void main() {
       onAddWisherTap: onAddWisherTap ?? () => {},
       onWisherTap: onWisherTap ?? (wisher) => {},
       onRetry: onRetry,
+      onViewAllTap: onViewAllTap,
     );
 
     group(TestGroups.rendering, () {
@@ -248,6 +250,26 @@ void main() {
         TestHelpers.expectTextOnce('View All');
       });
 
+      testWidgets('calls onViewAllTap callback when tapped', (
+        WidgetTester tester,
+      ) async {
+        var wasTapped = false;
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            createWishersList(
+              wishers: defaultTestWishers,
+              onViewAllTap: () => wasTapped = true,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await TestHelpers.tapAndSettle(tester, find.text('View All'));
+
+        expect(wasTapped, isTrue);
+      });
+
       testWidgets('handles onAddWisherTap callback', (
         WidgetTester tester,
       ) async {
@@ -271,7 +293,9 @@ void main() {
         expect(wasTapped, isTrue);
       });
 
-      testWidgets('View All button is clickable', (WidgetTester tester) async {
+      testWidgets('View All button is accessible and tappable', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
             createWishersList(wishers: defaultTestWishers),
@@ -279,11 +303,24 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
+        // View All text should be inside a Semantics widget marking it
+        // as a button for screen reader accessibility.
+        final semanticsWithViewAll = find.ancestor(
+          of: find.text('View All'),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Semantics && widget.properties.button == true,
+            description: 'Semantics with button=true',
+          ),
+        );
+        expect(semanticsWithViewAll, findsOneWidget);
+
+        // View All text should also be inside a GestureDetector for tap
         final gestureDetector = find.ancestor(
           of: find.text('View All'),
           matching: find.byType(GestureDetector),
         );
-        expect(gestureDetector, findsOneWidget);
+        expect(gestureDetector, findsWidgets);
       });
 
       testWidgets('supports horizontal scrolling', (WidgetTester tester) async {

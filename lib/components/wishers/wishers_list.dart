@@ -9,7 +9,6 @@ import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
-import 'package:wishing_well/utils/app_logger.dart';
 
 class WishersList extends StatefulWidget {
   const WishersList({
@@ -19,6 +18,7 @@ class WishersList extends StatefulWidget {
     this.isLoading = false,
     this.hasError = false,
     this.onRetry,
+    this.onViewAllTap,
     super.key,
   });
 
@@ -28,6 +28,7 @@ class WishersList extends StatefulWidget {
   final bool isLoading;
   final bool hasError;
   final VoidCallback? onRetry;
+  final VoidCallback? onViewAllTap;
 
   @override
   State<WishersList> createState() => _WishersListState();
@@ -91,15 +92,15 @@ class _WishersListState extends State<WishersList> {
                 children: [
                   Text(l10n.wishers, style: textTheme.titleLarge),
                   Flexible(
-                    child: GestureDetector(
-                      onTap: () => AppLogger.debug(
-                        'View All tapped',
-                        context: 'WishersList',
-                      ),
-                      child: Text(
-                        l10n.viewAll,
-                        style: textTheme.bodySmall,
-                        overflow: TextOverflow.ellipsis,
+                    child: Semantics(
+                      button: true,
+                      child: GestureDetector(
+                        onTap: widget.onViewAllTap,
+                        child: Text(
+                          l10n.viewAll,
+                          style: textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ),

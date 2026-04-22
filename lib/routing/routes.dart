@@ -1,5 +1,6 @@
 enum Routes {
   home('/home'),
+  allWishers('/all-wishers'),
   profile('/profile'),
   login('/login'),
   forgotPassword('/forgot-password'),

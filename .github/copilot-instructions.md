@@ -27,7 +27,7 @@ Copy `.env.development` or `.env.test` and configure:
 ```bash
 # Essential
 flutter pub get                    # Install dependencies
-flutter test lib/testing/path/to/test_file.dart  # Run single test
+flutter test test/path/to/test_file.dart          # Run single test
 flutter test --coverage           # Run with coverage
 ./scripts/test_coverage.sh        # Full coverage workflow (90% full-repo threshold)
 
@@ -129,9 +129,9 @@ For routes with parameters, use the `buildPath()` helper: `Routes.wisherDetails.
 
 ## Testing
 
-- Tests in `lib/testing/unit_tests/` and `lib/testing/ui_tests/`
+- Tests in `test/unit_tests/` and `test/ui_tests/`
 - Use `MockAuthRepository` from `lib/test_helpers/mocks/`
-- Widget test helper: `createTestWidget()` from `lib/test_helpers/helpers/`
+- Widget test helper: `createScreenTestWidget()` from `lib/test_helpers/helpers/`
 - Tests organized with `group()` blocks and descriptive names
 - Coverage thresholds: **95% on changed files** (enforced by pre-commit hook), **90% full repo** (`./scripts/test_coverage.sh`)
 

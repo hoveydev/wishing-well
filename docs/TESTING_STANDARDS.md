@@ -6,14 +6,17 @@ This document outlines the standardized testing patterns and conventions to ensu
 
 ### Directory Structure
 ```
-lib/testing/
+test/
 ├── unit_tests/                    # Pure unit tests (no widgets)
 │   ├── app/                      # App-level utilities and singletons
+│   ├── components/               # Component unit tests
 │   ├── config/                   # Configuration and dependency injection
 │   ├── data/                     # Data layer (models, repositories)
+│   ├── features/                 # Feature-specific unit tests
 │   ├── screens/                  # ViewModel tests
 │   └── utils/                    # Utility function tests
 ├── ui_tests/                     # Widget and integration tests
+│   ├── app/                      # Router/routing tests
 │   ├── components/               # Reusable UI components
 │   │   ├── app_alert/
 │   │   ├── app_bar/
@@ -27,15 +30,13 @@ lib/testing/
 │   │   └── wishers/
 │   └── screens/                  # Full screen tests
 │       ├── add_wisher/
-│       ├── create_account/
-│       ├── forgot_password/
+│       ├── auth/
 │       ├── home/
-│       ├── loading_overlay/
-│       ├── login/
-│       ├── profile_screen/
-│       └── reset_password/
-├── init_test.dart               # Coverage include file
-└── ../lib/test_helpers/        # Test utilities and helpers (outside lib/testing/ directory)
+│       ├── profile/
+│       └── wisher_details/
+└── init_test.dart               # Coverage include file
+
+lib/test_helpers/                 # Test utilities and helpers (not in test/ directory)
     ├── helpers/                  # Test helpers and base classes
     │   ├── test_helpers.dart
     │   ├── test_base.dart
@@ -508,7 +509,7 @@ flutter test --coverage
 
 ### Run Specific Test File
 ```bash
-flutter test lib/testing/path/to/test_file.dart
+flutter test test/path/to/test_file.dart
 ```
 
 ### Run Tests by Name
@@ -843,7 +844,7 @@ void main() {
 3. **Create the Supabase DataSource** (`lib/data/data_sources/{feature}/{feature}_data_source_supabase.dart`)
 4. **Create the Repository Implementation** (`lib/data/repositories/{feature}/{feature}_repository_impl.dart`)
 5. **Create the Mock DataSource** (`lib/test_helpers/mocks/data_sources/mock_{feature}_data_source.dart`)
-6. **Create Repository Implementation Tests** (`lib/testing/unit_tests/data/repositories/{feature}/{feature}_repository_impl_test.dart`)
+6. **Create Repository Implementation Tests** (`test/unit_tests/data/repositories/{feature}/{feature}_repository_impl_test.dart`)
 7. **Update dependencies.dart** to wire up the new providers
 
 ## Mock Repository Patterns

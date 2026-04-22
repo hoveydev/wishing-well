@@ -511,7 +511,7 @@ List<String> _mapSourceToTestFiles(List<String> sourceFiles) {
         continue;
       }
 
-      testFiles.add(testFile);
+      print('  ⚠️  No test file found for: $sourceFile');
     }
   }
 
@@ -589,10 +589,16 @@ String? _sourceToTestPath(String sourcePath) {
           final subDir = parts.sublist(1, parts.length - 1).join('/');
           testPath =
               'test/unit_tests/screens/$subDir/${_toTestFileName(fileName)}';
+        } else if (parts.length == 4 && parts[2] == 'components') {
+          // Feature-level component: features/{feature}/components/{file}
+          // Maps to: test/ui_tests/screens/{feature}/{file_test}
+          final feature = parts[1];
+          testPath =
+              'test/ui_tests/screens/$feature/${_toTestFileName(fileName)}';
         } else {
-          // Default to mirrored unit tests for shared feature infrastructure
+          // Default to mirrored unit tests for feature infrastructure
           final subDir = parts.sublist(0, parts.length - 1).join('/');
-          testPath = 'test/unit_tests/lib/$subDir/${_toTestFileName(fileName)}';
+          testPath = 'test/unit_tests/$subDir/${_toTestFileName(fileName)}';
         }
       } else {
         return null;

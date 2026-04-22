@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_screen.dart';
@@ -23,7 +24,6 @@ Widget _resetPasswordScreenBuilder(BuildContext context, GoRouterState state) =>
       viewModel: ResetPasswordViewModel(
         authRepository: MockAuthRepository(),
         email: '',
-        token: '',
       ),
     );
 
@@ -41,33 +41,34 @@ void main() {
       loadingController.dispose();
     });
 
-    Widget createResetPasswordTestWidget({
-      String? token,
-      AuthRepository? authRepository,
-    }) => MultiProvider(
-      providers: [
-        ChangeNotifierProvider<StatusOverlayController>.value(
-          value: loadingController,
-        ),
-        ListenableProvider<AuthRepository>.value(
-          value: authRepository ?? mockAuthRepository,
-        ),
-      ],
-      child: MaterialApp.router(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        routerConfig: GoRouter(
-          routes: [GoRoute(path: '/', builder: _resetPasswordScreenBuilder)],
-        ),
-      ),
-    );
+    Widget createResetPasswordTestWidget({AuthRepository? authRepository}) =>
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<StatusOverlayController>.value(
+              value: loadingController,
+            ),
+            ListenableProvider<AuthRepository>.value(
+              value: authRepository ?? mockAuthRepository,
+            ),
+          ],
+          child: MaterialApp.router(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: GoRouter(
+              routes: [
+                GoRoute(path: '/', builder: _resetPasswordScreenBuilder),
+              ],
+            ),
+            builder: (context, child) => StatusOverlay(child: child!),
+          ),
+        );
 
     group(TestGroups.rendering, () {
       testWidgets('renders with all required UI elements', (
@@ -416,10 +417,7 @@ void main() {
           );
 
           await tester.pumpWidget(
-            createResetPasswordTestWidget(
-              token: 'test-token',
-              authRepository: errorRepository,
-            ),
+            createResetPasswordTestWidget(authRepository: errorRepository),
           );
           await TestHelpers.pumpAndSettle(tester);
 
@@ -474,10 +472,7 @@ void main() {
         );
 
         await tester.pumpWidget(
-          createResetPasswordTestWidget(
-            token: 'test-token',
-            authRepository: errorRepository,
-          ),
+          createResetPasswordTestWidget(authRepository: errorRepository),
         );
         await TestHelpers.pumpAndSettle(tester);
 

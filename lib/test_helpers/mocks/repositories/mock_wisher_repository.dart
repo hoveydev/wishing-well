@@ -7,13 +7,12 @@ class MockWisherRepository extends WisherRepository {
     Result<Wisher>? createWisherResult,
     Result<void>? deleteWisherResult,
     Result<void>? fetchWishersResult,
-    Result<Wisher>? updateWisherResult,
+    this.updateWisherResult,
     List<Wisher>? initialWishers,
     this.delay = Duration.zero,
   }) : createWisherResult = createWisherResult ?? _defaultCreateWisherResult,
        deleteWisherResult = deleteWisherResult ?? const Result.ok(null),
        fetchWishersResult = fetchWishersResult ?? const Result.ok(null),
-       updateWisherResult = updateWisherResult,
        _wishers = initialWishers ?? _defaultWishers;
 
   /// Optional delay to simulate network latency

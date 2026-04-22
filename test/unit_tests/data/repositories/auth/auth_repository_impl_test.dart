@@ -221,7 +221,6 @@ void main() {
         final result = await repository.resetUserPassword(
           email: 'test@example.com',
           newPassword: 'newPassword',
-          token: 'valid-token',
         );
 
         expect(result, isA<Ok>());
@@ -234,7 +233,6 @@ void main() {
         final result = await repository.resetUserPassword(
           email: 'test@example.com',
           newPassword: 'newPassword',
-          token: 'invalid-token',
         );
 
         expect(result, isA<Error>());
@@ -249,7 +247,6 @@ void main() {
         await repository.resetUserPassword(
           email: 'test@example.com',
           newPassword: 'newPassword',
-          token: 'valid-token',
         );
 
         expect(notified, isTrue);

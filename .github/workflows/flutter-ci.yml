@@ -27,7 +27,7 @@ jobs:
 
       - name: Create placeholder env files
         run: |
-          touch .env.local .env.development .env.test
+          touch .env.local .env.development .env.test .env.prod
 
       - name: Install dependencies
         run: flutter pub get
@@ -51,7 +51,7 @@ jobs:
 
       - name: Create placeholder env files
         run: |
-          touch .env.local .env.development .env.test
+          touch .env.local .env.development .env.test .env.prod
 
       - name: Install dependencies
         run: flutter pub get
@@ -75,10 +75,92 @@ jobs:
 
       - name: Create placeholder env files
         run: |
-          touch .env.local .env.development .env.test
+          touch .env.local .env.development .env.test .env.prod
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Run tests
         run: flutter test --no-pub --reporter=expanded
+
+  screen-viewmodel-check:
+    name: Screen/ViewModel consistency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Create placeholder env files
+        run: |
+          touch .env.local .env.development .env.test .env.prod
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run screen/viewmodel consistency check
+        run: bash scripts/analyze_screen_viewmodels.sh
+
+  coverage:
+    name: Test coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Create placeholder env files
+        run: |
+          touch .env.local .env.development .env.test .env.prod
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install lcov
+        run: sudo apt-get install -y lcov
+
+      - name: Run tests with coverage
+        run: flutter test --coverage --reporter compact
+
+      - name: Remove excluded files from coverage
+        run: |
+          lcov --ignore-errors unused -r coverage/lcov.info \
+            --exclude "*/l10n/*" \
+            --exclude "*.g.dart" \
+            --exclude "*/main.dart" \
+            --exclude "*/app_config.dart" \
+            --exclude "*/app_logger.dart" \
+            --exclude "*/components/demo/demos/*" \
+            --exclude "*/components/demo/demo_home.dart" \
+            --exclude "*/components/demo/demo_app.dart" \
+            --exclude "*/data/data_sources/*" \
+            --exclude "*/data/repositories/image/image_repository_impl.dart" \
+            --exclude "*/test_helpers/*" \
+            --exclude "*/test/testing/*" \
+            --exclude "*/features/*/demo/*" \
+            -o coverage/lcov.info
+
+      - name: Check coverage threshold (90%)
+        run: |
+          TOTAL=$(lcov --summary coverage/lcov.info 2>&1 | \
+            grep "lines" | grep -oP '\d+\.\d+(?=%)' | head -1)
+          echo "Total line coverage: ${TOTAL}%"
+          python3 -c "
+          total = float('${TOTAL}')
+          if total < 90.0:
+              print(f'Coverage {total:.1f}% is below the 90% threshold')
+              exit(1)
+          print(f'Coverage {total:.1f}% meets the 90% threshold')
+          "

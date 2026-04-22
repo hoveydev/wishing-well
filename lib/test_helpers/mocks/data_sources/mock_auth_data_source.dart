@@ -141,7 +141,6 @@ class MockAuthDataSource implements AuthDataSource {
   Future<Map<String, dynamic>> updateUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   }) async {
     updateUserPasswordCalled = true;
     if (updateUserPasswordError != null) {

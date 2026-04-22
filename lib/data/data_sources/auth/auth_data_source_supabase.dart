@@ -81,7 +81,6 @@ class AuthDataSourceSupabase implements AuthDataSource {
   Future<Map<String, dynamic>> updateUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   }) async {
     final response = await _supabase.auth.updateUser(
       UserAttributes(email: email, password: newPassword),

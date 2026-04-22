@@ -423,5 +423,13 @@
     "errorNoChanges": "No changes were made.",
     "@errorNoChanges": {
         "description": "Error message when no changes were made to wisher"
+    },
+    "homeComingUpEmpty": "Nothing yet",
+    "@homeComingUpEmpty": {
+        "description": "Placeholder text shown in the Coming Up section when no events exist"
+    },
+    "appBarBack": "Back",
+    "@appBarBack": {
+        "description": "Accessibility label for back navigation button in app bar"
     }
 }

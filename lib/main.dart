@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/config/dependencies.dart';
+import 'package:wishing_well/data/data_sources/auth/auth_data_source_supabase.dart';
+import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
@@ -76,7 +78,19 @@ Future<void> main() async {
 }
 
 Future<void> _runProduction() async {
-  final goRouter = router();
+  WidgetsFlutterBinding.ensureInitialized();
+  AppLogger.init();
+  await AppConfig.initialize(environment: _environment);
+  await Supabase.initialize(
+    url: AppConfig.supabaseUrl,
+    anonKey: AppConfig.supabaseAnonKey,
+  );
+
+  final authRepository = AuthRepositoryImpl(
+    dataSource: AuthDataSourceSupabase(supabase: Supabase.instance.client),
+  );
+
+  final goRouter = router(authRepository: authRepository);
   final deepLinkSource = DeepLinkSource.platform();
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
@@ -85,16 +99,9 @@ Future<void> _runProduction() async {
     ),
     source: deepLinkSource,
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  AppLogger.init();
-  await AppConfig.initialize(environment: _environment);
-  await Supabase.initialize(
-    url: AppConfig.supabaseUrl,
-    anonKey: AppConfig.supabaseSecret,
-  );
   runApp(
     MultiProvider(
-      providers: providersRemote,
+      providers: providersRemoteWith(authRepository: authRepository),
       builder: (context, child) =>
           MainApp(router: goRouter, deepLinkHandler: deepLinkHandler),
     ),

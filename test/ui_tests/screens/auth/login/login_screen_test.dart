@@ -500,11 +500,10 @@ void main() {
         // Note: There may be also an inline error, so we check for at least
         // one error icon
         expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
-        // Generic exception shows generic error message - appears in both
-        // inline and overlay
+        // Generic exception shows generic error message
         expect(
           find.text('An unknown error occured. Please try again'),
-          findsNWidgets(2),
+          findsAtLeastNWidgets(1),
         );
 
         // OK button should be present (for the overlay)

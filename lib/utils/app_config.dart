@@ -30,7 +30,7 @@ class AppConfig {
   }
 
   static String get supabaseUrl => _getOrThrow('SUPABASE_URL');
-  static String get supabaseSecret => _getOrThrow('SUPABASE_SECRET');
+  static String get supabaseAnonKey => _getOrThrow('SUPABASE_ANON_KEY');
   static String get accountConfirmUrl => _getOrThrow('ACCOUNT_CONFIRM_URL');
   static String get passwordResetUrl => _getOrThrow('PASSWORD_RESET_URL');
 
@@ -63,7 +63,7 @@ class AppConfig {
     // This will throw if any required key is missing
     // if a default is provided, it will never throw
     supabaseUrl;
-    supabaseSecret;
+    supabaseAnonKey;
     accountConfirmUrl;
     passwordResetUrl;
 

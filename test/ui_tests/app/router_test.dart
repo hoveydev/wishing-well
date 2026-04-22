@@ -28,9 +28,14 @@ import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repositor
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
 
-Widget startAppWithRouter(GoRouter router) => MultiProvider(
+Widget startAppWithRouter(
+  GoRouter goRouter, {
+  AuthRepository? authRepository,
+}) => MultiProvider(
   providers: [
-    ChangeNotifierProvider<AuthRepository>(create: (_) => MockAuthRepository()),
+    ChangeNotifierProvider<AuthRepository>.value(
+      value: authRepository ?? MockAuthRepository(),
+    ),
     ChangeNotifierProvider<WisherRepository>(
       create: (_) => MockWisherRepository(),
     ),
@@ -51,7 +56,7 @@ Widget startAppWithRouter(GoRouter router) => MultiProvider(
   child: MaterialApp.router(
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
-    routerConfig: router,
+    routerConfig: goRouter,
     localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
@@ -66,8 +71,11 @@ void main() {
   group('Router', () {
     group(TestGroups.initialState, () {
       testWidgets('starts on login route', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(LoginScreen), findsOneWidget);
       });
@@ -82,8 +90,11 @@ void main() {
       });
 
       testWidgets('navigates to forgot password', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.forgotPassword.name);
         await TestHelpers.pumpAndSettle(tester);
@@ -91,8 +102,11 @@ void main() {
       });
 
       testWidgets('navigates to sign up', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.createAccount.name);
         await TestHelpers.pumpAndSettle(tester);
@@ -100,8 +114,13 @@ void main() {
       });
 
       testWidgets('navigates to home', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        // Simulate authenticated to bypass redirect
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.home.name);
         await TestHelpers.pumpAndSettle(tester);
@@ -109,8 +128,11 @@ void main() {
       });
 
       testWidgets('navigates to reset password', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(
           Routes.resetPassword.name,
@@ -121,8 +143,12 @@ void main() {
       });
 
       testWidgets('navigates to profile', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.profile.name);
         await TestHelpers.pumpAndSettle(tester);
@@ -130,8 +156,12 @@ void main() {
       });
 
       testWidgets('navigates to add wisher', (WidgetTester tester) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.addWisher.name);
         await TestHelpers.pumpAndSettle(tester);
@@ -141,8 +171,12 @@ void main() {
       testWidgets('navigates to add wisher details', (
         WidgetTester tester,
       ) async {
-        final goRouter = router();
-        await tester.pumpWidget(startAppWithRouter(goRouter));
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          startAppWithRouter(goRouter, authRepository: mockAuth),
+        );
         await TestHelpers.pumpAndSettle(tester);
         goRouter.goNamed(Routes.addWisherDetails.name);
         await TestHelpers.pumpAndSettle(tester);

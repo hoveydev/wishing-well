@@ -234,7 +234,9 @@ void main() {
     });
 
     group(TestGroups.interaction, () {
-      testWidgets('handles View All button tap', (WidgetTester tester) async {
+      testWidgets('View All text renders without tap handler', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
             createWishersList(wishers: defaultTestWishers),
@@ -242,9 +244,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await TestHelpers.tapAndSettle(tester, find.text('View All'));
-
-        // Should not crash - gesture detector should handle the tap
+        // View All is a plain Text - renders but not tappable
         TestHelpers.expectTextOnce('View All');
       });
 
@@ -271,7 +271,9 @@ void main() {
         expect(wasTapped, isTrue);
       });
 
-      testWidgets('View All button is clickable', (WidgetTester tester) async {
+      testWidgets('View All button is not tappable', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
             createWishersList(wishers: defaultTestWishers),
@@ -279,11 +281,13 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
+        // View All is now a plain Text with no GestureDetector
+        expect(find.text('View All'), findsOneWidget);
         final gestureDetector = find.ancestor(
           of: find.text('View All'),
           matching: find.byType(GestureDetector),
         );
-        expect(gestureDetector, findsOneWidget);
+        expect(gestureDetector, findsNothing);
       });
 
       testWidgets('supports horizontal scrolling', (WidgetTester tester) async {

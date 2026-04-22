@@ -41,33 +41,34 @@ void main() {
       loadingController.dispose();
     });
 
-    Widget createResetPasswordTestWidget({
-      AuthRepository? authRepository,
-    }) => MultiProvider(
-      providers: [
-        ChangeNotifierProvider<StatusOverlayController>.value(
-          value: loadingController,
-        ),
-        ListenableProvider<AuthRepository>.value(
-          value: authRepository ?? mockAuthRepository,
-        ),
-      ],
-      child: MaterialApp.router(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        routerConfig: GoRouter(
-          routes: [GoRoute(path: '/', builder: _resetPasswordScreenBuilder)],
-        ),
-        builder: (context, child) => StatusOverlay(child: child!),
-      ),
-    );
+    Widget createResetPasswordTestWidget({AuthRepository? authRepository}) =>
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<StatusOverlayController>.value(
+              value: loadingController,
+            ),
+            ListenableProvider<AuthRepository>.value(
+              value: authRepository ?? mockAuthRepository,
+            ),
+          ],
+          child: MaterialApp.router(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: GoRouter(
+              routes: [
+                GoRoute(path: '/', builder: _resetPasswordScreenBuilder),
+              ],
+            ),
+            builder: (context, child) => StatusOverlay(child: child!),
+          ),
+        );
 
     group(TestGroups.rendering, () {
       testWidgets('renders with all required UI elements', (
@@ -416,9 +417,7 @@ void main() {
           );
 
           await tester.pumpWidget(
-            createResetPasswordTestWidget(
-              authRepository: errorRepository,
-            ),
+            createResetPasswordTestWidget(authRepository: errorRepository),
           );
           await TestHelpers.pumpAndSettle(tester);
 
@@ -473,9 +472,7 @@ void main() {
         );
 
         await tester.pumpWidget(
-          createResetPasswordTestWidget(
-            authRepository: errorRepository,
-          ),
+          createResetPasswordTestWidget(authRepository: errorRepository),
         );
         await TestHelpers.pumpAndSettle(tester);
 

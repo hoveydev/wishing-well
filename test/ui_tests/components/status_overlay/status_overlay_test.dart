@@ -349,7 +349,7 @@ void main() {
             createScreenTestWidget(
               loadingController: loadingController,
               wrapWithStatusOverlay: false,
-          child: const StatusOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -381,7 +381,7 @@ void main() {
             createScreenTestWidget(
               loadingController: loadingController,
               wrapWithStatusOverlay: false,
-          child: const StatusOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();
@@ -477,7 +477,7 @@ void main() {
             createScreenTestWidget(
               loadingController: loadingController,
               wrapWithStatusOverlay: false,
-          child: const StatusOverlay(child: Screen(children: [])),
+              child: const StatusOverlay(child: Screen(children: [])),
             ),
           );
           await tester.pump();

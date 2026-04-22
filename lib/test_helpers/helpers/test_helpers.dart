@@ -37,8 +37,9 @@ Widget createScreenTestWidget({
   bool wrapWithStatusOverlay = true,
 }) {
   final controller = loadingController ?? StatusOverlayController();
-  final wrappedChild =
-      wrapWithStatusOverlay ? StatusOverlay(child: child) : child;
+  final wrappedChild = wrapWithStatusOverlay
+      ? StatusOverlay(child: child)
+      : child;
 
   return ChangeNotifierProvider<StatusOverlayController>.value(
     value: controller,

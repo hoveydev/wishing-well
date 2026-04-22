@@ -36,8 +36,9 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
     final isGoingToLogin = loc == '/login';
     final isGoingToCreateAccount = loc == '/create-account';
     final isGoingToForgotPassword = loc == '/forgot-password';
-    final isGoingToResetPassword =
-        loc.startsWith('/forgot-password/reset-password');
+    final isGoingToResetPassword = loc.startsWith(
+      '/forgot-password/reset-password',
+    );
 
     // Auth-only screens (skip if already authenticated)
     final isRedirectableAuthScreen =

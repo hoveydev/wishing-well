@@ -87,9 +87,7 @@ Future<void> _runProduction() async {
   );
 
   final authRepository = AuthRepositoryImpl(
-    dataSource: AuthDataSourceSupabase(
-      supabase: Supabase.instance.client,
-    ),
+    dataSource: AuthDataSourceSupabase(supabase: Supabase.instance.client),
   );
 
   final goRouter = router(authRepository: authRepository);

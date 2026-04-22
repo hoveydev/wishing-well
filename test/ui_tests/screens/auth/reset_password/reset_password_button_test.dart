@@ -8,10 +8,7 @@ import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repositor
 
 class MockResetPasswordViewModel extends ResetPasswordViewModel {
   MockResetPasswordViewModel()
-    : super(
-        authRepository: MockAuthRepository(),
-        email: 'test@example.com',
-      );
+    : super(authRepository: MockAuthRepository(), email: 'test@example.com');
 
   bool _buttonTapped = false;
 

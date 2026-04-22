@@ -35,23 +35,20 @@ class HomeComingUp extends StatelessWidget {
     TextTheme textTheme,
     AppColorScheme colorScheme,
     AppLocalizations l10n,
-  ) =>
-      SizedBox(
-        width: double.infinity,
-        child: Card(
-          margin: EdgeInsets.zero,
-          elevation: 0,
-          color: colorScheme.surfaceGray,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          child: DottedBorder(
-            options: DottedBorderConfig.standard(
-              color: colorScheme.borderGray!,
-            ),
-            child: Padding(
-              padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
-              child: Text(l10n.homeComingUpEmpty, style: textTheme.bodySmall),
-            ),
-          ),
+  ) => SizedBox(
+    width: double.infinity,
+    child: Card(
+      margin: EdgeInsets.zero,
+      elevation: 0,
+      color: colorScheme.surfaceGray,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: DottedBorder(
+        options: DottedBorderConfig.standard(color: colorScheme.borderGray!),
+        child: Padding(
+          padding: const EdgeInsetsGeometry.all(AppSpacerSize.small),
+          child: Text(l10n.homeComingUpEmpty, style: textTheme.bodySmall),
         ),
-      );
+      ),
+    ),
+  );
 }

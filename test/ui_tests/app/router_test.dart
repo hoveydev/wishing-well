@@ -116,10 +116,7 @@ void main() {
       testWidgets('navigates to home', (WidgetTester tester) async {
         final mockAuth = MockAuthRepository();
         // Simulate authenticated to bypass redirect
-        await mockAuth.login(
-          email: 'test@test.com',
-          password: 'password',
-        );
+        await mockAuth.login(email: 'test@test.com', password: 'password');
         final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           startAppWithRouter(goRouter, authRepository: mockAuth),
@@ -147,10 +144,7 @@ void main() {
 
       testWidgets('navigates to profile', (WidgetTester tester) async {
         final mockAuth = MockAuthRepository();
-        await mockAuth.login(
-          email: 'test@test.com',
-          password: 'password',
-        );
+        await mockAuth.login(email: 'test@test.com', password: 'password');
         final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           startAppWithRouter(goRouter, authRepository: mockAuth),
@@ -163,10 +157,7 @@ void main() {
 
       testWidgets('navigates to add wisher', (WidgetTester tester) async {
         final mockAuth = MockAuthRepository();
-        await mockAuth.login(
-          email: 'test@test.com',
-          password: 'password',
-        );
+        await mockAuth.login(email: 'test@test.com', password: 'password');
         final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           startAppWithRouter(goRouter, authRepository: mockAuth),
@@ -181,10 +172,7 @@ void main() {
         WidgetTester tester,
       ) async {
         final mockAuth = MockAuthRepository();
-        await mockAuth.login(
-          email: 'test@test.com',
-          password: 'password',
-        );
+        await mockAuth.login(email: 'test@test.com', password: 'password');
         final goRouter = router(authRepository: mockAuth);
         await tester.pumpWidget(
           startAppWithRouter(goRouter, authRepository: mockAuth),

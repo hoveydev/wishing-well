@@ -93,7 +93,7 @@ class _WishersListState extends State<WishersList> {
                   Text(l10n.wishers, style: textTheme.titleLarge),
                   Flexible(
                     child: Semantics(
-                      button: true,
+                      button: widget.onViewAllTap != null,
                       child: GestureDetector(
                         onTap: widget.onViewAllTap,
                         child: Text(

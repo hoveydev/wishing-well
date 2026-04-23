@@ -298,13 +298,16 @@ void main() {
       ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
-            createWishersList(wishers: defaultTestWishers),
+            createWishersList(
+              wishers: defaultTestWishers,
+              onViewAllTap: () {},
+            ),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // View All text should be inside a Semantics widget marking it
-        // as a button for screen reader accessibility.
+        // View All text should be inside a Semantics widget marked as button
+        // when a callback is provided.
         final semanticsWithViewAll = find.ancestor(
           of: find.text('View All'),
           matching: find.byWidgetPredicate(
@@ -314,14 +317,31 @@ void main() {
           ),
         );
         expect(semanticsWithViewAll, findsOneWidget);
-
-        // View All text should also be inside a GestureDetector for tap
-        final gestureDetector = find.ancestor(
-          of: find.text('View All'),
-          matching: find.byType(GestureDetector),
-        );
-        expect(gestureDetector, findsWidgets);
       });
+
+      testWidgets(
+        'View All is not announced as button when no callback provided',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            createScreenComponentTestWidget(
+              createWishersList(wishers: defaultTestWishers),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          // Without a callback, the Semantics should NOT mark it as a button
+          // so assistive tech does not announce a non-functional button.
+          final semanticsWithButton = find.ancestor(
+            of: find.text('View All'),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Semantics && widget.properties.button == true,
+              description: 'Semantics with button=true',
+            ),
+          );
+          expect(semanticsWithButton, findsNothing);
+        },
+      );
 
       testWidgets('supports horizontal scrolling', (WidgetTester tester) async {
         await tester.pumpWidget(

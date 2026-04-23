@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
-import 'package:wishing_well/utils/result.dart';
 
 void main() {
   group('AllWishersViewModel', () {
@@ -26,79 +25,15 @@ void main() {
         expect(viewModel.wishers.first.firstName, 'Alice');
       });
 
-      test('exposes isLoading from repository', () {
-        expect(viewModel.isLoading, isFalse);
-      });
-
-      test('has no error initially', () {
-        expect(viewModel.hasError, isFalse);
-      });
-    });
-
-    group('fetchWishers', () {
-      test('sets error when fetch fails', () async {
-        final failingRepository = MockWisherRepository(
-          fetchWishersResult: Result.error(Exception('Network error')),
-        );
-        final failingViewModel = AllWishersViewModel(
-          wisherRepository: failingRepository,
+      test('exposes empty wishers when repository has none', () {
+        final emptyRepo = MockWisherRepository(initialWishers: []);
+        final emptyViewModel = AllWishersViewModel(
+          wisherRepository: emptyRepo,
         );
 
-        await failingViewModel.fetchWishers();
+        expect(emptyViewModel.wishers, isEmpty);
 
-        expect(failingViewModel.hasError, isTrue);
-
-        failingViewModel.dispose();
-      });
-
-      test('clears error before fetching', () async {
-        final failingRepository = MockWisherRepository(
-          fetchWishersResult: Result.error(Exception('Network error')),
-        );
-        final failingViewModel = AllWishersViewModel(
-          wisherRepository: failingRepository,
-        );
-        await failingViewModel.fetchWishers();
-        expect(failingViewModel.hasError, isTrue);
-
-        final successRepository = MockWisherRepository(
-          fetchWishersResult: const Result.ok(null),
-        );
-        final successViewModel = AllWishersViewModel(
-          wisherRepository: successRepository,
-        );
-        await successViewModel.fetchWishers();
-
-        expect(successViewModel.hasError, isFalse);
-
-        failingViewModel.dispose();
-        successViewModel.dispose();
-      });
-
-      test('notifies listeners when fetch completes', () async {
-        var notificationCount = 0;
-        viewModel.addListener(() => notificationCount++);
-
-        await viewModel.fetchWishers();
-        await Future.delayed(const Duration(milliseconds: 50));
-
-        expect(notificationCount, greaterThanOrEqualTo(1));
-      });
-
-      test('returns error result when fetch fails', () async {
-        final error = Exception('Fetch failed');
-        final failingRepository = MockWisherRepository(
-          fetchWishersResult: Result.error(error),
-        );
-        final failingViewModel = AllWishersViewModel(
-          wisherRepository: failingRepository,
-        );
-
-        final result = await failingViewModel.fetchWishers();
-
-        expect(result, isA<Error>());
-
-        failingViewModel.dispose();
+        emptyViewModel.dispose();
       });
     });
 

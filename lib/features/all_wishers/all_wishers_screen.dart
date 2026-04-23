@@ -41,69 +41,39 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    if (widget.viewModel.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (widget.viewModel.hasError) {
-      return _AllWishersError(
-        title: l10n.wishersErrorTitle,
-        message: l10n.wishersErrorMessage,
-        retryText: l10n.tryAgain,
-        onRetry: widget.viewModel.fetchWishers,
-      );
-    }
-
-    if (widget.viewModel.wishers.isEmpty) {
-      return Center(
-        child: Text(l10n.allWishersEmpty),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: widget.viewModel.wishers.length,
-      itemBuilder: (context, index) {
-        final wisher = widget.viewModel.wishers[index];
-        return _WisherListTile(
-          wisher: wisher,
-          onTap: () => widget.viewModel.tapWisherItem(context, wisher),
-        );
-      },
-    );
-  }
-}
-
-class _AllWishersError extends StatelessWidget {
-  const _AllWishersError({
-    required this.title,
-    required this.message,
-    required this.retryText,
-    required this.onRetry,
-  });
-
-  final String title;
-  final String message;
-  final String retryText;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.screenPaddingStandard),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(title, style: textTheme.titleMedium),
-            const SizedBox(height: AppSpacing.wisherSpacing),
-            Text(message, textAlign: TextAlign.center),
-            const SizedBox(height: AppSpacing.wisherSpacing),
-            TextButton(onPressed: onRetry, child: Text(retryText)),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPaddingStandard,
+            AppSpacing.wisherSpacing,
+            AppSpacing.screenPaddingStandard,
+            AppSpacing.wisherSpacing,
+          ),
+          child: Text(l10n.allWishersTitle, style: textTheme.headlineMedium),
         ),
-      ),
+        if (widget.viewModel.wishers.isEmpty)
+          Expanded(
+            child: Center(child: Text(l10n.allWishersEmpty)),
+          )
+        else
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.viewModel.wishers.length,
+              itemBuilder: (context, index) {
+                final wisher = widget.viewModel.wishers[index];
+                return _WisherListTile(
+                  wisher: wisher,
+                  onTap: () =>
+                      widget.viewModel.tapWisherItem(context, wisher),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }

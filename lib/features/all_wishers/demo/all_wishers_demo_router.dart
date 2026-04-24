@@ -13,9 +13,7 @@ GoRouter allWishersDemoRouter(WisherRepository wisherRepository) => GoRouter(
       name: Routes.allWishers.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AllWishersScreen(
-          viewModel: AllWishersViewModel(
-            wisherRepository: wisherRepository,
-          ),
+          viewModel: AllWishersViewModel(wisherRepository: wisherRepository),
         ),
         transitionsBuilder: noTransition,
       ),

@@ -123,9 +123,7 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
       name: Routes.allWishers.name,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: AllWishersScreen(
-          viewModel: AllWishersViewModel(
-            wisherRepository: context.read(),
-          ),
+          viewModel: AllWishersViewModel(wisherRepository: context.read()),
         ),
         transitionsBuilder: slideUpWithParallaxTransition,
       ),

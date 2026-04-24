@@ -15,9 +15,7 @@ void main() {
 
     setUp(() {
       mockWisherRepository = MockWisherRepository();
-      viewModel = AllWishersViewModel(
-        wisherRepository: mockWisherRepository,
-      );
+      viewModel = AllWishersViewModel(wisherRepository: mockWisherRepository);
     });
 
     group(TestGroups.rendering, () {
@@ -25,9 +23,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createScreenTestWidget(
-            child: AllWishersScreen(viewModel: viewModel),
-          ),
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -37,9 +33,7 @@ void main() {
 
       testWidgets('renders screen title', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createScreenTestWidget(
-            child: AllWishersScreen(viewModel: viewModel),
-          ),
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -50,9 +44,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          createScreenTestWidget(
-            child: AllWishersScreen(viewModel: viewModel),
-          ),
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -61,13 +53,9 @@ void main() {
         expect(find.text('Bob Test'), findsOneWidget);
       });
 
-      testWidgets('renders wishers in a ListView', (
-        WidgetTester tester,
-      ) async {
+      testWidgets('renders wishers in a ListView', (WidgetTester tester) async {
         await tester.pumpWidget(
-          createScreenTestWidget(
-            child: AllWishersScreen(viewModel: viewModel),
-          ),
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
         );
         await TestHelpers.pumpAndSettle(tester);
 
@@ -119,6 +107,28 @@ void main() {
         expect(tappedWisher, isNotNull);
         expect(tappedWisher!.firstName, 'Alice');
       });
+
+      testWidgets('tapping close button invokes tapCloseButton', (
+        WidgetTester tester,
+      ) async {
+        var closeTapped = false;
+
+        final testViewModel = _TestAllWishersViewModel(
+          wisherRepository: mockWisherRepository,
+          onCloseTap: () => closeTapped = true,
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: AllWishersScreen(viewModel: testViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await TestHelpers.tapAndSettle(tester, find.byIcon(Icons.close));
+
+        expect(closeTapped, isTrue);
+      });
     });
 
     group(TestGroups.behavior, () {
@@ -163,18 +173,25 @@ void main() {
   });
 }
 
-/// Test double that intercepts tapWisherItem without needing a BuildContext
+/// Test double that intercepts navigation calls without needing a BuildContext
 /// navigation call (which would crash in tests without a real router).
 class _TestAllWishersViewModel extends AllWishersViewModel {
   _TestAllWishersViewModel({
     required super.wisherRepository,
-    required this.onWisherItemTap,
+    this.onWisherItemTap,
+    this.onCloseTap,
   });
 
-  final void Function(Wisher wisher) onWisherItemTap;
+  final void Function(Wisher wisher)? onWisherItemTap;
+  final VoidCallback? onCloseTap;
 
   @override
   void tapWisherItem(BuildContext context, Wisher wisher) {
-    onWisherItemTap(wisher);
+    onWisherItemTap?.call(wisher);
+  }
+
+  @override
+  void tapCloseButton(BuildContext context) {
+    onCloseTap?.call();
   }
 }

@@ -17,6 +17,7 @@ import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_scr
 import 'package:wishing_well/features/add_wisher/add_wisher_landing/add_wisher_landing_screen.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_screen.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
+import 'package:wishing_well/features/all_wishers/all_wishers_screen.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/routing/routes.dart';
@@ -504,6 +505,49 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byType(AddWisherDetailsScreen), findsOneWidget);
+      });
+
+      testWidgets('navigates to all wishers route', (
+        WidgetTester tester,
+      ) async {
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
+              ChangeNotifierProvider<WisherRepository>(
+                create: (_) => MockWisherRepository(),
+              ),
+              ChangeNotifierProvider<ImageRepository>(
+                create: (_) => MockImageRepository(),
+              ),
+              _contactAccessProvider(),
+              ChangeNotifierProvider<StatusOverlayController>(
+                create: (_) => StatusOverlayController(),
+              ),
+            ],
+            child: MaterialApp.router(
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              routerConfig: goRouter,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        goRouter.goNamed(Routes.allWishers.name);
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(AllWishersScreen), findsOneWidget);
       });
     });
   });

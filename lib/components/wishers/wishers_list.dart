@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_error_card/app_error_card.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
@@ -94,7 +95,7 @@ class _WishersListState extends State<WishersList> {
                   Flexible(
                     child: Semantics(
                       button: widget.onViewAllTap != null,
-                      child: GestureDetector(
+                      child: TouchFeedbackOpacity(
                         onTap: widget.onViewAllTap,
                         child: Text(
                           l10n.viewAll,

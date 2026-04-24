@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
@@ -35,47 +37,83 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
           action: () => widget.viewModel.tapCloseButton(context),
           type: AppMenuBarType.close,
         ),
-        body: SafeArea(child: _buildBody(context, l10n)),
+        body: _buildBody(context, l10n),
       ),
     );
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
     final textTheme = Theme.of(context).textTheme;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    if (widget.viewModel.wishers.isEmpty) {
+      return SafeArea(child: Center(child: Text(l10n.allWishersEmpty)));
+    }
+
+    return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.screenPaddingStandard,
-            AppSpacing.wisherSpacing,
-            AppSpacing.screenPaddingStandard,
-            AppSpacing.wisherSpacing,
+        ListView.builder(
+          padding: EdgeInsets.only(
+            top: _headerExtent(context),
+            bottom: bottomPadding,
           ),
-          child: Text(l10n.allWishersTitle, style: textTheme.headlineMedium),
+          itemCount: widget.viewModel.wishers.length,
+          itemBuilder: (context, index) {
+            final wisher = widget.viewModel.wishers[index];
+            return _WisherListTile(
+              wisher: wisher,
+              onTap: () => widget.viewModel.tapWisherItem(context, wisher),
+            );
+          },
         ),
-        if (widget.viewModel.wishers.isEmpty)
-          Expanded(
-            child: Center(child: Text(l10n.allWishersEmpty)),
-          )
-        else
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.viewModel.wishers.length,
-              itemBuilder: (context, index) {
-                final wisher = widget.viewModel.wishers[index];
-                return _WisherListTile(
-                  wisher: wisher,
-                  onTap: () =>
-                      widget.viewModel.tapWisherItem(context, wisher),
-                );
-              },
-            ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: _BlurredHeader(
+            title: l10n.allWishersTitle,
+            textTheme: textTheme,
           ),
+        ),
       ],
     );
   }
+
+  /// Returns the height reserved at the top of the list for the blurred header.
+  double _headerExtent(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final textScaler = MediaQuery.textScalerOf(context);
+    final style = textTheme.headlineMedium ?? const TextStyle(fontSize: 28);
+    final scaledFontSize = textScaler.scale(style.fontSize ?? 28);
+    final lineHeight = scaledFontSize * (style.height ?? 1.2);
+    return lineHeight + (AppSpacing.wisherSpacing * 2);
+  }
+}
+
+class _BlurredHeader extends StatelessWidget {
+  const _BlurredHeader({required this.title, required this.textTheme});
+
+  final String title;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) => ClipRect(
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+      child: Container(
+        color: Theme.of(
+          context,
+        ).scaffoldBackgroundColor.withValues(alpha: 0.75),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.screenPaddingStandard,
+          AppSpacing.wisherSpacing,
+          AppSpacing.screenPaddingStandard,
+          AppSpacing.wisherSpacing,
+        ),
+        child: Text(title, style: textTheme.headlineMedium),
+      ),
+    ),
+  );
 }
 
 class _WisherListTile extends StatelessWidget {

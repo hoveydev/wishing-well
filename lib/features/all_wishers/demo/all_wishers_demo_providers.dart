@@ -170,9 +170,7 @@ List<SingleChildWidget> getAllWishersDemoProviders({
             ..login(email: 'demo@test.com', password: 'demo'),
     ),
     ChangeNotifierProvider<WisherRepository>(
-      create: (_) => MockWisherRepository(
-        initialWishers: initialWishers,
-      ),
+      create: (_) => MockWisherRepository(initialWishers: initialWishers),
     ),
     ChangeNotifierProvider<ImageRepository>(
       create: (_) => MockImageRepository(),

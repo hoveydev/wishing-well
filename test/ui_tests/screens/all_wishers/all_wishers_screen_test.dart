@@ -152,7 +152,7 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('updates UI when repository notifies listeners', (
+      testWidgets('shows empty state when repository starts empty', (
         WidgetTester tester,
       ) async {
         final emptyRepository = MockWisherRepository(initialWishers: []);
@@ -168,6 +168,32 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('No wishers yet'), findsOneWidget);
+      });
+
+      testWidgets('shows loading indicator when repository is loading', (
+        WidgetTester tester,
+      ) async {
+        final loadingRepository = MockWisherRepository(initialWishers: []);
+        final testViewModel = AllWishersViewModel(
+          wisherRepository: loadingRepository,
+        );
+
+        // Start a fetch to set isLoading = true before building
+        final fetchFuture = loadingRepository.fetchWishers();
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: AllWishersScreen(viewModel: testViewModel),
+          ),
+        );
+
+        // isLoading is true so the indicator should be visible immediately
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.text('No wishers yet'), findsNothing);
+
+        // Advance past the mock's internal delay to avoid pending timers
+        await tester.pump(const Duration(milliseconds: 20));
+        await fetchFuture;
       });
     });
   });

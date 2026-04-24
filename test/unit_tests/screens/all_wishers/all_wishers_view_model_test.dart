@@ -33,31 +33,33 @@ void main() {
 
         emptyViewModel.dispose();
       });
+
+      test('isLoading reflects repository loading state', () {
+        expect(viewModel.isLoading, isFalse);
+      });
     });
 
     group('Repository listener', () {
-      test('forwards repository notifications to listeners', () async {
+      test('forwards repository notifications to listeners', () {
         var notificationCount = 0;
         viewModel.addListener(() => notificationCount++);
 
         mockWisherRepository.notifyListeners();
-        await Future.delayed(const Duration(milliseconds: 50));
 
         expect(notificationCount, 1);
       });
 
-      test('cleans up listener on dispose', () async {
+      test('cleans up listener on dispose', () {
+        final disposedViewModel = AllWishersViewModel(
+          wisherRepository: mockWisherRepository,
+        );
         var notificationCount = 0;
-        viewModel.addListener(() => notificationCount++);
+        disposedViewModel.addListener(() => notificationCount++);
 
-        viewModel.dispose();
+        disposedViewModel.dispose();
         mockWisherRepository.notifyListeners();
-        await Future.delayed(const Duration(milliseconds: 50));
 
         expect(notificationCount, 0);
-
-        // Prevent tearDown from disposing again
-        viewModel = AllWishersViewModel(wisherRepository: mockWisherRepository);
       });
     });
 

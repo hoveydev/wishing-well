@@ -7,6 +7,7 @@ import 'package:wishing_well/routing/routes.dart';
 
 abstract class AllWishersViewModelContract implements ScreenViewModelContract {
   List<Wisher> get wishers;
+  bool get isLoading;
   void tapCloseButton(BuildContext context);
   void tapWisherItem(BuildContext context, Wisher wisher);
 }
@@ -22,6 +23,9 @@ class AllWishersViewModel extends ChangeNotifier
 
   @override
   List<Wisher> get wishers => _wisherRepository.wishers;
+
+  @override
+  bool get isLoading => _wisherRepository.isLoading;
 
   @override
   void tapCloseButton(BuildContext context) {

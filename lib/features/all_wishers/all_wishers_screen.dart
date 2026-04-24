@@ -46,6 +46,12 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     final textTheme = Theme.of(context).textTheme;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
+    if (widget.viewModel.isLoading) {
+      return const SafeArea(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     if (widget.viewModel.wishers.isEmpty) {
       return SafeArea(child: Center(child: Text(l10n.allWishersEmpty)));
     }

@@ -7,7 +7,6 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
-import 'package:wishing_well/utils/result.dart';
 
 enum AllWishersDemoScenario {
   defaultWishers,
@@ -28,7 +27,6 @@ List<SingleChildWidget> getAllWishersDemoProviders({
   required AllWishersDemoScenario scenario,
 }) {
   final List<Wisher> initialWishers;
-  Result<void>? fetchWishersResult;
 
   switch (scenario) {
     case AllWishersDemoScenario.defaultWishers:
@@ -160,10 +158,9 @@ List<SingleChildWidget> getAllWishersDemoProviders({
 
     case AllWishersDemoScenario.failure:
       // Simulates arriving at AllWishers after Home's fetch failed.
-      // Repository holds no wishers and surfaces the error so the screen
-      // shows the empty state.
+      // AllWishers has no dedicated error UI — it relies on data already
+      // loaded by Home — so this shows the same empty state as noWishers.
       initialWishers = [];
-      fetchWishersResult = Result.error(Exception('Failed to load wishers'));
   }
 
   return [
@@ -175,7 +172,6 @@ List<SingleChildWidget> getAllWishersDemoProviders({
     ChangeNotifierProvider<WisherRepository>(
       create: (_) => MockWisherRepository(
         initialWishers: initialWishers,
-        fetchWishersResult: fetchWishersResult,
       ),
     ),
     ChangeNotifierProvider<ImageRepository>(

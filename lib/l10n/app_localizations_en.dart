@@ -321,6 +321,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorNoChanges => 'No changes were made.';
 
   @override
+  String get allWishersTitle => 'All Wishers';
+
+  @override
+  String get allWishersEmpty => 'No wishers yet';
+
+  @override
   String get homeComingUpEmpty => 'Nothing yet';
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/features/shared/screen_view_model_contract.dart';
@@ -15,6 +16,7 @@ abstract class WisherDetailsViewModelContract
     implements ScreenViewModelContract {
   Wisher? get wisher;
   bool get isLoading;
+  AppMenuBarType get menuBarType;
   void tapCloseButton(BuildContext context);
   void tapEditWisher(BuildContext context);
   Future<void> tapDeleteWisher(BuildContext context);
@@ -25,14 +27,17 @@ class WisherDetailsViewModel extends ChangeNotifier
   WisherDetailsViewModel({
     required WisherRepository wisherRepository,
     required String wisherId,
+    bool isFromAllWishers = false,
   }) : _wisherRepository = wisherRepository,
-       _wisherId = wisherId {
+       _wisherId = wisherId,
+       _isFromAllWishers = isFromAllWishers {
     _wisherRepository.addListener(_onRepositoryChanged);
     _loadWisher();
   }
 
   final WisherRepository _wisherRepository;
   final String _wisherId;
+  final bool _isFromAllWishers;
 
   Wisher? _wisher;
   bool _isLoading = true;
@@ -43,6 +48,10 @@ class WisherDetailsViewModel extends ChangeNotifier
 
   @override
   bool get isLoading => _isLoading;
+
+  @override
+  AppMenuBarType get menuBarType =>
+      _isFromAllWishers ? AppMenuBarType.back : AppMenuBarType.close;
 
   @override
   void tapCloseButton(BuildContext context) {

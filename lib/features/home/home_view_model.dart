@@ -18,6 +18,7 @@ abstract class HomeViewModelContract implements ScreenViewModelContract {
   void tapProfile(BuildContext context);
   void tapWisherItem(BuildContext context, Wisher wisher);
   void tapAddWisher(BuildContext context);
+  void tapViewAllWishers(BuildContext context);
 }
 
 class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
@@ -99,6 +100,11 @@ class HomeViewModel extends ChangeNotifier implements HomeViewModelContract {
   @override
   void tapAddWisher(BuildContext context) {
     context.pushNamed(Routes.addWisher.name);
+  }
+
+  @override
+  void tapViewAllWishers(BuildContext context) {
+    context.pushNamed(Routes.allWishers.name);
   }
 
   @override

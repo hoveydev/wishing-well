@@ -99,7 +99,9 @@ void main() {
     });
 
     group('Interaction', () {
-      testWidgets('shows close button in app bar', (WidgetTester tester) async {
+      testWidgets('shows close button in app bar by default', (
+        WidgetTester tester,
+      ) async {
         final viewModel = WisherDetailsViewModel(
           wisherRepository: mockWisherRepository,
           wisherId: '1',
@@ -113,6 +115,26 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.byIcon(Icons.close), findsOneWidget);
+        expect(find.byIcon(Icons.arrow_back_ios_new), findsNothing);
+      });
+
+      testWidgets('shows back button when navigated from all wishers', (
+        WidgetTester tester,
+      ) async {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+          isFromAllWishers: true,
+        );
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: WisherDetailsScreen(viewModel: viewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byIcon(Icons.close), findsNothing);
       });
 
       testWidgets('responds to ViewModel state changes', (

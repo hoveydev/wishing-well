@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_error_card/app_error_card.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
@@ -18,6 +19,7 @@ class WishersList extends StatefulWidget {
     this.isLoading = false,
     this.hasError = false,
     this.onRetry,
+    this.onViewAllTap,
     super.key,
   });
 
@@ -27,6 +29,7 @@ class WishersList extends StatefulWidget {
   final bool isLoading;
   final bool hasError;
   final VoidCallback? onRetry;
+  final VoidCallback? onViewAllTap;
 
   @override
   State<WishersList> createState() => _WishersListState();
@@ -90,10 +93,16 @@ class _WishersListState extends State<WishersList> {
                 children: [
                   Text(l10n.wishers, style: textTheme.titleLarge),
                   Flexible(
-                    child: Text(
-                      l10n.viewAll,
-                      style: textTheme.bodySmall,
-                      overflow: TextOverflow.ellipsis,
+                    child: Semantics(
+                      button: widget.onViewAllTap != null,
+                      child: TouchFeedbackOpacity(
+                        onTap: widget.onViewAllTap,
+                        child: Text(
+                          l10n.viewAll,
+                          style: textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   ),
                 ],

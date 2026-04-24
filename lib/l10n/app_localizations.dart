@@ -652,6 +652,18 @@ abstract class AppLocalizations {
   /// **'No changes were made.'**
   String get errorNoChanges;
 
+  /// Title for the all wishers screen
+  ///
+  /// In en, this message translates to:
+  /// **'All Wishers'**
+  String get allWishersTitle;
+
+  /// Message shown when there are no wishers on the all wishers screen
+  ///
+  /// In en, this message translates to:
+  /// **'No wishers yet'**
+  String get allWishersEmpty;
+
   /// Placeholder text shown in the Coming Up section when no events exist
   ///
   /// In en, this message translates to:

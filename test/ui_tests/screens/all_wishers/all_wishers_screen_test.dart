@@ -105,7 +105,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.text('No results found'), findsOneWidget);
+        expect(find.text('No Wishers found'), findsOneWidget);
         expect(find.byType(ListView), findsNothing);
       });
     });

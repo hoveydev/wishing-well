@@ -436,7 +436,7 @@
     "@allWishersSearchPlaceholder": {
         "description": "Placeholder text for the search bar on the all wishers screen"
     },
-    "allWishersNoResults": "No results found",
+    "allWishersNoResults": "No Wishers found",
     "@allWishersNoResults": {
         "description": "Message shown when a search query returns no matching wishers"
     },

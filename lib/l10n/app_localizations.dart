@@ -673,7 +673,7 @@ abstract class AppLocalizations {
   /// Message shown when a search query returns no matching wishers
   ///
   /// In en, this message translates to:
-  /// **'No results found'**
+  /// **'No Wishers found'**
   String get allWishersNoResults;
 
   /// Placeholder text shown in the Coming Up section when no events exist

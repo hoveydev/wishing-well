@@ -40,6 +40,16 @@ void main() {
         expect(find.text('All Wishers'), findsOneWidget);
       });
 
+      testWidgets('renders search bar', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(TextField), findsOneWidget);
+        expect(find.byIcon(Icons.search), findsOneWidget);
+      });
+
       testWidgets('renders wisher names from repository', (
         WidgetTester tester,
       ) async {
@@ -78,6 +88,24 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('No wishers yet'), findsOneWidget);
+        expect(find.byType(ListView), findsNothing);
+      });
+
+      testWidgets('shows no-results message when search has no matches', (
+        WidgetTester tester,
+      ) async {
+        final testViewModel = _TestAllWishersViewModel(
+          wisherRepository: mockWisherRepository,
+        )..updateSearchQuery('xyz_no_match');
+
+        await tester.pumpWidget(
+          createScreenTestWidget(
+            child: AllWishersScreen(viewModel: testViewModel),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('No results found'), findsOneWidget);
         expect(find.byType(ListView), findsNothing);
       });
     });
@@ -128,6 +156,43 @@ void main() {
         await TestHelpers.tapAndSettle(tester, find.byIcon(Icons.close));
 
         expect(closeTapped, isTrue);
+      });
+
+      testWidgets('typing in search bar updates the filtered list', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        // Initially all 4 default wishers are visible
+        expect(find.text('Alice Test'), findsOneWidget);
+        expect(find.text('Bob Test'), findsOneWidget);
+
+        await tester.enterText(find.byType(TextField), 'Alice');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('Alice Test'), findsOneWidget);
+        expect(find.text('Bob Test'), findsNothing);
+      });
+
+      testWidgets('clearing search bar restores full list', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenTestWidget(child: AllWishersScreen(viewModel: viewModel)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.enterText(find.byType(TextField), 'Alice');
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.enterText(find.byType(TextField), '');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('Alice Test'), findsOneWidget);
+        expect(find.text('Bob Test'), findsOneWidget);
       });
     });
 

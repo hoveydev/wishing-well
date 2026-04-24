@@ -664,6 +664,18 @@ abstract class AppLocalizations {
   /// **'No wishers yet'**
   String get allWishersEmpty;
 
+  /// Placeholder text for the search bar on the all wishers screen
+  ///
+  /// In en, this message translates to:
+  /// **'Search wishers'**
+  String get allWishersSearchPlaceholder;
+
+  /// Message shown when a search query returns no matching wishers
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get allWishersNoResults;
+
   /// Placeholder text shown in the Coming Up section when no events exist
   ///
   /// In en, this message translates to:

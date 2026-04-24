@@ -327,6 +327,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allWishersEmpty => 'No wishers yet';
 
   @override
+  String get allWishersSearchPlaceholder => 'Search wishers';
+
+  @override
+  String get allWishersNoResults => 'No results found';
+
+  @override
   String get homeComingUpEmpty => 'Nothing yet';
 
   @override

@@ -7,12 +7,15 @@ import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_auth_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_image_repository.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
+import 'package:wishing_well/utils/result.dart';
 
 enum AllWishersDemoScenario {
   defaultWishers,
   noWishers,
   manyWishers,
   longNames,
+  brokenImages,
+  failure,
 }
 
 const _sampleProfilePictures = [
@@ -25,6 +28,7 @@ List<SingleChildWidget> getAllWishersDemoProviders({
   required AllWishersDemoScenario scenario,
 }) {
   final List<Wisher> initialWishers;
+  Result<void>? fetchWishersResult;
 
   switch (scenario) {
     case AllWishersDemoScenario.defaultWishers:
@@ -120,6 +124,46 @@ List<SingleChildWidget> getAllWishersDemoProviders({
           updatedAt: DateTime(2024, 1, 3),
         ),
       ];
+
+    case AllWishersDemoScenario.brokenImages:
+      // Wishers with invalid/broken image URLs — verifies avatar initials fallback
+      initialWishers = [
+        Wisher(
+          id: '1',
+          userId: 'demo-user',
+          firstName: 'Alice',
+          lastName: 'Test',
+          profilePicture:
+              'https://this-domain-does-not-exist-12345.invalid/image.jpg',
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024),
+        ),
+        Wisher(
+          id: '2',
+          userId: 'demo-user',
+          firstName: 'Bob',
+          lastName: 'Test',
+          profilePicture: 'https://fake-broken-url-xyz.invalid/photo.png',
+          createdAt: DateTime(2024, 1, 2),
+          updatedAt: DateTime(2024, 1, 2),
+        ),
+        Wisher(
+          id: '3',
+          userId: 'demo-user',
+          firstName: 'Charlie',
+          lastName: 'Test',
+          // No image — always shows initials
+          createdAt: DateTime(2024, 1, 3),
+          updatedAt: DateTime(2024, 1, 3),
+        ),
+      ];
+
+    case AllWishersDemoScenario.failure:
+      // Simulates arriving at AllWishers after Home's fetch failed.
+      // Repository holds no wishers and surfaces the error so the screen
+      // shows the empty state.
+      initialWishers = [];
+      fetchWishersResult = Result.error(Exception('Failed to load wishers'));
   }
 
   return [
@@ -129,7 +173,10 @@ List<SingleChildWidget> getAllWishersDemoProviders({
             ..login(email: 'demo@test.com', password: 'demo'),
     ),
     ChangeNotifierProvider<WisherRepository>(
-      create: (_) => MockWisherRepository(initialWishers: initialWishers),
+      create: (_) => MockWisherRepository(
+        initialWishers: initialWishers,
+        fetchWishersResult: fetchWishersResult,
+      ),
     ),
     ChangeNotifierProvider<ImageRepository>(
       create: (_) => MockImageRepository(),

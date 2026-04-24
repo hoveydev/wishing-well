@@ -15,6 +15,8 @@ import 'package:wishing_well/utils/status_overlay_controller.dart';
 // - noWishers: Empty wishers list (shows empty state)
 // - manyWishers: 30 wishers for scroll testing
 // - longNames: 3 wishers with long names (tests truncation)
+// - brokenImages: Broken image URLs (tests avatar initials fallback)
+// - failure: Empty wishers after a failed Home fetch (shows empty state)
 const AllWishersDemoScenario _scenario = AllWishersDemoScenario.defaultWishers;
 
 Future<void> main() async {

@@ -149,15 +149,20 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
               '${Routes.wisherDetails.path}',
             ));
         final wisherRepository = context.read<WisherRepository>();
+        final isFromAllWishers =
+            state.uri.queryParameters['from'] == 'all-wishers';
 
         return CustomTransitionPage(
           child: WisherDetailsScreen(
             viewModel: WisherDetailsViewModel(
               wisherRepository: wisherRepository,
               wisherId: wisherId,
+              isFromAllWishers: isFromAllWishers,
             ),
           ),
-          transitionsBuilder: slideUpWithParallaxTransition,
+          transitionsBuilder: isFromAllWishers
+              ? slideInRightTransition
+              : slideUpWithParallaxTransition,
         );
       },
       routes: [

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -315,6 +316,42 @@ void main() {
 
           vm.dispose();
         }
+      });
+    });
+
+    group('menuBarType', () {
+      test('returns close when not from all wishers (default)', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+
+        expect(viewModel.menuBarType, AppMenuBarType.close);
+
+        viewModel.dispose();
+      });
+
+      test('returns back when isFromAllWishers is true', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+          isFromAllWishers: true,
+        );
+
+        expect(viewModel.menuBarType, AppMenuBarType.back);
+
+        viewModel.dispose();
+      });
+
+      test('returns close when isFromAllWishers is false', () {
+        final viewModel = WisherDetailsViewModel(
+          wisherRepository: mockWisherRepository,
+          wisherId: '1',
+        );
+
+        expect(viewModel.menuBarType, AppMenuBarType.close);
+
+        viewModel.dispose();
       });
     });
 

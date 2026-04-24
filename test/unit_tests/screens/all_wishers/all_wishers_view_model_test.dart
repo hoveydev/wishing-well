@@ -62,20 +62,21 @@ void main() {
     });
 
     group('Navigation', () {
-      test('tapWisherItem constructs correct edit path', () {
+      test('tapWisherItem constructs correct wisherDetails path', () {
         final wisher = viewModel.wishers.first;
-        final expectedPath = Routes.editWisher.buildPath(id: wisher.id);
+        final expectedPath = Routes.wisherDetails.buildPath(id: wisher.id);
 
-        expect(expectedPath, '/wisher-details/${wisher.id}/edit');
+        expect(expectedPath, '/wisher-details/${wisher.id}');
       });
 
-      test('tapWisherItem constructs edit path for all repository wishers', () {
+      test('tapWisherItem constructs wisherDetails path for all '
+          'repository wishers', () {
         for (final wisher in viewModel.wishers) {
-          final path = Routes.editWisher.buildPath(id: wisher.id);
+          final path = Routes.wisherDetails.buildPath(id: wisher.id);
 
           expect(path, startsWith('/wisher-details/'));
           expect(path, contains(wisher.id));
-          expect(path, endsWith('/edit'));
+          expect(path, isNot(endsWith('/edit')));
         }
       });
 
@@ -122,7 +123,7 @@ void main() {
         expect(find.text('home'), findsOneWidget);
       });
 
-      testWidgets('tapWisherItem navigates to edit wisher route', (
+      testWidgets('tapWisherItem navigates to wisher details route', (
         WidgetTester tester,
       ) async {
         final repo = MockWisherRepository();
@@ -148,13 +149,8 @@ void main() {
             ),
             GoRoute(
               path: '/wisher-details/:id',
+              name: Routes.wisherDetails.name,
               builder: (_, _) => const Scaffold(body: Text('wisher')),
-              routes: [
-                GoRoute(
-                  path: 'edit',
-                  builder: (_, _) => const Scaffold(body: Text('edit')),
-                ),
-              ],
             ),
           ],
           initialLocation: '/home/wishers',
@@ -171,7 +167,7 @@ void main() {
         await tester.tap(find.text('tap wisher'));
         await tester.pumpAndSettle();
 
-        expect(find.text('edit'), findsOneWidget);
+        expect(find.text('wisher'), findsOneWidget);
       });
     });
   });

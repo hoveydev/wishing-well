@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
-import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
@@ -35,7 +34,7 @@ class _WisherDetailsScreenState extends State<WisherDetailsScreen> {
       return Screen(
         appBar: AppMenuBar(
           action: () => widget.viewModel.tapCloseButton(context),
-          type: AppMenuBarType.close,
+          type: widget.viewModel.menuBarType,
           additionalActions: !widget.viewModel.isLoading && hasWisher
               ? [
                   Builder(

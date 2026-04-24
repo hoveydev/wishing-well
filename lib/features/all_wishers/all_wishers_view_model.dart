@@ -30,7 +30,11 @@ class AllWishersViewModel extends ChangeNotifier
 
   @override
   void tapWisherItem(BuildContext context, Wisher wisher) {
-    context.push(Routes.editWisher.buildPath(id: wisher.id));
+    context.pushNamed(
+      Routes.wisherDetails.name,
+      pathParameters: {'id': wisher.id},
+      queryParameters: {'from': 'all-wishers'},
+    );
   }
 
   @override

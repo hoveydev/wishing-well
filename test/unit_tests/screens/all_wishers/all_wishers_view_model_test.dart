@@ -85,6 +85,15 @@ void main() {
         expect(count, 1);
       });
 
+      test('updateSearchQuery does not notify listeners for identical query',
+          () {
+        viewModel.updateSearchQuery('Alice');
+        var count = 0;
+        viewModel.addListener(() => count++);
+        viewModel.updateSearchQuery('Alice');
+        expect(count, 0);
+      });
+
       test('filteredWishers returns all when query is whitespace-only', () {
         viewModel.updateSearchQuery('   ');
         expect(viewModel.filteredWishers.length, viewModel.wishers.length);

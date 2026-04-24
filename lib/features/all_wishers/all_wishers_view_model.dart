@@ -44,6 +44,7 @@ class AllWishersViewModel extends ChangeNotifier
 
   @override
   void updateSearchQuery(String query) {
+    if (query == _searchQuery) return;
     _searchQuery = query;
     notifyListeners();
   }

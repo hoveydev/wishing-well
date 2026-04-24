@@ -3,15 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
+import 'package:wishing_well/components/input/app_search_input.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_border_radius.dart';
-import 'package:wishing_well/theme/app_colors.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
-import 'package:wishing_well/theme/app_theme.dart';
 
 // Height of the search bar input within the blurred header.
 const double _kSearchBarHeight = 48.0;
@@ -70,7 +68,10 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     return Stack(
       children: [
         filtered.isEmpty
-            ? Center(child: Text(l10n.allWishersNoResults))
+            ? Padding(
+                padding: EdgeInsets.only(top: _headerExtent(context)),
+                child: Center(child: Text(l10n.allWishersNoResults)),
+              )
             : ListView.builder(
                 padding: EdgeInsets.only(
                   top: _headerExtent(context),
@@ -110,12 +111,11 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     final style = textTheme.headlineMedium ?? const TextStyle(fontSize: 28);
     final scaledFontSize = textScaler.scale(style.fontSize ?? 28);
     final lineHeight = scaledFontSize * (style.height ?? 1.2);
-    // wisherSpacing * 2 = top + bottom padding around the title;
+    // wisherSpacing * 2 = top + bottom padding around the header content;
     // wisherSpacing * 0.5 = gap between title and search bar.
     return lineHeight +
         (AppSpacing.wisherSpacing * 2.5) +
-        _kSearchBarHeight +
-        AppSpacing.wisherSpacing;
+        _kSearchBarHeight;
   }
 }
 
@@ -137,10 +137,8 @@ class _BlurredHeader extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-
-    return ClipRect(
+  Widget build(BuildContext context) =>
+      ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
@@ -161,47 +159,11 @@ class _BlurredHeader extends StatelessWidget {
               const SizedBox(height: AppSpacing.wisherSpacing / 2),
               SizedBox(
                 height: _kSearchBarHeight,
-                child: TextField(
+                child: AppSearchInput(
+                  placeholder: searchPlaceholder,
                   controller: searchController,
                   focusNode: searchFocusNode,
                   onChanged: onSearchChanged,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: colorScheme.primary,
-                    ),
-                    hintText: searchPlaceholder,
-                    hintStyle: textTheme.bodyMedium,
-                    contentPadding: EdgeInsets.zero,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppBorderRadius.medium,
-                      ),
-                      borderSide: BorderSide(
-                        color: colorScheme.borderGray ?? AppColors.borderGray,
-                        width: 1.5,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppBorderRadius.medium,
-                      ),
-                      borderSide: BorderSide(
-                        color: colorScheme.borderGray ?? AppColors.borderGray,
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppBorderRadius.medium,
-                      ),
-                      borderSide: BorderSide(
-                        color: colorScheme.primary ?? AppColors.primary,
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
-                  cursorColor: colorScheme.primary ?? AppColors.primary,
                 ),
               ),
             ],
@@ -209,7 +171,6 @@ class _BlurredHeader extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _WisherListTile extends StatelessWidget {

@@ -45,7 +45,6 @@ abstract class AuthDataSource {
   Future<Map<String, dynamic>> updateUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   });
 
   /// Returns the user's first name from metadata, if available.

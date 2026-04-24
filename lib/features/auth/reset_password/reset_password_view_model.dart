@@ -39,7 +39,6 @@ class ResetPasswordViewModel extends ChangeNotifier
   ResetPasswordViewModel({
     required AuthRepository authRepository,
     required this.email,
-    required this.token,
   }) : _authRepository = authRepository,
        _passwordValidator = PasswordValidator<ResetPasswordRequirements>(),
        _cachedMetRequirements = null {
@@ -49,7 +48,6 @@ class ResetPasswordViewModel extends ChangeNotifier
   final AuthRepository _authRepository;
   final PasswordValidator<ResetPasswordRequirements> _passwordValidator;
   final String email;
-  final String token;
 
   String _passwordOne = '';
   String _passwordTwo = '';
@@ -191,8 +189,6 @@ class ResetPasswordViewModel extends ChangeNotifier
       'Navigating to login screen',
       context: 'ResetPasswordViewModel.tapCloseButton',
     );
-    // TODO: open modal
-    // might not be on context
     context.goNamed(Routes.login.name);
   }
 
@@ -212,7 +208,6 @@ class ResetPasswordViewModel extends ChangeNotifier
     final response = await _authRepository.resetUserPassword(
       email: email,
       newPassword: _passwordOne,
-      token: token,
     );
 
     switch (response) {

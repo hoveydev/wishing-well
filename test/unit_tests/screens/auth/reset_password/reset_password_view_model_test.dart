@@ -15,7 +15,6 @@ void main() {
     viewModel = ResetPasswordViewModel(
       authRepository: authRepository,
       email: 'test@example.com',
-      token: 'test-token',
     );
   });
 
@@ -180,7 +179,6 @@ void main() {
       final vm = ResetPasswordViewModel(
         authRepository: repo,
         email: 'test@example.com',
-        token: 'test-token',
       );
       vm.updatePasswordOneField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
@@ -241,7 +239,6 @@ void main() {
       final vm = ResetPasswordViewModel(
         authRepository: repo,
         email: 'test@example.com',
-        token: 'test-token',
       );
       vm.updatePasswordOneField('ValidPassword123!');
       expect(vm.authError, isA<UIAuthError>());
@@ -300,7 +297,6 @@ void main() {
       final vm = ResetPasswordViewModel(
         authRepository: repo,
         email: 'test@example.com',
-        token: 'test-token',
       );
       vm.updatePasswordOneField('ValidPassword123!');
       vm.updatePasswordTwoField('ValidPassword123!');
@@ -315,7 +311,6 @@ void main() {
       final vm = ResetPasswordViewModel(
         authRepository: repo,
         email: 'test@example.com',
-        token: 'test-token',
       );
       vm.updatePasswordOneField('ValidPassword123!');
       vm.updatePasswordTwoField('ValidPassword123!');

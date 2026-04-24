@@ -137,7 +137,6 @@ class MockAuthRepository extends AuthRepository {
   Future<Result<void>> resetUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   }) async {
     // Add delay if specified
     if (_resetUserPasswordDelay != null) {

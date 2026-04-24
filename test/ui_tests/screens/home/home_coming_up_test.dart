@@ -27,7 +27,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce('Nothing yet :)');
+        TestHelpers.expectTextOnce('Nothing yet');
       });
 
       testWidgets('has semantic header for accessibility', (
@@ -62,7 +62,10 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        final sizedBoxFinder = find.byType(SizedBox);
+        final sizedBoxFinder = find.ancestor(
+          of: find.byType(Card),
+          matching: find.byType(SizedBox),
+        );
         final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
         expect(sizedBox.width, equals(double.infinity));
       });
@@ -99,7 +102,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        final textFinder = find.text('Nothing yet :)');
+        final textFinder = find.text('Nothing yet');
         final textWidget = tester.widget<Text>(textFinder);
         expect(textWidget.style?.fontSize, isNotNull);
       });

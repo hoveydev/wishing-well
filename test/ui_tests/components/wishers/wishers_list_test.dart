@@ -236,7 +236,9 @@ void main() {
     });
 
     group(TestGroups.interaction, () {
-      testWidgets('handles View All button tap', (WidgetTester tester) async {
+      testWidgets('View All text renders without tap handler', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           createScreenComponentTestWidget(
             createWishersList(wishers: defaultTestWishers),
@@ -244,9 +246,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await TestHelpers.tapAndSettle(tester, find.text('View All'));
-
-        // Should not crash - gesture detector should handle the tap
+        // View All is a plain Text - renders but not tappable
         TestHelpers.expectTextOnce('View All');
       });
 

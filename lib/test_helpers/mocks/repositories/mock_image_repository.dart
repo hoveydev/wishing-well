@@ -36,10 +36,7 @@ class MockImageRepository extends ImageRepository {
   }
 
   @override
-  Future<File?> compressImage(String filePath) async {
-    // No-op for mock — returns null (callers fall back to original file)
-    return null;
-  }
+  Future<File?> compressImage(String filePath) async => null;
 
   @override
   Future<bool> deleteImage({
@@ -51,9 +48,9 @@ class MockImageRepository extends ImageRepository {
   }
 
   @override
-  Map<String, String> getAuthHeaders() {
-    return {'Authorization': 'Bearer mock-token'};
-  }
+  Map<String, String> getAuthHeaders() => {
+    'Authorization': 'Bearer mock-token',
+  };
 
   @override
   Future<void> preloadImages(List<String> urls) async {

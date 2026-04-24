@@ -431,5 +431,13 @@
     "allWishersEmpty": "No wishers yet",
     "@allWishersEmpty": {
         "description": "Message shown when there are no wishers on the all wishers screen"
+    },
+    "homeComingUpEmpty": "Nothing yet",
+    "@homeComingUpEmpty": {
+        "description": "Placeholder text shown in the Coming Up section when no events exist"
+    },
+    "appBarBack": "Back",
+    "@appBarBack": {
+        "description": "Accessibility label for back navigation button in app bar"
     }
 }

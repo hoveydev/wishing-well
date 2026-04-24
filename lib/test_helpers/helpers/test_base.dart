@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
-import 'test_helpers.dart';
+import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 /// Base class for component tests to ensure consistency
 abstract class ComponentTestBase {

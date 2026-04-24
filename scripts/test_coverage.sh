@@ -48,7 +48,9 @@ lcov --ignore-errors unused -r coverage/lcov.info --exclude "${LCOV_REMOVE_ARGS[
 echo "📊 Generating HTML coverage report..."
 genhtml coverage/lcov.info -o coverage/html
 
-echo "🌍 Opening coverage report..."
-open coverage/html/index.html
+echo "📂 Coverage report: coverage/html/index.html"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  open coverage/html/index.html
+fi
 
 echo "✅ Coverage report ready!"

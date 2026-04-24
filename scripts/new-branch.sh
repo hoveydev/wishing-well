@@ -93,21 +93,15 @@ echo -e "${GREEN}✓ Worktree created successfully${NC}"
 echo ""
 
 # Copy .env files
-if [ -f ".env.development" ] && [ -f ".env.test" ] && [ -f ".env.local" ]; then
+if [ -f ".env.development" ] && [ -f ".env.test" ] && [ -f ".env.local" ] && [ -f ".env.prod" ]; then
     echo "Copying .env files to worktree..."
     cp ".env.development" "$WORKTREE_PATH/.env.development"
     cp ".env.test" "$WORKTREE_PATH/.env.test"
     cp ".env.local" "$WORKTREE_PATH/.env.local"
+    cp ".env.prod" "$WORKTREE_PATH/.env.prod"
     echo -e "${GREEN}✓ .env files copied successfully${NC}"
 else
-    echo -e "${YELLOW}Warning: .env.development, .env.test, or .env.local not found in current directory${NC}"
-fi
-
-# Copy .openclaude-profile.json
-if [ -f ".openclaude-profile.json" ]; then
-    echo "Copying .openclaude-profile.json to worktree..."
-    cp ".openclaude-profile.json" "$WORKTREE_PATH/.openclaude-profile.json"
-    echo -e "${GREEN}✓ .openclaude-profile.json copied successfully${NC}"
+    echo -e "${YELLOW}Warning: .env.development, .env.test, .env.local, or .env.prod not found in current directory${NC}"
 fi
 
 echo ""

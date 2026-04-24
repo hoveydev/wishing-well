@@ -325,4 +325,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allWishersEmpty => 'No wishers yet';
+
+  @override
+  String get homeComingUpEmpty => 'Nothing yet';
+
+  @override
+  String get appBarBack => 'Back';
 }

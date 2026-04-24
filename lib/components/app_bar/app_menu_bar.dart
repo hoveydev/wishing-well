@@ -104,7 +104,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
     ),
     AppMenuBarType.back => Builder(
       builder: (context) => Semantics(
-        label: l10n.appBarDismiss,
+        label: l10n.appBarBack,
         button: true,
         child: Padding(
           padding: const EdgeInsets.all(AppSpacerSize.xsmall),

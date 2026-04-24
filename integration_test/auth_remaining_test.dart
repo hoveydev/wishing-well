@@ -187,7 +187,6 @@ void main() {
               viewModel: ResetPasswordViewModel(
                 authRepository: authMock,
                 email: 'test@example.com',
-                token: 'valid-token',
               ),
             ),
           ),

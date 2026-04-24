@@ -663,6 +663,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No wishers yet'**
   String get allWishersEmpty;
+
+  /// Placeholder text shown in the Coming Up section when no events exist
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing yet'**
+  String get homeComingUpEmpty;
+
+  /// Accessibility label for back navigation button in app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get appBarBack;
 }
 
 class _AppLocalizationsDelegate

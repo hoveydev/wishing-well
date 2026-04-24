@@ -28,6 +28,5 @@ abstract class AuthRepository extends ChangeNotifier {
   Future<Result<void>> resetUserPassword({
     required String email,
     required String newPassword,
-    required String token,
   });
 }

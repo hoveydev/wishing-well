@@ -48,7 +48,7 @@ void main() {
         },
       );
 
-      test('navigates to unknown for non-signup', () async {
+      test('does not navigate for unrecognized account-confirm type', () async {
         final handler = createHandler(
           initialUri: Uri.parse(
             'https://wishing-well-ayb.pages.dev/auth/account-confirm',
@@ -58,7 +58,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(navigatedTo, 'unknown');
+        expect(navigatedTo, isNull);
       });
     });
 

@@ -432,7 +432,7 @@
     "@allWishersEmpty": {
         "description": "Message shown when there are no wishers on the all wishers screen"
     },
-    "allWishersSearchPlaceholder": "Search wishers",
+    "allWishersSearchPlaceholder": "Search Wishers",
     "@allWishersSearchPlaceholder": {
         "description": "Placeholder text for the search bar on the all wishers screen"
     },

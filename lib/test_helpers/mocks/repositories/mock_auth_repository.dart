@@ -101,8 +101,7 @@ class MockAuthRepository extends AuthRepository {
     }
     if (loginResult is Ok) {
       _isAuthenticated = true;
-      _authenticatedUserId =
-          _userId ?? 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
+      _authenticatedUserId = _userId ?? 'mock-user-id';
     }
     notifyListeners();
     return loginResult;
@@ -163,8 +162,7 @@ class MockAuthRepository extends AuthRepository {
     }
     if (loginWithGoogleResult is Ok) {
       _isAuthenticated = true;
-      _authenticatedUserId =
-          _userId ?? 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
+      _authenticatedUserId = _userId ?? 'mock-user-id';
     }
     notifyListeners();
     return loginWithGoogleResult;

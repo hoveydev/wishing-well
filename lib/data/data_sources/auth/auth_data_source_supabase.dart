@@ -1,6 +1,7 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/data_sources/auth/auth_data_source.dart';
+import 'package:wishing_well/utils/app_config.dart';
 
 /// Supabase implementation of [AuthDataSource].
 ///
@@ -96,13 +97,9 @@ class AuthDataSourceSupabase implements AuthDataSource {
   Future<void> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn(
       // iOS only
-      clientId:
-          '641200674201-b7hf3802jnot2htpq34ldhreqdlv1kij'
-          '.apps.googleusercontent.com',
+      clientId: AppConfig.googleOAuthClientIdIos,
       // Android
-      serverClientId:
-          '641200674201-dpfpeb3k9dqhge5q4gfbfkmll3ruv3jm'
-          '.apps.googleusercontent.com',
+      serverClientId: AppConfig.googleOAuthClientIdAndroid,
     );
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) {

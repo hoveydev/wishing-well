@@ -315,7 +315,7 @@ email_optional = false
 
 [auth.external.google]
 enabled = true
-client_id = "641200674201-dpfpeb3k9dqhge5q4gfbfkmll3ruv3jm.apps.googleusercontent.com,641200674201-b7hf3802jnot2htpq34ldhreqdlv1kij.apps.googleusercontent.com"
+client_id = ["641200674201-dpfpeb3k9dqhge5q4gfbfkmll3ruv3jm.apps.googleusercontent.com", "641200674201-b7hf3802jnot2htpq34ldhreqdlv1kij.apps.googleusercontent.com"]
 secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
 skip_nonce_check = false
 

@@ -144,7 +144,7 @@ void main() {
         expect(loadingController.isError, isTrue);
         expect(
           loadingController.message,
-          'An unknown error occured. Please try again',
+          'An unknown error occurred. Please try again',
         );
       });
 

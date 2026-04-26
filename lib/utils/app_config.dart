@@ -38,6 +38,12 @@ class AppConfig {
   static String get profilePicturesBucket =>
       _getOrDefault('STORAGE_PROFILE_PICTURES_BUCKET', 'profile-pictures');
 
+  // Google OAuth client IDs
+  static String get googleOAuthClientIdIos =>
+      _getOrThrow('GOOGLE_OAUTH_CLIENT_ID_IOS');
+  static String get googleOAuthClientIdAndroid =>
+      _getOrThrow('GOOGLE_OAUTH_CLIENT_ID_ANDROID');
+
   static Environment get environment => _environment;
   static bool get isTest => _environment == Environment.test;
   static bool get isLocal => _environment == Environment.local;
@@ -66,6 +72,8 @@ class AppConfig {
     supabaseAnonKey;
     accountConfirmUrl;
     passwordResetUrl;
+    googleOAuthClientIdIos;
+    googleOAuthClientIdAndroid;
 
     AppLogger.info(
       'All environment variables are present for ${_environment.name}',

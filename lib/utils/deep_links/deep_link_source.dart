@@ -6,10 +6,13 @@ typedef LinkStreamProvider = Stream<Uri?> Function();
 class DeepLinkSource {
   const DeepLinkSource({required this.initial, required this.stream});
 
-  factory DeepLinkSource.platform() => DeepLinkSource(
-    initial: () async => await AppLinks().getInitialLink(),
-    stream: () => AppLinks().uriLinkStream.cast<Uri?>(),
-  );
+  factory DeepLinkSource.platform() {
+    final appLinks = AppLinks();
+    return DeepLinkSource(
+      initial: () async => await appLinks.getInitialLink(),
+      stream: () => appLinks.uriLinkStream.cast<Uri?>(),
+    );
+  }
   final InitialLinkProvider initial;
   final LinkStreamProvider stream;
 }

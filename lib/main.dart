@@ -99,12 +99,24 @@ Future<void> _runProduction() async {
 
   final goRouter = router(authRepository: authRepository);
   final deepLinkSource = DeepLinkSource.platform();
+
+  // Supabase processes the password reset deep link internally and emits
+  // a passwordRecovery event once the recovery session is established.
+  // We navigate to the reset-password screen in response to that event
+  // rather than parsing the URI directly, which avoids a race condition
+  // where GoRouter processes the initial deep link URL and redirects to
+  // /login after our URI-based navigation has already fired.
+  final passwordRecoveryStream = Supabase.instance.client.auth.onAuthStateChange
+      .where((state) => state.event == AuthChangeEvent.passwordRecovery)
+      .map((state) => state.session?.user.email);
+
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
       name,
       queryParameters: queryParameters ?? const <String, dynamic>{},
     ),
     source: deepLinkSource,
+    passwordRecovery: passwordRecoveryStream,
   );
   runApp(
     MultiProvider(

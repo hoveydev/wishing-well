@@ -432,6 +432,14 @@
     "@allWishersEmpty": {
         "description": "Message shown when there are no wishers on the all wishers screen"
     },
+    "allWishersSearchPlaceholder": "Search Wishers",
+    "@allWishersSearchPlaceholder": {
+        "description": "Placeholder text for the search bar on the all wishers screen"
+    },
+    "allWishersNoResults": "No Wishers found",
+    "@allWishersNoResults": {
+        "description": "Message shown when a search query returns no matching wishers"
+    },
     "homeComingUpEmpty": "Nothing yet",
     "@homeComingUpEmpty": {
         "description": "Placeholder text shown in the Coming Up section when no events exist"

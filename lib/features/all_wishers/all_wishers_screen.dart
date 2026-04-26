@@ -28,6 +28,17 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
   final _searchFocusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+    // Seed the controller from the ViewModel so the field reflects any
+    // query that was set before the widget was built (e.g. in tests).
+    final initialQuery = widget.viewModel.searchQuery;
+    if (initialQuery.isNotEmpty) {
+      _searchController.text = initialQuery;
+    }
+  }
+
+  @override
   void didUpdateWidget(AllWishersScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.viewModel != widget.viewModel) {

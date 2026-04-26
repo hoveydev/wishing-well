@@ -75,9 +75,10 @@ class AllWishersViewModel extends ChangeNotifier
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return true;
 
-    final firstName = wisher.firstName.toLowerCase();
-    final lastName = wisher.lastName.toLowerCase();
-    final fullName = wisher.name.toLowerCase();
+    final firstName = wisher.firstName.trim().toLowerCase();
+    final lastName = wisher.lastName.trim().toLowerCase();
+    final fullName =
+        '${wisher.firstName.trim()} ${wisher.lastName.trim()}'.toLowerCase();
 
     // 1. Substring match — handles prefix, infix, full-name queries.
     if (firstName.contains(q) || lastName.contains(q) || fullName.contains(q)) {

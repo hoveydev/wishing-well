@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authSignIn => 'Sign In';
 
   @override
+  String get authSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get authGoogleSignInCancelled => 'Google sign-in was cancelled';
+
+  @override
   String get authCreateAccount => 'Create an Account';
 
   @override

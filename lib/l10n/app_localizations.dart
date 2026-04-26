@@ -130,6 +130,18 @@ abstract class AppLocalizations {
   /// **'Sign In'**
   String get authSignIn;
 
+  /// Button label for signing in with Google
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get authSignInWithGoogle;
+
+  /// Message shown when user cancels Google sign-in
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in was cancelled'**
+  String get authGoogleSignInCancelled;
+
   /// Text for the create account link
   ///
   /// In en, this message translates to:

@@ -44,6 +44,12 @@ class MockAuthRepository extends AuthRepository {
 
     /// Optional delay for resetUserPassword operations
     Duration? resetUserPasswordDelay,
+
+    /// Result to return from Google login operations
+    Result<void>? loginWithGoogleResult,
+
+    /// Optional delay for loginWithGoogle operations
+    Duration? loginWithGoogleDelay,
   }) : logoutResult = logoutResult ?? const Result.ok(null),
        loginResult = loginResult ?? const Result.ok(null),
        createAccountResult = createAccountResult ?? const Result.ok(null),
@@ -51,23 +57,27 @@ class MockAuthRepository extends AuthRepository {
            sendPasswordResetRequestResult ?? const Result.ok(null),
        resetUserPasswordResult =
            resetUserPasswordResult ?? const Result.ok(null),
+       loginWithGoogleResult = loginWithGoogleResult ?? const Result.ok(null),
        _userId = userId,
        _loginDelay = loginDelay,
        _createAccountDelay = createAccountDelay,
        _sendPasswordResetRequestDelay = sendPasswordResetRequestDelay,
-       _resetUserPasswordDelay = resetUserPasswordDelay;
+       _resetUserPasswordDelay = resetUserPasswordDelay,
+       _loginWithGoogleDelay = loginWithGoogleDelay;
 
   final String? _userId;
   final Duration? _loginDelay;
   final Duration? _createAccountDelay;
   final Duration? _sendPasswordResetRequestDelay;
   final Duration? _resetUserPasswordDelay;
+  final Duration? _loginWithGoogleDelay;
 
   final Result<void> logoutResult;
   final Result<void> loginResult;
   final Result<void> createAccountResult;
   final Result<void> sendPasswordResetRequestResult;
   final Result<void> resetUserPasswordResult;
+  final Result<void> loginWithGoogleResult;
 
   bool _isAuthenticated = false;
 
@@ -144,5 +154,19 @@ class MockAuthRepository extends AuthRepository {
     }
     notifyListeners();
     return resetUserPasswordResult;
+  }
+
+  @override
+  Future<Result<void>> loginWithGoogle() async {
+    if (_loginWithGoogleDelay != null) {
+      await Future.delayed(_loginWithGoogleDelay);
+    }
+    if (loginWithGoogleResult is Ok) {
+      _isAuthenticated = true;
+      _authenticatedUserId =
+          _userId ?? 'mock-user-${DateTime.now().millisecondsSinceEpoch}';
+    }
+    notifyListeners();
+    return loginWithGoogleResult;
   }
 }

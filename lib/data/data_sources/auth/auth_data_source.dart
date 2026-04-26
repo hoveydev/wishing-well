@@ -49,4 +49,9 @@ abstract class AuthDataSource {
 
   /// Returns the user's first name from metadata, if available.
   String? get userFirstName;
+
+  /// Signs in with Google using an ID token.
+  ///
+  /// Throws an exception on failure.
+  Future<void> signInWithGoogle();
 }

@@ -24,6 +24,14 @@
     "@authSignIn": {
         "description": "Text for the sign in button"
     },
+    "authSignInWithGoogle": "Sign in with Google",
+    "@authSignInWithGoogle": {
+        "description": "Button label for signing in with Google"
+    },
+    "authGoogleSignInCancelled": "Google sign-in was cancelled",
+    "@authGoogleSignInCancelled": {
+        "description": "Message shown when user cancels Google sign-in"
+    },
     "authCreateAccount": "Create an Account",
     "@authCreateAccount": {
         "description": "Text for the create account link"

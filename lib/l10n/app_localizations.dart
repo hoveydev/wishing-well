@@ -667,7 +667,7 @@ abstract class AppLocalizations {
   /// Placeholder text for the search bar on the all wishers screen
   ///
   /// In en, this message translates to:
-  /// **'Search wishers'**
+  /// **'Search Wishers'**
   String get allWishersSearchPlaceholder;
 
   /// Message shown when a search query returns no matching wishers

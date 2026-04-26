@@ -28,6 +28,14 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
   final _searchFocusNode = FocusNode();
 
   @override
+  void didUpdateWidget(AllWishersScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.viewModel != widget.viewModel) {
+      widget.viewModel.updateSearchQuery(_searchController.text);
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     _searchFocusNode.dispose();
@@ -113,9 +121,7 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     final lineHeight = scaledFontSize * (style.height ?? 1.2);
     // wisherSpacing * 2 = top + bottom padding around the header content;
     // wisherSpacing * 0.5 = gap between title and search bar.
-    return lineHeight +
-        (AppSpacing.wisherSpacing * 2.5) +
-        _kSearchBarHeight;
+    return lineHeight + (AppSpacing.wisherSpacing * 2.5) + _kSearchBarHeight;
   }
 }
 
@@ -137,40 +143,39 @@ class _BlurredHeader extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
 
   @override
-  Widget build(BuildContext context) =>
-      ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          color: Theme.of(
-            context,
-          ).scaffoldBackgroundColor.withValues(alpha: 0.75),
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.screenPaddingStandard,
-            AppSpacing.wisherSpacing,
-            AppSpacing.screenPaddingStandard,
-            AppSpacing.wisherSpacing,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(title, style: textTheme.headlineMedium),
-              const SizedBox(height: AppSpacing.wisherSpacing / 2),
-              SizedBox(
-                height: _kSearchBarHeight,
-                child: AppSearchInput(
-                  placeholder: searchPlaceholder,
-                  controller: searchController,
-                  focusNode: searchFocusNode,
-                  onChanged: onSearchChanged,
-                ),
+  Widget build(BuildContext context) => ClipRect(
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+      child: Container(
+        color: Theme.of(
+          context,
+        ).scaffoldBackgroundColor.withValues(alpha: 0.75),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.screenPaddingStandard,
+          AppSpacing.wisherSpacing,
+          AppSpacing.screenPaddingStandard,
+          AppSpacing.wisherSpacing,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: textTheme.headlineMedium),
+            const SizedBox(height: AppSpacing.wisherSpacing / 2),
+            SizedBox(
+              height: _kSearchBarHeight,
+              child: AppSearchInput(
+                placeholder: searchPlaceholder,
+                controller: searchController,
+                focusNode: searchFocusNode,
+                onChanged: onSearchChanged,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
 }
 
 class _WisherListTile extends StatelessWidget {

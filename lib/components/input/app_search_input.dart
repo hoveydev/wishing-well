@@ -52,16 +52,16 @@ class _AppSearchInputState extends State<AppSearchInput> {
     super.dispose();
   }
 
-  void _handleFocusChange() =>
-      setState(() => _isFocused = _focusNode.hasFocus);
+  void _handleFocusChange() => setState(() => _isFocused = _focusNode.hasFocus);
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
     final colorScheme = context.colorScheme;
 
-    final borderColor =
-        _isFocused ? colorScheme.primary! : colorScheme.borderGray!;
+    final borderColor = _isFocused
+        ? colorScheme.primary!
+        : colorScheme.borderGray!;
 
     return Semantics(
       label: widget.placeholder,
@@ -81,16 +81,11 @@ class _AppSearchInputState extends State<AppSearchInput> {
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.search),
             prefixIconColor: colorScheme.primary,
-            hint: Text(
-              widget.placeholder,
-              style: textStyle.bodyMedium,
-            ),
+            hint: Text(widget.placeholder, style: textStyle.bodyMedium),
             // Inset by the border width so the inner radius matches
             // the outer animated border.
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                AppBorderRadius.medium - 1.5,
-              ),
+              borderRadius: BorderRadius.circular(AppBorderRadius.medium - 1.5),
               borderSide: BorderSide.none,
             ),
           ),

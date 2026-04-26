@@ -260,6 +260,45 @@ void main() {
         await tester.pump(const Duration(milliseconds: 20));
         await fetchFuture;
       });
+
+      testWidgets(
+        'keeps list filtered when ViewModel is replaced while search text is '
+        'active (simulates go_router pageBuilder re-invocation on back)',
+        (WidgetTester tester) async {
+          // viewModel becomes orphaned when we swap to freshViewModel below, so
+          // register it for cleanup since the widget teardown won't dispose it.
+          addTearDown(viewModel.dispose);
+
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              child: AllWishersScreen(viewModel: viewModel),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          // Type a search query so only Alice is visible.
+          await tester.enterText(find.byType(TextField), 'Alice');
+          await TestHelpers.pumpAndSettle(tester);
+          expect(find.text('Alice Test'), findsOneWidget);
+          expect(find.text('Bob Test'), findsNothing);
+
+          // Simulate go_router rebuilding the page with a fresh ViewModel
+          // (the real scenario when navigating back from wisher details).
+          final freshViewModel = AllWishersViewModel(
+            wisherRepository: mockWisherRepository,
+          );
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              child: AllWishersScreen(viewModel: freshViewModel),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
+
+          // The list must still be filtered — not reset to all wishers.
+          expect(find.text('Alice Test'), findsOneWidget);
+          expect(find.text('Bob Test'), findsNothing);
+        },
+      );
     });
   });
 }

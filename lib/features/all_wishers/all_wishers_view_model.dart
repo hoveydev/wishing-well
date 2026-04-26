@@ -80,17 +80,16 @@ class AllWishersViewModel extends ChangeNotifier
     final fullName = wisher.name.toLowerCase();
 
     // 1. Substring match — handles prefix, infix, full-name queries.
-    if (firstName.contains(q) ||
-        lastName.contains(q) ||
-        fullName.contains(q)) {
+    if (firstName.contains(q) || lastName.contains(q) || fullName.contains(q)) {
       return true;
     }
 
     // 2. Fuzzy word-by-word match — allows for minor typos (e.g. "Jon"→"John").
-    final queryWords =
-        q.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
-    final nameWords =
-        [firstName, lastName].where((s) => s.isNotEmpty).toList();
+    final queryWords = q
+        .split(RegExp(r'\s+'))
+        .where((w) => w.isNotEmpty)
+        .toList();
+    final nameWords = [firstName, lastName].where((s) => s.isNotEmpty).toList();
 
     return queryWords.every(
       (qWord) => nameWords.any((nWord) => _fuzzyWordMatch(qWord, nWord)),

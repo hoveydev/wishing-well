@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,12 +18,14 @@ import 'package:wishing_well/test_helpers/mocks/routing/mock_router.dart';
 dynamic startAppWithLoginScreen(
   WidgetTester tester,
   GoRouter router,
-  MockDeepLinkSource source,
-) async {
+  MockDeepLinkSource source, {
+  Stream<String?>? passwordRecovery,
+}) async {
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) =>
         router.goNamed(name, queryParameters: queryParameters ?? const {}),
     source: source,
+    passwordRecovery: passwordRecovery,
   );
   final Widget app = MultiProvider(
     providers: [
@@ -154,19 +157,25 @@ void main() {
     });
 
     group(TestGroups.interaction, () {
-      testWidgets('Login > Reset Password (deep link) > Login', (
+      testWidgets('Login > Reset Password (password recovery) > Login', (
         WidgetTester tester,
       ) async {
         final mockRouter = createMockRouter();
-        final source = MockDeepLinkSource(
-          initialUri: Uri.parse('https://wishingwell.app/auth/password-reset'),
+        final recoveryController = StreamController<String?>.broadcast();
+        final source = MockDeepLinkSource();
+        await startAppWithLoginScreen(
+          tester,
+          mockRouter,
+          source,
+          passwordRecovery: recoveryController.stream,
         );
-        await startAppWithLoginScreen(tester, mockRouter, source);
+        recoveryController.add('user@example.com');
         await TestHelpers.pumpAndSettle(tester);
         expect(mockRouter.state.uri.path, '/forgot-password/reset');
         await tester.tap(find.byIcon(Icons.close));
         await TestHelpers.pumpAndSettle(tester);
         expect(mockRouter.state.uri.path, '/login');
+        await recoveryController.close();
       });
 
       // Note: Tests removed - they tested old confirmation screen behavior

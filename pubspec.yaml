@@ -7,6 +7,7 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
+  app_links: ^6.2.0
   cached_network_image: ^3.4.1
   coverage: ^1.15.0
   dotted_border: ^3.1.0
@@ -25,7 +26,6 @@ dependencies:
   google_fonts: ^6.3.2
   google_sign_in: ^6.2.1
   image_picker: ^1.1.2
-
   intl: any
   logging: ^1.2.0
   provider: ^6.1.5+1

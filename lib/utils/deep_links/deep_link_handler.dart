@@ -7,15 +7,28 @@ typedef NavigateFn =
     void Function(String routeName, Map<String, dynamic>? queryParameters);
 
 class DeepLinkHandler {
-  DeepLinkHandler(this.navigate, {required this.source});
+  DeepLinkHandler(this.navigate, {required this.source, this.passwordRecovery});
   final NavigateFn navigate;
   final DeepLinkSource source;
+
+  /// Emits the user's email when a password recovery auth event is received.
+  ///
+  /// Password reset navigation is handled via Supabase's auth state change
+  /// rather than URI parsing to avoid a race condition where GoRouter
+  /// processes the initial deep link URL and redirects back to login after
+  /// our URI-based navigation fires.
+  final Stream<String?>? passwordRecovery;
+
   StreamSubscription? _sub;
+  StreamSubscription? _recoverySub;
 
   void init() {
     _handleInitialUri();
     _sub = source.stream().listen((uri) {
       if (uri != null) _navigateFromUri(uri);
+    });
+    _recoverySub = passwordRecovery?.listen((email) {
+      navigate(Routes.resetPassword.name, {'email': email});
     });
   }
 
@@ -51,16 +64,11 @@ class DeepLinkHandler {
           );
         }
         break;
-      case 'password-reset':
-        navigate(Routes.resetPassword.name, {
-          'email': uri.queryParameters['email'],
-          'token': uri.queryParameters['code'],
-        });
-        break;
     }
   }
 
   void dispose() {
     _sub?.cancel();
+    _recoverySub?.cancel();
   }
 }

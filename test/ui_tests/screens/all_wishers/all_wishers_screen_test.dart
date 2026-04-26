@@ -110,24 +110,24 @@ void main() {
       });
 
       testWidgets(
-          'search field shows pre-existing query when ViewModel already '
-          'has a non-empty searchQuery at build time', (
-        WidgetTester tester,
-      ) async {
-        final testViewModel = _TestAllWishersViewModel(
-          wisherRepository: mockWisherRepository,
-        )..updateSearchQuery('Alice');
+        'search field shows pre-existing query when ViewModel already '
+        'has a non-empty searchQuery at build time',
+        (WidgetTester tester) async {
+          final testViewModel = _TestAllWishersViewModel(
+            wisherRepository: mockWisherRepository,
+          )..updateSearchQuery('Alice');
 
-        await tester.pumpWidget(
-          createScreenTestWidget(
-            child: AllWishersScreen(viewModel: testViewModel),
-          ),
-        );
-        await TestHelpers.pumpAndSettle(tester);
+          await tester.pumpWidget(
+            createScreenTestWidget(
+              child: AllWishersScreen(viewModel: testViewModel),
+            ),
+          );
+          await TestHelpers.pumpAndSettle(tester);
 
-        final textField = tester.widget<TextField>(find.byType(TextField));
-        expect(textField.controller?.text, 'Alice');
-      });
+          final textField = tester.widget<TextField>(find.byType(TextField));
+          expect(textField.controller?.text, 'Alice');
+        },
+      );
     });
 
     group(TestGroups.interaction, () {

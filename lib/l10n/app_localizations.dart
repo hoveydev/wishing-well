@@ -130,6 +130,18 @@ abstract class AppLocalizations {
   /// **'Sign In'**
   String get authSignIn;
 
+  /// Button label for signing in with Google
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get authSignInWithGoogle;
+
+  /// Message shown when user cancels Google sign-in
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in was cancelled'**
+  String get authGoogleSignInCancelled;
+
   /// Text for the create account link
   ///
   /// In en, this message translates to:
@@ -663,6 +675,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No wishers yet'**
   String get allWishersEmpty;
+
+  /// Placeholder text for the search bar on the all wishers screen
+  ///
+  /// In en, this message translates to:
+  /// **'Search Wishers'**
+  String get allWishersSearchPlaceholder;
+
+  /// Message shown when a search query returns no matching wishers
+  ///
+  /// In en, this message translates to:
+  /// **'No Wishers found'**
+  String get allWishersNoResults;
 
   /// Placeholder text shown in the Coming Up section when no events exist
   ///

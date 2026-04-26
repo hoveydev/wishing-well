@@ -29,4 +29,7 @@ abstract class AuthRepository extends ChangeNotifier {
     required String email,
     required String newPassword,
   });
+
+  /// Sign in with Google
+  Future<Result<void>> loginWithGoogle();
 }

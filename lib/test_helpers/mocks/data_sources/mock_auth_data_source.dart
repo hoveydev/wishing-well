@@ -18,6 +18,7 @@ class MockAuthDataSource implements AuthDataSource {
     this.resetPasswordForEmailError,
     this.updateUserPasswordResult,
     this.updateUserPasswordError,
+    this.signInWithGoogleError,
   });
 
   /// The user ID to return for [currentUserId].
@@ -59,6 +60,9 @@ class MockAuthDataSource implements AuthDataSource {
   /// Takes precedence over [updateUserPasswordResult].
   Exception? updateUserPasswordError;
 
+  /// The exception to throw from [signInWithGoogle].
+  Exception? signInWithGoogleError;
+
   /// Tracks whether [signInWithPassword] was called.
   bool signInWithPasswordCalled = false;
 
@@ -73,6 +77,9 @@ class MockAuthDataSource implements AuthDataSource {
 
   /// Tracks whether [updateUserPassword] was called.
   bool updateUserPasswordCalled = false;
+
+  /// Tracks whether [signInWithGoogle] was called.
+  bool signInWithGoogleCalled = false;
 
   @override
   String? get currentUserId => mockUserId;
@@ -148,5 +155,13 @@ class MockAuthDataSource implements AuthDataSource {
     }
     return updateUserPasswordResult ??
         {'user_id': 'test-user-id', 'email': email};
+  }
+
+  @override
+  Future<void> signInWithGoogle() async {
+    signInWithGoogleCalled = true;
+    if (signInWithGoogleError != null) {
+      throw signInWithGoogleError!;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/test_helpers/mocks/repositories/mock_wisher_repository.dart';
@@ -37,6 +38,14 @@ void main() {
       test('isLoading reflects repository loading state', () {
         expect(viewModel.isLoading, isFalse);
       });
+
+      test('searchQuery starts empty', () {
+        expect(viewModel.searchQuery, '');
+      });
+
+      test('filteredWishers equals wishers when searchQuery is empty', () {
+        expect(viewModel.filteredWishers, viewModel.wishers);
+      });
     });
 
     group('Repository listener', () {
@@ -60,6 +69,156 @@ void main() {
         mockWisherRepository.notifyListeners();
 
         expect(notificationCount, 0);
+      });
+    });
+
+    group('Search', () {
+      test('updateSearchQuery updates searchQuery', () {
+        viewModel.updateSearchQuery('Alice');
+        expect(viewModel.searchQuery, 'Alice');
+      });
+
+      test('updateSearchQuery notifies listeners', () {
+        var count = 0;
+        viewModel.addListener(() => count++);
+        viewModel.updateSearchQuery('Bob');
+        expect(count, 1);
+      });
+
+      test(
+        'updateSearchQuery does not notify listeners for identical query',
+        () {
+          viewModel.updateSearchQuery('Alice');
+          var count = 0;
+          viewModel.addListener(() => count++);
+          viewModel.updateSearchQuery('Alice');
+          expect(count, 0);
+        },
+      );
+
+      test('filteredWishers returns all when query is whitespace-only', () {
+        viewModel.updateSearchQuery('   ');
+        expect(viewModel.filteredWishers.length, viewModel.wishers.length);
+      });
+
+      test('filteredWishers filters by first name substring', () {
+        viewModel.updateSearchQuery('alice');
+        expect(viewModel.filteredWishers.length, 1);
+        expect(viewModel.filteredWishers.first.firstName, 'Alice');
+      });
+
+      test('filteredWishers filters case-insensitively', () {
+        viewModel.updateSearchQuery('ALICE');
+        expect(viewModel.filteredWishers.length, 1);
+        expect(viewModel.filteredWishers.first.firstName, 'Alice');
+      });
+
+      test('filteredWishers filters by last name substring', () {
+        // All default wishers share "Test" as last name
+        viewModel.updateSearchQuery('test');
+        expect(viewModel.filteredWishers.length, viewModel.wishers.length);
+      });
+
+      test('filteredWishers returns empty for no match', () {
+        viewModel.updateSearchQuery('xyz_no_match');
+        expect(viewModel.filteredWishers, isEmpty);
+      });
+
+      test('filteredWishers resets when query is cleared', () {
+        viewModel.updateSearchQuery('alice');
+        viewModel.updateSearchQuery('');
+        expect(viewModel.filteredWishers.length, viewModel.wishers.length);
+      });
+
+      test('filteredWishers includes fuzzy match for single-character '
+          'insertion (e.g. "Jon" matches "John")', () {
+        final repo = MockWisherRepository(
+          initialWishers: [
+            Wisher(
+              id: '1',
+              userId: 'u',
+              firstName: 'John',
+              lastName: 'Doe',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+            Wisher(
+              id: '2',
+              userId: 'u',
+              firstName: 'Jane',
+              lastName: 'Doe',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+          ],
+        );
+        final vm = AllWishersViewModel(wisherRepository: repo);
+        addTearDown(vm.dispose);
+
+        vm.updateSearchQuery('Jon');
+
+        // "Jon" has edit distance 1 from "John" (≤ threshold of 1 for len 3),
+        // so John should be included; Jane should not.
+        expect(vm.filteredWishers.length, 1);
+        expect(vm.filteredWishers.first.firstName, 'John');
+      });
+
+      test('filteredWishers excludes words beyond edit-distance threshold', () {
+        final repo = MockWisherRepository(
+          initialWishers: [
+            Wisher(
+              id: '1',
+              userId: 'u',
+              firstName: 'Alice',
+              lastName: 'Smith',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+          ],
+        );
+        final vm = AllWishersViewModel(wisherRepository: repo);
+        addTearDown(vm.dispose);
+
+        // "xy" is length 2 → threshold 0 (exact only), and
+        // "alice" doesn't contain "xy" → no match.
+        vm.updateSearchQuery('xy');
+        expect(vm.filteredWishers, isEmpty);
+      });
+
+      test('filteredWishers matches prefix of name', () {
+        viewModel.updateSearchQuery('ali');
+        expect(viewModel.filteredWishers.length, 1);
+        expect(viewModel.filteredWishers.first.firstName, 'Alice');
+      });
+
+      test('filteredWishers matches multi-word query across first and last '
+          'name', () {
+        final repo = MockWisherRepository(
+          initialWishers: [
+            Wisher(
+              id: '1',
+              userId: 'u',
+              firstName: 'Alice',
+              lastName: 'Smith',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+            Wisher(
+              id: '2',
+              userId: 'u',
+              firstName: 'Bob',
+              lastName: 'Smith',
+              createdAt: DateTime(2024),
+              updatedAt: DateTime(2024),
+            ),
+          ],
+        );
+        final vm = AllWishersViewModel(wisherRepository: repo);
+        addTearDown(vm.dispose);
+
+        vm.updateSearchQuery('alice smith');
+        expect(vm.filteredWishers.length, 1);
+        expect(vm.filteredWishers.first.firstName, 'Alice');
       });
     });
 

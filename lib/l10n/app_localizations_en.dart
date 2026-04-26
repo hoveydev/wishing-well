@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authSignIn => 'Sign In';
 
   @override
+  String get authSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get authGoogleSignInCancelled => 'Google sign-in was cancelled';
+
+  @override
   String get authCreateAccount => 'Create an Account';
 
   @override
@@ -325,6 +331,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allWishersEmpty => 'No wishers yet';
+
+  @override
+  String get allWishersSearchPlaceholder => 'Search Wishers';
+
+  @override
+  String get allWishersNoResults => 'No Wishers found';
 
   @override
   String get homeComingUpEmpty => 'Nothing yet';

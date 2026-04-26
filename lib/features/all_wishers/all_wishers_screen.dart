@@ -3,12 +3,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
+import 'package:wishing_well/components/input/app_search_input.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_spacing.dart';
+
+// Height of the search bar input within the blurred header.
+const double _kSearchBarHeight = 48.0;
 
 class AllWishersScreen extends StatefulWidget {
   const AllWishersScreen({required this.viewModel, super.key});
@@ -20,8 +24,32 @@ class AllWishersScreen extends StatefulWidget {
 }
 
 class _AllWishersScreenState extends State<AllWishersScreen> {
+  final _searchController = TextEditingController();
+  final _searchFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Seed the controller from the ViewModel so the field reflects any
+    // query that was set before the widget was built (e.g. in tests).
+    final initialQuery = widget.viewModel.searchQuery;
+    if (initialQuery.isNotEmpty) {
+      _searchController.text = initialQuery;
+    }
+  }
+
+  @override
+  void didUpdateWidget(AllWishersScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.viewModel != widget.viewModel) {
+      widget.viewModel.updateSearchQuery(_searchController.text);
+    }
+  }
+
   @override
   void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
     widget.viewModel.dispose();
     super.dispose();
   }
@@ -54,29 +82,41 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
       return SafeArea(child: Center(child: Text(l10n.allWishersEmpty)));
     }
 
+    final filtered = widget.viewModel.filteredWishers;
+
     return Stack(
       children: [
-        ListView.builder(
-          padding: EdgeInsets.only(
-            top: _headerExtent(context),
-            bottom: bottomPadding,
-          ),
-          itemCount: widget.viewModel.wishers.length,
-          itemBuilder: (context, index) {
-            final wisher = widget.viewModel.wishers[index];
-            return _WisherListTile(
-              wisher: wisher,
-              onTap: () => widget.viewModel.tapWisherItem(context, wisher),
-            );
-          },
-        ),
+        filtered.isEmpty
+            ? Padding(
+                padding: EdgeInsets.only(top: _headerExtent(context)),
+                child: Center(child: Text(l10n.allWishersNoResults)),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.only(
+                  top: _headerExtent(context),
+                  bottom: bottomPadding,
+                ),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final wisher = filtered[index];
+                  return _WisherListTile(
+                    wisher: wisher,
+                    onTap: () =>
+                        widget.viewModel.tapWisherItem(context, wisher),
+                  );
+                },
+              ),
         Positioned(
           top: 0,
           left: 0,
           right: 0,
           child: _BlurredHeader(
             title: l10n.allWishersTitle,
+            searchPlaceholder: l10n.allWishersSearchPlaceholder,
             textTheme: textTheme,
+            searchController: _searchController,
+            searchFocusNode: _searchFocusNode,
+            onSearchChanged: widget.viewModel.updateSearchQuery,
           ),
         ),
       ],
@@ -90,15 +130,28 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     final style = textTheme.headlineMedium ?? const TextStyle(fontSize: 28);
     final scaledFontSize = textScaler.scale(style.fontSize ?? 28);
     final lineHeight = scaledFontSize * (style.height ?? 1.2);
-    return lineHeight + (AppSpacing.wisherSpacing * 2);
+    // wisherSpacing * 2 = top + bottom padding around the header content;
+    // wisherSpacing * 0.5 = gap between title and search bar.
+    return lineHeight + (AppSpacing.wisherSpacing * 2.5) + _kSearchBarHeight;
   }
 }
 
 class _BlurredHeader extends StatelessWidget {
-  const _BlurredHeader({required this.title, required this.textTheme});
+  const _BlurredHeader({
+    required this.title,
+    required this.searchPlaceholder,
+    required this.textTheme,
+    required this.searchController,
+    required this.searchFocusNode,
+    required this.onSearchChanged,
+  });
 
   final String title;
+  final String searchPlaceholder;
   final TextTheme textTheme;
+  final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final ValueChanged<String> onSearchChanged;
 
   @override
   Widget build(BuildContext context) => ClipRect(
@@ -114,7 +167,23 @@ class _BlurredHeader extends StatelessWidget {
           AppSpacing.screenPaddingStandard,
           AppSpacing.wisherSpacing,
         ),
-        child: Text(title, style: textTheme.headlineMedium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: textTheme.headlineMedium),
+            const SizedBox(height: AppSpacing.wisherSpacing / 2),
+            SizedBox(
+              height: _kSearchBarHeight,
+              child: AppSearchInput(
+                placeholder: searchPlaceholder,
+                controller: searchController,
+                focusNode: searchFocusNode,
+                onChanged: onSearchChanged,
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );

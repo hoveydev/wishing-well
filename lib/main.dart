@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -117,6 +119,22 @@ Future<void> _runProduction() async {
     ),
     source: deepLinkSource,
     passwordRecovery: passwordRecoveryStream,
+  );
+
+  // Catch exceptions from Supabase's auth processing of deeplinks.
+  // When an expired/invalid deeplink is clicked, Supabase throws an AuthException
+  // before we can process it, so we subscribe to catch and suppress it.
+  unawaited(
+    Supabase.instance.client.auth.onAuthStateChange
+        .listen(
+          (_) {
+            // Auth state changes handled by passwordRecoveryStream above
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            // Suppress deeplink auth errors to prevent crashes
+          },
+        )
+        .asFuture(),
   );
   runApp(
     MultiProvider(

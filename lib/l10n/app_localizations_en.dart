@@ -337,4 +337,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appBarBack => 'Back';
+
+  @override
+  String get deepLinkErrorTitle => 'Link Expired or Invalid';
+
+  @override
+  String get deepLinkErrorPasswordResetMessage =>
+      'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.';
+
+  @override
+  String get deepLinkErrorPasswordResetAction => 'Request New Link';
+
+  @override
+  String get deepLinkErrorAccountConfirmMessage =>
+      'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.';
+
+  @override
+  String get deepLinkErrorAccountConfirmAction => 'Return to Login';
+
+  @override
+  String get deepLinkErrorGenericMessage =>
+      'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.';
+
+  @override
+  String get deepLinkErrorGenericAction => 'Return to Login';
 }

@@ -687,6 +687,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get appBarBack;
+
+  /// Title shown on the deep link error screen
+  ///
+  /// In en, this message translates to:
+  /// **'Link Expired or Invalid'**
+  String get deepLinkErrorTitle;
+
+  /// Error message shown when a password reset deep link is expired or invalid
+  ///
+  /// In en, this message translates to:
+  /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
+  String get deepLinkErrorPasswordResetMessage;
+
+  /// Action button label on deep link error screen for password reset errors
+  ///
+  /// In en, this message translates to:
+  /// **'Request New Link'**
+  String get deepLinkErrorPasswordResetAction;
+
+  /// Error message shown when an account confirmation deep link is expired or invalid
+  ///
+  /// In en, this message translates to:
+  /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
+  String get deepLinkErrorAccountConfirmMessage;
+
+  /// Action button label on deep link error screen for account confirmation errors
+  ///
+  /// In en, this message translates to:
+  /// **'Return to Login'**
+  String get deepLinkErrorAccountConfirmAction;
+
+  /// Generic error message shown on the deep link error screen when the error type is unknown
+  ///
+  /// In en, this message translates to:
+  /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
+  String get deepLinkErrorGenericMessage;
+
+  /// Generic action button label on deep link error screen
+  ///
+  /// In en, this message translates to:
+  /// **'Return to Login'**
+  String get deepLinkErrorGenericAction;
 }
 
 class _AppLocalizationsDelegate

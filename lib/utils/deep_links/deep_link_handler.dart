@@ -35,18 +35,26 @@ class DeepLinkHandler {
   Future<void> _handleInitialUri() async {
     try {
       final uri = await source.initial();
-      if (uri != null) _navigateFromUri(uri);
-    } catch (e, stackTrace) {
+      if (uri != null) {
+        _navigateFromUri(uri);
+      }
+    } catch (e) {
       AppLogger.error(
-        'Error handling initial URI',
-        context: 'DeepLinkHandler',
-        error: e,
-        stackTrace: stackTrace,
+        'Error handling initial URI: $e',
+        context: 'DeepLinkHandler._handleInitialUri',
       );
     }
   }
 
   void _navigateFromUri(Uri uri) {
+    // First, check for error query params (these can come on any path)
+    if (uri.queryParameters.containsKey('error')) {
+      // Extract the path segment to determine error type (if it's an auth path)
+      final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
+      _navigateToDeepLinkError(subPath, uri.queryParameters);
+      return;
+    }
+
     if (uri.pathSegments.isEmpty) return;
     if (uri.pathSegments.first != 'auth') return;
 
@@ -57,14 +65,26 @@ class DeepLinkHandler {
         if (uri.queryParameters['type'] == 'signup') {
           navigate(Routes.login.name, {'accountConfirmed': 'true'});
         } else {
-          AppLogger.warning(
-            'Unrecognized type parameter (or it may not exist) - '
-            'not navigating',
-            context: 'DeepLinkHandler._navigateFromUri',
-          );
+          _navigateToDeepLinkError(subPath, uri.queryParameters);
         }
         break;
     }
+  }
+
+  /// Navigates to the deep link error screen with an appropriate error type.
+  void _navigateToDeepLinkError(
+    String? subPath,
+    Map<String, String> queryParameters,
+  ) {
+    final errorType = switch (subPath) {
+      'password-reset' => 'password-reset',
+      'account-confirm' => 'account-confirm',
+      _ => 'unknown',
+    };
+    navigate(Routes.deepLinkError.name, {
+      'errorType': errorType,
+      'errorDescription': queryParameters['error_description'],
+    });
   }
 
   void dispose() {

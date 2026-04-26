@@ -447,5 +447,33 @@
     "appBarBack": "Back",
     "@appBarBack": {
         "description": "Accessibility label for back navigation button in app bar"
+    },
+    "deepLinkErrorTitle": "Link Expired or Invalid",
+    "@deepLinkErrorTitle": {
+        "description": "Title shown on the deep link error screen"
+    },
+    "deepLinkErrorPasswordResetMessage": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
+    "@deepLinkErrorPasswordResetMessage": {
+        "description": "Error message shown when a password reset deep link is expired or invalid"
+    },
+    "deepLinkErrorPasswordResetAction": "Request New Link",
+    "@deepLinkErrorPasswordResetAction": {
+        "description": "Action button label on deep link error screen for password reset errors"
+    },
+    "deepLinkErrorAccountConfirmMessage": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
+    "@deepLinkErrorAccountConfirmMessage": {
+        "description": "Error message shown when an account confirmation deep link is expired or invalid"
+    },
+    "deepLinkErrorAccountConfirmAction": "Return to Login",
+    "@deepLinkErrorAccountConfirmAction": {
+        "description": "Action button label on deep link error screen for account confirmation errors"
+    },
+    "deepLinkErrorGenericMessage": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
+    "@deepLinkErrorGenericMessage": {
+        "description": "Generic error message shown on the deep link error screen when the error type is unknown"
+    },
+    "deepLinkErrorGenericAction": "Return to Login",
+    "@deepLinkErrorGenericAction": {
+        "description": "Generic action button label on deep link error screen"
     }
 }

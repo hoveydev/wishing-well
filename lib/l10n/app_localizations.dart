@@ -205,7 +205,7 @@ abstract class AppLocalizations {
   /// Generic error message when an unknown error occurs
   ///
   /// In en, this message translates to:
-  /// **'An unknown error occured. Please try again'**
+  /// **'An unknown error occurred. Please try again'**
   String get errorUnknown;
 
   /// Header for login screen

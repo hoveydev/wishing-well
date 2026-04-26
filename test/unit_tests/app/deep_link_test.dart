@@ -7,12 +7,12 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 void main() {
   late StreamController<Uri?> stream;
   late String? navigatedTo;
-  late Map<String, dynamic>? navigatedQueryParams;
+  late String? errorMessage;
 
   setUp(() {
     stream = StreamController<Uri?>();
     navigatedTo = null;
-    navigatedQueryParams = null;
+    errorMessage = null;
   });
 
   tearDown(() async {
@@ -31,10 +31,12 @@ void main() {
     return DeepLinkHandler(
       (routeName, queryParams) {
         navigatedTo = routeName;
-        navigatedQueryParams = queryParams;
       },
       source: source,
       passwordRecovery: passwordRecovery,
+      onError: (msg) {
+        errorMessage = msg;
+      },
     );
   }
 
@@ -57,22 +59,22 @@ void main() {
         },
       );
 
-      test(
-        'navigates to deep-link-error for unrecognized account-confirm type',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/account-confirm',
-            ),
-          );
+      test('calls onError for unrecognized account-confirm type', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
+          ),
+        );
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'account-confirm');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
       test('does not navigate for password-reset initial URI', () async {
         final handler = createHandler(
@@ -90,140 +92,117 @@ void main() {
     });
 
     group(TestGroups.errorHandling, () {
-      test(
-        'navigates to deep-link-error for password-reset error URI',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/password-reset'
-              '?error=access_denied&error_code=otp_expired'
-              '&error_description=Email+link+is+invalid+or+has+expired',
-            ),
-          );
+      test('calls onError for password-reset error URI', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/password-reset'
+            '?error=access_denied&error_code=otp_expired'
+            '&error_description=Email+link+is+invalid+or+has+expired',
+          ),
+        );
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'password-reset');
-          expect(
-            navigatedQueryParams?['errorDescription'],
-            'Email link is invalid or has expired',
-          );
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
-      test(
-        'navigates to deep-link-error for account-confirm error URI',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
-              '?error=access_denied&error_code=otp_expired'
-              '&error_description=Email+link+is+invalid+or+has+expired',
-            ),
-          );
+      test('calls onError for account-confirm error URI', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?error=access_denied&error_code=otp_expired'
+            '&error_description=Email+link+is+invalid+or+has+expired',
+          ),
+        );
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'account-confirm');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
-      test(
-        'navigates to deep-link-error with unknown type for unrecognized path',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/unknown-path'
-              '?error=access_denied',
-            ),
-          );
+      test('calls onError for unrecognized path', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/unknown-path'
+            '?error=access_denied',
+          ),
+        );
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'unknown');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
-      test(
-        'navigates to deep-link-error via stream for password-reset error',
-        () async {
-          final handler = createHandler();
-          handler.init();
+      test('calls onError via stream for password-reset error', () async {
+        final handler = createHandler();
+        handler.init();
 
-          stream.add(
-            Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/password-reset'
-              '?error=access_denied&error_code=otp_expired',
-            ),
-          );
-          await Future<void>.delayed(Duration.zero);
+        stream.add(
+          Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/password-reset'
+            '?error=access_denied&error_code=otp_expired',
+          ),
+        );
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'password-reset');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
-      test(
-        'navigates to deep-link-error via stream for account-confirm error',
-        () async {
-          final handler = createHandler();
-          handler.init();
+      test('calls onError via stream for account-confirm error', () async {
+        final handler = createHandler();
+        handler.init();
 
-          stream.add(
-            Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
-              '?error=access_denied',
-            ),
-          );
-          await Future<void>.delayed(Duration.zero);
+        stream.add(
+          Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?error=access_denied',
+          ),
+        );
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'account-confirm');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
 
-      test(
-        'errorDescription is null in query params when not present in URI',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/password-reset'
-              '?error=access_denied',
-            ),
-          );
+      test('calls onError for error query params without auth path', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/?error=access_denied'
+            '&error_code=otp_expired&error_description=Invalid+link',
+          ),
+        );
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorDescription'], isNull);
-        },
-      );
-
-      test(
-        'navigates to deep-link-error for error query params without auth path',
-        () async {
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/?error=access_denied'
-              '&error_code=otp_expired&error_description=Invalid+link',
-            ),
-          );
-
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
-
-          expect(navigatedTo, 'deep-link-error');
-          expect(navigatedQueryParams?['errorType'], 'unknown');
-          expect(navigatedQueryParams?['errorDescription'], 'Invalid link');
-        },
-      );
+        expect(
+          errorMessage,
+          'This link has expired or is no longer valid. Please return to the '
+          'login screen and resubmit for a new link.',
+        );
+      });
     });
 
     group(TestGroups.behavior, () {

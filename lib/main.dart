@@ -136,9 +136,15 @@ Future<void> _runProduction() async {
         )
         .asFuture(),
   );
+
+  final statusOverlayController = StatusOverlayController();
+
   runApp(
     MultiProvider(
-      providers: providersRemoteWith(authRepository: authRepository),
+      providers: [
+        ...providersRemoteWith(authRepository: authRepository),
+        ChangeNotifierProvider.value(value: statusOverlayController),
+      ],
       builder: (context, child) =>
           MainApp(router: goRouter, deepLinkHandler: deepLinkHandler),
     ),
@@ -162,7 +168,16 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    widget.deepLinkHandler.init();
+    // Delay until after first frame to safely access context and
+    // StatusOverlayController for error handling
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      final overlayController = context.read<StatusOverlayController>();
+      widget.deepLinkHandler.setErrorHandler(
+        (message) => overlayController.showError(message),
+      );
+      widget.deepLinkHandler.init();
+    });
   }
 
   @override
@@ -172,20 +187,17 @@ class _MainAppState extends State<MainApp> {
   }
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => StatusOverlayController(),
-    child: MaterialApp.router(
-      builder: (_, child) => StatusOverlay(child: child!),
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: widget.router,
-    ),
+  Widget build(BuildContext context) => MaterialApp.router(
+    builder: (_, child) => StatusOverlay(child: child!),
+    theme: AppTheme.lightTheme,
+    darkTheme: AppTheme.darkTheme,
+    localizationsDelegates: const [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: AppLocalizations.supportedLocales,
+    routerConfig: widget.router,
   );
 }

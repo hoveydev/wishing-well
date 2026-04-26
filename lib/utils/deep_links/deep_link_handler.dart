@@ -6,10 +6,18 @@ import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 typedef NavigateFn =
     void Function(String routeName, Map<String, dynamic>? queryParameters);
 
+typedef ErrorFn = void Function(String message);
+
 class DeepLinkHandler {
-  DeepLinkHandler(this.navigate, {required this.source, this.passwordRecovery});
+  DeepLinkHandler(
+    this.navigate, {
+    required this.source,
+    this.passwordRecovery,
+    this.onError,
+  });
   final NavigateFn navigate;
   final DeepLinkSource source;
+  ErrorFn? onError;
 
   /// Emits the user's email when a password recovery auth event is received.
   ///
@@ -21,6 +29,14 @@ class DeepLinkHandler {
 
   StreamSubscription? _sub;
   StreamSubscription? _recoverySub;
+
+  /// Sets the error handler callback for deep link errors.
+  ///
+  /// This must be called before [init()] to ensure errors are properly handled
+  /// when deep links are processed.
+  void setErrorHandler(ErrorFn handler) {
+    onError = handler;
+  }
 
   void init() {
     _handleInitialUri();
@@ -71,20 +87,15 @@ class DeepLinkHandler {
     }
   }
 
-  /// Navigates to the deep link error screen with an appropriate error type.
+  /// Shows a deep link error using StatusOverlay.
   void _navigateToDeepLinkError(
     String? subPath,
     Map<String, String> queryParameters,
   ) {
-    final errorType = switch (subPath) {
-      'password-reset' => 'password-reset',
-      'account-confirm' => 'account-confirm',
-      _ => 'unknown',
-    };
-    navigate(Routes.deepLinkError.name, {
-      'errorType': errorType,
-      'errorDescription': queryParameters['error_description'],
-    });
+    const errorMessage =
+        'This link has expired or is no longer valid. Please return to the '
+        'login screen and resubmit for a new link.';
+    onError?.call(errorMessage);
   }
 
   void dispose() {

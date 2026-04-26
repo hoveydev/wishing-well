@@ -9,8 +9,7 @@ enum Routes {
   addWisher('/add-wisher'), // add-wisher
   addWisherDetails('details'), // add-wisher/details
   wisherDetails('/wisher-details/:id'), // wisher-details/:id
-  editWisher('edit'), // wisher-details/:id/edit
-  deepLinkError('/deep-link-error');
+  editWisher('edit'); // wisher-details/:id/edit
 
   const Routes(this.path);
   final String path;

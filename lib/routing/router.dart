@@ -13,8 +13,6 @@ import 'package:wishing_well/features/all_wishers/all_wishers_screen.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_screen.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
-import 'package:wishing_well/features/auth/deep_link_error/deep_link_error_screen.dart';
-import 'package:wishing_well/features/auth/deep_link_error/deep_link_error_view_model.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_screen.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_screen.dart';
@@ -38,38 +36,19 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
     final isAuthenticated = authRepository.isAuthenticated;
     final loc = state.matchedLocation;
 
-    // Check for error query params in the raw URI (not the matched location)
-    final uri = state.uri;
-    if (uri.queryParameters.containsKey('error')) {
-      // Determine error type from path if available, else 'unknown'
-      String errorType = 'unknown';
-      if (uri.pathSegments.isNotEmpty && uri.pathSegments[0] == 'auth') {
-        if (uri.pathSegments.length > 1) {
-          errorType = uri.pathSegments[1]; // e.g., 'password-reset'
-        }
-      }
-      final errorDescription = uri.queryParameters['error_description'] ?? '';
-      final encodedDescription = Uri.encodeComponent(errorDescription);
-      return '/deep-link-error?errorType=$errorType&errorDescription=$encodedDescription';
-    }
-
     final isGoingToLogin = loc == '/login';
     final isGoingToCreateAccount = loc == '/create-account';
     final isGoingToForgotPassword = loc == '/forgot-password';
     final isGoingToResetPassword = loc.startsWith(
       '/forgot-password/reset-password',
     );
-    final isGoingToDeepLinkError = loc == '/deep-link-error';
 
     // Auth-only screens (skip if already authenticated)
     final isRedirectableAuthScreen =
         isGoingToLogin || isGoingToCreateAccount || isGoingToForgotPassword;
 
     // Public screens accessible by all (no auth required, no redirect)
-    final isPublicScreen =
-        isRedirectableAuthScreen ||
-        isGoingToResetPassword ||
-        isGoingToDeepLinkError;
+    final isPublicScreen = isRedirectableAuthScreen || isGoingToResetPassword;
 
     if (isAuthenticated && isRedirectableAuthScreen) {
       return '/home';
@@ -242,21 +221,6 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
           ),
         ),
       ],
-    ),
-    GoRoute(
-      path: Routes.deepLinkError.path,
-      name: Routes.deepLinkError.name,
-      pageBuilder: (context, state) {
-        final errorTypeParam = state.uri.queryParameters['errorType'];
-        return CustomTransitionPage(
-          child: DeepLinkErrorScreen(
-            viewModel: DeepLinkErrorViewModel(
-              errorType: DeepLinkErrorType.fromString(errorTypeParam),
-            ),
-          ),
-          transitionsBuilder: slideUpTransition,
-        );
-      },
     ),
   ],
 );

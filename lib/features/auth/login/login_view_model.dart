@@ -26,6 +26,7 @@ abstract class LoginViewModelContract implements ScreenViewModelContract {
   Future<void> tapLoginButton(BuildContext context);
   void tapCreateAccountButton(BuildContext context);
   void clearAccountConfirmationQuery(BuildContext context);
+  Future<void> tapGoogleSignInButton(BuildContext context);
 }
 
 class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
@@ -219,6 +220,46 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
   @override
   void clearAccountConfirmationQuery(BuildContext context) {
     context.goNamed(Routes.login.name);
+  }
+
+  @override
+  Future<void> tapGoogleSignInButton(BuildContext context) async {
+    final loading = context.read<StatusOverlayController>();
+    loading.show();
+
+    final response = await _authRepository.loginWithGoogle();
+    switch (response) {
+      case Ok():
+        AppLogger.info(
+          'Google login successful',
+          context: 'LoginViewModel.tapGoogleSignInButton',
+        );
+        if (context.mounted) {
+          AppLogger.debug(
+            'Navigating to home screen',
+            context: 'LoginViewModel.tapGoogleSignInButton',
+          );
+          unawaited(context.pushNamed(Routes.home.name));
+        }
+        loading.hide();
+      case Error(:final Exception error):
+        AppLogger.error(
+          'Google login failed',
+          context: 'LoginViewModel.tapGoogleSignInButton',
+          error: error,
+        );
+        if (!context.mounted) {
+          loading.hide();
+          return;
+        }
+        final l10n = AppLocalizations.of(context)!;
+        final errorString = error.toString().toLowerCase();
+        if (errorString.contains('cancel')) {
+          loading.showError(l10n.authGoogleSignInCancelled);
+        } else {
+          loading.showError(l10n.errorUnknown);
+        }
+    }
   }
 
   @override

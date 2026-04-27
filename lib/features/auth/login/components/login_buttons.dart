@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
@@ -21,6 +22,12 @@ class LoginButtons extends StatelessWidget {
           label: l10n.authSignIn,
           onPressed: () => viewModel.tapLoginButton(context),
           type: AppButtonType.primary,
+        ),
+        AppButton.labelWithIcon(
+          icon: FontAwesomeIcons.google,
+          label: l10n.authSignInWithGoogle,
+          onPressed: () => viewModel.tapGoogleSignInButton(context),
+          type: AppButtonType.secondary,
         ),
         AppButton.label(
           label: l10n.authCreateAccount,

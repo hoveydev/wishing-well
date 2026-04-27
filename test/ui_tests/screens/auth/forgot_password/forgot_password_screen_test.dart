@@ -145,7 +145,7 @@ void main() {
         expect(find.text('Email cannot be empty'), findsNothing);
         expect(find.text('Invalid email format'), findsNothing);
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNothing,
         );
 
@@ -198,7 +198,7 @@ void main() {
           // Generic exception shows generic error message - appears in both
           // inline and overlay
           expect(
-            find.text('An unknown error occured. Please try again'),
+            find.text('An unknown error occurred. Please try again'),
             findsNWidgets(2),
           );
 
@@ -293,7 +293,7 @@ void main() {
         // Should show appropriate error message
         // Note: Now shows in both inline and overlay
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNWidgets(2),
         );
       });
@@ -337,7 +337,7 @@ void main() {
         // Should show appropriate error message
         // Note: Now shows in both inline and overlay
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNWidgets(2),
         );
       });
@@ -379,7 +379,7 @@ void main() {
         expect(find.text('Email cannot be empty'), findsNothing);
         expect(find.text('Invalid email format'), findsNothing);
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNothing,
         );
 
@@ -388,7 +388,7 @@ void main() {
         expect(find.text('Email cannot be empty'), findsNothing);
         expect(find.text('Invalid email format'), findsNothing);
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNothing,
         );
 
@@ -396,7 +396,7 @@ void main() {
         expect(find.text('Email cannot be empty'), findsNothing);
         expect(find.text('Invalid email format'), findsNothing);
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsNothing,
         );
       });

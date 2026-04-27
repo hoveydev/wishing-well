@@ -173,6 +173,27 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  @override
+  Future<Result<void>> loginWithGoogle() async {
+    AppLogger.debug('Attempting Google login', context: 'AuthRepository');
+
+    try {
+      await _dataSource.signInWithGoogle();
+      AppLogger.info('Google login successful', context: 'AuthRepository');
+      return const Result.ok(null);
+    } on Exception catch (err, stackTrace) {
+      AppLogger.error(
+        'Google login failed: $err',
+        context: 'AuthRepository',
+        error: err,
+        stackTrace: stackTrace,
+      );
+      return Result.error(err);
+    } finally {
+      notifyListeners();
+    }
+  }
+
   void _logConnectionHintIfNeeded(Exception err, String context) {
     final message = err.toString();
     if (message.contains('Connection refused') ||

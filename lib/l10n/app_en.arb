@@ -24,6 +24,14 @@
     "@authSignIn": {
         "description": "Text for the sign in button"
     },
+    "authSignInWithGoogle": "Sign in with Google",
+    "@authSignInWithGoogle": {
+        "description": "Button label for signing in with Google"
+    },
+    "authGoogleSignInCancelled": "Google sign-in was cancelled",
+    "@authGoogleSignInCancelled": {
+        "description": "Message shown when user cancels Google sign-in"
+    },
     "authCreateAccount": "Create an Account",
     "@authCreateAccount": {
         "description": "Text for the create account link"
@@ -64,7 +72,7 @@
     "@errorPasswordRequirements": {
         "description": "Error message when password does not meet requirements"
     },
-    "errorUnknown": "An unknown error occured. Please try again",
+    "errorUnknown": "An unknown error occurred. Please try again",
     "@errorUnknown": {
         "description": "Generic error message when an unknown error occurs"
     },

@@ -502,7 +502,7 @@ void main() {
         expect(find.byIcon(Icons.error), findsAtLeastNWidgets(1));
         // Generic exception shows generic error message
         expect(
-          find.text('An unknown error occured. Please try again'),
+          find.text('An unknown error occurred. Please try again'),
           findsAtLeastNWidgets(1),
         );
 

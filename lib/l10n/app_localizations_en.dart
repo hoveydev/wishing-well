@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authSignIn => 'Sign In';
 
   @override
+  String get authSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get authGoogleSignInCancelled => 'Google sign-in was cancelled';
+
+  @override
   String get authCreateAccount => 'Create an Account';
 
   @override
@@ -58,7 +64,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Password does not meet above requirements';
 
   @override
-  String get errorUnknown => 'An unknown error occured. Please try again';
+  String get errorUnknown => 'An unknown error occurred. Please try again';
 
   @override
   String get loginScreenHeader => 'Welcome to WishingWell';

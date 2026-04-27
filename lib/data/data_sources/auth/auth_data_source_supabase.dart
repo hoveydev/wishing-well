@@ -1,5 +1,7 @@
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/data_sources/auth/auth_data_source.dart';
+import 'package:wishing_well/utils/app_config.dart';
 
 /// Supabase implementation of [AuthDataSource].
 ///
@@ -89,5 +91,29 @@ class AuthDataSourceSupabase implements AuthDataSource {
     final user = response.user;
 
     return {'user_id': user?.id, 'email': user?.email};
+  }
+
+  @override
+  Future<void> signInWithGoogle() async {
+    final googleSignIn = GoogleSignIn(
+      // iOS only
+      clientId: AppConfig.googleOAuthClientIdIos,
+      // Android
+      serverClientId: AppConfig.googleOAuthClientIdAndroid,
+    );
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) {
+      throw Exception('Google sign-in cancelled');
+    }
+    final googleAuth = await googleUser.authentication;
+    final idToken = googleAuth.idToken;
+    if (idToken == null) {
+      throw Exception('Google sign-in failed: no ID token');
+    }
+    await _supabase.auth.signInWithIdToken(
+      provider: OAuthProvider.google,
+      idToken: idToken,
+      accessToken: googleAuth.accessToken,
+    );
   }
 }

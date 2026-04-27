@@ -177,4 +177,10 @@ class IntegrationMockAuthRepository extends AuthRepository {
     notifyListeners();
     return _resetUserPasswordResult;
   }
+
+  @override
+  Future<Result<void>> loginWithGoogle() async {
+    notifyListeners();
+    return const Result.ok(null);
+  }
 }

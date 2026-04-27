@@ -699,6 +699,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get appBarBack;
+
+  /// Error message shown when a deep link (password reset or account confirmation) has expired or is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
+  String get deepLinkError;
 }
 
 class _AppLocalizationsDelegate

@@ -137,7 +137,7 @@ void main() {
         TestHelpers.expectTextOnce('Oh no!');
         TestHelpers.expectWidgetOnce(AppAlert);
         TestHelpers.expectTextOnce(
-          'An unknown error occured. Please try again',
+          'An unknown error occurred. Please try again',
         );
 
         // Dismiss error dialog

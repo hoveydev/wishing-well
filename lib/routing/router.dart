@@ -35,6 +35,7 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
   redirect: (context, state) {
     final isAuthenticated = authRepository.isAuthenticated;
     final loc = state.matchedLocation;
+
     final isGoingToLogin = loc == '/login';
     final isGoingToCreateAccount = loc == '/create-account';
     final isGoingToForgotPassword = loc == '/forgot-password';

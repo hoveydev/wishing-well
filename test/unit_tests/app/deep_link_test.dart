@@ -7,10 +7,12 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 void main() {
   late StreamController<Uri?> stream;
   late String? navigatedTo;
+  late DeepLinkErrorType? errorType;
 
   setUp(() {
     stream = StreamController<Uri?>();
     navigatedTo = null;
+    errorType = null;
   });
 
   tearDown(() async {
@@ -27,9 +29,14 @@ void main() {
     );
 
     return DeepLinkHandler(
-      (routeName, queryParams) => navigatedTo = routeName,
+      (routeName, queryParams) {
+        navigatedTo = routeName;
+      },
       source: source,
       passwordRecovery: passwordRecovery,
+      onError: (type) {
+        errorType = type;
+      },
     );
   }
 
@@ -52,7 +59,7 @@ void main() {
         },
       );
 
-      test('does not navigate for unrecognized account-confirm type', () async {
+      test('calls onError for unrecognized account-confirm type', () async {
         final handler = createHandler(
           initialUri: Uri.parse(
             'https://wishing-well-ayb.pages.dev/auth/account-confirm',
@@ -62,7 +69,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(navigatedTo, isNull);
+        expect(errorType, DeepLinkErrorType.accountConfirm);
       });
 
       test('does not navigate for password-reset initial URI', () async {
@@ -77,6 +84,96 @@ void main() {
         await Future<void>.delayed(Duration.zero);
 
         expect(navigatedTo, isNull);
+      });
+    });
+
+    group(TestGroups.errorHandling, () {
+      test('calls onError for password-reset error URI', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/password-reset'
+            '?error=access_denied&error_code=otp_expired'
+            '&error_description=Email+link+is+invalid+or+has+expired',
+          ),
+        );
+
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.passwordReset);
+      });
+
+      test('calls onError for account-confirm error URI', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?error=access_denied&error_code=otp_expired'
+            '&error_description=Email+link+is+invalid+or+has+expired',
+          ),
+        );
+
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.accountConfirm);
+      });
+
+      test('calls onError for unrecognized path', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/unknown-path'
+            '?error=access_denied',
+          ),
+        );
+
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.unknown);
+      });
+
+      test('calls onError via stream for password-reset error', () async {
+        final handler = createHandler();
+        handler.init();
+
+        stream.add(
+          Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/password-reset'
+            '?error=access_denied&error_code=otp_expired',
+          ),
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.passwordReset);
+      });
+
+      test('calls onError via stream for account-confirm error', () async {
+        final handler = createHandler();
+        handler.init();
+
+        stream.add(
+          Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?error=access_denied',
+          ),
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.accountConfirm);
+      });
+
+      test('calls onError for error query params without auth path', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/?error=access_denied'
+            '&error_code=otp_expired&error_description=Invalid+link',
+          ),
+        );
+
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errorType, DeepLinkErrorType.unknown);
       });
     });
 

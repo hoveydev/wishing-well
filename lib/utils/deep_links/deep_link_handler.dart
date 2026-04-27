@@ -6,7 +6,22 @@ import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 typedef NavigateFn =
     void Function(String routeName, Map<String, dynamic>? queryParameters);
 
-typedef ErrorFn = void Function(String message);
+typedef ErrorFn = void Function(DeepLinkErrorType type);
+
+/// Typed error category emitted by [DeepLinkHandler] when a deep link fails.
+///
+/// The UI layer is responsible for mapping these values to user-visible,
+/// localized strings.
+enum DeepLinkErrorType {
+  /// The link was a password-reset link that has expired or is invalid.
+  passwordReset,
+
+  /// The link was an account-confirmation link that has expired or is invalid.
+  accountConfirm,
+
+  /// The link contained an error but could not be classified.
+  unknown,
+}
 
 class DeepLinkHandler {
   DeepLinkHandler(
@@ -54,10 +69,12 @@ class DeepLinkHandler {
       if (uri != null) {
         _navigateFromUri(uri);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       AppLogger.error(
-        'Error handling initial URI: $e',
+        'Error handling initial URI',
         context: 'DeepLinkHandler._handleInitialUri',
+        error: e,
+        stackTrace: stackTrace,
       );
     }
   }
@@ -87,15 +104,17 @@ class DeepLinkHandler {
     }
   }
 
-  /// Shows a deep link error using StatusOverlay.
+  /// Derives a typed [DeepLinkErrorType] from [subPath] and invokes [onError].
   void _navigateToDeepLinkError(
     String? subPath,
     Map<String, String> queryParameters,
   ) {
-    const errorMessage =
-        'This link has expired or is no longer valid. Please return to the '
-        'login screen and resubmit for a new link.';
-    onError?.call(errorMessage);
+    final errorType = switch (subPath) {
+      'password-reset' => DeepLinkErrorType.passwordReset,
+      'account-confirm' => DeepLinkErrorType.accountConfirm,
+      _ => DeepLinkErrorType.unknown,
+    };
+    onError?.call(errorType);
   }
 
   void dispose() {

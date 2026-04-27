@@ -121,22 +121,6 @@ Future<void> _runProduction() async {
     passwordRecovery: passwordRecoveryStream,
   );
 
-  // Catch exceptions from Supabase's auth processing of deeplinks.
-  // When an expired/invalid deeplink is clicked, Supabase throws an AuthException
-  // before we can process it, so we subscribe to catch and suppress it.
-  unawaited(
-    Supabase.instance.client.auth.onAuthStateChange
-        .listen(
-          (_) {
-            // Auth state changes handled by passwordRecoveryStream above
-          },
-          onError: (Object error, StackTrace stackTrace) {
-            // Suppress deeplink auth errors to prevent crashes
-          },
-        )
-        .asFuture(),
-  );
-
   final statusOverlayController = StatusOverlayController();
 
   runApp(
@@ -165,23 +149,49 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  StreamSubscription? _authStreamSub;
+
   @override
   void initState() {
     super.initState();
+    // Catch exceptions from Supabase's auth processing of deep links.
+    // When an expired/invalid deep link is clicked, Supabase throws an
+    // AuthException before we can process the URI, so we subscribe here to
+    // suppress those expected errors. Unexpected errors are logged at warning
+    // level so they are not silently swallowed.
+    _authStreamSub = Supabase.instance.client.auth.onAuthStateChange.listen(
+      (_) {
+        // Auth state changes are handled by the passwordRecoveryStream above.
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        if (error is AuthException) return;
+        AppLogger.error(
+          'Unexpected auth stream error',
+          context: '_MainAppState.initState',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      },
+    );
     // Delay until after first frame to safely access context and
     // StatusOverlayController for error handling
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!context.mounted) return;
       final overlayController = context.read<StatusOverlayController>();
-      widget.deepLinkHandler.setErrorHandler(
-        (message) => overlayController.showError(message),
-      );
+      widget.deepLinkHandler.setErrorHandler((errorType) {
+        final l10n = AppLocalizations.of(context);
+        if (l10n == null || !context.mounted) return;
+        // All deep link error types currently show the same message.
+        // The typed errorType is passed through for future per-type messages.
+        overlayController.showError(l10n.deepLinkError);
+      });
       widget.deepLinkHandler.init();
     });
   }
 
   @override
   void dispose() {
+    _authStreamSub?.cancel();
     widget.deepLinkHandler.dispose();
     super.dispose();
   }

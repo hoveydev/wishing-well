@@ -7,12 +7,12 @@ import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 void main() {
   late StreamController<Uri?> stream;
   late String? navigatedTo;
-  late String? errorMessage;
+  late DeepLinkErrorType? errorType;
 
   setUp(() {
     stream = StreamController<Uri?>();
     navigatedTo = null;
-    errorMessage = null;
+    errorType = null;
   });
 
   tearDown(() async {
@@ -34,8 +34,8 @@ void main() {
       },
       source: source,
       passwordRecovery: passwordRecovery,
-      onError: (msg) {
-        errorMessage = msg;
+      onError: (type) {
+        errorType = type;
       },
     );
   }
@@ -69,11 +69,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.accountConfirm);
       });
 
       test('does not navigate for password-reset initial URI', () async {
@@ -104,11 +100,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.passwordReset);
       });
 
       test('calls onError for account-confirm error URI', () async {
@@ -123,11 +115,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.accountConfirm);
       });
 
       test('calls onError for unrecognized path', () async {
@@ -141,11 +129,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.unknown);
       });
 
       test('calls onError via stream for password-reset error', () async {
@@ -160,11 +144,7 @@ void main() {
         );
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.passwordReset);
       });
 
       test('calls onError via stream for account-confirm error', () async {
@@ -179,11 +159,7 @@ void main() {
         );
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.accountConfirm);
       });
 
       test('calls onError for error query params without auth path', () async {
@@ -197,11 +173,7 @@ void main() {
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(
-          errorMessage,
-          'This link has expired or is no longer valid. Please return to the '
-          'login screen and resubmit for a new link.',
-        );
+        expect(errorType, DeepLinkErrorType.unknown);
       });
     });
 

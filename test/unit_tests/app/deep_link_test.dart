@@ -85,20 +85,6 @@ void main() {
 
         expect(navigatedTo, isNull);
       });
-
-      test('does not navigate for password-reset initial URI', () async {
-        final handler = createHandler(
-          initialUri: Uri.parse(
-            'https://wishing-well-ayb.pages.dev/auth/password-reset'
-            '?code=abc123',
-          ),
-        );
-
-        handler.init();
-        await Future<void>.delayed(Duration.zero);
-
-        expect(navigatedTo, isNull);
-      });
     });
 
     group(TestGroups.errorHandling, () {

@@ -248,7 +248,10 @@ class LoginViewModel extends ChangeNotifier implements LoginViewModelContract {
           context: 'LoginViewModel.tapGoogleSignInButton',
           error: error,
         );
-        if (!context.mounted) return;
+        if (!context.mounted) {
+          loading.hide();
+          return;
+        }
         final l10n = AppLocalizations.of(context)!;
         final errorString = error.toString().toLowerCase();
         if (errorString.contains('cancel')) {

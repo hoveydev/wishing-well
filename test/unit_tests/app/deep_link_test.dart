@@ -73,18 +73,33 @@ void main() {
         },
       );
 
-      test('calls onError for unrecognized account-confirm type', () async {
-        final handler = createHandler(
-          initialUri: Uri.parse(
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
-          ),
-        );
+      test(
+        'emits to controller for account-confirm URI without type '
+        '(PKCE redirect)',
+        () async {
+          final controller = StreamController<String>.broadcast();
+          final handler = createHandler(
+            initialUri: Uri.parse(
+              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+              '?code=abc123',
+            ),
+            accountConfirmationController: controller,
+          );
 
-        handler.init();
-        await Future<void>.delayed(Duration.zero);
+          var accountConfirmationEmitted = false;
+          handler.accountConfirmationController?.stream.listen((_) {
+            accountConfirmationEmitted = true;
+          });
 
-        expect(errorType, DeepLinkErrorType.accountConfirm);
-      });
+          handler.init();
+          await Future<void>.delayed(Duration.zero);
+
+          expect(accountConfirmationEmitted, isTrue);
+          expect(navigatedTo, isNull);
+          expect(errorType, isNull);
+          await controller.close();
+        },
+      );
 
       test('does not navigate for password-reset initial URI', () async {
         final handler = createHandler(

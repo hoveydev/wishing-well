@@ -97,6 +97,7 @@ Future<void> _runProduction() async {
 
   final authRepository = AuthRepositoryImpl(
     dataSource: AuthDataSourceSupabase(supabase: Supabase.instance.client),
+    emailRedirectTo: AppConfig.accountConfirmUrl,
   );
 
   final goRouter = router(authRepository: authRepository);

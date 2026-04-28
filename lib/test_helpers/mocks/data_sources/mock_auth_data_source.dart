@@ -69,6 +69,9 @@ class MockAuthDataSource implements AuthDataSource {
   /// Tracks whether [signUp] was called.
   bool signUpCalled = false;
 
+  /// The emailRedirectTo passed to the last [signUp] call.
+  String? lastSignUpEmailRedirectTo;
+
   /// Tracks whether [signOut] was called.
   bool signOutCalled = false;
 
@@ -116,6 +119,7 @@ class MockAuthDataSource implements AuthDataSource {
     String? emailRedirectTo,
   }) async {
     signUpCalled = true;
+    lastSignUpEmailRedirectTo = emailRedirectTo;
     if (signUpError != null) {
       throw signUpError!;
     }

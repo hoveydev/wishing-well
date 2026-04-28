@@ -156,6 +156,31 @@ void main() {
         expect(mockDataSource.signUpCalled, isTrue);
       });
 
+      test('passes emailRedirectTo to data source when set', () async {
+        const redirectUrl = 'https://example.com/auth/account-confirm';
+        final repoWithRedirect = AuthRepositoryImpl(
+          dataSource: mockDataSource,
+          emailRedirectTo: redirectUrl,
+        );
+
+        await repoWithRedirect.createAccount(
+          email: 'new@example.com',
+          password: 'password',
+        );
+
+        expect(mockDataSource.lastSignUpEmailRedirectTo, redirectUrl);
+        repoWithRedirect.dispose();
+      });
+
+      test('passes null emailRedirectTo to data source when not set', () async {
+        await repository.createAccount(
+          email: 'new@example.com',
+          password: 'password',
+        );
+
+        expect(mockDataSource.lastSignUpEmailRedirectTo, isNull);
+      });
+
       test('returns Error on data source exception', () async {
         mockDataSource.signUpError = Exception('Email already exists');
 

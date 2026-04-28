@@ -111,11 +111,7 @@ class DeepLinkHandler {
           'Account confirm URI detected, type=${uri.queryParameters['type']}',
           context: 'DeepLinkHandler._navigateFromUri',
         );
-        if (uri.queryParameters['type'] == 'signup') {
-          accountConfirmationController?.add('');
-        } else {
-          _navigateToDeepLinkError(subPath, uri.queryParameters);
-        }
+        accountConfirmationController?.add('');
         break;
     }
   }

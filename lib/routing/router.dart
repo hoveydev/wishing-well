@@ -32,6 +32,9 @@ import 'package:wishing_well/utils/app_config.dart';
 GoRouter router({required AuthRepository authRepository}) => GoRouter(
   initialLocation: '/login',
   refreshListenable: authRepository,
+  onException: (context, state, router) {
+    router.go(authRepository.isAuthenticated ? '/home' : '/login');
+  },
   redirect: (context, state) {
     final isAuthenticated = authRepository.isAuthenticated;
     final loc = state.matchedLocation;

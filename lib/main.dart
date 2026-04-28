@@ -187,9 +187,15 @@ class _MainAppState extends State<MainApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!context.mounted) return;
       final overlayController = context.read<StatusOverlayController>();
+      // Use the navigator's context (inside MaterialApp.router's Localizations
+      // tree) rather than _MainAppState's context (which is above
+      // MaterialApp.router and therefore has no Localizations ancestor).
       widget.deepLinkHandler.setErrorHandler((errorType) {
-        final l10n = AppLocalizations.of(context);
-        if (l10n == null || !context.mounted) return;
+        final navContext =
+            widget.router.routerDelegate.navigatorKey.currentContext;
+        if (navContext == null || !navContext.mounted) return;
+        final l10n = AppLocalizations.of(navContext);
+        if (l10n == null) return;
         // All deep link error types currently show the same message.
         // The typed errorType is passed through for future per-type messages.
         overlayController.showError(l10n.deepLinkError);
@@ -200,13 +206,16 @@ class _MainAppState extends State<MainApp> {
       // signed the user in (triggering a redirect to /home), which would
       // discard any query-param navigation to /login. The StatusOverlay wraps
       // the entire app and persists across route changes.
-      final l10n = AppLocalizations.of(context);
       _accountConfirmationSub = widget
           .deepLinkHandler
           .accountConfirmationController
           ?.stream
           .listen((_) {
-            if (!context.mounted || l10n == null) return;
+            final navContext =
+                widget.router.routerDelegate.navigatorKey.currentContext;
+            if (navContext == null || !navContext.mounted) return;
+            final l10n = AppLocalizations.of(navContext);
+            if (l10n == null) return;
             AppLogger.debug(
               'Account confirmation event received, showing success overlay',
               context: '_MainAppState.initState',

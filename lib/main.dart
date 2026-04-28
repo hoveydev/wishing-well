@@ -14,6 +14,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/routing/router.dart';
+import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
@@ -112,22 +113,11 @@ Future<void> _runProduction() async {
       .where((state) => state.event == AuthChangeEvent.passwordRecovery)
       .map((state) => state.session?.user.email);
 
-  // Similar to password recovery, detect account confirmation via the deep
-  // link source and emit when we get a signup confirmation link. This is
-  // event-based to avoid race conditions with GoRouter's initial redirect.
-  final accountConfirmationStream = deepLinkSource
-      .stream()
-      .where((uri) {
-        if (uri == null || uri.pathSegments.isEmpty) return false;
-        if (uri.pathSegments.first != 'auth') return false;
-        final subPath = uri.pathSegments.length > 1
-            ? uri.pathSegments[1]
-            : null;
-        return subPath == 'account-confirm' &&
-            uri.queryParameters['type'] == 'signup' &&
-            !uri.queryParameters.containsKey('error');
-      })
-      .map((_) => '');
+  // Detect account confirmation via the deep link source and emit when we
+  // get a signup confirmation link. The handler itself will emit to this
+  // controller when it detects a valid account-confirm URI (both initial
+  // and ongoing streams).
+  final accountConfirmationController = StreamController<String>.broadcast();
 
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
@@ -136,7 +126,7 @@ Future<void> _runProduction() async {
     ),
     source: deepLinkSource,
     passwordRecovery: passwordRecoveryStream,
-    accountConfirmation: accountConfirmationStream,
+    accountConfirmationController: accountConfirmationController,
   );
 
   final statusOverlayController = StatusOverlayController();
@@ -168,6 +158,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   StreamSubscription? _authStreamSub;
+  StreamSubscription? _accountConfirmationSub;
 
   @override
   void initState() {
@@ -203,6 +194,20 @@ class _MainAppState extends State<MainApp> {
         // The typed errorType is passed through for future per-type messages.
         overlayController.showError(l10n.deepLinkError);
       });
+      // Subscribe to account confirmation events and navigate to login screen
+      _accountConfirmationSub = widget
+          .deepLinkHandler
+          .accountConfirmationController
+          ?.stream
+          .listen((_) {
+            if (!context.mounted) return;
+            widget.router.goNamed(
+              Routes.login.name,
+              queryParameters: const <String, dynamic>{
+                'accountConfirmed': 'true',
+              },
+            );
+          });
       widget.deepLinkHandler.init();
     });
   }
@@ -210,6 +215,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void dispose() {
     _authStreamSub?.cancel();
+    _accountConfirmationSub?.cancel();
     widget.deepLinkHandler.dispose();
     super.dispose();
   }

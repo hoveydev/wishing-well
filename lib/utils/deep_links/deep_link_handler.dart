@@ -28,7 +28,7 @@ class DeepLinkHandler {
     this.navigate, {
     required this.source,
     this.passwordRecovery,
-    this.accountConfirmation,
+    this.accountConfirmationController,
     this.onError,
   });
   final NavigateFn navigate;
@@ -43,17 +43,12 @@ class DeepLinkHandler {
   /// our URI-based navigation fires.
   final Stream<String?>? passwordRecovery;
 
-  /// Emits an empty string when an account confirmation deep link is detected.
-  ///
-  /// Account confirmation navigation is handled via the deep link stream
-  /// rather than URI parsing in the router to avoid a race condition where
-  /// GoRouter processes the initial deep link URL and redirects back to login
-  /// before account confirmation navigation can complete with query params.
-  final Stream<String>? accountConfirmation;
+  /// Controller for account confirmation events. Allows the handler to emit
+  /// when account confirmation URIs are detected (both initial and ongoing).
+  final StreamController<String>? accountConfirmationController;
 
   StreamSubscription? _sub;
   StreamSubscription? _recoverySub;
-  StreamSubscription? _confirmationSub;
 
   /// Sets the error handler callback for deep link errors.
   ///
@@ -70,9 +65,6 @@ class DeepLinkHandler {
     });
     _recoverySub = passwordRecovery?.listen((email) {
       navigate(Routes.resetPassword.name, {'email': email});
-    });
-    _confirmationSub = accountConfirmation?.listen((_) {
-      navigate(Routes.login.name, {'accountConfirmed': 'true'});
     });
   }
 
@@ -106,12 +98,14 @@ class DeepLinkHandler {
 
     final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
 
-    // Account confirmation with type=signup is handled via the
-    // accountConfirmation stream. Other account-confirm URLs (without type or
-    // with different type) are treated as errors.
+    // Account confirmation with type=signup is handled via the controller.
+    // Other account-confirm URLs (without type or with different type) are
+    // treated as errors.
     switch (subPath) {
       case 'account-confirm':
-        if (uri.queryParameters['type'] != 'signup') {
+        if (uri.queryParameters['type'] == 'signup') {
+          accountConfirmationController?.add('');
+        } else {
           _navigateToDeepLinkError(subPath, uri.queryParameters);
         }
         break;
@@ -134,6 +128,5 @@ class DeepLinkHandler {
   void dispose() {
     _sub?.cancel();
     _recoverySub?.cancel();
-    _confirmationSub?.cancel();
   }
 }

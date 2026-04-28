@@ -112,6 +112,23 @@ Future<void> _runProduction() async {
       .where((state) => state.event == AuthChangeEvent.passwordRecovery)
       .map((state) => state.session?.user.email);
 
+  // Similar to password recovery, detect account confirmation via the deep
+  // link source and emit when we get a signup confirmation link. This is
+  // event-based to avoid race conditions with GoRouter's initial redirect.
+  final accountConfirmationStream = deepLinkSource
+      .stream()
+      .where((uri) {
+        if (uri == null || uri.pathSegments.isEmpty) return false;
+        if (uri.pathSegments.first != 'auth') return false;
+        final subPath = uri.pathSegments.length > 1
+            ? uri.pathSegments[1]
+            : null;
+        return subPath == 'account-confirm' &&
+            uri.queryParameters['type'] == 'signup' &&
+            !uri.queryParameters.containsKey('error');
+      })
+      .map((_) => '');
+
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
       name,
@@ -119,6 +136,7 @@ Future<void> _runProduction() async {
     ),
     source: deepLinkSource,
     passwordRecovery: passwordRecoveryStream,
+    accountConfirmation: accountConfirmationStream,
   );
 
   final statusOverlayController = StatusOverlayController();

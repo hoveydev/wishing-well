@@ -22,6 +22,7 @@ void main() {
   DeepLinkHandler createHandler({
     Uri? initialUri,
     Stream<String?>? passwordRecovery,
+    Stream<String>? accountConfirmation,
   }) {
     final source = DeepLinkSource(
       initial: () async => initialUri,
@@ -34,6 +35,7 @@ void main() {
       },
       source: source,
       passwordRecovery: passwordRecovery,
+      accountConfirmation: accountConfirmation,
       onError: (type) {
         errorType = type;
       },
@@ -43,7 +45,7 @@ void main() {
   group('DeepLinkHandler', () {
     group(TestGroups.initialState, () {
       test(
-        'navigates to login with accountConfirmed param for signup',
+        'does not navigate for account-confirm URI (handled via stream)',
         () async {
           final handler = createHandler(
             initialUri: Uri.parse(
@@ -55,7 +57,7 @@ void main() {
           handler.init();
           await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'login');
+          expect(navigatedTo, isNull);
         },
       );
 
@@ -221,6 +223,23 @@ void main() {
         },
       );
 
+      test(
+        'navigates to login with accountConfirmed on account confirmation',
+        () async {
+          final confirmationController = StreamController<String>();
+          final handler = createHandler(
+            accountConfirmation: confirmationController.stream,
+          );
+          handler.init();
+
+          confirmationController.add('');
+          await Future<void>.delayed(Duration.zero);
+
+          expect(navigatedTo, 'login');
+          await confirmationController.close();
+        },
+      );
+
       test('ignores unrelated links', () async {
         final handler = createHandler();
         handler.init();
@@ -253,6 +272,21 @@ void main() {
 
         expect(navigatedTo, isNull);
         await recoveryController.close();
+      });
+
+      test('dispose cancels account confirmation subscription', () async {
+        final confirmationController = StreamController<String>();
+        final handler = createHandler(
+          accountConfirmation: confirmationController.stream,
+        );
+        handler.init();
+        handler.dispose();
+
+        confirmationController.add('');
+        await Future<void>.delayed(Duration.zero);
+
+        expect(navigatedTo, isNull);
+        await confirmationController.close();
       });
     });
   });

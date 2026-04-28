@@ -131,20 +131,6 @@ Future<void> _runProduction() async {
 
   final statusOverlayController = StatusOverlayController();
 
-  // Check initial URI for account confirmation to handle cold start
-  unawaited(
-    deepLinkSource.initial().then((uri) {
-      if (uri != null &&
-          uri.pathSegments.length > 1 &&
-          uri.pathSegments.first == 'auth' &&
-          uri.pathSegments[1] == 'account-confirm' &&
-          uri.queryParameters['type'] == 'signup' &&
-          !uri.queryParameters.containsKey('error')) {
-        accountConfirmationController.add('');
-      }
-    }),
-  );
-
   runApp(
     MultiProvider(
       providers: [
@@ -215,6 +201,10 @@ class _MainAppState extends State<MainApp> {
           ?.stream
           .listen((_) {
             if (!context.mounted) return;
+            AppLogger.debug(
+              'Account confirmation event received, navigating to login',
+              context: '_MainAppState.initState',
+            );
             widget.router.goNamed(
               Routes.login.name,
               queryParameters: const <String, dynamic>{

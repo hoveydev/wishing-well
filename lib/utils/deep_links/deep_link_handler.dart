@@ -71,6 +71,10 @@ class DeepLinkHandler {
   Future<void> _handleInitialUri() async {
     try {
       final uri = await source.initial();
+      AppLogger.debug(
+        'Initial URI: $uri',
+        context: 'DeepLinkHandler._handleInitialUri',
+      );
       if (uri != null) {
         _navigateFromUri(uri);
       }
@@ -103,6 +107,10 @@ class DeepLinkHandler {
     // treated as errors.
     switch (subPath) {
       case 'account-confirm':
+        AppLogger.debug(
+          'Account confirm URI detected, type=${uri.queryParameters['type']}',
+          context: 'DeepLinkHandler._navigateFromUri',
+        );
         if (uri.queryParameters['type'] == 'signup') {
           accountConfirmationController?.add('');
         } else {

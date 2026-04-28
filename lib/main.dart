@@ -131,6 +131,20 @@ Future<void> _runProduction() async {
 
   final statusOverlayController = StatusOverlayController();
 
+  // Check initial URI for account confirmation to handle cold start
+  unawaited(
+    deepLinkSource.initial().then((uri) {
+      if (uri != null &&
+          uri.pathSegments.length > 1 &&
+          uri.pathSegments.first == 'auth' &&
+          uri.pathSegments[1] == 'account-confirm' &&
+          uri.queryParameters['type'] == 'signup' &&
+          !uri.queryParameters.containsKey('error')) {
+        accountConfirmationController.add('');
+      }
+    }),
+  );
+
   runApp(
     MultiProvider(
       providers: [

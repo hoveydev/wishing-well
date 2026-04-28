@@ -73,9 +73,7 @@ void main() {
       expect(find.byType(LoginScreen), findsOneWidget);
     });
 
-    testWidgets('accountConfirmationChecked flag prevents duplicate checks', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('screen rebuilds without errors', (WidgetTester tester) async {
       await tester.pumpWidget(
         createScreenTestWidget(
           loadingController: StatusOverlayController(),
@@ -84,7 +82,7 @@ void main() {
       );
       await TestHelpers.pumpAndSettle(tester);
 
-      // Rebuild - the _accountConfirmationChecked flag should prevent re-run
+      // Rebuild - screen should remain stable
       await tester.pumpWidget(
         createScreenTestWidget(
           loadingController: StatusOverlayController(),

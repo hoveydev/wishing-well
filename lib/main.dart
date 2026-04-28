@@ -14,7 +14,6 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/routing/router.dart';
-import 'package:wishing_well/routing/routes.dart';
 import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/utils/app_logger.dart';
@@ -194,22 +193,26 @@ class _MainAppState extends State<MainApp> {
         // The typed errorType is passed through for future per-type messages.
         overlayController.showError(l10n.deepLinkError);
       });
-      // Subscribe to account confirmation events and navigate to login screen
+      // Subscribe to account confirmation events and show success overlay.
+      // Using StatusOverlayController directly avoids a race with GoRouter:
+      // by the time the deep link is processed Supabase may have already
+      // signed the user in (triggering a redirect to /home), which would
+      // discard any query-param navigation to /login. The StatusOverlay wraps
+      // the entire app and persists across route changes.
+      final l10n = AppLocalizations.of(context);
       _accountConfirmationSub = widget
           .deepLinkHandler
           .accountConfirmationController
           ?.stream
           .listen((_) {
-            if (!context.mounted) return;
+            if (!context.mounted || l10n == null) return;
             AppLogger.debug(
-              'Account confirmation event received, navigating to login',
+              'Account confirmation event received, showing success overlay',
               context: '_MainAppState.initState',
             );
-            widget.router.goNamed(
-              Routes.login.name,
-              queryParameters: const <String, dynamic>{
-                'accountConfirmed': 'true',
-              },
+            overlayController.showSuccess(
+              l10n.accountConfirmationMessage,
+              onOk: () {},
             );
           });
       widget.deepLinkHandler.init();

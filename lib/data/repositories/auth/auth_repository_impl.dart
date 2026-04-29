@@ -9,14 +9,10 @@ import 'package:wishing_well/utils/result.dart';
 /// including state management, error handling, and `Result<T>` transformations.
 /// The actual Supabase calls are delegated to the [AuthDataSource].
 class AuthRepositoryImpl extends AuthRepository {
-  AuthRepositoryImpl({required AuthDataSource dataSource, this.emailRedirectTo})
+  AuthRepositoryImpl({required AuthDataSource dataSource})
     : _dataSource = dataSource;
 
   final AuthDataSource _dataSource;
-
-  /// The URL Supabase redirects to after email confirmation.
-  /// When null, Supabase falls back to the project's configured Site URL.
-  final String? emailRedirectTo;
 
   @override
   bool get isAuthenticated => _dataSource.currentAccessToken != null;
@@ -101,11 +97,7 @@ class AuthRepositoryImpl extends AuthRepository {
     );
 
     try {
-      await _dataSource.signUp(
-        email: email,
-        password: password,
-        emailRedirectTo: emailRedirectTo,
-      );
+      await _dataSource.signUp(email: email, password: password);
       AppLogger.info('Account creation successful', context: 'AuthRepository');
       return const Result.ok(null);
     } on Exception catch (err, stackTrace) {

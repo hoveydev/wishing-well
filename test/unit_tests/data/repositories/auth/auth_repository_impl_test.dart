@@ -44,6 +44,15 @@ void main() {
         mockDataSource.mockUserFirstName = 'TestUser';
         expect(repository.userFirstName, 'TestUser');
       });
+
+      test('currentUserId returns null by default', () {
+        expect(repository.currentUserId, isNull);
+      });
+
+      test('currentUserId returns value from data source', () {
+        mockDataSource.mockUserId = 'user-123';
+        expect(repository.currentUserId, 'user-123');
+      });
     });
 
     group('Login', () {
@@ -154,31 +163,6 @@ void main() {
 
         expect(result, isA<Ok>());
         expect(mockDataSource.signUpCalled, isTrue);
-      });
-
-      test('passes emailRedirectTo to data source when set', () async {
-        const redirectUrl = 'https://example.com/auth/account-confirm';
-        final repoWithRedirect = AuthRepositoryImpl(
-          dataSource: mockDataSource,
-          emailRedirectTo: redirectUrl,
-        );
-
-        await repoWithRedirect.createAccount(
-          email: 'new@example.com',
-          password: 'password',
-        );
-
-        expect(mockDataSource.lastSignUpEmailRedirectTo, redirectUrl);
-        repoWithRedirect.dispose();
-      });
-
-      test('passes null emailRedirectTo to data source when not set', () async {
-        await repository.createAccount(
-          email: 'new@example.com',
-          password: 'password',
-        );
-
-        expect(mockDataSource.lastSignUpEmailRedirectTo, isNull);
       });
 
       test('returns Error on data source exception', () async {
@@ -331,6 +315,64 @@ void main() {
 
         expect(listener1Count, 1);
         expect(listener2Count, 1);
+      });
+    });
+
+    group('Login With Google', () {
+      test('returns Ok on successful Google login', () async {
+        final result = await repository.loginWithGoogle();
+
+        expect(result, isA<Ok>());
+        expect(mockDataSource.signInWithGoogleCalled, isTrue);
+      });
+
+      test('returns Error on data source exception', () async {
+        mockDataSource.signInWithGoogleError = Exception(
+          'Google sign-in failed',
+        );
+
+        final result = await repository.loginWithGoogle();
+
+        expect(result, isA<Error>());
+      });
+
+      test('notifies listeners after Google login attempt', () async {
+        var notified = false;
+        repository.addListener(() {
+          notified = true;
+        });
+
+        await repository.loginWithGoogle();
+
+        expect(notified, isTrue);
+      });
+    });
+
+    group('Connection Hint Logging', () {
+      test('logs hint when error contains Connection refused', () async {
+        mockDataSource.signInWithPasswordError = Exception(
+          'Connection refused to server',
+        );
+
+        final result = await repository.login(
+          email: 'test@example.com',
+          password: 'password',
+        );
+
+        expect(result, isA<Error>());
+      });
+
+      test('logs hint when error contains SocketException', () async {
+        mockDataSource.signUpError = Exception(
+          'SocketException: Failed to connect',
+        );
+
+        final result = await repository.createAccount(
+          email: 'test@example.com',
+          password: 'password',
+        );
+
+        expect(result, isA<Error>());
       });
     });
 

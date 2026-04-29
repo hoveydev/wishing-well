@@ -233,8 +233,8 @@ class _MainAppState extends State<MainApp> {
   void dispose() {
     _authStreamSub?.cancel();
     _accountConfirmationSub?.cancel();
-    widget.deepLinkHandler.accountConfirmationController?.close();
     widget.deepLinkHandler.dispose();
+    widget.deepLinkHandler.accountConfirmationController?.close();
     super.dispose();
   }
 

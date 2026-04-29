@@ -113,7 +113,10 @@ class DeepLinkHandler {
           'Account confirm URI detected, type=${uri.queryParameters['type']}',
           context: 'DeepLinkHandler._navigateFromUri',
         );
-        accountConfirmationController?.add(null);
+        if (accountConfirmationController != null &&
+            !accountConfirmationController!.isClosed) {
+          accountConfirmationController!.add(null);
+        }
         break;
     }
   }

@@ -27,12 +27,17 @@ import 'package:wishing_well/features/auth/reset_password/reset_password_screen.
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_screen.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/app_config.dart';
 
 GoRouter router({required AuthRepository authRepository}) => GoRouter(
   initialLocation: '/login',
   refreshListenable: authRepository,
   onException: (context, state, router) {
+    AppLogger.warning(
+      'Routing exception: ${state.error}',
+      context: 'router.onException',
+    );
     router.go(authRepository.isAuthenticated ? '/home' : '/login');
   },
   redirect: (context, state) {

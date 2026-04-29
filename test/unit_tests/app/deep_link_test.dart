@@ -73,33 +73,30 @@ void main() {
         },
       );
 
-      test(
-        'emits to controller for account-confirm URI without type '
-        '(PKCE redirect)',
-        () async {
-          final controller = StreamController<String>.broadcast();
-          final handler = createHandler(
-            initialUri: Uri.parse(
-              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
-              '?code=abc123',
-            ),
-            accountConfirmationController: controller,
-          );
+      test('emits to controller for account-confirm URI without type '
+          '(PKCE redirect)', () async {
+        final controller = StreamController<String>.broadcast();
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?code=abc123',
+          ),
+          accountConfirmationController: controller,
+        );
 
-          var accountConfirmationEmitted = false;
-          handler.accountConfirmationController?.stream.listen((_) {
-            accountConfirmationEmitted = true;
-          });
+        var accountConfirmationEmitted = false;
+        handler.accountConfirmationController?.stream.listen((_) {
+          accountConfirmationEmitted = true;
+        });
 
-          handler.init();
-          await Future<void>.delayed(Duration.zero);
+        handler.init();
+        await Future<void>.delayed(Duration.zero);
 
-          expect(accountConfirmationEmitted, isTrue);
-          expect(navigatedTo, isNull);
-          expect(errorType, isNull);
-          await controller.close();
-        },
-      );
+        expect(accountConfirmationEmitted, isTrue);
+        expect(navigatedTo, isNull);
+        expect(errorType, isNull);
+        await controller.close();
+      });
 
       test('does not navigate for password-reset initial URI', () async {
         final handler = createHandler(

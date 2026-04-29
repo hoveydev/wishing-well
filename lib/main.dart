@@ -117,7 +117,7 @@ Future<void> _runProduction() async {
   // get a signup confirmation link. The handler itself will emit to this
   // controller when it detects a valid account-confirm URI (both initial
   // and ongoing streams).
-  final accountConfirmationController = StreamController<String>.broadcast();
+  final accountConfirmationController = StreamController<void>.broadcast();
 
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
@@ -233,6 +233,7 @@ class _MainAppState extends State<MainApp> {
   void dispose() {
     _authStreamSub?.cancel();
     _accountConfirmationSub?.cancel();
+    widget.deepLinkHandler.accountConfirmationController?.close();
     widget.deepLinkHandler.dispose();
     super.dispose();
   }

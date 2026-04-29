@@ -45,7 +45,7 @@ class DeepLinkHandler {
 
   /// Controller for account confirmation events. Allows the handler to emit
   /// when account confirmation URIs are detected (both initial and ongoing).
-  final StreamController<String>? accountConfirmationController;
+  final StreamController<void>? accountConfirmationController;
 
   StreamSubscription? _sub;
   StreamSubscription? _recoverySub;
@@ -71,8 +71,11 @@ class DeepLinkHandler {
   Future<void> _handleInitialUri() async {
     try {
       final uri = await source.initial();
+      final sanitizedUri = uri == null
+          ? null
+          : Uri(scheme: uri.scheme, host: uri.host, path: uri.path);
       AppLogger.debug(
-        'Initial URI: $uri',
+        'Initial URI: $sanitizedUri',
         context: 'DeepLinkHandler._handleInitialUri',
       );
       if (uri != null) {
@@ -102,16 +105,15 @@ class DeepLinkHandler {
 
     final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
 
-    // Account confirmation with type=signup is handled via the controller.
-    // Other account-confirm URLs (without type or with different type) are
-    // treated as errors.
+    // Non-error account-confirm URLs are handled via the controller.
+    // Links with error query params are handled above.
     switch (subPath) {
       case 'account-confirm':
         AppLogger.debug(
           'Account confirm URI detected, type=${uri.queryParameters['type']}',
           context: 'DeepLinkHandler._navigateFromUri',
         );
-        accountConfirmationController?.add('');
+        accountConfirmationController?.add(null);
         break;
     }
   }

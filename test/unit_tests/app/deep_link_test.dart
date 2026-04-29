@@ -22,7 +22,7 @@ void main() {
   DeepLinkHandler createHandler({
     Uri? initialUri,
     Stream<String?>? passwordRecovery,
-    StreamController<String>? accountConfirmationController,
+    StreamController<void>? accountConfirmationController,
   }) {
     final source = DeepLinkSource(
       initial: () async => initialUri,
@@ -30,7 +30,7 @@ void main() {
     );
 
     final controller =
-        accountConfirmationController ?? StreamController<String>.broadcast();
+        accountConfirmationController ?? StreamController<void>.broadcast();
 
     return DeepLinkHandler(
       (routeName, queryParams) {
@@ -50,7 +50,7 @@ void main() {
       test(
         'does not navigate for account-confirm URI (handled via stream)',
         () async {
-          final controller = StreamController<String>.broadcast();
+          final controller = StreamController<void>.broadcast();
           final handler = createHandler(
             initialUri: Uri.parse(
               'https://wishing-well-ayb.pages.dev/auth/account-confirm'
@@ -75,7 +75,7 @@ void main() {
 
       test('emits to controller for account-confirm URI without type '
           '(PKCE redirect)', () async {
-        final controller = StreamController<String>.broadcast();
+        final controller = StreamController<void>.broadcast();
         final handler = createHandler(
           initialUri: Uri.parse(
             'https://wishing-well-ayb.pages.dev/auth/account-confirm'
@@ -250,7 +250,7 @@ void main() {
       test(
         'emits to controller when account-confirm URI is detected via stream',
         () async {
-          final controller = StreamController<String>.broadcast();
+          final controller = StreamController<void>.broadcast();
           var emitted = false;
           controller.stream.listen((_) {
             emitted = true;
@@ -309,30 +309,33 @@ void main() {
         await recoveryController.close();
       });
 
-      test('dispose cancels account confirmation subscription', () async {
-        final confirmationController = StreamController<String>.broadcast();
-        var emitted = false;
-        confirmationController.stream.listen((_) {
-          emitted = true;
-        });
+      test(
+        'dispose prevents processing account confirmation deep links',
+        () async {
+          final confirmationController = StreamController<void>.broadcast();
+          var emitted = false;
+          confirmationController.stream.listen((_) {
+            emitted = true;
+          });
 
-        final handler = createHandler(
-          accountConfirmationController: confirmationController,
-        );
-        handler.init();
-        handler.dispose();
+          final handler = createHandler(
+            accountConfirmationController: confirmationController,
+          );
+          handler.init();
+          handler.dispose();
 
-        // After dispose, handler should not process URIs
-        stream.add(
-          Uri.parse(
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
-          ),
-        );
-        await Future<void>.delayed(Duration.zero);
+          // After dispose, handler should not process URIs
+          stream.add(
+            Uri.parse(
+              'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
+            ),
+          );
+          await Future<void>.delayed(Duration.zero);
 
-        expect(emitted, isFalse);
-        await confirmationController.close();
-      });
+          expect(emitted, isFalse);
+          await confirmationController.close();
+        },
+      );
     });
   });
 }

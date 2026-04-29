@@ -273,9 +273,17 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Tap at the top-center of the screen — an area with no buttons or
-        // inputs — to trigger the GestureDetector's onTap and _dismissKeyboard
-        await tester.tapAt(const Offset(400, 30));
+        // Derive a safe tap point from the rendered widget's bounds to avoid
+        // brittle hard-coded offsets (inputs / buttons are near the bottom).
+        final screenRect = tester.getRect(find.byType(LoginScreen));
+        final backgroundTapPoint = Offset(
+          screenRect.center.dx,
+          screenRect.top + (screenRect.height * 0.05),
+        );
+
+        // Tap near the top-center of the rendered screen bounds to hit the
+        // background area and trigger the GestureDetector's onTap.
+        await tester.tapAt(backgroundTapPoint);
         await tester.pump();
 
         expect(find.byType(LoginScreen), findsOneWidget);

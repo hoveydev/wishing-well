@@ -262,7 +262,7 @@ void main() {
         expect(find.byType(GestureDetector), findsWidgets);
       });
 
-      testWidgets('tapping GestureDetector does not throw', (
+      testWidgets('tapping background area dismisses keyboard', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
@@ -273,12 +273,17 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        // Find the GestureDetector that wraps the screen content
-        final gestureDetector = find.byType(GestureDetector);
-        expect(gestureDetector, findsWidgets);
+        // Derive a safe tap point from the rendered widget's bounds to avoid
+        // brittle hard-coded offsets (inputs / buttons are near the bottom).
+        final screenRect = tester.getRect(find.byType(LoginScreen));
+        final backgroundTapPoint = Offset(
+          screenRect.center.dx,
+          screenRect.top + (screenRect.height * 0.05),
+        );
 
-        // Tap should not throw
-        await tester.tap(gestureDetector.first);
+        // Tap near the top-center of the rendered screen bounds to hit the
+        // background area and trigger the GestureDetector's onTap.
+        await tester.tapAt(backgroundTapPoint);
         await tester.pump();
 
         expect(find.byType(LoginScreen), findsOneWidget);

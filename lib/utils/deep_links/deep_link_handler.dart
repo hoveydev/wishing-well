@@ -28,6 +28,7 @@ class DeepLinkHandler {
     this.navigate, {
     required this.source,
     this.passwordRecovery,
+    this.accountConfirmationController,
     this.onError,
   });
   final NavigateFn navigate;
@@ -41,6 +42,10 @@ class DeepLinkHandler {
   /// processes the initial deep link URL and redirects back to login after
   /// our URI-based navigation fires.
   final Stream<String?>? passwordRecovery;
+
+  /// Controller for account confirmation events. Allows the handler to emit
+  /// when account confirmation URIs are detected (both initial and ongoing).
+  final StreamController<void>? accountConfirmationController;
 
   StreamSubscription? _sub;
   StreamSubscription? _recoverySub;
@@ -66,6 +71,13 @@ class DeepLinkHandler {
   Future<void> _handleInitialUri() async {
     try {
       final uri = await source.initial();
+      final sanitizedUri = uri == null
+          ? null
+          : Uri(scheme: uri.scheme, host: uri.host, path: uri.path);
+      AppLogger.debug(
+        'Initial URI: $sanitizedUri',
+        context: 'DeepLinkHandler._handleInitialUri',
+      );
       if (uri != null) {
         _navigateFromUri(uri);
       }
@@ -93,12 +105,17 @@ class DeepLinkHandler {
 
     final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
 
+    // Non-error account-confirm URLs are handled via the controller.
+    // Links with error query params are handled above.
     switch (subPath) {
       case 'account-confirm':
-        if (uri.queryParameters['type'] == 'signup') {
-          navigate(Routes.login.name, {'accountConfirmed': 'true'});
-        } else {
-          _navigateToDeepLinkError(subPath, uri.queryParameters);
+        AppLogger.debug(
+          'Account confirm URI detected, type=${uri.queryParameters['type']}',
+          context: 'DeepLinkHandler._navigateFromUri',
+        );
+        if (accountConfirmationController != null &&
+            !accountConfirmationController!.isClosed) {
+          accountConfirmationController!.add(null);
         }
         break;
     }

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:wishing_well/components/screen/screen.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/features/auth/login/components/login_buttons.dart';
 import 'package:wishing_well/features/auth/login/components/login_header.dart';
 import 'package:wishing_well/features/auth/login/components/login_inputs.dart';
 import 'package:wishing_well/features/auth/login/login_view_model.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.viewModel, super.key});
@@ -21,36 +17,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-  bool _accountConfirmationChecked = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _checkForAccountConfirmation();
-  }
-
-  void _checkForAccountConfirmation() {
-    // Prevent multiple checks - only run once per screen instance
-    if (_accountConfirmationChecked) return;
-    _accountConfirmationChecked = true;
-
-    try {
-      final state = GoRouterState.of(context);
-      if (state.uri.queryParameters['accountConfirmed'] == 'true') {
-        // Show success overlay after the first frame renders
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          final loading = context.read<StatusOverlayController>();
-          final l10n = AppLocalizations.of(context)!;
-          loading.showSuccess(l10n.accountConfirmationMessage, onOk: () {});
-          // Remove the query parameter to prevent showing again on rebuild
-          widget.viewModel.clearAccountConfirmationQuery(context);
-        });
-      }
-    } catch (_) {
-      // GoRouter not available (e.g., in tests) - ignore
-    }
-  }
 
   @override
   void dispose() {

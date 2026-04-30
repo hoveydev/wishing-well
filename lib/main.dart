@@ -112,6 +112,12 @@ Future<void> _runProduction() async {
       .where((state) => state.event == AuthChangeEvent.passwordRecovery)
       .map((state) => state.session?.user.email);
 
+  // Detect account confirmation via the deep link source and emit when we
+  // get a signup confirmation link. The handler itself will emit to this
+  // controller when it detects a valid account-confirm URI (both initial
+  // and ongoing streams).
+  final accountConfirmationController = StreamController<void>.broadcast();
+
   final deepLinkHandler = DeepLinkHandler(
     (name, queryParameters) => goRouter.goNamed(
       name,
@@ -119,6 +125,7 @@ Future<void> _runProduction() async {
     ),
     source: deepLinkSource,
     passwordRecovery: passwordRecoveryStream,
+    accountConfirmationController: accountConfirmationController,
   );
 
   final statusOverlayController = StatusOverlayController();
@@ -150,6 +157,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   StreamSubscription? _authStreamSub;
+  StreamSubscription? _accountConfirmationSub;
 
   @override
   void initState() {
@@ -178,13 +186,44 @@ class _MainAppState extends State<MainApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!context.mounted) return;
       final overlayController = context.read<StatusOverlayController>();
+      // Use the navigator's context (inside MaterialApp.router's Localizations
+      // tree) rather than _MainAppState's context (which is above
+      // MaterialApp.router and therefore has no Localizations ancestor).
       widget.deepLinkHandler.setErrorHandler((errorType) {
-        final l10n = AppLocalizations.of(context);
-        if (l10n == null || !context.mounted) return;
+        final navContext =
+            widget.router.routerDelegate.navigatorKey.currentContext;
+        if (navContext == null || !navContext.mounted) return;
+        final l10n = AppLocalizations.of(navContext);
+        if (l10n == null) return;
         // All deep link error types currently show the same message.
         // The typed errorType is passed through for future per-type messages.
         overlayController.showError(l10n.deepLinkError);
       });
+      // Subscribe to account confirmation events and show success overlay.
+      // Using StatusOverlayController directly avoids a race with GoRouter:
+      // by the time the deep link is processed Supabase may have already
+      // signed the user in (triggering a redirect to /home), which would
+      // discard any query-param navigation to /login. The StatusOverlay wraps
+      // the entire app and persists across route changes.
+      _accountConfirmationSub = widget
+          .deepLinkHandler
+          .accountConfirmationController
+          ?.stream
+          .listen((_) {
+            final navContext =
+                widget.router.routerDelegate.navigatorKey.currentContext;
+            if (navContext == null || !navContext.mounted) return;
+            final l10n = AppLocalizations.of(navContext);
+            if (l10n == null) return;
+            AppLogger.debug(
+              'Account confirmation event received, showing success overlay',
+              context: '_MainAppState.initState',
+            );
+            overlayController.showSuccess(
+              l10n.accountConfirmationMessage,
+              onOk: () {},
+            );
+          });
       widget.deepLinkHandler.init();
     });
   }
@@ -192,7 +231,9 @@ class _MainAppState extends State<MainApp> {
   @override
   void dispose() {
     _authStreamSub?.cancel();
+    _accountConfirmationSub?.cancel();
     widget.deepLinkHandler.dispose();
+    widget.deepLinkHandler.accountConfirmationController?.close();
     super.dispose();
   }
 

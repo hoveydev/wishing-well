@@ -507,6 +507,91 @@ void main() {
         expect(find.byType(AddWisherDetailsScreen), findsOneWidget);
       });
 
+      testWidgets('redirects unauthenticated user to login on unknown route', (
+        WidgetTester tester,
+      ) async {
+        final mockAuth = MockAuthRepository();
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
+              ChangeNotifierProvider<WisherRepository>(
+                create: (_) => MockWisherRepository(),
+              ),
+              ChangeNotifierProvider<ImageRepository>(
+                create: (_) => MockImageRepository(),
+              ),
+              _contactAccessProvider(),
+              ChangeNotifierProvider<StatusOverlayController>(
+                create: (_) => StatusOverlayController(),
+              ),
+            ],
+            child: MaterialApp.router(
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              routerConfig: goRouter,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        goRouter.go('/auth/account-confirm?error=invalid_token');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(LoginScreen), findsOneWidget);
+      });
+
+      testWidgets('redirects authenticated user to home on unknown route', (
+        WidgetTester tester,
+      ) async {
+        final mockAuth = MockAuthRepository();
+        await mockAuth.login(email: 'test@test.com', password: 'password');
+        final goRouter = router(authRepository: mockAuth);
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<AuthRepository>.value(value: mockAuth),
+              ChangeNotifierProvider<WisherRepository>(
+                create: (_) => MockWisherRepository(),
+              ),
+              ChangeNotifierProvider<ImageRepository>(
+                create: (_) => MockImageRepository(),
+              ),
+              _contactAccessProvider(),
+              ChangeNotifierProvider<StatusOverlayController>(
+                create: (_) => StatusOverlayController(),
+              ),
+            ],
+            child: MaterialApp.router(
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              routerConfig: goRouter,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        goRouter.go('/auth/account-confirm?error=invalid_token');
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(HomeScreen), findsOneWidget);
+      });
+
       testWidgets('navigates to all wishers route', (
         WidgetTester tester,
       ) async {

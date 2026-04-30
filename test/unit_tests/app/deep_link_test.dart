@@ -22,11 +22,15 @@ void main() {
   DeepLinkHandler createHandler({
     Uri? initialUri,
     Stream<String?>? passwordRecovery,
+    StreamController<void>? accountConfirmationController,
   }) {
     final source = DeepLinkSource(
       initial: () async => initialUri,
       stream: () => stream.stream,
     );
+
+    final controller =
+        accountConfirmationController ?? StreamController<void>.broadcast();
 
     return DeepLinkHandler(
       (routeName, queryParams) {
@@ -34,6 +38,7 @@ void main() {
       },
       source: source,
       passwordRecovery: passwordRecovery,
+      accountConfirmationController: controller,
       onError: (type) {
         errorType = type;
       },
@@ -43,33 +48,54 @@ void main() {
   group('DeepLinkHandler', () {
     group(TestGroups.initialState, () {
       test(
-        'navigates to login with accountConfirmed param for signup',
+        'does not navigate for account-confirm URI (handled via stream)',
         () async {
+          final controller = StreamController<void>.broadcast();
           final handler = createHandler(
             initialUri: Uri.parse(
               'https://wishing-well-ayb.pages.dev/auth/account-confirm'
               '?type=signup',
             ),
+            accountConfirmationController: controller,
           );
+
+          var accountConfirmationEmitted = false;
+          handler.accountConfirmationController?.stream.listen((_) {
+            accountConfirmationEmitted = true;
+          });
 
           handler.init();
           await Future<void>.delayed(Duration.zero);
 
-          expect(navigatedTo, 'login');
+          expect(accountConfirmationEmitted, isTrue);
+          expect(navigatedTo, isNull);
+          await controller.close();
         },
       );
 
-      test('calls onError for unrecognized account-confirm type', () async {
+      test('emits to controller for account-confirm URI without type '
+          '(PKCE redirect)', () async {
+        final controller = StreamController<void>.broadcast();
         final handler = createHandler(
           initialUri: Uri.parse(
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+            '?code=abc123',
           ),
+          accountConfirmationController: controller,
         );
+
+        var accountConfirmationEmitted = false;
+        handler.accountConfirmationController?.stream.listen((_) {
+          accountConfirmationEmitted = true;
+        });
 
         handler.init();
         await Future<void>.delayed(Duration.zero);
 
-        expect(errorType, DeepLinkErrorType.accountConfirm);
+        expect(accountConfirmationEmitted, isTrue);
+        expect(navigatedTo, isNull);
+        expect(errorType, isNull);
+        await controller.close();
       });
 
       test('does not navigate for password-reset initial URI', () async {
@@ -221,6 +247,34 @@ void main() {
         },
       );
 
+      test(
+        'emits to controller when account-confirm URI is detected via stream',
+        () async {
+          final controller = StreamController<void>.broadcast();
+          var emitted = false;
+          controller.stream.listen((_) {
+            emitted = true;
+          });
+
+          final handler = createHandler(
+            accountConfirmationController: controller,
+          );
+          handler.init();
+
+          stream.add(
+            Uri.parse(
+              'https://wishing-well-ayb.pages.dev/auth/account-confirm'
+              '?type=signup',
+            ),
+          );
+          await Future<void>.delayed(Duration.zero);
+
+          expect(emitted, isTrue);
+          expect(navigatedTo, isNull);
+          await controller.close();
+        },
+      );
+
       test('ignores unrelated links', () async {
         final handler = createHandler();
         handler.init();
@@ -254,6 +308,34 @@ void main() {
         expect(navigatedTo, isNull);
         await recoveryController.close();
       });
+
+      test(
+        'dispose prevents processing account confirmation deep links',
+        () async {
+          final confirmationController = StreamController<void>.broadcast();
+          var emitted = false;
+          confirmationController.stream.listen((_) {
+            emitted = true;
+          });
+
+          final handler = createHandler(
+            accountConfirmationController: confirmationController,
+          );
+          handler.init();
+          handler.dispose();
+
+          // After dispose, handler should not process URIs
+          stream.add(
+            Uri.parse(
+              'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=signup',
+            ),
+          );
+          await Future<void>.delayed(Duration.zero);
+
+          expect(emitted, isFalse);
+          await confirmationController.close();
+        },
+      );
     });
   });
 }

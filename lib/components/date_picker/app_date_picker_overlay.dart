@@ -17,12 +17,18 @@ import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 /// Use [AppDatePickerOverlay.show] to present the overlay and receive the
 /// chosen date (or `null` if the user cancels).
 class AppDatePickerOverlay extends StatefulWidget {
-  const AppDatePickerOverlay({
+  AppDatePickerOverlay({
     required this.firstDate,
     required this.lastDate,
     this.initialDate,
     super.key,
-  });
+  })  : assert(!firstDate.isAfter(lastDate)),
+        assert(
+          initialDate == null || !initialDate.isBefore(firstDate),
+        ),
+        assert(
+          initialDate == null || !initialDate.isAfter(lastDate),
+        );
 
   final DateTime? initialDate;
   final DateTime firstDate;
@@ -165,20 +171,38 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AppButton.icon(
-          icon: Icons.chevron_left,
-          type: AppButtonType.tertiary,
-          onPressed: _previousMonth,
-          color: _canGoPrevious ? colorScheme.primary : colorScheme.borderGray,
-          iconSize: const AppIconSize().large,
+        Semantics(
+          button: true,
+          enabled: _canGoPrevious,
+          child: IgnorePointer(
+            ignoring: !_canGoPrevious,
+            child: AppButton.icon(
+              icon: Icons.chevron_left,
+              type: AppButtonType.tertiary,
+              onPressed: _previousMonth,
+              color:
+                  _canGoPrevious
+                      ? colorScheme.primary
+                      : colorScheme.borderGray,
+              iconSize: const AppIconSize().large,
+            ),
+          ),
         ),
         Text(monthLabel, style: textTheme.titleSmall),
-        AppButton.icon(
-          icon: Icons.chevron_right,
-          type: AppButtonType.tertiary,
-          onPressed: _nextMonth,
-          color: _canGoNext ? colorScheme.primary : colorScheme.borderGray,
-          iconSize: const AppIconSize().large,
+        Semantics(
+          button: true,
+          enabled: _canGoNext,
+          child: IgnorePointer(
+            ignoring: !_canGoNext,
+            child: AppButton.icon(
+              icon: Icons.chevron_right,
+              type: AppButtonType.tertiary,
+              onPressed: _nextMonth,
+              color:
+                  _canGoNext ? colorScheme.primary : colorScheme.borderGray,
+              iconSize: const AppIconSize().large,
+            ),
+          ),
         ),
       ],
     );
@@ -277,10 +301,9 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
     }
 
     final dateLabel = DateFormat.yMMMMd().format(date);
-    final semanticLabel = isSelected ? '$dateLabel, selected' : dateLabel;
 
     final cell = Semantics(
-      label: semanticLabel,
+      label: dateLabel,
       button: inRange,
       enabled: inRange,
       selected: isSelected,

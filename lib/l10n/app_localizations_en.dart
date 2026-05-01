@@ -355,5 +355,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get datePickerConfirm => 'Confirm';
 
   @override
+  String get datePickerClearDate => 'Clear date';
+
+  @override
+  String get datePickerPreviousMonth => 'Previous month';
+
+  @override
+  String get datePickerNextMonth => 'Next month';
+
+  @override
   String get done => 'Done';
 }

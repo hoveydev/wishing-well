@@ -718,6 +718,24 @@ abstract class AppLocalizations {
   /// **'Confirm'**
   String get datePickerConfirm;
 
+  /// Tooltip / accessibility label for the clear date button in the date picker field
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get datePickerClearDate;
+
+  /// Accessibility label for the previous month navigation button in the date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get datePickerPreviousMonth;
+
+  /// Accessibility label for the next month navigation button in the date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get datePickerNextMonth;
+
   /// Label for a confirm / done button
   ///
   /// In en, this message translates to:

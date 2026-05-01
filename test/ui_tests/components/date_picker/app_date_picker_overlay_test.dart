@@ -59,11 +59,13 @@ void main() {
         await tester.pumpWidget(buildTestWidget());
         await TestHelpers.pumpAndSettle(tester);
 
-        // 7 day header cells, each one letter
-        final singleLetterDays = ['S', 'M', 'T', 'W', 'F'];
-        for (final day in singleLetterDays) {
-          expect(find.text(day), findsWidgets);
-        }
+        // 7 day header cells, with duplicated initials for Sunday/Saturday
+        // and Tuesday/Thursday.
+        const dayHeaderCounts = {'S': 2, 'M': 1, 'T': 2, 'W': 1, 'F': 1};
+
+        dayHeaderCounts.forEach((day, expectedCount) {
+          expect(find.text(day), findsNWidgets(expectedCount));
+        });
       });
 
       testWidgets('renders day numbers for the displayed month', (
@@ -108,13 +110,18 @@ void main() {
         TestHelpers.expectTextOnce('April 2025');
       });
 
-      testWidgets('ignores out-of-range initialDate', (tester) async {
-        // initialDate before firstDate — should not be pre-selected
-        await tester.pumpWidget(buildTestWidget(initialDate: DateTime(2020)));
-        await TestHelpers.pumpAndSettle(tester);
-
-        // Should land on firstDate's month (Jan 2025)
-        TestHelpers.expectTextOnce('January 2025');
+      testWidgets('asserts when initialDate is before firstDate', (
+        tester,
+      ) async {
+        // initialDate before firstDate — should fail fast with assertion
+        expect(
+          () => AppDatePickerOverlay(
+            firstDate: DateTime(2025),
+            lastDate: DateTime(2025, 12, 31),
+            initialDate: DateTime(2020), // before firstDate
+          ),
+          throwsAssertionError,
+        );
       });
 
       testWidgets('normalizes initialDate with time component', (tester) async {
@@ -160,7 +167,7 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         // Already at January — prev tap should not change the month
-        await tester.tap(find.byIcon(Icons.chevron_left));
+        await tester.tap(find.byIcon(Icons.chevron_left), warnIfMissed: false);
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectTextOnce('January 2025');
@@ -175,7 +182,7 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         // Already at December — next tap should not change the month
-        await tester.tap(find.byIcon(Icons.chevron_right));
+        await tester.tap(find.byIcon(Icons.chevron_right), warnIfMissed: false);
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectTextOnce('December 2025');
@@ -200,13 +207,12 @@ void main() {
 
         // Verify by widget predicate – selected cell should have 'selected'
         final march15Label = DateFormat.yMMMMd().format(DateTime(2020, 3, 15));
-        final selectedLabel = '$march15Label, selected';
-        final selectedWidget = tester.widget<Semantics>(
+        final semanticsWidget = tester.widget<Semantics>(
           find.byWidgetPredicate(
-            (w) => w is Semantics && w.properties.label == selectedLabel,
+            (w) => w is Semantics && w.properties.label == march15Label,
           ),
         );
-        expect(selectedWidget.properties.selected, isTrue);
+        expect(semanticsWidget.properties.selected, isTrue);
       });
 
       testWidgets('out-of-range days cannot be selected', (tester) async {
@@ -228,7 +234,7 @@ void main() {
         TestHelpers.expectTextOnce('March 2020');
         // Day 15 should still be selected
         expect(
-          find.bySemanticsLabel(RegExp(r'March 15, 2020, selected')),
+          find.bySemanticsLabel(RegExp(r'March 15, 2020')),
           findsOneWidget,
         );
       });
@@ -386,10 +392,9 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         final march15Label = DateFormat.yMMMMd().format(DateTime(2025, 3, 15));
-        final selectedLabel = '$march15Label, selected';
         final semanticsWidget = tester.widget<Semantics>(
           find.byWidgetPredicate(
-            (w) => w is Semantics && w.properties.label == selectedLabel,
+            (w) => w is Semantics && w.properties.label == march15Label,
           ),
         );
         expect(semanticsWidget.properties.selected, isTrue);

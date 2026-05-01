@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_overlay.dart';
-import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_border_radius.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
+import 'package:wishing_well/theme/app_theme.dart';
 
 /// A tappable date-picker row that integrates with the app's design system.
 class AppDatePickerField extends StatelessWidget {
@@ -22,8 +25,9 @@ class AppDatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).extension<AppColorScheme>();
+    final colorScheme = context.colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasValue = value != null;
 
     return Semantics(
@@ -32,7 +36,7 @@ class AppDatePickerField extends StatelessWidget {
           : placeholder,
       button: true,
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppBorderRadius.small),
         onTap: () => _pickDate(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -40,8 +44,8 @@ class AppDatePickerField extends StatelessWidget {
             children: [
               Icon(
                 Icons.calendar_today_outlined,
-                size: 20,
-                color: colorScheme?.primary,
+                size: const AppIconSize().large,
+                color: colorScheme.primary,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -50,17 +54,23 @@ class AppDatePickerField extends StatelessWidget {
                   style: hasValue
                       ? textTheme.bodyLarge
                       : textTheme.bodyLarge?.copyWith(
-                          color: colorScheme?.borderGray,
+                          color: colorScheme.borderGray,
                         ),
                 ),
               ),
               if (hasValue)
-                GestureDetector(
-                  onTap: () => onChanged(null),
-                  child: Icon(
+                IconButton(
+                  onPressed: () => onChanged(null),
+                  icon: Icon(
                     Icons.close,
-                    size: 18,
-                    color: colorScheme?.borderGray,
+                    size: const AppIconSize().medium,
+                    color: colorScheme.borderGray,
+                  ),
+                  tooltip: l10n.datePickerClearDate,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
                   ),
                 ),
             ],

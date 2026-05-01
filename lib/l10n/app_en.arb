@@ -468,6 +468,18 @@
     "@datePickerConfirm": {
         "description": "Confirm button label in the custom date picker overlay"
     },
+    "datePickerClearDate": "Clear date",
+    "@datePickerClearDate": {
+        "description": "Tooltip / accessibility label for the clear date button in the date picker field"
+    },
+    "datePickerPreviousMonth": "Previous month",
+    "@datePickerPreviousMonth": {
+        "description": "Accessibility label for the previous month navigation button in the date picker overlay"
+    },
+    "datePickerNextMonth": "Next month",
+    "@datePickerNextMonth": {
+        "description": "Accessibility label for the next month navigation button in the date picker overlay"
+    },
     "done": "Done",
     "@done": {
         "description": "Label for a confirm / done button"

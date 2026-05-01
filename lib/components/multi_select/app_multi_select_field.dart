@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/multi_select/multi_select_sheet.dart';
+import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -92,7 +93,11 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
         ),
         if (hasSelection)
           Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 8),
+            padding: const EdgeInsets.only(
+              left: 12,
+              right: 12,
+              bottom: AppSpacerSize.small,
+            ),
             child: Wrap(
               spacing: 6,
               runSpacing: 6,

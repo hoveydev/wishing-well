@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
+import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// Shared infrastructure for selection-style modal bottom sheets.
@@ -29,7 +30,7 @@ class AppSheetHeader extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 12),
           width: 40,
-          height: 4,
+          height: AppSpacerSize.xsmall,
           decoration: BoxDecoration(
             color: colorScheme.borderGray,
             borderRadius: BorderRadius.circular(2),
@@ -37,7 +38,7 @@ class AppSheetHeader extends StatelessWidget {
         ),
         const AppSpacer.small(),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacerSize.small),
           child: Text(title, style: textTheme.titleMedium),
         ),
       ],

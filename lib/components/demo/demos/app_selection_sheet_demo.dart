@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/demo/demos/input_demo.dart';
+import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
+import 'package:wishing_well/components/multi_select/multi_select_sheet.dart';
 import 'package:wishing_well/components/sheet/app_selection_sheet.dart';
+
+const _sampleItems = [
+  AppMultiSelectItem(value: 'books', label: 'Books'),
+  AppMultiSelectItem(value: 'electronics', label: 'Electronics'),
+  AppMultiSelectItem(value: 'clothing', label: 'Clothing'),
+  AppMultiSelectItem(value: 'art', label: 'Art'),
+];
 
 class AppSelectionSheetDemo extends StatefulWidget {
   const AppSelectionSheetDemo({super.key});
@@ -11,6 +20,7 @@ class AppSelectionSheetDemo extends StatefulWidget {
 
 class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
   String? _lastDismissed;
+  List<String> _selectedCategories = [];
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -59,6 +69,34 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
               ),
             ],
           ]),
+          _buildSection('MultiSelectSheet (built on AppSelectionSheet)', [
+            const FeatureBulletPoint(
+              text:
+                  'MultiSelectSheet.show() delegates to '
+                  'AppSelectionSheet.show() for consistent styling',
+            ),
+            const FeatureBulletPoint(
+              text: 'DraggableScrollableSheet with ChecklistIcon rows',
+            ),
+            const FeatureBulletPoint(
+              text: 'Done button returns the confirmed selection',
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => _openMultiSelectSheet(context),
+                child: const Text('Open MultiSelectSheet'),
+              ),
+            ),
+            if (_selectedCategories.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Selected: ${_selectedCategories.join(', ')}',
+                style: const TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ],
+          ]),
         ],
       ),
     ),
@@ -96,6 +134,19 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
       ),
     );
     setState(() => _lastDismissed = result ?? 'swiped away');
+  }
+
+  Future<void> _openMultiSelectSheet(BuildContext context) async {
+    final result = await MultiSelectSheet.show(
+      context: context,
+      items: _sampleItems,
+      selectedValues: _selectedCategories,
+      title: 'Gift Categories',
+    );
+    if (!mounted) return;
+    if (result != null) {
+      setState(() => _selectedCategories = result);
+    }
   }
 
   Widget _buildSection(String title, List<Widget> children) => Column(

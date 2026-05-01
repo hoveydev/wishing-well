@@ -22,12 +22,22 @@ class AppDatePickerOverlay extends StatefulWidget {
     required this.lastDate,
     this.initialDate,
     super.key,
-  })  : assert(!firstDate.isAfter(lastDate)),
-        assert(
-          initialDate == null || !initialDate.isBefore(firstDate),
+  })  : assert(
+          !DateUtils.dateOnly(firstDate).isAfter(
+            DateUtils.dateOnly(lastDate),
+          ),
         ),
         assert(
-          initialDate == null || !initialDate.isAfter(lastDate),
+          initialDate == null ||
+              !DateUtils.dateOnly(initialDate).isBefore(
+                DateUtils.dateOnly(firstDate),
+              ),
+        ),
+        assert(
+          initialDate == null ||
+              !DateUtils.dateOnly(initialDate).isAfter(
+                DateUtils.dateOnly(lastDate),
+              ),
         );
 
   final DateTime? initialDate;
@@ -166,6 +176,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
   Widget _buildMonthHeader(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = context.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final monthLabel = DateFormat.yMMMM().format(_displayedMonth);
 
     return Row(
@@ -174,6 +185,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
         Semantics(
           button: true,
           enabled: _canGoPrevious,
+          label: l10n.datePickerPreviousMonth,
           child: IgnorePointer(
             ignoring: !_canGoPrevious,
             child: AppButton.icon(
@@ -192,6 +204,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
         Semantics(
           button: true,
           enabled: _canGoNext,
+          label: l10n.datePickerNextMonth,
           child: IgnorePointer(
             ignoring: !_canGoNext,
             child: AppButton.icon(

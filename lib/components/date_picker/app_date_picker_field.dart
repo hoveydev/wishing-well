@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_overlay.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -26,6 +27,7 @@ class AppDatePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasValue = value != null;
 
     return Semantics(
@@ -64,9 +66,12 @@ class AppDatePickerField extends StatelessWidget {
                     size: const AppIconSize().medium,
                     color: colorScheme.borderGray,
                   ),
-                  tooltip: 'Clear date',
+                  tooltip: l10n.datePickerClearDate,
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
                 ),
             ],
           ),

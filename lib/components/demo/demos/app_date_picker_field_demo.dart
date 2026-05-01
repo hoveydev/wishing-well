@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_field.dart';
-import 'package:wishing_well/components/demo/demos/input_demo.dart';
 
 class AppDatePickerFieldDemo extends StatefulWidget {
   const AppDatePickerFieldDemo({super.key});
@@ -56,24 +55,24 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
             ),
           ]),
           _buildSection('Features', [
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text: 'Tappable row opens a custom bottom-sheet date picker',
             ),
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text:
                   'Calendar icon on the left, clear (×) button when a date '
                   'is set',
             ),
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text: 'Accepts optional firstDate / lastDate to constrain range',
             ),
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text: 'Defaults to 1900–today (suitable for birthdays)',
             ),
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text: 'Callback-based: onChanged(DateTime?) with null to clear',
             ),
-            const FeatureBulletPoint(
+            const _FeatureBulletPoint(
               text: 'Accessibility: Semantics label reflects current value',
             ),
           ]),
@@ -93,5 +92,26 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
       ...children,
       const SizedBox(height: 24),
     ],
+  );
+}
+
+class _FeatureBulletPoint extends StatelessWidget {
+  const _FeatureBulletPoint({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '• ',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
+      ],
+    ),
   );
 }

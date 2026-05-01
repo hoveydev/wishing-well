@@ -347,4 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deepLinkError =>
       'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.';
+
+  @override
+  String get done => 'Done';
 }

@@ -47,6 +47,8 @@ import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
+import 'package:wishing_well/components/demo/demos/app_selection_sheet_demo.dart';
+import 'package:wishing_well/components/demo/demos/app_multi_select_field_demo.dart';
 import 'package:wishing_well/components/demo/demos/profile_image_demo.dart';
 
 /// Registers all component demos with the registry.
@@ -209,6 +211,26 @@ void registerAllDemos() {
         'Reusable profile image component with auth support for private bucket',
   );
 
+  ComponentDemoRegistry.register(
+    componentName: 'sheet',
+    title: 'Selection Sheet',
+    icon: Icons.layers_outlined,
+    demoBuilder: (_) => const AppSelectionSheetDemo(),
+    description:
+        'Shared infrastructure for selection-style bottom sheets: '
+        'AppSheetHeader and AppSelectionSheet.show()',
+  );
+
+  ComponentDemoRegistry.register(
+    componentName: 'multi_select',
+    title: 'Multi-Select Field',
+    icon: Icons.checklist_outlined,
+    demoBuilder: (_) => const AppMultiSelectFieldDemo(),
+    description:
+        'Tappable multi-select field with bottom-sheet checkboxes and '
+        'chips display',
+  );
+
   // NEW COMPONENT REGISTRATION HERE - DO NOT DELETE
 
   // ═══════════════════════════════════════════════════════════════════
@@ -238,6 +260,8 @@ void registerAllDemos() {
     'image_picker_circle', // Image picker component
     'image_source_menu', // Image source menu component
     'profile_image', // Profile image component with auth support
+    'multi_select', // Multi-select field component
+    'sheet', // Shared selection sheet infrastructure
   ];
 
   // Verify that all required components have been registered

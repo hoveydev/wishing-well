@@ -459,5 +459,9 @@
     "deepLinkError": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
     "@deepLinkError": {
         "description": "Error message shown when a deep link (password reset or account confirmation) has expired or is invalid"
+    },
+    "done": "Done",
+    "@done": {
+        "description": "Label for a confirm / done button"
     }
 }

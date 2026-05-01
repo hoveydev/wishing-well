@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/sheet/app_selection_sheet.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -21,44 +22,20 @@ class ImageSourceMenu extends StatelessWidget {
   static Future<void> show({
     required BuildContext context,
     required void Function(ImageSourceOption) onOptionSelected,
-  }) {
-    final colorScheme = context.colorScheme;
-    return showModalBottomSheet(
-      context: context,
-      backgroundColor: colorScheme.background,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => ImageSourceMenu(onOptionSelected: onOptionSelected),
-    );
-  }
+  }) => AppSelectionSheet.show(
+    context: context,
+    builder: (context) => ImageSourceMenu(onOptionSelected: onOptionSelected),
+  );
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
 
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
-          Container(
-            margin: const EdgeInsets.only(top: 12),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: colorScheme.borderGray,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const AppSpacer.small(),
-          // Title
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(l10n.selectImageSource, style: textTheme.titleMedium),
-          ),
+          AppSheetHeader(title: l10n.selectImageSource),
           // Options
           _buildOption(
             context: context,

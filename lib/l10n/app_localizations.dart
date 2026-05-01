@@ -705,6 +705,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
   String get deepLinkError;
+
+  /// Label for a confirm / done button
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
 }
 
 class _AppLocalizationsDelegate

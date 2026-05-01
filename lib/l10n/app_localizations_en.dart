@@ -353,4 +353,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get datePickerConfirm => 'Confirm';
+
+  @override
+  String get done => 'Done';
 }

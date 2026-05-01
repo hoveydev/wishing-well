@@ -467,5 +467,9 @@
     "datePickerConfirm": "Confirm",
     "@datePickerConfirm": {
         "description": "Confirm button label in the custom date picker overlay"
+    },
+    "done": "Done",
+    "@done": {
+        "description": "Label for a confirm / done button"
     }
 }

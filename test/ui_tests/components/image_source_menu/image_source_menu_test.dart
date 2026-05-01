@@ -481,12 +481,13 @@ void main() {
         await tester.tap(find.text('Open Menu'));
         await TestHelpers.pumpAndSettle(tester);
 
-        // Find Column and verify mainAxisSize is min
+        // Find outer Column directly in ImageSourceMenu (AppSheetHeader
+        // adds its own nested Column, so we use .first for the outer one)
         final columnFinder = find.descendant(
           of: find.byType(ImageSourceMenu),
           matching: find.byType(Column),
         );
-        final column = tester.widget<Column>(columnFinder);
+        final column = tester.widget<Column>(columnFinder.first);
         expect(column.mainAxisSize, MainAxisSize.min);
       });
 

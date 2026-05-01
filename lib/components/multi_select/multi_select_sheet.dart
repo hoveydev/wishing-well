@@ -143,9 +143,7 @@ class _SelectionRow extends StatelessWidget {
       children: [
         ChecklistIcon(
           icon: isSelected ? Icons.check : null,
-          iconColor: isSelected
-              ? colorScheme.onPrimary!
-              : colorScheme.primary!,
+          iconColor: isSelected ? colorScheme.onPrimary! : colorScheme.primary!,
           bgColor: isSelected ? colorScheme.primary! : colorScheme.background!,
           borderColor: isSelected
               ? colorScheme.primary!

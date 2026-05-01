@@ -156,17 +156,11 @@ void main() {
         final bottomSheet = find.byType(BottomSheet);
         expect(bottomSheet, findsOneWidget);
         expect(
-          find.descendant(
-            of: bottomSheet,
-            matching: find.text('Sheet'),
-          ),
+          find.descendant(of: bottomSheet, matching: find.text('Sheet')),
           findsOneWidget,
         );
         expect(
-          find.descendant(
-            of: bottomSheet,
-            matching: find.byType(Material),
-          ),
+          find.descendant(of: bottomSheet, matching: find.byType(Material)),
           findsWidgets,
         );
       });

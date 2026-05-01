@@ -113,7 +113,12 @@ class _MultiSelectSheetState extends State<MultiSelectSheet> {
               child: AppButton.label(
                 label: l10n.done,
                 type: AppButtonType.primary,
-                onPressed: () => Navigator.of(context).pop(_selected.toList()),
+                onPressed: () => Navigator.of(context).pop(
+                  widget.items
+                      .where((item) => _selected.contains(item.value))
+                      .map((item) => item.value)
+                      .toList(),
+                ),
               ),
             ),
           ),

@@ -4,6 +4,11 @@ import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
+// Non-standard dimensions with no current AppSpacerSize/AppIconSize equivalent
+// — tracked as TLM items for a future token audit.
+const double _triggerVerticalPadding = 14.0;
+const double _triggerIconSize = 20.0;
+
 /// A single item in an [AppMultiSelectField].
 class AppMultiSelectItem {
   const AppMultiSelectItem({required this.value, required this.label});
@@ -63,15 +68,18 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
         TouchFeedbackOpacity(
           onTap: _openSheet,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacerSize.medium,
+              vertical: _triggerVerticalPadding,
+            ),
             child: Row(
               children: [
                 Icon(
                   Icons.checklist_outlined,
-                  size: 20,
+                  size: _triggerIconSize,
                   color: colorScheme.primary,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacerSize.medium),
                 Expanded(
                   child: Text(
                     hasSelection
@@ -94,19 +102,21 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
         if (hasSelection)
           Padding(
             padding: const EdgeInsets.only(
-              left: 12,
-              right: 12,
+              left: AppSpacerSize.medium,
+              right: AppSpacerSize.medium,
               bottom: AppSpacerSize.small,
             ),
             child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
+              spacing: AppSpacerSize.xsmall,
+              runSpacing: AppSpacerSize.xsmall,
               children: selected.map((value) {
                 final label = labelByValue[value] ?? value;
                 return Chip(
                   label: Text(
                     label,
-                    style: TextStyle(color: colorScheme.primary),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.primary,
+                    ),
                   ),
                   backgroundColor: colorScheme.primary!.withValues(alpha: 0.12),
                   side: BorderSide(

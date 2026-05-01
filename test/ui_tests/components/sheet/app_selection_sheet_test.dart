@@ -153,7 +153,22 @@ void main() {
         await tester.tap(find.text('Open'));
         await TestHelpers.pumpAndSettle(tester);
 
-        expect(find.byType(Material), findsWidgets);
+        final bottomSheet = find.byType(BottomSheet);
+        expect(bottomSheet, findsOneWidget);
+        expect(
+          find.descendant(
+            of: bottomSheet,
+            matching: find.text('Sheet'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: bottomSheet,
+            matching: find.byType(Material),
+          ),
+          findsWidgets,
+        );
       });
     });
 

@@ -47,6 +47,7 @@ import 'package:wishing_well/components/demo/demos/touch_feedback_demo.dart';
 import 'package:wishing_well/components/demo/demos/wishers_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_picker_circle_demo.dart';
 import 'package:wishing_well/components/demo/demos/image_source_menu_demo.dart';
+import 'package:wishing_well/components/demo/demos/app_date_picker_field_demo.dart';
 import 'package:wishing_well/components/demo/demos/app_selection_sheet_demo.dart';
 import 'package:wishing_well/components/demo/demos/app_multi_select_field_demo.dart';
 import 'package:wishing_well/components/demo/demos/profile_image_demo.dart';
@@ -212,6 +213,14 @@ void registerAllDemos() {
   );
 
   ComponentDemoRegistry.register(
+    componentName: 'date_picker',
+    title: 'Date Picker Field',
+    icon: Icons.calendar_today_outlined,
+    demoBuilder: (_) => const AppDatePickerFieldDemo(),
+    description: 'Tappable date-picker row with calendar icon and clear button',
+  );
+
+  ComponentDemoRegistry.register(
     componentName: 'sheet',
     title: 'Selection Sheet',
     icon: Icons.layers_outlined,
@@ -260,6 +269,7 @@ void registerAllDemos() {
     'image_picker_circle', // Image picker component
     'image_source_menu', // Image source menu component
     'profile_image', // Profile image component with auth support
+    'date_picker', // Date picker field component
     'multi_select', // Multi-select field component
     'sheet', // Shared selection sheet infrastructure
   ];

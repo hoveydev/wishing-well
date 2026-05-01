@@ -706,6 +706,36 @@ abstract class AppLocalizations {
   /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
   String get deepLinkError;
 
+  /// Title shown at the top of the custom date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Select a Date'**
+  String get datePickerTitle;
+
+  /// Confirm button label in the custom date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get datePickerConfirm;
+
+  /// Tooltip / accessibility label for the clear date button in the date picker field
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get datePickerClearDate;
+
+  /// Accessibility label for the previous month navigation button in the date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get datePickerPreviousMonth;
+
+  /// Accessibility label for the next month navigation button in the date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get datePickerNextMonth;
+
   /// Label for a confirm / done button
   ///
   /// In en, this message translates to:

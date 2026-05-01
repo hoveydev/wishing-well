@@ -349,5 +349,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.';
 
   @override
+  String get datePickerTitle => 'Select a Date';
+
+  @override
+  String get datePickerConfirm => 'Confirm';
+
+  @override
+  String get datePickerClearDate => 'Clear date';
+
+  @override
+  String get datePickerPreviousMonth => 'Previous month';
+
+  @override
+  String get datePickerNextMonth => 'Next month';
+
+  @override
   String get done => 'Done';
 }

@@ -73,9 +73,11 @@ class _MultiSelectSheetState extends State<MultiSelectSheet> {
         children: [
           AppSheetHeader(title: widget.title),
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               controller: scrollController,
-              children: widget.items.map((item) {
+              itemCount: widget.items.length,
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
                 final isSelected = _selected.contains(item.value);
                 return TouchFeedbackOpacity(
                   onTap: () => setState(() {
@@ -97,7 +99,7 @@ class _MultiSelectSheetState extends State<MultiSelectSheet> {
                     ),
                   ),
                 );
-              }).toList(),
+              },
             ),
           ),
           SafeArea(
@@ -133,7 +135,7 @@ class _SelectionRow extends StatelessWidget {
         ChecklistIcon(
           icon: isSelected ? Icons.check : null,
           iconColor: isSelected
-              ? colorScheme.background!
+              ? colorScheme.onPrimary!
               : colorScheme.primary!,
           bgColor: isSelected ? colorScheme.primary! : colorScheme.background!,
           borderColor: isSelected

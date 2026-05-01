@@ -25,8 +25,16 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        final containers = find.byType(Container);
-        expect(containers, findsWidgets);
+        final headerFinder = find.byType(AppSheetHeader);
+        final handleBarFinder = find.descendant(
+          of: headerFinder,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Container &&
+                widget.margin == const EdgeInsets.only(top: 12),
+          ),
+        );
+        expect(handleBarFinder, findsOneWidget);
       });
 
       testWidgets('handle bar has correct margin', (WidgetTester tester) async {

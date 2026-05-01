@@ -78,7 +78,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce('2 selected');
+        TestHelpers.expectTextOnce('2 items selected');
       });
 
       testWidgets('shows chips for pre-selected values', (
@@ -282,7 +282,7 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Pick fruits'), findsNothing);
-        TestHelpers.expectTextOnce('1 selected');
+        TestHelpers.expectTextOnce('1 item selected');
       });
     });
   });

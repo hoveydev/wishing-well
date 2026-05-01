@@ -40,6 +40,7 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
       selectedValues: widget.selectedValues,
       title: widget.title,
     );
+    if (!mounted) return;
     if (result != null) {
       widget.onChanged(result);
     }
@@ -51,6 +52,9 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
     final textTheme = Theme.of(context).textTheme;
     final selected = widget.selectedValues;
     final hasSelection = selected.isNotEmpty;
+    final labelByValue = {
+      for (final item in widget.items) item.value: item.label,
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +74,9 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
                 Expanded(
                   child: Text(
                     hasSelection
-                        ? '${selected.length} selected'
+                        ? MaterialLocalizations.of(
+                            context,
+                          ).selectedRowCountTitle(selected.length)
                         : widget.placeholder,
                     style: hasSelection
                         ? textTheme.bodyLarge
@@ -91,12 +97,7 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
               spacing: 6,
               runSpacing: 6,
               children: selected.map((value) {
-                final label =
-                    widget.items
-                        .where((item) => item.value == value)
-                        .firstOrNull
-                        ?.label ??
-                    value;
+                final label = labelByValue[value] ?? value;
                 return Chip(
                   label: Text(
                     label,

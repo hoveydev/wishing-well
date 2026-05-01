@@ -459,5 +459,13 @@
     "deepLinkError": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
     "@deepLinkError": {
         "description": "Error message shown when a deep link (password reset or account confirmation) has expired or is invalid"
+    },
+    "datePickerTitle": "Select a Date",
+    "@datePickerTitle": {
+        "description": "Title shown at the top of the custom date picker overlay"
+    },
+    "datePickerConfirm": "Confirm",
+    "@datePickerConfirm": {
+        "description": "Confirm button label in the custom date picker overlay"
     }
 }

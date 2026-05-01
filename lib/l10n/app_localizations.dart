@@ -705,6 +705,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
   String get deepLinkError;
+
+  /// Title shown at the top of the custom date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Select a Date'**
+  String get datePickerTitle;
+
+  /// Confirm button label in the custom date picker overlay
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get datePickerConfirm;
 }
 
 class _AppLocalizationsDelegate

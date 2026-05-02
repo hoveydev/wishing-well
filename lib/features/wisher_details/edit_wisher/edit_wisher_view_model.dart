@@ -15,26 +15,37 @@ import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class EditWisherViewModelContract implements ScreenViewModelContract {
+  // State
   Wisher? get wisher;
   bool get isLoading;
-  File? get imageFile;
-  String? get existingImageUrl;
   bool get hasAlert;
   EditWisherError get error;
   bool get isFormValid;
+
+  // Basic info getters
+  File? get imageFile;
+  String? get existingImageUrl;
+
+  // Gift fields getters
+  DateTime? get birthday;
+  List<String> get giftOccasions;
+  List<String> get giftInterests;
+
+  // Basic info updates
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
   void updateImage(File? imageFile);
   void clearImage();
-  void clearError();
-  Future<void> tapSaveButton(BuildContext context);
-  void tapBackButton(BuildContext context);
-  DateTime? get birthday;
-  List<String> get giftOccasions;
-  List<String> get giftInterests;
+
+  // Gift field updates
   void updateBirthday(DateTime? birthday);
   void updateGiftOccasions(List<String> occasions);
   void updateGiftInterests(List<String> interests);
+
+  // UI actions
+  void clearError();
+  Future<void> tapSaveButton(BuildContext context);
+  void tapBackButton(BuildContext context);
 }
 
 enum EditWisherErrorType {
@@ -91,17 +102,12 @@ class EditWisherViewModel extends ChangeNotifier
 
   EditWisherError _error = const EditWisherError(EditWisherErrorType.none);
 
+  // State getters
   @override
   Wisher? get wisher => _wisher;
 
   @override
   bool get isLoading => _isLoading;
-
-  @override
-  File? get imageFile => _imageFile;
-
-  @override
-  String? get existingImageUrl => _existingImageUrl;
 
   @override
   EditWisherError get error => _error;
@@ -112,6 +118,14 @@ class EditWisherViewModel extends ChangeNotifier
   @override
   bool get isFormValid => true;
 
+  // Basic info getters
+  @override
+  File? get imageFile => _imageFile;
+
+  @override
+  String? get existingImageUrl => _existingImageUrl;
+
+  // Gift field getters
   @override
   DateTime? get birthday => _birthday;
 
@@ -121,25 +135,7 @@ class EditWisherViewModel extends ChangeNotifier
   @override
   List<String> get giftInterests => _giftInterests;
 
-  @override
-  void updateBirthday(DateTime? birthday) {
-    _birthday = birthday;
-    _validateForm();
-    notifyListeners();
-  }
-
-  @override
-  void updateGiftOccasions(List<String> occasions) {
-    _giftOccasions = occasions;
-    notifyListeners();
-  }
-
-  @override
-  void updateGiftInterests(List<String> interests) {
-    _giftInterests = interests;
-    notifyListeners();
-  }
-
+  // Basic info updates
   @override
   void updateFirstName(String firstName) {
     _firstName = firstName.trim();
@@ -171,8 +167,29 @@ class EditWisherViewModel extends ChangeNotifier
     notifyListeners();
   }
 
-  // Attaches a fire-and-forget delete callback to a compression future so
-  // orphaned temp files are removed even if the result is never awaited.
+  // Gift field updates
+  @override
+  void updateBirthday(DateTime? birthday) {
+    _birthday = birthday;
+    _validateForm();
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftOccasions(List<String> occasions) {
+    _giftOccasions = occasions;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftInterests(List<String> interests) {
+    _giftInterests = interests;
+    notifyListeners();
+  }
+
+  // Helper method: Attaches a fire-and-forget delete callback to a
+  // compression future so orphaned temp files are removed even if the result
+  // is never awaited.
   void _cleanupFutureFile(Future<File?>? future) {
     future
         ?.then((file) {
@@ -181,6 +198,16 @@ class EditWisherViewModel extends ChangeNotifier
           } catch (_) {}
         })
         .catchError((_) {});
+  }
+
+  // Validation and UI actions
+  void _validateForm() {
+    final previousError = _error;
+    _error = const EditWisherError(EditWisherErrorType.none);
+
+    if (previousError.type != _error.type) {
+      notifyListeners();
+    }
   }
 
   @override
@@ -382,15 +409,6 @@ class EditWisherViewModel extends ChangeNotifier
       if (a[i] != b[i]) return false;
     }
     return true;
-  }
-
-  void _validateForm() {
-    final previousError = _error;
-    _error = const EditWisherError(EditWisherErrorType.none);
-
-    if (previousError.type != _error.type) {
-      notifyListeners();
-    }
   }
 
   @override

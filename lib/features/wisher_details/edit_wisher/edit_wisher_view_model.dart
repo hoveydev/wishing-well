@@ -15,17 +15,34 @@ import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class EditWisherViewModelContract implements ScreenViewModelContract {
+  // State
   Wisher? get wisher;
   bool get isLoading;
-  File? get imageFile;
-  String? get existingImageUrl;
   bool get hasAlert;
   EditWisherError get error;
   bool get isFormValid;
+
+  // Basic info getters
+  File? get imageFile;
+  String? get existingImageUrl;
+
+  // Gift fields getters
+  DateTime? get birthday;
+  List<String> get giftOccasions;
+  List<String> get giftInterests;
+
+  // Basic info updates
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
   void updateImage(File? imageFile);
   void clearImage();
+
+  // Gift field updates
+  void updateBirthday(DateTime? birthday);
+  void updateGiftOccasions(List<String> occasions);
+  void updateGiftInterests(List<String> interests);
+
+  // UI actions
   void clearError();
   Future<void> tapSaveButton(BuildContext context);
   void tapBackButton(BuildContext context);
@@ -72,24 +89,25 @@ class EditWisherViewModel extends ChangeNotifier
   File? _imageFile;
   String? _existingImageUrl;
   Future<File?>? _compressionFuture;
+  DateTime? _birthday;
+  List<String> _giftOccasions = [];
+  List<String> _giftInterests = [];
 
   String _originalFirstName = '';
   String _originalLastName = '';
   String? _originalImageUrl;
+  DateTime? _originalBirthday;
+  List<String> _originalGiftOccasions = [];
+  List<String> _originalGiftInterests = [];
 
   EditWisherError _error = const EditWisherError(EditWisherErrorType.none);
 
+  // State getters
   @override
   Wisher? get wisher => _wisher;
 
   @override
   bool get isLoading => _isLoading;
-
-  @override
-  File? get imageFile => _imageFile;
-
-  @override
-  String? get existingImageUrl => _existingImageUrl;
 
   @override
   EditWisherError get error => _error;
@@ -100,6 +118,24 @@ class EditWisherViewModel extends ChangeNotifier
   @override
   bool get isFormValid => true;
 
+  // Basic info getters
+  @override
+  File? get imageFile => _imageFile;
+
+  @override
+  String? get existingImageUrl => _existingImageUrl;
+
+  // Gift field getters
+  @override
+  DateTime? get birthday => _birthday;
+
+  @override
+  List<String> get giftOccasions => _giftOccasions;
+
+  @override
+  List<String> get giftInterests => _giftInterests;
+
+  // Basic info updates
   @override
   void updateFirstName(String firstName) {
     _firstName = firstName.trim();
@@ -131,8 +167,29 @@ class EditWisherViewModel extends ChangeNotifier
     notifyListeners();
   }
 
-  // Attaches a fire-and-forget delete callback to a compression future so
-  // orphaned temp files are removed even if the result is never awaited.
+  // Gift field updates
+  @override
+  void updateBirthday(DateTime? birthday) {
+    _birthday = birthday;
+    _validateForm();
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftOccasions(List<String> occasions) {
+    _giftOccasions = occasions;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftInterests(List<String> interests) {
+    _giftInterests = interests;
+    notifyListeners();
+  }
+
+  // Helper method: Attaches a fire-and-forget delete callback to a
+  // compression future so orphaned temp files are removed even if the result
+  // is never awaited.
   void _cleanupFutureFile(Future<File?>? future) {
     future
         ?.then((file) {
@@ -141,6 +198,16 @@ class EditWisherViewModel extends ChangeNotifier
           } catch (_) {}
         })
         .catchError((_) {});
+  }
+
+  // Validation and UI actions
+  void _validateForm() {
+    final previousError = _error;
+    _error = const EditWisherError(EditWisherErrorType.none);
+
+    if (previousError.type != _error.type) {
+      notifyListeners();
+    }
   }
 
   @override
@@ -242,6 +309,9 @@ class EditWisherViewModel extends ChangeNotifier
         profilePicture: profilePictureUrl,
         createdAt: _wisher!.createdAt,
         updatedAt: DateTime.now(),
+        birthday: _birthday,
+        giftOccasions: _giftOccasions,
+        giftInterests: _giftInterests,
       );
 
       final response = await _wisherRepository.updateWisher(updatedWisher);
@@ -312,6 +382,12 @@ class EditWisherViewModel extends ChangeNotifier
       _originalFirstName = _wisher!.firstName;
       _originalLastName = _wisher!.lastName;
       _originalImageUrl = _wisher!.profilePicture;
+      _birthday = _wisher!.birthday;
+      _giftOccasions = List.from(_wisher!.giftOccasions);
+      _giftInterests = List.from(_wisher!.giftInterests);
+      _originalBirthday = _wisher!.birthday;
+      _originalGiftOccasions = List.from(_wisher!.giftOccasions);
+      _originalGiftInterests = List.from(_wisher!.giftInterests);
     }
 
     _isLoading = false;
@@ -322,15 +398,17 @@ class EditWisherViewModel extends ChangeNotifier
       _firstName != _originalFirstName ||
       _lastName != _originalLastName ||
       _imageFile != null ||
-      _existingImageUrl != _originalImageUrl;
+      _existingImageUrl != _originalImageUrl ||
+      _birthday != _originalBirthday ||
+      !_listEquals(_giftOccasions, _originalGiftOccasions) ||
+      !_listEquals(_giftInterests, _originalGiftInterests);
 
-  void _validateForm() {
-    final previousError = _error;
-    _error = const EditWisherError(EditWisherErrorType.none);
-
-    if (previousError.type != _error.type) {
-      notifyListeners();
+  bool _listEquals(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
     }
+    return true;
   }
 
   @override

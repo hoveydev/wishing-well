@@ -175,6 +175,9 @@ class IntegrationMockWisherRepository extends WisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) async {
     _createWisherCallCount++;
     _isLoading = true;
@@ -194,6 +197,9 @@ class IntegrationMockWisherRepository extends WisherRepository {
         firstName: firstName,
         lastName: lastName,
         profilePicture: profilePicture,
+        birthday: birthday,
+        giftOccasions: giftOccasions ?? [],
+        giftInterests: giftInterests ?? [],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

@@ -70,6 +70,9 @@ class WisherRepositoryImpl extends WisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     AppLogger.debug(
       'Creating wisher: $firstName $lastName',
@@ -82,6 +85,9 @@ class WisherRepositoryImpl extends WisherRepository {
         firstName: firstName,
         lastName: lastName,
         profilePicture: profilePicture,
+        birthday: birthday,
+        giftOccasions: giftOccasions,
+        giftInterests: giftInterests,
       );
 
       final newWisher = Wisher.fromJson(response);
@@ -117,6 +123,9 @@ class WisherRepositoryImpl extends WisherRepository {
         firstName: wisher.firstName,
         lastName: wisher.lastName,
         profilePicture: wisher.profilePicture,
+        birthday: wisher.birthday,
+        giftOccasions: wisher.giftOccasions,
+        giftInterests: wisher.giftInterests,
       );
 
       final updatedWisher = Wisher.fromJson(response);

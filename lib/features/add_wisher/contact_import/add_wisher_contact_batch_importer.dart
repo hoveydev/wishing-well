@@ -170,6 +170,7 @@ class AddWisherContactBatchImporter {
           firstName: draft.firstName,
           lastName: draft.lastName,
           profilePicture: profilePictureUrl,
+          birthday: draft.birthday,
         );
 
         switch (response) {

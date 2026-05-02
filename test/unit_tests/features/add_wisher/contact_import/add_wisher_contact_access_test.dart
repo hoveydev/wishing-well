@@ -67,6 +67,58 @@ void main() {
           throwsA(isA<AddWisherContactAccessException>()),
         );
       });
+
+      test('extracts birthday from contact events', () {
+        final selection = mapper.map(
+          const contacts.Contact(
+            id: 'contact-bday',
+            displayName: 'Jane Doe',
+            name: contacts.Name(first: 'Jane', last: 'Doe'),
+            events: [
+              contacts.Event(
+                year: 1990,
+                month: 6,
+                day: 15,
+                label: contacts.Label(contacts.EventLabel.birthday),
+              ),
+            ],
+          ),
+        );
+
+        expect(selection.birthday, DateTime(1990, 6, 15));
+      });
+
+      test('falls back to current year when birthday year is null', () {
+        final currentYear = DateTime.now().year;
+        final selection = mapper.map(
+          const contacts.Contact(
+            id: 'contact-noyear',
+            displayName: 'Jane Doe',
+            name: contacts.Name(first: 'Jane', last: 'Doe'),
+            events: [
+              contacts.Event(
+                month: 3,
+                day: 20,
+                label: contacts.Label(contacts.EventLabel.birthday),
+              ),
+            ],
+          ),
+        );
+
+        expect(selection.birthday, DateTime(currentYear, 3, 20));
+      });
+
+      test('has null birthday when no birthday event exists', () {
+        final selection = mapper.map(
+          const contacts.Contact(
+            id: 'contact-noevent',
+            displayName: 'Jane Doe',
+            name: contacts.Name(first: 'Jane', last: 'Doe'),
+          ),
+        );
+
+        expect(selection.birthday, isNull);
+      });
     });
   });
 

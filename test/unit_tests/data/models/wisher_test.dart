@@ -162,6 +162,54 @@ void main() {
         expect(copy.lastName, original.lastName);
         expect(copy.id, original.id);
       });
+
+      test('copies birthday to new value', () {
+        final original = createTestWisher();
+        final newBirthday = DateTime(1990, 6, 15);
+        final copy = original.copyWith(birthday: newBirthday);
+        expect(copy.birthday, newBirthday);
+      });
+
+      test('clears birthday when sentinel is passed', () {
+        final original = Wisher(
+          id: 'test-id',
+          userId: 'test-user-id',
+          firstName: 'Alice',
+          lastName: 'Johnson',
+          createdAt: DateTime(2026),
+          updatedAt: DateTime(2026),
+          birthday: DateTime(1990, 6, 15),
+        );
+        final copy = original.copyWith(birthday: null);
+        expect(copy.birthday, isNull);
+      });
+
+      test('preserves birthday when not passed to copyWith', () {
+        final birthday = DateTime(1990, 6, 15);
+        final original = Wisher(
+          id: 'test-id',
+          userId: 'test-user-id',
+          firstName: 'Alice',
+          lastName: 'Johnson',
+          createdAt: DateTime(2026),
+          updatedAt: DateTime(2026),
+          birthday: birthday,
+        );
+        final copy = original.copyWith(firstName: 'Bob');
+        expect(copy.birthday, birthday);
+      });
+
+      test('copies giftOccasions', () {
+        final original = createTestWisher();
+        final copy = original.copyWith(giftOccasions: ['christmas', 'easter']);
+        expect(copy.giftOccasions, ['christmas', 'easter']);
+      });
+
+      test('copies giftInterests', () {
+        final original = createTestWisher();
+        final copy = original.copyWith(giftInterests: ['books', 'travel']);
+        expect(copy.giftInterests, ['books', 'travel']);
+      });
     });
 
     group('fromJson / toJson', () {
@@ -204,6 +252,121 @@ void main() {
         };
         final wisher = Wisher.fromJson(json);
         expect(wisher.profilePicture, isNull);
+      });
+
+      test('fromJson parses birthday as DateTime', () {
+        final json = {
+          'id': 'json-id',
+          'user_id': 'user-123',
+          'first_name': 'Jane',
+          'last_name': 'Doe',
+          'profile_picture': null,
+          'birthday': '1990-06-15',
+          'created_at': '2026-01-01T00:00:00.000Z',
+          'updated_at': '2026-01-02T00:00:00.000Z',
+        };
+        final wisher = Wisher.fromJson(json);
+        expect(wisher.birthday, DateTime(1990, 6, 15));
+      });
+
+      test('fromJson handles null birthday', () {
+        final json = {
+          'id': 'json-id',
+          'user_id': 'user-123',
+          'first_name': 'Jane',
+          'last_name': 'Doe',
+          'profile_picture': null,
+          'birthday': null,
+          'created_at': '2026-01-01T00:00:00.000Z',
+          'updated_at': '2026-01-02T00:00:00.000Z',
+        };
+        final wisher = Wisher.fromJson(json);
+        expect(wisher.birthday, isNull);
+      });
+
+      test('fromJson parses gift_occasions list', () {
+        final json = {
+          'id': 'json-id',
+          'user_id': 'user-123',
+          'first_name': 'Jane',
+          'last_name': 'Doe',
+          'profile_picture': null,
+          'gift_occasions': ['christmas', 'easter'],
+          'created_at': '2026-01-01T00:00:00.000Z',
+          'updated_at': '2026-01-02T00:00:00.000Z',
+        };
+        final wisher = Wisher.fromJson(json);
+        expect(wisher.giftOccasions, ['christmas', 'easter']);
+      });
+
+      test('fromJson defaults giftOccasions to empty list when null', () {
+        final json = {
+          'id': 'json-id',
+          'user_id': 'user-123',
+          'first_name': 'Jane',
+          'last_name': 'Doe',
+          'profile_picture': null,
+          'gift_occasions': null,
+          'created_at': '2026-01-01T00:00:00.000Z',
+          'updated_at': '2026-01-02T00:00:00.000Z',
+        };
+        final wisher = Wisher.fromJson(json);
+        expect(wisher.giftOccasions, isEmpty);
+      });
+
+      test('fromJson parses gift_interests list', () {
+        final json = {
+          'id': 'json-id',
+          'user_id': 'user-123',
+          'first_name': 'Jane',
+          'last_name': 'Doe',
+          'profile_picture': null,
+          'gift_interests': ['books', 'travel'],
+          'created_at': '2026-01-01T00:00:00.000Z',
+          'updated_at': '2026-01-02T00:00:00.000Z',
+        };
+        final wisher = Wisher.fromJson(json);
+        expect(wisher.giftInterests, ['books', 'travel']);
+      });
+
+      test('toJson serializes birthday as yyyy-MM-dd string', () {
+        final wisher = Wisher(
+          id: 'test-id',
+          userId: 'test-user-id',
+          firstName: 'Alice',
+          lastName: 'Johnson',
+          birthday: DateTime(1990, 6, 15),
+          createdAt: DateTime(2026),
+          updatedAt: DateTime(2026),
+        );
+        final json = wisher.toJson();
+        expect(json['birthday'], '1990-06-15');
+      });
+
+      test('toJson serializes null birthday as null', () {
+        final wisher = createTestWisher();
+        final json = wisher.toJson();
+        expect(json['birthday'], isNull);
+      });
+
+      test('toJson serializes giftOccasions list', () {
+        final wisher = Wisher(
+          id: 'test-id',
+          userId: 'test-user-id',
+          firstName: 'Alice',
+          lastName: 'Johnson',
+          giftOccasions: ['christmas', 'easter'],
+          createdAt: DateTime(2026),
+          updatedAt: DateTime(2026),
+        );
+        final json = wisher.toJson();
+        expect(json['gift_occasions'], ['christmas', 'easter']);
+      });
+
+      test('toJson serializes empty giftOccasions as null', () {
+        final wisher = createTestWisher();
+        final json = wisher.toJson();
+        expect(json['gift_occasions'], isNull);
       });
     });
 

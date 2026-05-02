@@ -55,42 +55,40 @@ class _EditWisherInputsState extends State<EditWisherInputs> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      spacing: AppSpacerSize.small,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AppInput(
-          placeholder: l10n.firstName,
-          type: AppInputType.text,
-          controller: firstNameController,
-          focusNode: firstNameFocusNode,
-          showIcon: false,
-          onChanged: (String firstName) =>
-              widget.viewModel.updateFirstName(firstName),
-        ),
-        AppInput(
-          placeholder: l10n.lastName,
-          type: AppInputType.text,
-          controller: lastNameController,
-          focusNode: lastNameFocusNode,
-          showIcon: false,
-          onChanged: (String lastName) =>
-              widget.viewModel.updateLastName(lastName),
-        ),
-        ListenableBuilder(
-          listenable: widget.viewModel,
-          builder: (context, _) {
-            if (!widget.viewModel.hasAlert) return const SizedBox.shrink();
-            return Padding(
+    return ListenableBuilder(
+      listenable: widget.viewModel,
+      builder: (context, _) => Column(
+        spacing: AppSpacerSize.small,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppInput(
+            placeholder: l10n.firstName,
+            type: AppInputType.text,
+            controller: firstNameController,
+            focusNode: firstNameFocusNode,
+            showIcon: false,
+            onChanged: (String firstName) =>
+                widget.viewModel.updateFirstName(firstName),
+          ),
+          AppInput(
+            placeholder: l10n.lastName,
+            type: AppInputType.text,
+            controller: lastNameController,
+            focusNode: lastNameFocusNode,
+            showIcon: false,
+            onChanged: (String lastName) =>
+                widget.viewModel.updateLastName(lastName),
+          ),
+          if (widget.viewModel.hasAlert)
+            Padding(
               padding: AppInlineAlertSpacing.inputPadding,
               child: AppInlineAlert(
                 message: _validationMessage(l10n),
                 type: AppInlineAlertType.error,
               ),
-            );
-          },
-        ),
-      ],
+            ),
+        ],
+      ),
     );
   }
 

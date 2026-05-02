@@ -81,6 +81,75 @@ void main() {
       test('isFormValid is true when wisher has name pre-populated', () {
         expect(viewModel.isFormValid, isTrue);
       });
+
+      test('birthday is null initially when wisher has no birthday', () {
+        expect(viewModel.birthday, isNull);
+      });
+
+      test('giftOccasions is empty initially when wisher has none', () {
+        expect(viewModel.giftOccasions, isEmpty);
+      });
+
+      test('giftInterests is empty initially when wisher has none', () {
+        expect(viewModel.giftInterests, isEmpty);
+      });
+    });
+
+    group('New optional fields', () {
+      test('updateBirthday stores the birthday', () {
+        final birthday = DateTime(1990, 6, 15);
+        viewModel.updateBirthday(birthday);
+        expect(viewModel.birthday, birthday);
+      });
+
+      test('updateBirthday accepts null to clear birthday', () {
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateBirthday(null);
+        expect(viewModel.birthday, isNull);
+      });
+
+      test('updateGiftOccasions stores occasions', () {
+        viewModel.updateGiftOccasions(['christmas', 'easter']);
+        expect(viewModel.giftOccasions, ['christmas', 'easter']);
+      });
+
+      test('updateGiftInterests stores interests', () {
+        viewModel.updateGiftInterests(['books', 'travel']);
+        expect(viewModel.giftInterests, ['books', 'travel']);
+      });
+
+      test('setting new fields does not affect form validity', () {
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateGiftOccasions(['christmas']);
+        viewModel.updateGiftInterests(['books']);
+        expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
+      });
+
+      test('loads birthday from wisher when wisher has one', () {
+        final birthdayWisher = Wisher(
+          id: '1',
+          userId: 'test-user',
+          firstName: 'Alice',
+          lastName: 'Test',
+          birthday: DateTime(1990, 6, 15),
+          giftOccasions: const ['christmas'],
+          giftInterests: const ['books'],
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024),
+        );
+        final repo = MockWisherRepository(initialWishers: [birthdayWisher]);
+        final vm = EditWisherViewModel(
+          wisherRepository: repo,
+          imageRepository: mockImageRepository,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        expect(vm.birthday, DateTime(1990, 6, 15));
+        expect(vm.giftOccasions, ['christmas']);
+        expect(vm.giftInterests, ['books']);
+      });
     });
 
     group(TestGroups.validation, () {

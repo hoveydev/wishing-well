@@ -240,6 +240,9 @@ class _ThrowingOnceWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) async {
     createCalls += 1;
     if (createCalls == 1) {
@@ -251,6 +254,9 @@ class _ThrowingOnceWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
+      birthday: birthday,
+      giftOccasions: giftOccasions,
+      giftInterests: giftInterests,
     );
   }
 }

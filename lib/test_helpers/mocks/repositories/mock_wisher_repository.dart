@@ -112,6 +112,9 @@ class MockWisherRepository extends WisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) async {
     // Simulate network delay
     await Future.delayed(delay);
@@ -127,6 +130,9 @@ class MockWisherRepository extends WisherRepository {
         firstName: firstName,
         lastName: lastName,
         profilePicture: profilePicture,
+        birthday: birthday,
+        giftOccasions: giftOccasions ?? [],
+        giftInterests: giftInterests ?? [],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

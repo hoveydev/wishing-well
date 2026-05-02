@@ -20,14 +20,27 @@ import 'package:wishing_well/utils/result.dart';
 
 abstract class AddWisherDetailsViewModelContract
     implements ScreenViewModelContract {
-  void updateFirstName(String firstName);
-  void updateLastName(String lastName);
-  void updateImage(File? imageFile);
+  // Getters
   File? get imageFile;
   bool get hasAlert;
   AddWisherDetailsError get error;
-  void clearError();
   bool get isFormValid;
+  DateTime? get birthday;
+  List<String> get giftOccasions;
+  List<String> get giftInterests;
+
+  // Basic info updates
+  void updateFirstName(String firstName);
+  void updateLastName(String lastName);
+  void updateImage(File? imageFile);
+
+  // Gift field updates
+  void updateBirthday(DateTime? birthday);
+  void updateGiftOccasions(List<String> occasions);
+  void updateGiftInterests(List<String> interests);
+
+  // UI actions
+  void clearError();
   Future<void> tapSaveButton(BuildContext context);
   void tapBackButton(BuildContext context);
 }
@@ -64,11 +77,15 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   Future<File?>? _compressionFuture;
+  DateTime? _birthday;
+  List<String> _giftOccasions = [];
+  List<String> _giftInterests = [];
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
   );
 
+  // Getters
   @override
   AddWisherDetailsError get error => _error;
 
@@ -76,11 +93,21 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   bool get hasAlert => _error.type != AddWisherDetailsErrorType.none;
 
   @override
-  void clearError() {
-    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
-    notifyListeners();
-  }
+  File? get imageFile => _imageFile;
 
+  @override
+  DateTime? get birthday => _birthday;
+
+  @override
+  List<String> get giftOccasions => _giftOccasions;
+
+  @override
+  List<String> get giftInterests => _giftInterests;
+
+  @override
+  bool get isFormValid => true;
+
+  // Basic info updates
   @override
   void updateFirstName(String firstName) {
     _firstName = firstName.trim();
@@ -103,8 +130,28 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     notifyListeners();
   }
 
-  // Attaches a fire-and-forget delete callback to a compression future so
-  // orphaned temp files are removed even if the result is never awaited.
+  // Gift field updates
+  @override
+  void updateBirthday(DateTime? birthday) {
+    _birthday = birthday;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftOccasions(List<String> occasions) {
+    _giftOccasions = occasions;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftInterests(List<String> interests) {
+    _giftInterests = interests;
+    notifyListeners();
+  }
+
+  // Helper method: Attaches a fire-and-forget delete callback to a
+  // compression future so orphaned temp files are removed even if the result
+  // is never awaited.
   void _cleanupFutureFile(Future<File?>? future) {
     future
         ?.then((file) {
@@ -115,10 +162,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         .catchError((_) {});
   }
 
-  /// Getter for the selected image file
-  @override
-  File? get imageFile => _imageFile;
-
+  // Validation and UI actions
   void _validateForm() {
     final previousError = _error;
     _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
@@ -129,7 +173,10 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   }
 
   @override
-  bool get isFormValid => true;
+  void clearError() {
+    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
+    notifyListeners();
+  }
 
   @override
   void tapBackButton(BuildContext context) {
@@ -230,6 +277,9 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       firstName: _firstName,
       lastName: _lastName,
       profilePicture: profilePictureUrl,
+      birthday: _birthday,
+      giftOccasions: _giftOccasions,
+      giftInterests: _giftInterests,
     );
 
     switch (response) {

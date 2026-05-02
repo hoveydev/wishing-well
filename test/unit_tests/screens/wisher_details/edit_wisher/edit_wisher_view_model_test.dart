@@ -7,7 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -84,15 +83,15 @@ void main() {
       });
 
       test('birthday is null initially when wisher has no birthday', () {
-        expect(viewModel.giftProfile.birthday, isNull);
+        expect(viewModel.birthday, isNull);
       });
 
       test('giftOccasions is empty initially when wisher has none', () {
-        expect(viewModel.giftProfile.giftOccasions, isEmpty);
+        expect(viewModel.giftOccasions, isEmpty);
       });
 
       test('giftInterests is empty initially when wisher has none', () {
-        expect(viewModel.giftProfile.giftInterests, isEmpty);
+        expect(viewModel.giftInterests, isEmpty);
       });
     });
 
@@ -100,23 +99,23 @@ void main() {
       test('updateBirthday stores the birthday', () {
         final birthday = DateTime(1990, 6, 15);
         viewModel.updateBirthday(birthday);
-        expect(viewModel.giftProfile.birthday, birthday);
+        expect(viewModel.birthday, birthday);
       });
 
       test('updateBirthday accepts null to clear birthday', () {
         viewModel.updateBirthday(DateTime(1990, 6, 15));
         viewModel.updateBirthday(null);
-        expect(viewModel.giftProfile.birthday, isNull);
+        expect(viewModel.birthday, isNull);
       });
 
       test('updateGiftOccasions stores occasions', () {
         viewModel.updateGiftOccasions(['christmas', 'easter']);
-        expect(viewModel.giftProfile.giftOccasions, ['christmas', 'easter']);
+        expect(viewModel.giftOccasions, ['christmas', 'easter']);
       });
 
       test('updateGiftInterests stores interests', () {
         viewModel.updateGiftInterests(['books', 'travel']);
-        expect(viewModel.giftProfile.giftInterests, ['books', 'travel']);
+        expect(viewModel.giftInterests, ['books', 'travel']);
       });
 
       test('setting new fields does not affect form validity', () {
@@ -147,46 +146,9 @@ void main() {
         );
         addTearDown(vm.dispose);
 
-        expect(vm.giftProfile.birthday, DateTime(1990, 6, 15));
-        expect(vm.giftProfile.giftOccasions, ['christmas']);
-        expect(vm.giftProfile.giftInterests, ['books']);
-      });
-
-      test('hasChanges is false when gift lists have same items in '
-          'different order', () async {
-        final birthdayWisher = Wisher(
-          id: '1',
-          userId: 'test-user',
-          firstName: 'Alice',
-          lastName: 'Test',
-          giftOccasions: const ['christmas', 'birthday'],
-          giftInterests: const ['books', 'travel'],
-          createdAt: DateTime(2024),
-          updatedAt: DateTime(2024),
-        );
-        final repo = MockWisherRepository(initialWishers: [birthdayWisher]);
-        final vm = EditWisherViewModel(
-          wisherRepository: repo,
-          imageRepository: mockImageRepository,
-          wisherId: '1',
-        );
-        addTearDown(vm.dispose);
-        addTearDown(repo.dispose);
-
-        // Update with same items in different order
-        vm.updateGiftOccasions(['birthday', 'christmas']);
-        vm.updateGiftInterests(['travel', 'books']);
-
-        // hasChanges is internal, but we can verify via tapSaveButton
-        // not returning noChanges error by checking the contract indirectly:
-        // WisherGiftProfile == should be true (order-insensitive)
-        expect(
-          vm.giftProfile,
-          const WisherGiftProfile(
-            giftOccasions: ['christmas', 'birthday'],
-            giftInterests: ['books', 'travel'],
-          ),
-        );
+        expect(vm.birthday, DateTime(1990, 6, 15));
+        expect(vm.giftOccasions, ['christmas']);
+        expect(vm.giftInterests, ['books']);
       });
     });
 

@@ -1,6 +1,5 @@
 import 'package:wishing_well/data/data_sources/wisher/wisher_data_source.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 import 'package:wishing_well/utils/result.dart';
@@ -71,7 +70,9 @@ class WisherRepositoryImpl extends WisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    WisherGiftProfile giftProfile = const WisherGiftProfile(),
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     AppLogger.debug(
       'Creating wisher: $firstName $lastName',
@@ -84,7 +85,9 @@ class WisherRepositoryImpl extends WisherRepository {
         firstName: firstName,
         lastName: lastName,
         profilePicture: profilePicture,
-        giftProfile: giftProfile,
+        birthday: birthday,
+        giftOccasions: giftOccasions,
+        giftInterests: giftInterests,
       );
 
       final newWisher = Wisher.fromJson(response);
@@ -120,11 +123,9 @@ class WisherRepositoryImpl extends WisherRepository {
         firstName: wisher.firstName,
         lastName: wisher.lastName,
         profilePicture: wisher.profilePicture,
-        giftProfile: WisherGiftProfile(
-          birthday: wisher.birthday,
-          giftOccasions: wisher.giftOccasions,
-          giftInterests: wisher.giftInterests,
-        ),
+        birthday: wisher.birthday,
+        giftOccasions: wisher.giftOccasions,
+        giftInterests: wisher.giftInterests,
       );
 
       final updatedWisher = Wisher.fromJson(response);

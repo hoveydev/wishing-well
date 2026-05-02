@@ -1,6 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/data_sources/wisher/wisher_data_source.dart';
-import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 
 /// Supabase implementation of [WisherDataSource].
 ///
@@ -31,7 +30,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    WisherGiftProfile giftProfile = const WisherGiftProfile(),
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     final response = await _supabase
         .from('wishers')
@@ -40,13 +41,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
-          'birthday': _formatDate(giftProfile.birthday),
-          'gift_occasions': giftProfile.giftOccasions.isEmpty
-              ? null
-              : giftProfile.giftOccasions,
-          'gift_interests': giftProfile.giftInterests.isEmpty
-              ? null
-              : giftProfile.giftInterests,
+          'birthday': _formatDate(birthday),
+          'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
+          'gift_interests': giftInterests.isEmpty ? null : giftInterests,
         })
         .select()
         .single();
@@ -60,7 +57,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    WisherGiftProfile giftProfile = const WisherGiftProfile(),
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     final response = await _supabase
         .from('wishers')
@@ -68,13 +67,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
-          'birthday': _formatDate(giftProfile.birthday),
-          'gift_occasions': giftProfile.giftOccasions.isEmpty
-              ? null
-              : giftProfile.giftOccasions,
-          'gift_interests': giftProfile.giftInterests.isEmpty
-              ? null
-              : giftProfile.giftInterests,
+          'birthday': _formatDate(birthday),
+          'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
+          'gift_interests': giftInterests.isEmpty ? null : giftInterests,
         })
         .eq('id', wisherId)
         .select()

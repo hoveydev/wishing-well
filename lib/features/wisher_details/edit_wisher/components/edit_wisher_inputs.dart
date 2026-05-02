@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/components/date_picker/app_date_picker_field.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_spacing.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
+import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/data/models/wisher_field_options.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 
@@ -87,10 +90,83 @@ class _EditWisherInputsState extends State<EditWisherInputs> {
                 type: AppInlineAlertType.error,
               ),
             ),
+          AppDatePickerField(
+            placeholder: l10n.birthdayPlaceholder,
+            value: widget.viewModel.birthday,
+            onChanged: (DateTime? date) =>
+                widget.viewModel.updateBirthday(date),
+          ),
+          AppMultiSelectField(
+            placeholder: l10n.giftOccasionsPlaceholder,
+            title: l10n.giftOccasions,
+            items: _buildOccasionItems(l10n),
+            selectedValues: widget.viewModel.giftOccasions,
+            onChanged: (List<String> values) =>
+                widget.viewModel.updateGiftOccasions(values),
+          ),
+          AppMultiSelectField(
+            placeholder: l10n.giftInterestsPlaceholder,
+            title: l10n.giftInterests,
+            items: _buildInterestItems(l10n),
+            selectedValues: widget.viewModel.giftInterests,
+            onChanged: (List<String> values) =>
+                widget.viewModel.updateGiftInterests(values),
+          ),
         ],
       ),
     );
   }
+
+  List<AppMultiSelectItem> _buildOccasionItems(AppLocalizations l10n) =>
+      WisherGiftOccasions.all
+          .map(
+            (occasion) => AppMultiSelectItem(
+              value: occasion,
+              label: _occasionLabel(l10n, occasion),
+            ),
+          )
+          .toList();
+
+  List<AppMultiSelectItem> _buildInterestItems(AppLocalizations l10n) =>
+      WisherGiftInterests.all
+          .map(
+            (interest) => AppMultiSelectItem(
+              value: interest,
+              label: _interestLabel(l10n, interest),
+            ),
+          )
+          .toList();
+
+  String _occasionLabel(AppLocalizations l10n, String occasion) =>
+      switch (occasion) {
+        'christmas' => l10n.occasionChristmas,
+        'hanukkah' => l10n.occasionHanukkah,
+        'kwanzaa' => l10n.occasionKwanzaa,
+        'diwali' => l10n.occasionDiwali,
+        'eid' => l10n.occasionEid,
+        'valentines_day' => l10n.occasionValentinesDay,
+        'mothers_day' => l10n.occasionMothersDay,
+        'fathers_day' => l10n.occasionFathersDay,
+        'easter' => l10n.occasionEaster,
+        'new_years' => l10n.occasionNewYears,
+        _ => occasion,
+      };
+
+  String _interestLabel(AppLocalizations l10n, String interest) =>
+      switch (interest) {
+        'books' => l10n.interestBooks,
+        'electronics' => l10n.interestElectronics,
+        'clothing' => l10n.interestClothing,
+        'jewelry' => l10n.interestJewelry,
+        'art' => l10n.interestArt,
+        'home_and_garden' => l10n.interestHomeAndGarden,
+        'sports' => l10n.interestSports,
+        'beauty' => l10n.interestBeauty,
+        'food_and_drink' => l10n.interestFoodAndDrink,
+        'travel' => l10n.interestTravel,
+        'games_and_toys' => l10n.interestGamesAndToys,
+        _ => interest,
+      };
 
   String _validationMessage(AppLocalizations l10n) =>
       switch (widget.viewModel.error.type) {

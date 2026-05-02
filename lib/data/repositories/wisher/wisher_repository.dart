@@ -33,6 +33,9 @@ abstract class WisherRepository extends ChangeNotifier {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   });
 
   /// Updates an existing wisher.

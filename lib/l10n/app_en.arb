@@ -480,6 +480,78 @@
     "@datePickerNextMonth": {
         "description": "Accessibility label for the next month navigation button in the date picker overlay"
     },
+    "birthday": "Birthday",
+    "@birthday": {
+        "description": "Label for the wisher's birthday field"
+    },
+    "giftOccasions": "Gift Occasions",
+    "@giftOccasions": {
+        "description": "Label for the gift occasions multi-select field"
+    },
+    "giftInterests": "Gift Interests",
+    "@giftInterests": {
+        "description": "Label for the gift interests multi-select field"
+    },
+    "birthdayPlaceholder": "Add birthday",
+    "@birthdayPlaceholder": {
+        "description": "Placeholder shown when no birthday is set"
+    },
+    "giftOccasionsPlaceholder": "Select gift occasions",
+    "@giftOccasionsPlaceholder": {
+        "description": "Placeholder shown when no gift occasions are selected"
+    },
+    "giftInterestsPlaceholder": "Select gift interests",
+    "@giftInterestsPlaceholder": {
+        "description": "Placeholder shown when no gift interests are selected"
+    },
+    "occasionChristmas": "Christmas",
+    "@occasionChristmas": { "description": "Gift occasion: Christmas" },
+    "occasionHanukkah": "Hanukkah",
+    "@occasionHanukkah": { "description": "Gift occasion: Hanukkah" },
+    "occasionKwanzaa": "Kwanzaa",
+    "@occasionKwanzaa": { "description": "Gift occasion: Kwanzaa" },
+    "occasionDiwali": "Diwali",
+    "@occasionDiwali": { "description": "Gift occasion: Diwali" },
+    "occasionEid": "Eid",
+    "@occasionEid": { "description": "Gift occasion: Eid" },
+    "occasionValentinesDay": "Valentine's Day",
+    "@occasionValentinesDay": {
+        "description": "Gift occasion: Valentine's Day"
+    },
+    "occasionMothersDay": "Mother's Day",
+    "@occasionMothersDay": { "description": "Gift occasion: Mother's Day" },
+    "occasionFathersDay": "Father's Day",
+    "@occasionFathersDay": { "description": "Gift occasion: Father's Day" },
+    "occasionEaster": "Easter",
+    "@occasionEaster": { "description": "Gift occasion: Easter" },
+    "occasionNewYears": "New Year's",
+    "@occasionNewYears": { "description": "Gift occasion: New Year's" },
+    "interestBooks": "Books",
+    "@interestBooks": { "description": "Gift interest: Books" },
+    "interestElectronics": "Electronics",
+    "@interestElectronics": { "description": "Gift interest: Electronics" },
+    "interestClothing": "Clothing",
+    "@interestClothing": { "description": "Gift interest: Clothing" },
+    "interestJewelry": "Jewelry",
+    "@interestJewelry": { "description": "Gift interest: Jewelry" },
+    "interestArt": "Art",
+    "@interestArt": { "description": "Gift interest: Art" },
+    "interestHomeAndGarden": "Home & Garden",
+    "@interestHomeAndGarden": {
+        "description": "Gift interest: Home & Garden"
+    },
+    "interestSports": "Sports",
+    "@interestSports": { "description": "Gift interest: Sports" },
+    "interestBeauty": "Beauty",
+    "@interestBeauty": { "description": "Gift interest: Beauty" },
+    "interestFoodAndDrink": "Food & Drink",
+    "@interestFoodAndDrink": { "description": "Gift interest: Food & Drink" },
+    "interestTravel": "Travel",
+    "@interestTravel": { "description": "Gift interest: Travel" },
+    "interestGamesAndToys": "Games & Toys",
+    "@interestGamesAndToys": {
+        "description": "Gift interest: Games & Toys"
+    },
     "done": "Done",
     "@done": {
         "description": "Label for a confirm / done button"

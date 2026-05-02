@@ -18,6 +18,9 @@ abstract class WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   });
 
   /// Updates an existing wisher.
@@ -29,6 +32,9 @@ abstract class WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   });
 
   /// Deletes a wisher by ID.

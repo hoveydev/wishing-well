@@ -364,5 +364,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get datePickerNextMonth => 'Next month';
 
   @override
+  String get birthday => 'Birthday';
+
+  @override
+  String get giftOccasions => 'Gift Occasions';
+
+  @override
+  String get giftInterests => 'Gift Interests';
+
+  @override
+  String get birthdayPlaceholder => 'Add birthday';
+
+  @override
+  String get giftOccasionsPlaceholder => 'Select gift occasions';
+
+  @override
+  String get giftInterestsPlaceholder => 'Select gift interests';
+
+  @override
+  String get occasionChristmas => 'Christmas';
+
+  @override
+  String get occasionHanukkah => 'Hanukkah';
+
+  @override
+  String get occasionKwanzaa => 'Kwanzaa';
+
+  @override
+  String get occasionDiwali => 'Diwali';
+
+  @override
+  String get occasionEid => 'Eid';
+
+  @override
+  String get occasionValentinesDay => 'Valentine\'s Day';
+
+  @override
+  String get occasionMothersDay => 'Mother\'s Day';
+
+  @override
+  String get occasionFathersDay => 'Father\'s Day';
+
+  @override
+  String get occasionEaster => 'Easter';
+
+  @override
+  String get occasionNewYears => 'New Year\'s';
+
+  @override
+  String get interestBooks => 'Books';
+
+  @override
+  String get interestElectronics => 'Electronics';
+
+  @override
+  String get interestClothing => 'Clothing';
+
+  @override
+  String get interestJewelry => 'Jewelry';
+
+  @override
+  String get interestArt => 'Art';
+
+  @override
+  String get interestHomeAndGarden => 'Home & Garden';
+
+  @override
+  String get interestSports => 'Sports';
+
+  @override
+  String get interestBeauty => 'Beauty';
+
+  @override
+  String get interestFoodAndDrink => 'Food & Drink';
+
+  @override
+  String get interestTravel => 'Travel';
+
+  @override
+  String get interestGamesAndToys => 'Games & Toys';
+
+  @override
   String get done => 'Done';
 }

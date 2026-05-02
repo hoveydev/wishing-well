@@ -736,6 +736,168 @@ abstract class AppLocalizations {
   /// **'Next month'**
   String get datePickerNextMonth;
 
+  /// Label for the wisher's birthday field
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get birthday;
+
+  /// Label for the gift occasions multi-select field
+  ///
+  /// In en, this message translates to:
+  /// **'Gift Occasions'**
+  String get giftOccasions;
+
+  /// Label for the gift interests multi-select field
+  ///
+  /// In en, this message translates to:
+  /// **'Gift Interests'**
+  String get giftInterests;
+
+  /// Placeholder shown when no birthday is set
+  ///
+  /// In en, this message translates to:
+  /// **'Add birthday'**
+  String get birthdayPlaceholder;
+
+  /// Placeholder shown when no gift occasions are selected
+  ///
+  /// In en, this message translates to:
+  /// **'Select gift occasions'**
+  String get giftOccasionsPlaceholder;
+
+  /// Placeholder shown when no gift interests are selected
+  ///
+  /// In en, this message translates to:
+  /// **'Select gift interests'**
+  String get giftInterestsPlaceholder;
+
+  /// Gift occasion: Christmas
+  ///
+  /// In en, this message translates to:
+  /// **'Christmas'**
+  String get occasionChristmas;
+
+  /// Gift occasion: Hanukkah
+  ///
+  /// In en, this message translates to:
+  /// **'Hanukkah'**
+  String get occasionHanukkah;
+
+  /// Gift occasion: Kwanzaa
+  ///
+  /// In en, this message translates to:
+  /// **'Kwanzaa'**
+  String get occasionKwanzaa;
+
+  /// Gift occasion: Diwali
+  ///
+  /// In en, this message translates to:
+  /// **'Diwali'**
+  String get occasionDiwali;
+
+  /// Gift occasion: Eid
+  ///
+  /// In en, this message translates to:
+  /// **'Eid'**
+  String get occasionEid;
+
+  /// Gift occasion: Valentine's Day
+  ///
+  /// In en, this message translates to:
+  /// **'Valentine\'s Day'**
+  String get occasionValentinesDay;
+
+  /// Gift occasion: Mother's Day
+  ///
+  /// In en, this message translates to:
+  /// **'Mother\'s Day'**
+  String get occasionMothersDay;
+
+  /// Gift occasion: Father's Day
+  ///
+  /// In en, this message translates to:
+  /// **'Father\'s Day'**
+  String get occasionFathersDay;
+
+  /// Gift occasion: Easter
+  ///
+  /// In en, this message translates to:
+  /// **'Easter'**
+  String get occasionEaster;
+
+  /// Gift occasion: New Year's
+  ///
+  /// In en, this message translates to:
+  /// **'New Year\'s'**
+  String get occasionNewYears;
+
+  /// Gift interest: Books
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get interestBooks;
+
+  /// Gift interest: Electronics
+  ///
+  /// In en, this message translates to:
+  /// **'Electronics'**
+  String get interestElectronics;
+
+  /// Gift interest: Clothing
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing'**
+  String get interestClothing;
+
+  /// Gift interest: Jewelry
+  ///
+  /// In en, this message translates to:
+  /// **'Jewelry'**
+  String get interestJewelry;
+
+  /// Gift interest: Art
+  ///
+  /// In en, this message translates to:
+  /// **'Art'**
+  String get interestArt;
+
+  /// Gift interest: Home & Garden
+  ///
+  /// In en, this message translates to:
+  /// **'Home & Garden'**
+  String get interestHomeAndGarden;
+
+  /// Gift interest: Sports
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get interestSports;
+
+  /// Gift interest: Beauty
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty'**
+  String get interestBeauty;
+
+  /// Gift interest: Food & Drink
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Drink'**
+  String get interestFoodAndDrink;
+
+  /// Gift interest: Travel
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get interestTravel;
+
+  /// Gift interest: Games & Toys
+  ///
+  /// In en, this message translates to:
+  /// **'Games & Toys'**
+  String get interestGamesAndToys;
+
   /// Label for a confirm / done button
   ///
   /// In en, this message translates to:

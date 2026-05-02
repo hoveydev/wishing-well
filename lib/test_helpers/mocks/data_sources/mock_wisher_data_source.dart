@@ -70,6 +70,9 @@ class MockWisherDataSource implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     createWisherCalled = true;
     if (createWisherError != null) {
@@ -82,6 +85,9 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': birthday?.toIso8601String(),
+          'gift_occasions': giftOccasions,
+          'gift_interests': giftInterests,
           'created_at': DateTime.now().toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         };
@@ -93,6 +99,9 @@ class MockWisherDataSource implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     updateWisherCalled = true;
     if (updateWisherError != null) {
@@ -105,6 +114,9 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': birthday?.toIso8601String(),
+          'gift_occasions': giftOccasions,
+          'gift_interests': giftInterests,
           'created_at': DateTime(2024).toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         };

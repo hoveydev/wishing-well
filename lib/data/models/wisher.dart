@@ -11,6 +11,9 @@ class Wisher {
     required this.createdAt,
     required this.updatedAt,
     this.profilePicture,
+    this.birthday,
+    this.giftOccasions = const [],
+    this.giftInterests = const [],
   }) : assert(
          firstName.isNotEmpty || lastName.isNotEmpty,
          'At least one of firstName or lastName must be non-empty.',
@@ -25,7 +28,16 @@ class Wisher {
     profilePicture: json['profile_picture'] as String?,
     createdAt: DateTime.parse(json['created_at'] as String),
     updatedAt: DateTime.parse(json['updated_at'] as String),
+    birthday: json['birthday'] != null
+        ? DateTime.parse(json['birthday'] as String)
+        : null,
+    giftOccasions:
+        (json['gift_occasions'] as List?)?.cast<String>() ?? const [],
+    giftInterests:
+        (json['gift_interests'] as List?)?.cast<String>() ?? const [],
   );
+
+  static const _unset = Object();
 
   /// Unique identifier for the wisher
   final String id;
@@ -47,6 +59,15 @@ class Wisher {
 
   /// When this wisher was last updated
   final DateTime updatedAt;
+
+  /// Optional birthday (date only, no time component)
+  final DateTime? birthday;
+
+  /// Gift-giving occasions this wisher celebrates
+  final List<String> giftOccasions;
+
+  /// Gift interest categories for this wisher
+  final List<String> giftInterests;
 
   /// Convenience getter for a display-safe full name.
   String get name => [
@@ -74,9 +95,19 @@ class Wisher {
     'profile_picture': profilePicture,
     'created_at': createdAt.toIso8601String(),
     'updated_at': updatedAt.toIso8601String(),
+    'birthday': birthday != null
+        ? '${birthday!.year.toString().padLeft(4, '0')}-'
+              '${birthday!.month.toString().padLeft(2, '0')}-'
+              '${birthday!.day.toString().padLeft(2, '0')}'
+        : null,
+    'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
+    'gift_interests': giftInterests.isEmpty ? null : giftInterests,
   };
 
-  /// Creates a copy with updated fields
+  /// Creates a copy with updated fields.
+  ///
+  /// Use the [birthday] sentinel pattern to explicitly clear birthday to null.
+  /// If [birthday] is not provided, the original value is preserved.
   Wisher copyWith({
     String? id,
     String? userId,
@@ -85,6 +116,9 @@ class Wisher {
     String? profilePicture,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Object? birthday = _unset,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) => Wisher(
     id: id ?? this.id,
     userId: userId ?? this.userId,
@@ -93,6 +127,11 @@ class Wisher {
     profilePicture: profilePicture ?? this.profilePicture,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
+    birthday: identical(birthday, _unset)
+        ? this.birthday
+        : birthday as DateTime?,
+    giftOccasions: giftOccasions ?? this.giftOccasions,
+    giftInterests: giftInterests ?? this.giftInterests,
   );
 
   @override

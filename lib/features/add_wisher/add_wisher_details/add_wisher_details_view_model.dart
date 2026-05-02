@@ -30,6 +30,12 @@ abstract class AddWisherDetailsViewModelContract
   bool get isFormValid;
   Future<void> tapSaveButton(BuildContext context);
   void tapBackButton(BuildContext context);
+  DateTime? get birthday;
+  List<String> get giftOccasions;
+  List<String> get giftInterests;
+  void updateBirthday(DateTime? birthday);
+  void updateGiftOccasions(List<String> occasions);
+  void updateGiftInterests(List<String> interests);
 }
 
 enum AddWisherDetailsErrorType {
@@ -64,6 +70,9 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   Future<File?>? _compressionFuture;
+  DateTime? _birthday;
+  List<String> _giftOccasions = [];
+  List<String> _giftInterests = [];
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
@@ -118,6 +127,33 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   /// Getter for the selected image file
   @override
   File? get imageFile => _imageFile;
+
+  @override
+  DateTime? get birthday => _birthday;
+
+  @override
+  List<String> get giftOccasions => _giftOccasions;
+
+  @override
+  List<String> get giftInterests => _giftInterests;
+
+  @override
+  void updateBirthday(DateTime? birthday) {
+    _birthday = birthday;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftOccasions(List<String> occasions) {
+    _giftOccasions = occasions;
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftInterests(List<String> interests) {
+    _giftInterests = interests;
+    notifyListeners();
+  }
 
   void _validateForm() {
     final previousError = _error;
@@ -230,6 +266,9 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       firstName: _firstName,
       lastName: _lastName,
       profilePicture: profilePictureUrl,
+      birthday: _birthday,
+      giftOccasions: _giftOccasions,
+      giftInterests: _giftInterests,
     );
 
     switch (response) {

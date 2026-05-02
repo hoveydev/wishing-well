@@ -30,6 +30,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     final response = await _supabase
         .from('wishers')
@@ -38,6 +41,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': _formatDate(birthday),
+          'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
+          'gift_interests': giftInterests.isEmpty ? null : giftInterests,
         })
         .select()
         .single();
@@ -51,6 +57,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String> giftOccasions = const [],
+    List<String> giftInterests = const [],
   }) async {
     final response = await _supabase
         .from('wishers')
@@ -58,6 +67,9 @@ class WisherDataSourceSupabase implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': _formatDate(birthday),
+          'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
+          'gift_interests': giftInterests.isEmpty ? null : giftInterests,
         })
         .eq('id', wisherId)
         .select()
@@ -69,5 +81,15 @@ class WisherDataSourceSupabase implements WisherDataSource {
   @override
   Future<void> deleteWisher(String wisherId) async {
     await _supabase.from('wishers').delete().eq('id', wisherId);
+  }
+
+  /// Formats a [DateTime] as a yyyy-MM-dd string for Postgres DATE columns.
+  /// Returns null when [date] is null.
+  String? _formatDate(DateTime? date) {
+    if (date == null) return null;
+    final y = date.year.toString().padLeft(4, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    final d = date.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
   }
 }

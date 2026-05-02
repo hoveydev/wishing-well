@@ -256,6 +256,9 @@ class _DemoContactAwareWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) async {
     final fullName = [
       firstName,
@@ -272,6 +275,9 @@ class _DemoContactAwareWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
+      birthday: birthday,
+      giftOccasions: giftOccasions,
+      giftInterests: giftInterests,
     );
   }
 }

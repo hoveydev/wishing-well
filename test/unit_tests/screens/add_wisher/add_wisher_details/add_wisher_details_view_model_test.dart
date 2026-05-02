@@ -49,6 +49,18 @@ void main() {
       test('imageFile starts null', () {
         expect(viewModel.imageFile, isNull);
       });
+
+      test('birthday starts null', () {
+        expect(viewModel.birthday, isNull);
+      });
+
+      test('giftOccasions starts empty', () {
+        expect(viewModel.giftOccasions, isEmpty);
+      });
+
+      test('giftInterests starts empty', () {
+        expect(viewModel.giftInterests, isEmpty);
+      });
     });
 
     group(TestGroups.validation, () {
@@ -115,6 +127,51 @@ void main() {
             AddWisherDetailsErrorType.unknown,
           ]),
         );
+      });
+    });
+
+    group('New optional fields', () {
+      test('updateBirthday stores the birthday', () {
+        final birthday = DateTime(1990, 6, 15);
+        viewModel.updateBirthday(birthday);
+        expect(viewModel.birthday, birthday);
+      });
+
+      test('updateBirthday accepts null to clear birthday', () {
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateBirthday(null);
+        expect(viewModel.birthday, isNull);
+      });
+
+      test('updateGiftOccasions stores occasions', () {
+        viewModel.updateGiftOccasions(['christmas', 'easter']);
+        expect(viewModel.giftOccasions, ['christmas', 'easter']);
+      });
+
+      test('updateGiftOccasions replaces previous selection', () {
+        viewModel.updateGiftOccasions(['christmas']);
+        viewModel.updateGiftOccasions(['easter', 'hanukkah']);
+        expect(viewModel.giftOccasions, ['easter', 'hanukkah']);
+      });
+
+      test('updateGiftInterests stores interests', () {
+        viewModel.updateGiftInterests(['books', 'travel']);
+        expect(viewModel.giftInterests, ['books', 'travel']);
+      });
+
+      test('updateGiftInterests replaces previous selection', () {
+        viewModel.updateGiftInterests(['books']);
+        viewModel.updateGiftInterests(['sports', 'beauty']);
+        expect(viewModel.giftInterests, ['sports', 'beauty']);
+      });
+
+      test('setting new fields does not affect form validation', () {
+        viewModel.updateFirstName('Alice');
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateGiftOccasions(['christmas']);
+        viewModel.updateGiftInterests(['books']);
+        expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
       });
     });
 
@@ -857,6 +914,9 @@ class _RecordingWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) {
     createCallCount += 1;
     return super.createWisher(
@@ -864,6 +924,9 @@ class _RecordingWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
+      birthday: birthday,
+      giftOccasions: giftOccasions,
+      giftInterests: giftInterests,
     );
   }
 }

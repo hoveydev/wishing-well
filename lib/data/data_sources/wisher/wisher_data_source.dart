@@ -1,3 +1,5 @@
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
+
 /// Abstract data source for wisher operations.
 ///
 /// This interface abstracts the Supabase PostgREST API for wishers,
@@ -18,9 +20,7 @@ abstract class WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String> giftOccasions = const [],
-    List<String> giftInterests = const [],
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   });
 
   /// Updates an existing wisher.
@@ -32,9 +32,7 @@ abstract class WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String> giftOccasions = const [],
-    List<String> giftInterests = const [],
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   });
 
   /// Deletes a wisher by ID.

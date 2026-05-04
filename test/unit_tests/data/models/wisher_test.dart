@@ -170,7 +170,7 @@ void main() {
         expect(copy.birthday, newBirthday);
       });
 
-      test('clears birthday when sentinel is passed', () {
+      test('clears birthday when null is passed', () {
         final original = Wisher(
           id: 'test-id',
           userId: 'test-user-id',

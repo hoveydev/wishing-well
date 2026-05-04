@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/utils/result.dart';
 
 /// Abstract repository for managing wishers.
@@ -33,9 +34,7 @@ abstract class WisherRepository extends ChangeNotifier {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String> giftOccasions = const [],
-    List<String> giftInterests = const [],
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   });
 
   /// Updates an existing wisher.

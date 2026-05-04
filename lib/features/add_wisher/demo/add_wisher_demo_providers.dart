@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
@@ -256,9 +257,7 @@ class _DemoContactAwareWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String>? giftOccasions,
-    List<String>? giftInterests,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) async {
     final fullName = [
       firstName,
@@ -275,9 +274,7 @@ class _DemoContactAwareWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
-      birthday: birthday,
-      giftOccasions: giftOccasions,
-      giftInterests: giftInterests,
+      giftProfile: giftProfile,
     );
   }
 }

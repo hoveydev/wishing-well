@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
@@ -25,9 +26,7 @@ abstract class AddWisherDetailsViewModelContract
   bool get hasAlert;
   AddWisherDetailsError get error;
   bool get isFormValid;
-  DateTime? get birthday;
-  List<String> get giftOccasions;
-  List<String> get giftInterests;
+  WisherGiftProfile get giftProfile;
 
   // Basic info updates
   void updateFirstName(String firstName);
@@ -77,9 +76,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   Future<File?>? _compressionFuture;
-  DateTime? _birthday;
-  List<String> _giftOccasions = [];
-  List<String> _giftInterests = [];
+  WisherGiftProfile _giftProfile = const WisherGiftProfile();
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
@@ -96,13 +93,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   File? get imageFile => _imageFile;
 
   @override
-  DateTime? get birthday => _birthday;
-
-  @override
-  List<String> get giftOccasions => _giftOccasions;
-
-  @override
-  List<String> get giftInterests => _giftInterests;
+  WisherGiftProfile get giftProfile => _giftProfile;
 
   @override
   bool get isFormValid => true;
@@ -133,19 +124,19 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   // Gift field updates
   @override
   void updateBirthday(DateTime? birthday) {
-    _birthday = birthday;
+    _giftProfile = _giftProfile.copyWith(birthday: birthday);
     notifyListeners();
   }
 
   @override
   void updateGiftOccasions(List<String> occasions) {
-    _giftOccasions = occasions;
+    _giftProfile = _giftProfile.copyWith(giftOccasions: occasions);
     notifyListeners();
   }
 
   @override
   void updateGiftInterests(List<String> interests) {
-    _giftInterests = interests;
+    _giftProfile = _giftProfile.copyWith(giftInterests: interests);
     notifyListeners();
   }
 
@@ -277,9 +268,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       firstName: _firstName,
       lastName: _lastName,
       profilePicture: profilePictureUrl,
-      birthday: _birthday,
-      giftOccasions: _giftOccasions,
-      giftInterests: _giftInterests,
+      giftProfile: _giftProfile,
     );
 
     switch (response) {

@@ -1,4 +1,5 @@
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -175,9 +176,7 @@ class IntegrationMockWisherRepository extends WisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String>? giftOccasions,
-    List<String>? giftInterests,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) async {
     _createWisherCallCount++;
     _isLoading = true;
@@ -197,9 +196,9 @@ class IntegrationMockWisherRepository extends WisherRepository {
         firstName: firstName,
         lastName: lastName,
         profilePicture: profilePicture,
-        birthday: birthday,
-        giftOccasions: giftOccasions ?? [],
-        giftInterests: giftInterests ?? [],
+        birthday: giftProfile.birthday,
+        giftOccasions: giftProfile.giftOccasions,
+        giftInterests: giftProfile.giftInterests,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

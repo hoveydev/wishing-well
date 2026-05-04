@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -51,15 +52,15 @@ void main() {
       });
 
       test('birthday starts null', () {
-        expect(viewModel.birthday, isNull);
+        expect(viewModel.giftProfile.birthday, isNull);
       });
 
       test('giftOccasions starts empty', () {
-        expect(viewModel.giftOccasions, isEmpty);
+        expect(viewModel.giftProfile.giftOccasions, isEmpty);
       });
 
       test('giftInterests starts empty', () {
-        expect(viewModel.giftInterests, isEmpty);
+        expect(viewModel.giftProfile.giftInterests, isEmpty);
       });
     });
 
@@ -134,35 +135,35 @@ void main() {
       test('updateBirthday stores the birthday', () {
         final birthday = DateTime(1990, 6, 15);
         viewModel.updateBirthday(birthday);
-        expect(viewModel.birthday, birthday);
+        expect(viewModel.giftProfile.birthday, birthday);
       });
 
       test('updateBirthday accepts null to clear birthday', () {
         viewModel.updateBirthday(DateTime(1990, 6, 15));
         viewModel.updateBirthday(null);
-        expect(viewModel.birthday, isNull);
+        expect(viewModel.giftProfile.birthday, isNull);
       });
 
       test('updateGiftOccasions stores occasions', () {
         viewModel.updateGiftOccasions(['christmas', 'easter']);
-        expect(viewModel.giftOccasions, ['christmas', 'easter']);
+        expect(viewModel.giftProfile.giftOccasions, ['christmas', 'easter']);
       });
 
       test('updateGiftOccasions replaces previous selection', () {
         viewModel.updateGiftOccasions(['christmas']);
         viewModel.updateGiftOccasions(['easter', 'hanukkah']);
-        expect(viewModel.giftOccasions, ['easter', 'hanukkah']);
+        expect(viewModel.giftProfile.giftOccasions, ['easter', 'hanukkah']);
       });
 
       test('updateGiftInterests stores interests', () {
         viewModel.updateGiftInterests(['books', 'travel']);
-        expect(viewModel.giftInterests, ['books', 'travel']);
+        expect(viewModel.giftProfile.giftInterests, ['books', 'travel']);
       });
 
       test('updateGiftInterests replaces previous selection', () {
         viewModel.updateGiftInterests(['books']);
         viewModel.updateGiftInterests(['sports', 'beauty']);
-        expect(viewModel.giftInterests, ['sports', 'beauty']);
+        expect(viewModel.giftProfile.giftInterests, ['sports', 'beauty']);
       });
 
       test('setting new fields does not affect form validation', () {
@@ -914,9 +915,7 @@ class _RecordingWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    DateTime? birthday,
-    List<String>? giftOccasions,
-    List<String>? giftInterests,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) {
     createCallCount += 1;
     return super.createWisher(
@@ -924,9 +923,7 @@ class _RecordingWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
-      birthday: birthday,
-      giftOccasions: giftOccasions,
-      giftInterests: giftInterests,
+      giftProfile: giftProfile,
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
@@ -27,9 +28,7 @@ abstract class EditWisherViewModelContract implements ScreenViewModelContract {
   String? get existingImageUrl;
 
   // Gift fields getters
-  DateTime? get birthday;
-  List<String> get giftOccasions;
-  List<String> get giftInterests;
+  WisherGiftProfile get giftProfile;
 
   // Basic info updates
   void updateFirstName(String firstName);
@@ -89,16 +88,12 @@ class EditWisherViewModel extends ChangeNotifier
   File? _imageFile;
   String? _existingImageUrl;
   Future<File?>? _compressionFuture;
-  DateTime? _birthday;
-  List<String> _giftOccasions = [];
-  List<String> _giftInterests = [];
+  WisherGiftProfile _giftProfile = const WisherGiftProfile();
 
   String _originalFirstName = '';
   String _originalLastName = '';
   String? _originalImageUrl;
-  DateTime? _originalBirthday;
-  List<String> _originalGiftOccasions = [];
-  List<String> _originalGiftInterests = [];
+  WisherGiftProfile _originalGiftProfile = const WisherGiftProfile();
 
   EditWisherError _error = const EditWisherError(EditWisherErrorType.none);
 
@@ -127,13 +122,7 @@ class EditWisherViewModel extends ChangeNotifier
 
   // Gift field getters
   @override
-  DateTime? get birthday => _birthday;
-
-  @override
-  List<String> get giftOccasions => _giftOccasions;
-
-  @override
-  List<String> get giftInterests => _giftInterests;
+  WisherGiftProfile get giftProfile => _giftProfile;
 
   // Basic info updates
   @override
@@ -170,20 +159,20 @@ class EditWisherViewModel extends ChangeNotifier
   // Gift field updates
   @override
   void updateBirthday(DateTime? birthday) {
-    _birthday = birthday;
+    _giftProfile = _giftProfile.copyWith(birthday: birthday);
     _validateForm();
     notifyListeners();
   }
 
   @override
   void updateGiftOccasions(List<String> occasions) {
-    _giftOccasions = occasions;
+    _giftProfile = _giftProfile.copyWith(giftOccasions: occasions);
     notifyListeners();
   }
 
   @override
   void updateGiftInterests(List<String> interests) {
-    _giftInterests = interests;
+    _giftProfile = _giftProfile.copyWith(giftInterests: interests);
     notifyListeners();
   }
 
@@ -309,9 +298,9 @@ class EditWisherViewModel extends ChangeNotifier
         profilePicture: profilePictureUrl,
         createdAt: _wisher!.createdAt,
         updatedAt: DateTime.now(),
-        birthday: _birthday,
-        giftOccasions: _giftOccasions,
-        giftInterests: _giftInterests,
+        birthday: _giftProfile.birthday,
+        giftOccasions: _giftProfile.giftOccasions,
+        giftInterests: _giftProfile.giftInterests,
       );
 
       final response = await _wisherRepository.updateWisher(updatedWisher);
@@ -382,12 +371,16 @@ class EditWisherViewModel extends ChangeNotifier
       _originalFirstName = _wisher!.firstName;
       _originalLastName = _wisher!.lastName;
       _originalImageUrl = _wisher!.profilePicture;
-      _birthday = _wisher!.birthday;
-      _giftOccasions = List.from(_wisher!.giftOccasions);
-      _giftInterests = List.from(_wisher!.giftInterests);
-      _originalBirthday = _wisher!.birthday;
-      _originalGiftOccasions = List.from(_wisher!.giftOccasions);
-      _originalGiftInterests = List.from(_wisher!.giftInterests);
+      _giftProfile = WisherGiftProfile(
+        birthday: _wisher!.birthday,
+        giftOccasions: List.from(_wisher!.giftOccasions),
+        giftInterests: List.from(_wisher!.giftInterests),
+      );
+      _originalGiftProfile = WisherGiftProfile(
+        birthday: _wisher!.birthday,
+        giftOccasions: List.from(_wisher!.giftOccasions),
+        giftInterests: List.from(_wisher!.giftInterests),
+      );
     }
 
     _isLoading = false;
@@ -399,17 +392,7 @@ class EditWisherViewModel extends ChangeNotifier
       _lastName != _originalLastName ||
       _imageFile != null ||
       _existingImageUrl != _originalImageUrl ||
-      _birthday != _originalBirthday ||
-      !_listEquals(_giftOccasions, _originalGiftOccasions) ||
-      !_listEquals(_giftInterests, _originalGiftInterests);
-
-  bool _listEquals(List<String> a, List<String> b) {
-    if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
-  }
+      _giftProfile != _originalGiftProfile;
 
   @override
   void dispose() {

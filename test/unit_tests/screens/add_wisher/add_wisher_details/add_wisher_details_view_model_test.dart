@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -48,6 +49,18 @@ void main() {
 
       test('imageFile starts null', () {
         expect(viewModel.imageFile, isNull);
+      });
+
+      test('birthday starts null', () {
+        expect(viewModel.giftProfile.birthday, isNull);
+      });
+
+      test('giftOccasions starts empty', () {
+        expect(viewModel.giftProfile.giftOccasions, isEmpty);
+      });
+
+      test('giftInterests starts empty', () {
+        expect(viewModel.giftProfile.giftInterests, isEmpty);
       });
     });
 
@@ -115,6 +128,51 @@ void main() {
             AddWisherDetailsErrorType.unknown,
           ]),
         );
+      });
+    });
+
+    group('New optional fields', () {
+      test('updateBirthday stores the birthday', () {
+        final birthday = DateTime(1990, 6, 15);
+        viewModel.updateBirthday(birthday);
+        expect(viewModel.giftProfile.birthday, birthday);
+      });
+
+      test('updateBirthday accepts null to clear birthday', () {
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateBirthday(null);
+        expect(viewModel.giftProfile.birthday, isNull);
+      });
+
+      test('updateGiftOccasions stores occasions', () {
+        viewModel.updateGiftOccasions(['christmas', 'easter']);
+        expect(viewModel.giftProfile.giftOccasions, ['christmas', 'easter']);
+      });
+
+      test('updateGiftOccasions replaces previous selection', () {
+        viewModel.updateGiftOccasions(['christmas']);
+        viewModel.updateGiftOccasions(['easter', 'hanukkah']);
+        expect(viewModel.giftProfile.giftOccasions, ['easter', 'hanukkah']);
+      });
+
+      test('updateGiftInterests stores interests', () {
+        viewModel.updateGiftInterests(['books', 'travel']);
+        expect(viewModel.giftProfile.giftInterests, ['books', 'travel']);
+      });
+
+      test('updateGiftInterests replaces previous selection', () {
+        viewModel.updateGiftInterests(['books']);
+        viewModel.updateGiftInterests(['sports', 'beauty']);
+        expect(viewModel.giftProfile.giftInterests, ['sports', 'beauty']);
+      });
+
+      test('setting new fields does not affect form validation', () {
+        viewModel.updateFirstName('Alice');
+        viewModel.updateBirthday(DateTime(1990, 6, 15));
+        viewModel.updateGiftOccasions(['christmas']);
+        viewModel.updateGiftInterests(['books']);
+        expect(viewModel.isFormValid, isTrue);
+        expect(viewModel.hasAlert, isFalse);
       });
     });
 
@@ -857,6 +915,7 @@ class _RecordingWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) {
     createCallCount += 1;
     return super.createWisher(
@@ -864,6 +923,7 @@ class _RecordingWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
+      giftProfile: giftProfile,
     );
   }
 }

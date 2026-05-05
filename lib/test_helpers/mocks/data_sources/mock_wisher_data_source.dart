@@ -1,4 +1,5 @@
 import 'package:wishing_well/data/data_sources/wisher/wisher_data_source.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 
 /// Mock implementation of [WisherDataSource] for testing.
 ///
@@ -70,11 +71,18 @@ class MockWisherDataSource implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) async {
     createWisherCalled = true;
     if (createWisherError != null) {
       throw createWisherError!;
     }
+    final birthday = giftProfile.birthday;
+    final birthdayStr = birthday == null
+        ? null
+        : '${birthday.year.toString().padLeft(4, '0')}-'
+              '${birthday.month.toString().padLeft(2, '0')}-'
+              '${birthday.day.toString().padLeft(2, '0')}';
     return createWisherResult ??
         {
           'id': 'new-wisher-id',
@@ -82,6 +90,9 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': birthdayStr,
+          'gift_occasions': giftProfile.giftOccasions,
+          'gift_interests': giftProfile.giftInterests,
           'created_at': DateTime.now().toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         };
@@ -93,11 +104,18 @@ class MockWisherDataSource implements WisherDataSource {
     required String firstName,
     required String lastName,
     String? profilePicture,
+    WisherGiftProfile giftProfile = const WisherGiftProfile(),
   }) async {
     updateWisherCalled = true;
     if (updateWisherError != null) {
       throw updateWisherError!;
     }
+    final birthday = giftProfile.birthday;
+    final birthdayStr = birthday == null
+        ? null
+        : '${birthday.year.toString().padLeft(4, '0')}-'
+              '${birthday.month.toString().padLeft(2, '0')}-'
+              '${birthday.day.toString().padLeft(2, '0')}';
     return updateWisherResult ??
         {
           'id': wisherId,
@@ -105,6 +123,9 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
+          'birthday': birthdayStr,
+          'gift_occasions': giftProfile.giftOccasions,
+          'gift_interests': giftProfile.giftInterests,
           'created_at': DateTime(2024).toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         };

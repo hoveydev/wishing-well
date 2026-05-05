@@ -72,6 +72,30 @@ void main() {
         expect(draft.summaryLabel, 'Taylor');
       });
 
+      test('toDraft propagates birthday into the draft', () {
+        final birthday = DateTime(1990, 6, 15);
+        final selection = AddWisherContactSelection.normalized(
+          sourceId: 'contact-bday',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          birthday: birthday,
+        );
+
+        final draft = selection.toDraft();
+        expect(draft.birthday, birthday);
+      });
+
+      test('toDraft has null birthday when selection has no birthday', () {
+        final selection = AddWisherContactSelection.normalized(
+          sourceId: 'contact-nobday',
+          firstName: 'John',
+          lastName: 'Smith',
+        );
+
+        final draft = selection.toDraft();
+        expect(draft.birthday, isNull);
+      });
+
       test('summaryLabel falls back to source display name when needed', () {
         const draft = AddWisherContactImportDraft(
           sourceId: 'contact-5',

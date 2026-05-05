@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/wisher/wisher_repository.dart';
@@ -170,6 +171,7 @@ class AddWisherContactBatchImporter {
           firstName: draft.firstName,
           lastName: draft.lastName,
           profilePicture: profilePictureUrl,
+          giftProfile: WisherGiftProfile(birthday: draft.birthday),
         );
 
         switch (response) {

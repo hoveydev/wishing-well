@@ -40,6 +40,7 @@ class AddWisherContactSelection {
     required this.lastName,
     required this.originalDisplayName,
     this.imageReference,
+    this.birthday,
   });
 
   factory AddWisherContactSelection.normalized({
@@ -48,6 +49,7 @@ class AddWisherContactSelection {
     String? lastName,
     String? displayName,
     AddWisherContactImageReference? imageReference,
+    DateTime? birthday,
   }) {
     final normalizedSourceId = sourceId.trim();
     final normalizedFirstName = firstName?.trim() ?? '';
@@ -61,6 +63,7 @@ class AddWisherContactSelection {
         lastName: normalizedLastName,
         originalDisplayName: normalizedDisplayName,
         imageReference: imageReference,
+        birthday: birthday,
       );
     }
 
@@ -75,6 +78,7 @@ class AddWisherContactSelection {
       lastName: nameParts.length < 2 ? '' : nameParts.sublist(1).join(' '),
       originalDisplayName: normalizedDisplayName,
       imageReference: imageReference,
+      birthday: birthday,
     );
   }
 
@@ -83,6 +87,7 @@ class AddWisherContactSelection {
   final String lastName;
   final String originalDisplayName;
   final AddWisherContactImageReference? imageReference;
+  final DateTime? birthday;
 
   bool get hasName => firstName.isNotEmpty || lastName.isNotEmpty;
 
@@ -101,6 +106,7 @@ class AddWisherContactSelection {
     lastName: lastName,
     sourceDisplayName: originalDisplayName,
     imageReference: imageReference,
+    birthday: birthday,
   );
 
   @override
@@ -111,7 +117,8 @@ class AddWisherContactSelection {
         other.firstName == firstName &&
         other.lastName == lastName &&
         other.originalDisplayName == originalDisplayName &&
-        other.imageReference == imageReference;
+        other.imageReference == imageReference &&
+        other.birthday == birthday;
   }
 
   @override
@@ -121,6 +128,7 @@ class AddWisherContactSelection {
     lastName,
     originalDisplayName,
     imageReference,
+    birthday,
   );
 }
 
@@ -131,6 +139,7 @@ class AddWisherContactImportDraft {
     required this.lastName,
     required this.sourceDisplayName,
     this.imageReference,
+    this.birthday,
   });
 
   final String sourceId;
@@ -138,6 +147,7 @@ class AddWisherContactImportDraft {
   final String lastName;
   final String sourceDisplayName;
   final AddWisherContactImageReference? imageReference;
+  final DateTime? birthday;
 
   bool get hasName => firstName.isNotEmpty || lastName.isNotEmpty;
 
@@ -158,7 +168,8 @@ class AddWisherContactImportDraft {
         other.firstName == firstName &&
         other.lastName == lastName &&
         other.sourceDisplayName == sourceDisplayName &&
-        other.imageReference == imageReference;
+        other.imageReference == imageReference &&
+        other.birthday == birthday;
   }
 
   @override
@@ -168,6 +179,7 @@ class AddWisherContactImportDraft {
     lastName,
     sourceDisplayName,
     imageReference,
+    birthday,
   );
 }
 

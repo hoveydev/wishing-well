@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/repositories/image/image_repository_impl.dart';
@@ -20,14 +21,25 @@ import 'package:wishing_well/utils/result.dart';
 
 abstract class AddWisherDetailsViewModelContract
     implements ScreenViewModelContract {
-  void updateFirstName(String firstName);
-  void updateLastName(String lastName);
-  void updateImage(File? imageFile);
+  // Getters
   File? get imageFile;
   bool get hasAlert;
   AddWisherDetailsError get error;
-  void clearError();
   bool get isFormValid;
+  WisherGiftProfile get giftProfile;
+
+  // Basic info updates
+  void updateFirstName(String firstName);
+  void updateLastName(String lastName);
+  void updateImage(File? imageFile);
+
+  // Gift field updates
+  void updateBirthday(DateTime? birthday);
+  void updateGiftOccasions(List<String> occasions);
+  void updateGiftInterests(List<String> interests);
+
+  // UI actions
+  void clearError();
   Future<void> tapSaveButton(BuildContext context);
   void tapBackButton(BuildContext context);
 }
@@ -64,11 +76,13 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   String _lastName = '';
   File? _imageFile;
   Future<File?>? _compressionFuture;
+  WisherGiftProfile _giftProfile = const WisherGiftProfile();
 
   AddWisherDetailsError _error = const AddWisherDetailsError(
     AddWisherDetailsErrorType.none,
   );
 
+  // Getters
   @override
   AddWisherDetailsError get error => _error;
 
@@ -76,11 +90,15 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   bool get hasAlert => _error.type != AddWisherDetailsErrorType.none;
 
   @override
-  void clearError() {
-    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
-    notifyListeners();
-  }
+  File? get imageFile => _imageFile;
 
+  @override
+  WisherGiftProfile get giftProfile => _giftProfile;
+
+  @override
+  bool get isFormValid => true;
+
+  // Basic info updates
   @override
   void updateFirstName(String firstName) {
     _firstName = firstName.trim();
@@ -103,8 +121,28 @@ class AddWisherDetailsViewModel extends ChangeNotifier
     notifyListeners();
   }
 
-  // Attaches a fire-and-forget delete callback to a compression future so
-  // orphaned temp files are removed even if the result is never awaited.
+  // Gift field updates
+  @override
+  void updateBirthday(DateTime? birthday) {
+    _giftProfile = _giftProfile.copyWith(birthday: birthday);
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftOccasions(List<String> occasions) {
+    _giftProfile = _giftProfile.copyWith(giftOccasions: occasions);
+    notifyListeners();
+  }
+
+  @override
+  void updateGiftInterests(List<String> interests) {
+    _giftProfile = _giftProfile.copyWith(giftInterests: interests);
+    notifyListeners();
+  }
+
+  // Helper method: Attaches a fire-and-forget delete callback to a
+  // compression future so orphaned temp files are removed even if the result
+  // is never awaited.
   void _cleanupFutureFile(Future<File?>? future) {
     future
         ?.then((file) {
@@ -115,10 +153,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
         .catchError((_) {});
   }
 
-  /// Getter for the selected image file
-  @override
-  File? get imageFile => _imageFile;
-
+  // Validation and UI actions
   void _validateForm() {
     final previousError = _error;
     _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
@@ -129,7 +164,10 @@ class AddWisherDetailsViewModel extends ChangeNotifier
   }
 
   @override
-  bool get isFormValid => true;
+  void clearError() {
+    _error = const AddWisherDetailsError(AddWisherDetailsErrorType.none);
+    notifyListeners();
+  }
 
   @override
   void tapBackButton(BuildContext context) {
@@ -230,6 +268,7 @@ class AddWisherDetailsViewModel extends ChangeNotifier
       firstName: _firstName,
       lastName: _lastName,
       profilePicture: profilePictureUrl,
+      giftProfile: _giftProfile,
     );
 
     switch (response) {

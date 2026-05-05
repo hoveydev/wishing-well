@@ -65,12 +65,25 @@ class AddWisherContactSelectionMapper {
       );
     }
 
+    final birthdayEvent = contact.events
+        .where((e) => e.label.label == contacts.EventLabel.birthday)
+        .firstOrNull;
+    DateTime? birthdayDate;
+    if (birthdayEvent != null) {
+      birthdayDate = DateTime(
+        birthdayEvent.year ?? DateTime.now().year,
+        birthdayEvent.month,
+        birthdayEvent.day,
+      );
+    }
+
     return AddWisherContactSelection.normalized(
       sourceId: sourceId,
       firstName: contact.name?.first,
       lastName: _structuredLastName(contact),
       displayName: _displayName(contact),
       imageReference: _imageReference(contact, sourceId),
+      birthday: birthdayDate,
     );
   }
 
@@ -140,6 +153,7 @@ class AddWisherContactAccess {
         contacts.ContactProperty.name,
         contacts.ContactProperty.photoThumbnail,
         contacts.ContactProperty.photoFullRes,
+        contacts.ContactProperty.event,
       },
     ),
     selectionMapper: selectionMapper,

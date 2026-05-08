@@ -29,6 +29,7 @@ class _EditWisherScreenState extends State<EditWisherScreen> {
     ),
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.stretch,
+    bottomSafeArea: false,
     children: [
       EditWisherHeader(viewModel: widget.viewModel),
       EditWisherButton(viewModel: widget.viewModel),

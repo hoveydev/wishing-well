@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/data/models/wisher.dart';
+import 'package:wishing_well/data/models/wisher_field_options.dart';
 import 'package:wishing_well/features/wisher_details/components/wisher_details_profile.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -18,7 +20,7 @@ void main() {
     group(TestGroups.rendering, () {
       testWidgets('renders ProfileAvatar', (WidgetTester tester) async {
         await tester.pumpWidget(
-          buildMaterialAppHome(WisherDetailsProfile(wisher: wisher)),
+          createScreenComponentTestWidget(WisherDetailsProfile(wisher: wisher)),
         );
         await TestHelpers.pumpAndSettle(tester);
         expect(find.byType(ProfileAvatar), findsOneWidget);
@@ -26,7 +28,7 @@ void main() {
 
       testWidgets('renders wisher name', (WidgetTester tester) async {
         await tester.pumpWidget(
-          buildMaterialAppHome(WisherDetailsProfile(wisher: wisher)),
+          createScreenComponentTestWidget(WisherDetailsProfile(wisher: wisher)),
         );
         await TestHelpers.pumpAndSettle(tester);
         expect(find.text('Alice Smith'), findsOneWidget);
@@ -45,13 +47,70 @@ void main() {
         );
 
         await tester.pumpWidget(
-          buildMaterialAppHome(
+          createScreenComponentTestWidget(
             WisherDetailsProfile(wisher: wisherWithOnlyLastName),
           ),
         );
         await TestHelpers.pumpAndSettle(tester);
 
         expect(find.text('Brown'), findsOneWidget);
+      });
+
+      testWidgets('does not render gift sections when empty', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(WisherDetailsProfile(wisher: wisher)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(Chip), findsNothing);
+      });
+
+      testWidgets('renders gift occasions section when present', (
+        WidgetTester tester,
+      ) async {
+        final wisherWithOccasions = Wisher(
+          id: '3',
+          userId: 'user1',
+          firstName: 'Bob',
+          lastName: 'Jones',
+          giftOccasions: [WisherGiftOccasions.christmas],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WisherDetailsProfile(wisher: wisherWithOccasions),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(Chip), findsOneWidget);
+      });
+
+      testWidgets('renders gift interests section when present', (
+        WidgetTester tester,
+      ) async {
+        final wisherWithInterests = Wisher(
+          id: '4',
+          userId: 'user1',
+          firstName: 'Carol',
+          lastName: 'Davis',
+          giftInterests: [WisherGiftInterests.books],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        await tester.pumpWidget(
+          createScreenComponentTestWidget(
+            WisherDetailsProfile(wisher: wisherWithInterests),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byType(Chip), findsOneWidget);
       });
     });
   });

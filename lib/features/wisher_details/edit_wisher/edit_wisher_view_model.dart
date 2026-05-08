@@ -373,13 +373,15 @@ class EditWisherViewModel extends ChangeNotifier
       _imageFile != null ||
       _existingImageUrl != _originalImageUrl ||
       _birthday != _originalBirthday ||
-      !_listEquals(_giftOccasions, _originalGiftOccasions) ||
-      !_listEquals(_giftInterests, _originalGiftInterests);
+      !_unorderedListEquals(_giftOccasions, _originalGiftOccasions) ||
+      !_unorderedListEquals(_giftInterests, _originalGiftInterests);
 
-  bool _listEquals(List<String> a, List<String> b) {
+  bool _unorderedListEquals(List<String> a, List<String> b) {
     if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
+    final sortedA = List<String>.from(a)..sort();
+    final sortedB = List<String>.from(b)..sort();
+    for (var i = 0; i < sortedA.length; i++) {
+      if (sortedA[i] != sortedB[i]) return false;
     }
     return true;
   }

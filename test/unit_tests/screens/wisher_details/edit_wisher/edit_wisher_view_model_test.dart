@@ -599,6 +599,43 @@ void main() {
         expect(loadingController.isIdle, isTrue);
       });
 
+      testWidgets('with reordered gift selections still sets noChanges error', (
+        WidgetTester tester,
+      ) async {
+        final giftWisher = Wisher(
+          id: '1',
+          userId: 'test-user',
+          firstName: 'Alice',
+          lastName: 'Test',
+          giftOccasions: const ['christmas', 'easter'],
+          giftInterests: const ['books', 'travel'],
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024),
+        );
+        final repoWithGifts = MockWisherRepository(
+          initialWishers: [giftWisher],
+        );
+        final vm = EditWisherViewModel(
+          wisherRepository: repoWithGifts,
+          imageRepository: mockImageRepository,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+        addTearDown(repoWithGifts.dispose);
+
+        vm.updateGiftOccasions(['easter', 'christmas']);
+        vm.updateGiftInterests(['travel', 'books']);
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+
+        expect(vm.error.type, EditWisherErrorType.noChanges);
+        expect(loadingController.isIdle, isTrue);
+      });
+
       testWidgets('with null wisher shows error', (WidgetTester tester) async {
         // Use a wisherId that doesn't exist so _wisher is null
         final vm = EditWisherViewModel(

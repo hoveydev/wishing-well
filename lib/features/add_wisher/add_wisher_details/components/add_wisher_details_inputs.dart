@@ -8,8 +8,9 @@ import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
 import 'package:wishing_well/components/spacer/app_spacer_size.dart';
 import 'package:wishing_well/data/models/wisher_field_options.dart';
-import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
+import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/utils/wisher_field_labels.dart';
 
 class AddWisherDetailsInputs extends StatefulWidget {
   const AddWisherDetailsInputs({required this.viewModel, super.key});
@@ -124,7 +125,7 @@ class _AddWisherDetailsInputsState extends State<AddWisherDetailsInputs> {
           .map(
             (occasion) => AppMultiSelectItem(
               value: occasion,
-              label: _occasionLabel(l10n, occasion),
+              label: wisherOccasionLabel(l10n, occasion),
             ),
           )
           .toList();
@@ -134,41 +135,10 @@ class _AddWisherDetailsInputsState extends State<AddWisherDetailsInputs> {
           .map(
             (interest) => AppMultiSelectItem(
               value: interest,
-              label: _interestLabel(l10n, interest),
+              label: wisherInterestLabel(l10n, interest),
             ),
           )
           .toList();
-
-  String _occasionLabel(AppLocalizations l10n, String occasion) =>
-      switch (occasion) {
-        'christmas' => l10n.occasionChristmas,
-        'hanukkah' => l10n.occasionHanukkah,
-        'kwanzaa' => l10n.occasionKwanzaa,
-        'diwali' => l10n.occasionDiwali,
-        'eid' => l10n.occasionEid,
-        'valentines_day' => l10n.occasionValentinesDay,
-        'mothers_day' => l10n.occasionMothersDay,
-        'fathers_day' => l10n.occasionFathersDay,
-        'easter' => l10n.occasionEaster,
-        'new_years' => l10n.occasionNewYears,
-        _ => occasion,
-      };
-
-  String _interestLabel(AppLocalizations l10n, String interest) =>
-      switch (interest) {
-        'books' => l10n.interestBooks,
-        'electronics' => l10n.interestElectronics,
-        'clothing' => l10n.interestClothing,
-        'jewelry' => l10n.interestJewelry,
-        'art' => l10n.interestArt,
-        'home_and_garden' => l10n.interestHomeAndGarden,
-        'sports' => l10n.interestSports,
-        'beauty' => l10n.interestBeauty,
-        'food_and_drink' => l10n.interestFoodAndDrink,
-        'travel' => l10n.interestTravel,
-        'games_and_toys' => l10n.interestGamesAndToys,
-        _ => interest,
-      };
 
   String _validationMessage(
     AppLocalizations l10n,

@@ -9,7 +9,6 @@ class Screen extends StatelessWidget {
     this.padding,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.bottomSafeArea = true,
   });
 
   final List<Widget> children;
@@ -17,17 +16,15 @@ class Screen extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
-  final bool bottomSafeArea;
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: appBar,
-    body: SafeArea(
-      bottom: bottomSafeArea,
-      child: LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+    body: LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: SafeArea(
             child: Padding(
               padding:
                   padding ??

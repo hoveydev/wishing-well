@@ -14,7 +14,6 @@ class WisherDetailsProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final allChipValues = [...wisher.giftOccasions, ...wisher.giftInterests];
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -39,13 +38,36 @@ class WisherDetailsProfile extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-        if (allChipValues.isNotEmpty) ...[
+        if (wisher.giftOccasions.isNotEmpty) ...[
           const SizedBox(height: AppSpacerSize.small),
+          Text(
+            l10n.giftOccasions,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacerSize.xsmall),
           Wrap(
             spacing: AppSpacerSize.xsmall,
             runSpacing: AppSpacerSize.xsmall,
             alignment: WrapAlignment.center,
-            children: allChipValues
+            children: wisher.giftOccasions
+                .map((v) => Chip(label: Text(_chipLabel(l10n, v))))
+                .toList(growable: false),
+          ),
+        ],
+        if (wisher.giftInterests.isNotEmpty) ...[
+          const SizedBox(height: AppSpacerSize.small),
+          Text(
+            l10n.giftInterests,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacerSize.xsmall),
+          Wrap(
+            spacing: AppSpacerSize.xsmall,
+            runSpacing: AppSpacerSize.xsmall,
+            alignment: WrapAlignment.center,
+            children: wisher.giftInterests
                 .map((v) => Chip(label: Text(_chipLabel(l10n, v))))
                 .toList(growable: false),
           ),

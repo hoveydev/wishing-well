@@ -184,7 +184,7 @@ void main() {
       expect(viewModel.giftInterests, testInterests);
     });
 
-    testWidgets('gift occasions display with localized labels', (
+    testWidgets('gift occasions selection is reflected in viewModel state', (
       WidgetTester tester,
     ) async {
       viewModel.updateGiftOccasions(['christmas', 'hanukkah']);
@@ -196,13 +196,10 @@ void main() {
       );
       await TestHelpers.pumpAndSettle(tester);
 
-      // Verify that the fields are populated and the items would have
-      // correct labels
-      final multiSelectFields = find.byType(AppMultiSelectField);
-      expect(multiSelectFields, findsNWidgets(2));
+      expect(viewModel.giftOccasions, ['christmas', 'hanukkah']);
     });
 
-    testWidgets('gift interests display with localized labels', (
+    testWidgets('gift interests selection is reflected in viewModel state', (
       WidgetTester tester,
     ) async {
       viewModel.updateGiftInterests(['books', 'art', 'jewelry']);

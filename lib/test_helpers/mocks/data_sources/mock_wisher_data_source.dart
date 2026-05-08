@@ -85,7 +85,7 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
-          'birthday': birthday?.toIso8601String(),
+          'birthday': _formatDate(birthday),
           'gift_occasions': giftOccasions,
           'gift_interests': giftInterests,
           'created_at': DateTime.now().toIso8601String(),
@@ -114,12 +114,20 @@ class MockWisherDataSource implements WisherDataSource {
           'first_name': firstName,
           'last_name': lastName,
           'profile_picture': profilePicture,
-          'birthday': birthday?.toIso8601String(),
+          'birthday': _formatDate(birthday),
           'gift_occasions': giftOccasions,
           'gift_interests': giftInterests,
           'created_at': DateTime(2024).toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         };
+  }
+
+  String? _formatDate(DateTime? date) {
+    if (date == null) return null;
+    final y = date.year.toString().padLeft(4, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    final d = date.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
   }
 
   @override

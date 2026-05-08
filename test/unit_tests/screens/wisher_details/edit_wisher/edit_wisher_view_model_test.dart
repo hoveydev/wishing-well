@@ -599,6 +599,31 @@ void main() {
         expect(loadingController.isIdle, isTrue);
       });
 
+      testWidgets('changing gift fields clears noChanges error', (
+        WidgetTester tester,
+      ) async {
+        final vm = EditWisherViewModel(
+          wisherRepository: mockRepository,
+          imageRepository: mockImageRepository,
+          wisherId: '1',
+        );
+        addTearDown(vm.dispose);
+
+        await tester.pumpWidget(buildTestWidget(vm));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('Save'));
+        await tester.pump();
+        expect(vm.error.type, EditWisherErrorType.noChanges);
+
+        vm.updateGiftOccasions(['christmas']);
+        expect(vm.error.type, EditWisherErrorType.none);
+
+        await tester.tap(find.text('Save'));
+        await tester.pumpAndSettle();
+        expect(vm.error.type, EditWisherErrorType.none);
+      });
+
       testWidgets('with reordered gift selections still sets noChanges error', (
         WidgetTester tester,
       ) async {

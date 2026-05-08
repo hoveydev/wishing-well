@@ -131,12 +131,14 @@ class EditWisherViewModel extends ChangeNotifier
   @override
   void updateGiftOccasions(List<String> occasions) {
     _giftOccasions = occasions;
+    _validateForm();
     notifyListeners();
   }
 
   @override
   void updateGiftInterests(List<String> interests) {
     _giftInterests = interests;
+    _validateForm();
     notifyListeners();
   }
 

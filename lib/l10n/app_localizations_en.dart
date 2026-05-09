@@ -364,6 +364,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get datePickerNextMonth => 'Next month';
 
   @override
+  String get datePickerSelectYearMonth => 'Select Year & Month';
+
+  @override
+  String get datePickerBackToCalendar => 'Back to calendar';
+
+  @override
+  String get datePickerYearTab => 'Year';
+
+  @override
+  String get datePickerMonthTab => 'Month';
+
+  @override
   String get birthday => 'Birthday';
 
   @override

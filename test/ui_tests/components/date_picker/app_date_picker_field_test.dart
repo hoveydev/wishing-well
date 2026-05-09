@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_field.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_overlay.dart';
 
@@ -63,6 +64,85 @@ void main() {
 
         expect(find.byIcon(Icons.close), findsNothing);
       });
+
+      testWidgets('renders dropdown icon when no date is set', (tester) async {
+        await tester.pumpWidget(buildTestWidget());
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
+      });
+
+      testWidgets('keeps the same height with and without selected date', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildMaterialAppHome(
+            Scaffold(
+              body: Column(
+                children: [
+                  AppDatePickerField(
+                    placeholder: 'Empty date',
+                    onChanged: (_) {},
+                  ),
+                  AppDatePickerField(
+                    placeholder: 'Filled date',
+                    value: DateTime(2025, 6, 15),
+                    onChanged: (_) {},
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final emptyField = find.byWidgetPredicate(
+          (w) =>
+              w is AppDatePickerField &&
+              w.placeholder == 'Empty date' &&
+              w.value == null,
+        );
+        final filledField = find.byWidgetPredicate(
+          (w) =>
+              w is AppDatePickerField &&
+              w.placeholder == 'Filled date' &&
+              w.value != null,
+        );
+
+        expect(tester.getSize(emptyField), equals(tester.getSize(filledField)));
+      });
+
+      testWidgets('clear icon aligns with dropdown icon position', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildMaterialAppHome(
+            Scaffold(
+              body: Column(
+                children: [
+                  AppDatePickerField(
+                    placeholder: 'Select date',
+                    onChanged: (_) {},
+                  ),
+                  AppDatePickerField(
+                    placeholder: 'Select date',
+                    value: DateTime(2025, 6, 15),
+                    onChanged: (_) {},
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final arrowCenter = tester.getCenter(
+          find.byIcon(Icons.arrow_drop_down),
+        );
+        final closeCenter = tester.getCenter(find.byIcon(Icons.close));
+
+        expect((arrowCenter.dx - closeCenter.dx).abs(), lessThan(1));
+      });
     });
 
     group(TestGroups.behavior, () {
@@ -95,6 +175,19 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         expect(result, isNull);
+      });
+
+      testWidgets('opens picker focused on current month when value is null', (
+        tester,
+      ) async {
+        await tester.pumpWidget(buildTestWidget());
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.byType(AppDatePickerField));
+        await TestHelpers.pumpAndSettle(tester);
+
+        final currentMonthLabel = DateFormat.yMMMM().format(DateTime.now());
+        TestHelpers.expectTextOnce(currentMonthLabel);
       });
     });
 

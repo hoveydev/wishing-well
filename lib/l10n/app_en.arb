@@ -480,6 +480,22 @@
     "@datePickerNextMonth": {
         "description": "Accessibility label for the next month navigation button in the date picker overlay"
     },
+    "datePickerSelectYearMonth": "Select Year & Month",
+    "@datePickerSelectYearMonth": {
+        "description": "Title shown in the date picker overlay header when the year & month picker panel is open"
+    },
+    "datePickerBackToCalendar": "Back to calendar",
+    "@datePickerBackToCalendar": {
+        "description": "Accessibility label for the back button in the date picker overlay that returns from the year & month picker to the calendar view"
+    },
+    "datePickerYearTab": "Year",
+    "@datePickerYearTab": {
+        "description": "Toggle button label for the year view in the date picker selector"
+    },
+    "datePickerMonthTab": "Month",
+    "@datePickerMonthTab": {
+        "description": "Toggle button label for the month view in the date picker selector"
+    },
     "birthday": "Birthday",
     "@birthday": {
         "description": "Label for the wisher's birthday field"

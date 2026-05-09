@@ -14,7 +14,10 @@ class WisherDetailsProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final allChipValues = [...wisher.giftOccasions, ...wisher.giftInterests];
+    final textTheme = Theme.of(context).textTheme;
+    final sectionHeaderStyle = textTheme.titleSmall?.copyWith(
+      fontWeight: FontWeight.w600,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -28,26 +31,33 @@ class WisherDetailsProfile extends StatelessWidget {
         const AppSpacer.medium(),
         Text(
           wisher.name,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         if (wisher.birthday != null) ...[
           const SizedBox(height: AppSpacerSize.xsmall),
           Text(
             DateFormat.yMMMMd().format(wisher.birthday!),
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         ],
-        if (allChipValues.isNotEmpty) ...[
+        if (wisher.giftOccasions.isNotEmpty) ...[
           const SizedBox(height: AppSpacerSize.small),
-          Wrap(
-            spacing: AppSpacerSize.xsmall,
-            runSpacing: AppSpacerSize.xsmall,
-            alignment: WrapAlignment.center,
-            children: allChipValues
-                .map((v) => Chip(label: Text(_chipLabel(l10n, v))))
-                .toList(growable: false),
+          _GiftTagSection(
+            title: l10n.giftOccasions,
+            values: wisher.giftOccasions,
+            chipLabel: (value) => _chipLabel(l10n, value),
+            titleStyle: sectionHeaderStyle,
+          ),
+        ],
+        if (wisher.giftInterests.isNotEmpty) ...[
+          const SizedBox(height: AppSpacerSize.small),
+          _GiftTagSection(
+            title: l10n.giftInterests,
+            values: wisher.giftInterests,
+            chipLabel: (value) => _chipLabel(l10n, value),
+            titleStyle: sectionHeaderStyle,
           ),
         ],
       ],
@@ -78,4 +88,44 @@ class WisherDetailsProfile extends StatelessWidget {
     WisherGiftInterests.gamesAndToys => l10n.interestGamesAndToys,
     _ => value,
   };
+}
+
+class _GiftTagSection extends StatelessWidget {
+  /// Reusable gift section for rendering a title and selected gift chips.
+  const _GiftTagSection({
+    required this.title,
+    required this.values,
+    required this.chipLabel,
+    this.titleStyle,
+  });
+
+  /// Section header text.
+  final String title;
+
+  /// Gift values displayed as chips.
+  final List<String> values;
+
+  /// Maps a raw gift value to its localized chip label.
+  final String Function(String value) chipLabel;
+  final TextStyle? titleStyle;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      Text(
+        title,
+        style: titleStyle ?? Theme.of(context).textTheme.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: AppSpacerSize.xsmall),
+      Wrap(
+        spacing: AppSpacerSize.xsmall,
+        runSpacing: AppSpacerSize.xsmall,
+        alignment: WrapAlignment.center,
+        children: values
+            .map((value) => Chip(label: Text(chipLabel(value))))
+            .toList(growable: false),
+      ),
+    ],
+  );
 }

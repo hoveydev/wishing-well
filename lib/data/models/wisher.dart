@@ -1,3 +1,5 @@
+import 'package:wishing_well/utils/date_utils.dart';
+
 /// Represents a wisher - someone special in a user's life.
 ///
 /// Wishers are associated with a specific user and contain basic
@@ -95,11 +97,7 @@ class Wisher {
     'profile_picture': profilePicture,
     'created_at': createdAt.toIso8601String(),
     'updated_at': updatedAt.toIso8601String(),
-    'birthday': birthday != null
-        ? '${birthday!.year.toString().padLeft(4, '0')}-'
-              '${birthday!.month.toString().padLeft(2, '0')}-'
-              '${birthday!.day.toString().padLeft(2, '0')}'
-        : null,
+    'birthday': formatDateForStorage(birthday),
     'gift_occasions': giftOccasions.isEmpty ? null : giftOccasions,
     'gift_interests': giftInterests.isEmpty ? null : giftInterests,
   };

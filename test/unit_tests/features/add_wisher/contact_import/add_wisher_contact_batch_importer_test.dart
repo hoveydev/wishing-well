@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/data/repositories/image/image_repository.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/data/models/wisher_gift_profile.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_batch_importer.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -241,7 +240,9 @@ class _ThrowingOnceWisherRepository extends MockWisherRepository {
     required String firstName,
     required String lastName,
     String? profilePicture,
-    WisherGiftProfile giftProfile = const WisherGiftProfile(),
+    DateTime? birthday,
+    List<String>? giftOccasions,
+    List<String>? giftInterests,
   }) async {
     createCalls += 1;
     if (createCalls == 1) {
@@ -253,7 +254,9 @@ class _ThrowingOnceWisherRepository extends MockWisherRepository {
       firstName: firstName,
       lastName: lastName,
       profilePicture: profilePicture,
-      giftProfile: giftProfile,
+      birthday: birthday,
+      giftOccasions: giftOccasions,
+      giftInterests: giftInterests,
     );
   }
 }

@@ -20,11 +20,11 @@ class Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: appBar,
-    body: SafeArea(
-      child: LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+    body: LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: SafeArea(
             child: Padding(
               padding:
                   padding ??

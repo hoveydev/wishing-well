@@ -14,6 +14,10 @@ class WisherDetailsProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
+    final sectionHeaderStyle = textTheme.titleSmall?.copyWith(
+      fontWeight: FontWeight.w600,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -27,14 +31,14 @@ class WisherDetailsProfile extends StatelessWidget {
         const AppSpacer.medium(),
         Text(
           wisher.name,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         if (wisher.birthday != null) ...[
           const SizedBox(height: AppSpacerSize.xsmall),
           Text(
             DateFormat.yMMMMd().format(wisher.birthday!),
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         ],
@@ -44,6 +48,7 @@ class WisherDetailsProfile extends StatelessWidget {
             title: l10n.giftOccasions,
             values: wisher.giftOccasions,
             chipLabel: (value) => _chipLabel(l10n, value),
+            titleStyle: sectionHeaderStyle,
           ),
         ],
         if (wisher.giftInterests.isNotEmpty) ...[
@@ -52,6 +57,7 @@ class WisherDetailsProfile extends StatelessWidget {
             title: l10n.giftInterests,
             values: wisher.giftInterests,
             chipLabel: (value) => _chipLabel(l10n, value),
+            titleStyle: sectionHeaderStyle,
           ),
         ],
       ],
@@ -90,6 +96,7 @@ class _GiftTagSection extends StatelessWidget {
     required this.title,
     required this.values,
     required this.chipLabel,
+    this.titleStyle,
   });
 
   /// Section header text.
@@ -100,13 +107,14 @@ class _GiftTagSection extends StatelessWidget {
 
   /// Maps a raw gift value to its localized chip label.
   final String Function(String value) chipLabel;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) => Column(
     children: [
       Text(
         title,
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: titleStyle ?? Theme.of(context).textTheme.bodyMedium,
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: AppSpacerSize.xsmall),

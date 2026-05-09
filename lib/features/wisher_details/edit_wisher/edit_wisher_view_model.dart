@@ -15,6 +15,7 @@ import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/utils/result.dart';
 
 abstract class EditWisherViewModelContract implements ScreenViewModelContract {
+  // State getters
   Wisher? get wisher;
   bool get isLoading;
   File? get imageFile;
@@ -22,19 +23,27 @@ abstract class EditWisherViewModelContract implements ScreenViewModelContract {
   bool get hasAlert;
   EditWisherError get error;
   bool get isFormValid;
+
+  // Gift field getters
+  DateTime? get birthday;
+  List<String> get giftOccasions;
+  List<String> get giftInterests;
+
+  // Basic info updates
   void updateFirstName(String firstName);
   void updateLastName(String lastName);
   void updateImage(File? imageFile);
   void clearImage();
-  void clearError();
-  Future<void> tapSaveButton(BuildContext context);
-  void tapBackButton(BuildContext context);
-  DateTime? get birthday;
-  List<String> get giftOccasions;
-  List<String> get giftInterests;
+
+  // Gift field updates
   void updateBirthday(DateTime? birthday);
   void updateGiftOccasions(List<String> occasions);
   void updateGiftInterests(List<String> interests);
+
+  // UI actions
+  void clearError();
+  Future<void> tapSaveButton(BuildContext context);
+  void tapBackButton(BuildContext context);
 }
 
 enum EditWisherErrorType {
@@ -65,14 +74,17 @@ class EditWisherViewModel extends ChangeNotifier
     _loadWisher();
   }
 
+  // Dependencies
   final WisherRepository _wisherRepository;
   final ImageRepository _imageRepository;
   final String _wisherId;
 
+  // State
   Wisher? _wisher;
   bool _isLoading = true;
   bool _isDisposed = false;
 
+  // Form state
   String _firstName = '';
   String _lastName = '';
   File? _imageFile;
@@ -82,6 +94,7 @@ class EditWisherViewModel extends ChangeNotifier
   List<String> _giftOccasions = [];
   List<String> _giftInterests = [];
 
+  // Original state for change detection
   String _originalFirstName = '';
   String _originalLastName = '';
   String? _originalImageUrl;
@@ -89,8 +102,10 @@ class EditWisherViewModel extends ChangeNotifier
   List<String> _originalGiftOccasions = [];
   List<String> _originalGiftInterests = [];
 
+  // UI state
   EditWisherError _error = const EditWisherError(EditWisherErrorType.none);
 
+  // State getters
   @override
   Wisher? get wisher => _wisher;
 
@@ -121,6 +136,7 @@ class EditWisherViewModel extends ChangeNotifier
   @override
   List<String> get giftInterests => _giftInterests;
 
+  // Gift field updates
   @override
   void updateBirthday(DateTime? birthday) {
     _birthday = birthday;
@@ -142,6 +158,7 @@ class EditWisherViewModel extends ChangeNotifier
     notifyListeners();
   }
 
+  // Basic info updates
   @override
   void updateFirstName(String firstName) {
     _firstName = firstName.trim();
@@ -185,6 +202,7 @@ class EditWisherViewModel extends ChangeNotifier
         .catchError((_) {});
   }
 
+  // UI actions
   @override
   void clearError() {
     _error = const EditWisherError(EditWisherErrorType.none);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:wishing_well/components/button/app_button.dart';
+import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_overlay.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
@@ -103,11 +105,17 @@ void main() {
         TestHelpers.expectTextOnce('July 2025');
       });
 
-      testWidgets('shows firstDate month when no initialDate', (tester) async {
-        await tester.pumpWidget(buildTestWidget(firstDate: DateTime(2025, 4)));
+      testWidgets('shows current month when no initialDate', (tester) async {
+        final currentMonthLabel = DateFormat.yMMMM().format(DateTime.now());
+        await tester.pumpWidget(
+          buildTestWidget(
+            firstDate: DateTime(DateTime.now().year - 2),
+            lastDate: DateTime(DateTime.now().year + 2, 12, 31),
+          ),
+        );
         await TestHelpers.pumpAndSettle(tester);
 
-        TestHelpers.expectTextOnce('April 2025');
+        TestHelpers.expectTextOnce(currentMonthLabel);
       });
 
       testWidgets('asserts when initialDate is before firstDate', (
@@ -154,7 +162,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await tester.tap(find.byIcon(Icons.chevron_left));
+        await tester.tap(find.byType(TextButton).first);
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectTextOnce('February 2025');
@@ -163,7 +171,7 @@ void main() {
       testWidgets('prev navigation is a no-op at firstDate month', (
         tester,
       ) async {
-        await tester.pumpWidget(buildTestWidget());
+        await tester.pumpWidget(buildTestWidget(initialDate: DateTime(2025)));
         await TestHelpers.pumpAndSettle(tester);
 
         // Already at January — prev tap should not change the month
@@ -410,6 +418,151 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectTextOnce(monthLabel);
+      });
+    });
+
+    group('Selector Mode', () {
+      testWidgets('month/year trigger uses a centered pill button', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(initialDate: DateTime(2025, 3)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(
+          find.byWidgetPredicate(
+            (w) =>
+                w is AppButton &&
+                w.label == 'March 2025' &&
+                w.icon == Icons.calendar_today_outlined &&
+                w.type == AppButtonType.secondary,
+          ),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('selector opens on the year tab by default', (tester) async {
+        final currentYear = DateTime.now().year;
+        final currentMonthLabel = DateFormat.yMMMM().format(DateTime.now());
+        await tester.pumpWidget(
+          buildTestWidget(
+            firstDate: DateTime(currentYear - 2),
+            lastDate: DateTime(currentYear + 2, 12, 31),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text(currentMonthLabel));
+        await TestHelpers.pumpAndSettle(tester);
+
+        TestHelpers.expectTextOnce('Year');
+        TestHelpers.expectTextOnce('Month');
+
+        final yearSemantics = tester.widget<Semantics>(
+          find.byWidgetPredicate(
+            (w) =>
+                w is Semantics &&
+                w.properties.label == '$currentYear' &&
+                w.properties.selected == true,
+          ),
+        );
+        expect(yearSemantics.properties.selected, isTrue);
+      });
+
+      testWidgets('year and month views are shown separately', (tester) async {
+        await tester.pumpWidget(
+          buildTestWidget(initialDate: DateTime(2025, 3)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('March 2025'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('2025'), findsWidgets);
+        await tester.tap(
+          find.byWidgetPredicate((w) => w is AppButton && w.label == 'Month'),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        expect(find.text('2025'), findsNothing);
+        expect(find.text('Jan'), findsOneWidget);
+      });
+
+      testWidgets('year and month tabs keep the same size', (tester) async {
+        await tester.pumpWidget(
+          buildTestWidget(initialDate: DateTime(2025, 3)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('March 2025'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        final yearButton = find.byWidgetPredicate(
+          (w) => w is AppButton && w.label == 'Year',
+        );
+        final monthButton = find.byWidgetPredicate(
+          (w) => w is AppButton && w.label == 'Month',
+        );
+
+        expect(tester.getSize(yearButton), equals(tester.getSize(monthButton)));
+      });
+
+      testWidgets('selected year fills the picker width and is centered', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(initialDate: DateTime(2025, 3)),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('March 2025'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        final yearRow = find.ancestor(
+          of: find.text('2025'),
+          matching: find.byType(GestureDetector),
+        );
+        final yearList = find.byType(ListView);
+
+        expect(tester.getSize(yearRow).width, tester.getSize(yearList).width);
+
+        final yearCenter = tester.getCenter(yearRow);
+        final listCenter = tester.getCenter(yearList);
+        expect((yearCenter.dy - listCenter.dy).abs(), lessThan(12));
+      });
+
+      testWidgets('scrolling years updates selection without tapping', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(
+            firstDate: DateTime(2020),
+            lastDate: DateTime(2030, 12, 31),
+            initialDate: DateTime(2025, 3),
+          ),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.tap(find.text('March 2025'));
+        await TestHelpers.pumpAndSettle(tester);
+
+        await tester.drag(find.byType(ListView), const Offset(0, -100));
+        await TestHelpers.pumpAndSettle(tester);
+
+        final selectedYearSemantics = tester.widgetList<Semantics>(
+          find.byWidgetPredicate(
+            (w) => w is Semantics && w.properties.selected == true,
+          ),
+        );
+
+        final selectedYearLabels = selectedYearSemantics
+            .map((widget) => widget.properties.label)
+            .whereType<String>()
+            .toList();
+
+        expect(selectedYearLabels.length, 1);
+        expect(selectedYearLabels.single, isNot('2025'));
       });
     });
   });

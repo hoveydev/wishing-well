@@ -73,7 +73,9 @@ class ButtonFeedbackStyle {
 
     final WidgetStateProperty<BorderSide?> sideProperty = side != null
         ? WidgetStatePropertyAll<BorderSide>(side)
-        : WidgetStatePropertyAll<BorderSide>(BorderSide(color: buttonColor));
+        : WidgetStatePropertyAll<BorderSide>(
+            BorderSide(color: buttonColor, width: 1.5),
+          );
 
     return ButtonStyle(
       backgroundBuilder: (context, states, child) => AnimatedContainer(

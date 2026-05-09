@@ -736,6 +736,30 @@ abstract class AppLocalizations {
   /// **'Next month'**
   String get datePickerNextMonth;
 
+  /// Title shown in the date picker overlay header when the year & month picker panel is open
+  ///
+  /// In en, this message translates to:
+  /// **'Select Year & Month'**
+  String get datePickerSelectYearMonth;
+
+  /// Accessibility label for the back button in the date picker overlay that returns from the year & month picker to the calendar view
+  ///
+  /// In en, this message translates to:
+  /// **'Back to calendar'**
+  String get datePickerBackToCalendar;
+
+  /// Toggle button label for the year view in the date picker selector
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get datePickerYearTab;
+
+  /// Toggle button label for the month view in the date picker selector
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get datePickerMonthTab;
+
   /// Label for the wisher's birthday field
   ///
   /// In en, this message translates to:

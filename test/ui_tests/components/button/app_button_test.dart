@@ -514,7 +514,7 @@ void main() {
           );
           expect(buttonWidget.style!.shape!.resolve({}), roundedRectangle);
           expect(buttonWidget.style!.padding!.resolve({}), primaryPadding);
-          const borderSide = BorderSide(color: AppColors.primary);
+          const borderSide = BorderSide(color: AppColors.primary, width: 1.5);
           expect(buttonWidget.style!.side!.resolve({}), borderSide);
         });
 

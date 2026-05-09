@@ -524,7 +524,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
                     color: inRange
                         ? colorScheme.primary!
                         : colorScheme.borderGray!,
-                    width: AppBorderWeight.regular + AppBorderWeight.light,
+                    width: AppBorderWeight.bold,
                   ),
                   borderRadius: BorderRadius.circular(AppBorderRadius.small),
                 ),

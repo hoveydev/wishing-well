@@ -42,7 +42,7 @@ class AppDatePickerField extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacerSize.medium,
-            vertical: AppSpacerSize.xsmall / 2,
+            vertical: AppSpacerSize.xsmall,
           ),
           child: Row(
             children: [

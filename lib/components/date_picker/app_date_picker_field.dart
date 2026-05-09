@@ -73,8 +73,8 @@ class AppDatePickerField extends StatelessWidget {
                           behavior: HitTestBehavior.opaque,
                           onTap: () => onChanged(null),
                           child: SizedBox(
-                            width: AppSpacerSize.xlarge,
-                            height: AppSpacerSize.xlarge,
+                            width: const AppIconSize().large * 2,
+                            height: const AppIconSize().large * 2,
                             child: Center(
                               child: Icon(
                                 Icons.close,
@@ -86,8 +86,8 @@ class AppDatePickerField extends StatelessWidget {
                         ),
                       )
                     : SizedBox(
-                        width: AppSpacerSize.xlarge,
-                        height: AppSpacerSize.xlarge,
+                        width: const AppIconSize().large * 2,
+                        height: const AppIconSize().large * 2,
                         child: Center(
                           child: Icon(
                             Icons.arrow_drop_down,

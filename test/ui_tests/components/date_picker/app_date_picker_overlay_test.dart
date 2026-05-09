@@ -162,7 +162,7 @@ void main() {
         );
         await TestHelpers.pumpAndSettle(tester);
 
-        await tester.tap(find.byType(TextButton).first);
+        await tester.tap(find.byIcon(Icons.chevron_left));
         await TestHelpers.pumpAndSettle(tester);
 
         TestHelpers.expectTextOnce('February 2025');

@@ -4,6 +4,7 @@ import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
+import 'package:wishing_well/theme/app_border_weight.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
@@ -523,9 +524,9 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
                     color: inRange
                         ? colorScheme.primary!
                         : colorScheme.borderGray!,
-                    width: 1.5,
+                    width: AppBorderWeight.regular + AppBorderWeight.light,
                   ),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(AppBorderRadius.small),
                 ),
                 child: Text(
                   monthNames[index],

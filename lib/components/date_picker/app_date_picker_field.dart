@@ -7,9 +7,6 @@ import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
-const double _datePickerFieldVerticalPadding = 14.0;
-const double _datePickerFieldSuffixIconSize = 20.0;
-
 /// A tappable date-picker row that integrates with the app's design system.
 class AppDatePickerField extends StatelessWidget {
   const AppDatePickerField({
@@ -45,7 +42,7 @@ class AppDatePickerField extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacerSize.medium,
-            vertical: _datePickerFieldVerticalPadding,
+            vertical: AppSpacerSize.xsmall / 2,
           ),
           child: Row(
             children: [
@@ -69,19 +66,36 @@ class AppDatePickerField extends StatelessWidget {
               Semantics(
                 button: hasValue,
                 label: hasValue ? l10n.datePickerClearDate : null,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: hasValue ? () => onChanged(null) : null,
-                  child: SizedBox(
-                    width: const AppIconSize().large,
-                    height: const AppIconSize().large,
-                    child: Icon(
-                      hasValue ? Icons.close : Icons.arrow_drop_down,
-                      size: _datePickerFieldSuffixIconSize,
-                      color: colorScheme.borderGray,
-                    ),
-                  ),
-                ),
+                child: hasValue
+                    ? Tooltip(
+                        message: l10n.datePickerClearDate,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => onChanged(null),
+                          child: SizedBox(
+                            width: AppSpacerSize.xlarge,
+                            height: AppSpacerSize.xlarge,
+                            child: Center(
+                              child: Icon(
+                                Icons.close,
+                                size: const AppIconSize().medium,
+                                color: colorScheme.borderGray,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        width: AppSpacerSize.xlarge,
+                        height: AppSpacerSize.xlarge,
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            size: const AppIconSize().medium,
+                            color: colorScheme.borderGray,
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),

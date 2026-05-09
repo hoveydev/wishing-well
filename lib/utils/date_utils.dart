@@ -1,3 +1,6 @@
+/// Formats [date] as `yyyy-MM-dd` for storage in date-only fields.
+///
+/// Returns null when [date] is null.
 String? formatDateForStorage(DateTime? date) {
   if (date == null) return null;
   final y = date.year.toString().padLeft(4, '0');

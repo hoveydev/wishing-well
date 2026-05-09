@@ -85,14 +85,20 @@ class WisherDetailsProfile extends StatelessWidget {
 }
 
 class _GiftTagSection extends StatelessWidget {
+  /// Reusable gift section for rendering a title and selected gift chips.
   const _GiftTagSection({
     required this.title,
     required this.values,
     required this.chipLabel,
   });
 
+  /// Section header text.
   final String title;
+
+  /// Gift values displayed as chips.
   final List<String> values;
+
+  /// Maps a raw gift value to its localized chip label.
   final String Function(String value) chipLabel;
 
   @override

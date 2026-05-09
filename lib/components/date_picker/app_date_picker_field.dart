@@ -8,6 +8,8 @@ import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 const double _suffixHitTargetMultiplier = 2;
+final double _suffixHitTargetSize =
+    const AppIconSize().large * _suffixHitTargetMultiplier;
 
 /// A tappable date-picker row that integrates with the app's design system.
 class AppDatePickerField extends StatelessWidget {
@@ -75,12 +77,8 @@ class AppDatePickerField extends StatelessWidget {
                           behavior: HitTestBehavior.opaque,
                           onTap: () => onChanged(null),
                           child: SizedBox(
-                            width:
-                                const AppIconSize().large *
-                                _suffixHitTargetMultiplier,
-                            height:
-                                const AppIconSize().large *
-                                _suffixHitTargetMultiplier,
+                            width: _suffixHitTargetSize,
+                            height: _suffixHitTargetSize,
                             child: Center(
                               child: Icon(
                                 Icons.close,
@@ -92,12 +90,8 @@ class AppDatePickerField extends StatelessWidget {
                         ),
                       )
                     : SizedBox(
-                        width:
-                            const AppIconSize().large *
-                            _suffixHitTargetMultiplier,
-                        height:
-                            const AppIconSize().large *
-                            _suffixHitTargetMultiplier,
+                        width: _suffixHitTargetSize,
+                        height: _suffixHitTargetSize,
                         child: Center(
                           child: Icon(
                             Icons.arrow_drop_down,

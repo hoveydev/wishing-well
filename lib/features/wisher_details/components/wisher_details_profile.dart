@@ -40,36 +40,18 @@ class WisherDetailsProfile extends StatelessWidget {
         ],
         if (wisher.giftOccasions.isNotEmpty) ...[
           const SizedBox(height: AppSpacerSize.small),
-          Text(
-            l10n.giftOccasions,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacerSize.xsmall),
-          Wrap(
-            spacing: AppSpacerSize.xsmall,
-            runSpacing: AppSpacerSize.xsmall,
-            alignment: WrapAlignment.center,
-            children: wisher.giftOccasions
-                .map((v) => Chip(label: Text(_chipLabel(l10n, v))))
-                .toList(growable: false),
+          _GiftTagSection(
+            title: l10n.giftOccasions,
+            values: wisher.giftOccasions,
+            chipLabel: (value) => _chipLabel(l10n, value),
           ),
         ],
         if (wisher.giftInterests.isNotEmpty) ...[
           const SizedBox(height: AppSpacerSize.small),
-          Text(
-            l10n.giftInterests,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacerSize.xsmall),
-          Wrap(
-            spacing: AppSpacerSize.xsmall,
-            runSpacing: AppSpacerSize.xsmall,
-            alignment: WrapAlignment.center,
-            children: wisher.giftInterests
-                .map((v) => Chip(label: Text(_chipLabel(l10n, v))))
-                .toList(growable: false),
+          _GiftTagSection(
+            title: l10n.giftInterests,
+            values: wisher.giftInterests,
+            chipLabel: (value) => _chipLabel(l10n, value),
           ),
         ],
       ],
@@ -100,4 +82,36 @@ class WisherDetailsProfile extends StatelessWidget {
     WisherGiftInterests.gamesAndToys => l10n.interestGamesAndToys,
     _ => value,
   };
+}
+
+class _GiftTagSection extends StatelessWidget {
+  const _GiftTagSection({
+    required this.title,
+    required this.values,
+    required this.chipLabel,
+  });
+
+  final String title;
+  final List<String> values;
+  final String Function(String value) chipLabel;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      Text(
+        title,
+        style: Theme.of(context).textTheme.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: AppSpacerSize.xsmall),
+      Wrap(
+        spacing: AppSpacerSize.xsmall,
+        runSpacing: AppSpacerSize.xsmall,
+        alignment: WrapAlignment.center,
+        children: values
+            .map((value) => Chip(label: Text(chipLabel(value))))
+            .toList(growable: false),
+      ),
+    ],
+  );
 }

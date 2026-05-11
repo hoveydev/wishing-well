@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class InlineAlertDemo extends StatelessWidget {
   const InlineAlertDemo({super.key});
@@ -12,7 +13,7 @@ class InlineAlertDemo extends StatelessWidget {
       backgroundColor: Colors.amber.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,7 +76,7 @@ class InlineAlertDemo extends StatelessWidget {
               'Form Validation:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAlertCard(
               'Validation Error',
               Colors.red,
@@ -84,12 +85,12 @@ class InlineAlertDemo extends StatelessWidget {
                 type: AppInlineAlertType.error,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Success Message:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAlertCard(
               'Operation Success',
               Colors.green,
@@ -98,12 +99,12 @@ class InlineAlertDemo extends StatelessWidget {
                 type: AppInlineAlertType.success,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Informational Notice:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAlertCard(
               'Information',
               Colors.blue,
@@ -141,23 +142,23 @@ class InlineAlertDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildAlertCard(String title, Color color, Widget alert) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.medium),
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Icon(Icons.label, color: color, size: 16),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacerSize.small),
               Text(
                 title,
                 style: TextStyle(
@@ -168,9 +169,9 @@ class InlineAlertDemo extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacerSize.medium),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(AppSpacerSize.medium),
             decoration: BoxDecoration(
               color: Colors.grey.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(8),
@@ -190,7 +191,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

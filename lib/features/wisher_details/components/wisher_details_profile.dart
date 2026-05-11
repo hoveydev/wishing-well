@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/data/models/wisher_field_options.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -28,7 +28,7 @@ class WisherDetailsProfile extends StatelessWidget {
           lastName: wisher.lastName,
           radius: 50,
         ),
-        const AppSpacer.medium(),
+        const AppSpacer.large(),
         Text(
           wisher.name,
           style: textTheme.headlineMedium,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide OverlayState;
 import 'package:provider/provider.dart';
 import 'package:wishing_well/components/status_overlay/status_overlay.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 class StatusOverlayDemo extends StatelessWidget {
@@ -27,7 +28,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
       ),
       body: StatusOverlay(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacerSize.large),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -35,7 +36,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                 'Status Overlay Component',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacerSize.large),
               const Text(
                 'The StatusOverlay is a wrapper component that displays '
                 'a full-screen overlay with loading, success, or error states. '
@@ -43,10 +44,10 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                 'StatusOverlayController state.',
                 style: TextStyle(fontSize: 14),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacerSize.xxlarge),
               _buildSection('Current State', [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppSpacerSize.medium),
                   decoration: BoxDecoration(
                     color: _getStateColor(
                       controller.state,
@@ -60,7 +61,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                         _getStateIcon(controller.state),
                         color: _getStateColor(controller.state),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppSpacerSize.medium),
                       Text(
                         _getStateText(controller.state),
                         style: TextStyle(
@@ -72,19 +73,19 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                   ),
                 ),
               ]),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacerSize.xxlarge),
               _buildSection('Trigger States', [
                 const Text(
                   'Use these buttons to trigger different overlay states. '
                   'The overlay will appear over this content.',
                   style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacerSize.large),
                 _DemoButton(
                   label: 'Show Loading',
                   onPressed: () => controller.show(),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Show Success',
                   onPressed: () => controller.showSuccess(
@@ -92,14 +93,14 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                     name: 'John',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Show Error',
                   onPressed: () => controller.showError(
                     'Something went wrong. Please try again.',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Show Warning',
                   onPressed: () => controller.showWarning(
@@ -108,20 +109,20 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                     secondaryActionLabel: 'Cancel',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Hide Overlay',
                   onPressed: () => controller.hide(),
                 ),
               ]),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacerSize.xxlarge),
               _buildSection('With Callbacks', [
                 const Text(
                   'You can provide callbacks that fire when the user '
                   'acknowledges success or error states.',
                   style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacerSize.large),
                 _DemoButton(
                   label: 'Success with Callback',
                   onPressed: () => controller.showSuccess(
@@ -136,7 +137,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Error with Callback',
                   onPressed: () => controller.showError(
@@ -150,7 +151,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacerSize.medium),
                 _DemoButton(
                   label: 'Warning with Callbacks',
                   onPressed: () => controller.showWarning(
@@ -174,7 +175,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                   ),
                 ),
               ]),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacerSize.xxlarge),
               _buildSection('Sample Content', [
                 const Text(
                   'This is sample content that appears beneath the overlay. '
@@ -182,17 +183,17 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                   'user interaction with this content will be disabled.',
                   style: TextStyle(fontSize: 14),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacerSize.large),
                 Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppSpacerSize.large),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             const CircleAvatar(child: Icon(Icons.person)),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: AppSpacerSize.medium),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -208,7 +209,7 @@ class _StatusOverlayDemoContent extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: AppSpacerSize.medium),
                         const Text(
                           'Lorem ipsum dolor sit amet, consectetur adipiscing '
                           'elit. Sed do eiusmod tempor incididunt ut labore et '
@@ -233,9 +234,9 @@ class _StatusOverlayDemoContent extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 16),
+      const SizedBox(height: AppSpacerSize.large),
     ],
   );
 

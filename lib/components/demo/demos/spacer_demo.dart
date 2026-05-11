@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class SpacerDemo extends StatelessWidget {
   const SpacerDemo({super.key});
@@ -12,7 +12,7 @@ class SpacerDemo extends StatelessWidget {
       backgroundColor: Colors.grey.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.xxlarge),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,13 +22,13 @@ class SpacerDemo extends StatelessWidget {
             _buildSpacerCard('Small (8px)', AppSpacerSize.small, Colors.green),
             _buildSpacerCard(
               'Medium (16px)',
-              AppSpacerSize.medium,
+              AppSpacerSize.large,
               Colors.orange,
             ),
-            _buildSpacerCard('Large (24px)', AppSpacerSize.large, Colors.red),
+            _buildSpacerCard('Large (24px)', AppSpacerSize.xxlarge, Colors.red),
             _buildSpacerCard(
               'XLarge (48px)',
-              AppSpacerSize.xlarge,
+              AppSpacerSize.huge,
               Colors.purple,
             ),
           ]),
@@ -52,10 +52,10 @@ class SpacerDemo extends StatelessWidget {
               'Same elements with different spacers:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.xxlarge),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,14 +76,14 @@ class SpacerDemo extends StatelessWidget {
                     Row(
                       children: [
                         _buildColoredBox(Colors.purple),
-                        const AppSpacer.medium(),
+                        const AppSpacer.large(),
                         _buildColoredBox(Colors.teal),
                       ],
                     ),
                     Row(
                       children: [
                         _buildColoredBox(Colors.cyan),
-                        const AppSpacer.large(),
+                        const AppSpacer.xxlarge(),
                         _buildColoredBox(Colors.indigo),
                       ],
                     ),
@@ -97,7 +97,7 @@ class SpacerDemo extends StatelessWidget {
           _buildSection('Vertical Spacing Example', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.xxlarge),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -106,9 +106,9 @@ class SpacerDemo extends StatelessWidget {
                     _buildSectionContent('Content with xsmall spacer'),
                     const AppSpacer.small(),
                     _buildSectionContent('Content with small spacer'),
-                    const AppSpacer.medium(),
-                    _buildSectionContent('Content with medium spacer'),
                     const AppSpacer.large(),
+                    _buildSectionContent('Content with medium spacer'),
+                    const AppSpacer.xxlarge(),
                     _buildSectionContent('Content with large spacer'),
                   ],
                 ),
@@ -119,8 +119,8 @@ class SpacerDemo extends StatelessWidget {
           // Use Cases
           _buildSection('Common Use Cases', [
             _buildUseCaseCard('Between form elements', 'AppSpacer.small()'),
-            _buildUseCaseCard('Between sections', 'AppSpacer.medium()'),
-            _buildUseCaseCard('Between major blocks', 'AppSpacer.large()'),
+            _buildUseCaseCard('Between sections', 'AppSpacer.large()'),
+            _buildUseCaseCard('Between major blocks', 'AppSpacer.xxlarge()'),
             _buildUseCaseCard('Tight spacing', 'AppSpacer.xsmall()'),
             _buildUseCaseCard('Major separation', 'AppSpacer.xlarge()'),
           ]),
@@ -136,20 +136,20 @@ class SpacerDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.large),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.huge),
     ],
   );
 
   Widget _buildSpacerCard(String label, double size, Color color) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.large),
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.xxlarge),
       child: Row(
         children: [
           _buildColoredBox(color),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.large),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +161,7 @@ class SpacerDemo extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacerSize.xsmall),
                 Text(
                   '${size.toInt()} pixels',
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -207,7 +207,7 @@ class SpacerDemo extends StatelessWidget {
   );
 
   Widget _buildSectionContent(String text) => Container(
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(AppSpacerSize.large),
     decoration: BoxDecoration(
       color: Colors.grey.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(8),
@@ -216,14 +216,17 @@ class SpacerDemo extends StatelessWidget {
   );
 
   Widget _buildUseCaseCard(String useCase, String code) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Row(
         children: [
           Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacerSize.large,
+              vertical: AppSpacerSize.xsmall,
+            ),
             decoration: BoxDecoration(
               color: Colors.grey.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(4),
@@ -246,7 +249,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

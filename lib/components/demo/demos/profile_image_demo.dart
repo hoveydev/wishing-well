@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class ProfileImageDemo extends StatefulWidget {
   const ProfileImageDemo({super.key});
@@ -22,7 +23,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
       backgroundColor: Colors.pink.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +31,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
           _buildSection('Interactive Demo', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   children: [
                     const Text(
@@ -40,7 +41,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     Center(
                       child: ProfileImage(
                         imageUrl: _imageUrl,
@@ -90,25 +91,25 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
           _buildSection('ProfileAvatar (simpler version for lists)', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   children: [
                     const Text(
                       'With image:',
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ProfileAvatar(
                       imageUrl: _imageUrl,
                       firstName: _firstName,
                       lastName: _lastName,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     const Text(
                       'Without image (fallback to initials):',
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ProfileAvatar(firstName: _firstName, lastName: _lastName),
                   ],
                 ),
@@ -120,7 +121,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
           _buildSection('ProfileImageWithLabel (for success/error overlays)', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Center(
                   child: ProfileImageWithLabel(
                     imageUrl: _imageUrl,
@@ -135,35 +136,35 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
           _buildSection('Size Variations', [
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         ProfileAvatar(firstName: 'A', radius: 20),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppSpacerSize.xsmall),
                         Text('20px', style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     Column(
                       children: [
                         ProfileAvatar(firstName: 'B'),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppSpacerSize.xsmall),
                         Text('30px', style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     Column(
                       children: [
                         ProfileAvatar(firstName: 'C', radius: 40),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppSpacerSize.xsmall),
                         Text('40px', style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     Column(
                       children: [
                         ProfileAvatar(firstName: 'D', radius: 50),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppSpacerSize.xsmall),
                         Text('50px', style: TextStyle(fontSize: 12)),
                       ],
                     ),
@@ -199,9 +200,9 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
@@ -210,7 +211,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
     String value,
     ValueChanged<String> onChanged,
   ) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.medium),
     child: TextField(
       decoration: InputDecoration(
         labelText: label,
@@ -228,7 +229,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
     double max,
     ValueChanged<double> onChanged,
   ) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.medium),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -240,7 +241,7 @@ class _ProfileImageDemoState extends State<ProfileImageDemo> {
 
   Widget _buildSwitch(String label, bool value, ValueChanged<bool> onChanged) =>
       Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.only(bottom: AppSpacerSize.medium),
         child: Row(
           children: [
             Text(label),
@@ -258,7 +259,7 @@ class _FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

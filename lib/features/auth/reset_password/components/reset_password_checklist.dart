@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/checklist/checklist_item.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/reset_password/components/reset_password_inline_error.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
@@ -49,13 +49,13 @@ class ResetPasswordChecklist extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppSpacer.medium(),
+            const AppSpacer.large(),
             Text(l10n.passwordRequirementsHeader, style: textTheme.titleMedium),
             const AppSpacer.small(),
             Semantics(
               container: true,
               child: Container(
-                padding: const EdgeInsets.all(AppSpacerSize.medium),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 decoration: BoxDecoration(
                   color: colorScheme.background!,
                   borderRadius: BorderRadius.circular(AppBorderRadius.medium),
@@ -77,7 +77,7 @@ class ResetPasswordChecklist extends StatelessWidget {
             ),
             const AppSpacer.small(),
             ResetPasswordInlineError(viewModel: viewModel),
-            const AppSpacer.large(),
+            const AppSpacer.xxlarge(),
           ],
         );
       },

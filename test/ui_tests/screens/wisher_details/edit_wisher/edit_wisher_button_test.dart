@@ -60,7 +60,7 @@ void main() {
       );
     });
 
-    testWidgets('renders AppSpacer.medium above button', (
+    testWidgets('renders AppSpacer.large above button', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(createTestWidget());

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/theme/app_border_weight.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// A utility class that provides consistent touch feedback styles for buttons.
@@ -41,7 +43,11 @@ class ButtonFeedbackStyle {
           foregroundColor ?? WidgetStatePropertyAll(colorScheme.onPrimary),
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       padding: WidgetStateProperty.all(
-        padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding ??
+            const EdgeInsets.symmetric(
+              vertical: AppSpacerSize.large,
+              horizontal: AppSpacerSize.xxlarge,
+            ),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
@@ -74,7 +80,7 @@ class ButtonFeedbackStyle {
     final WidgetStateProperty<BorderSide?> sideProperty = side != null
         ? WidgetStatePropertyAll<BorderSide>(side)
         : WidgetStatePropertyAll<BorderSide>(
-            BorderSide(color: buttonColor, width: 1.5),
+            BorderSide(color: buttonColor, width: AppBorderWeight.medium),
           );
 
     return ButtonStyle(
@@ -94,7 +100,11 @@ class ButtonFeedbackStyle {
       foregroundColor: foregroundColor ?? WidgetStatePropertyAll(buttonColor),
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       padding: WidgetStateProperty.all(
-        padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding ??
+            const EdgeInsets.symmetric(
+              vertical: AppSpacerSize.large,
+              horizontal: AppSpacerSize.xxlarge,
+            ),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
@@ -143,7 +153,11 @@ class ButtonFeedbackStyle {
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
       padding: WidgetStateProperty.all(
-        padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding ??
+            const EdgeInsets.symmetric(
+              vertical: AppSpacerSize.large,
+              horizontal: AppSpacerSize.xxlarge,
+            ),
       ),
       shape: WidgetStateProperty.all(
         shape ??

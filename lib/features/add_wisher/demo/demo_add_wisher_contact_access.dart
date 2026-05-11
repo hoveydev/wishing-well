@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_access.dart';
 import 'package:wishing_well/features/add_wisher/contact_import/add_wisher_contact_import.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
 
 class DemoAddWisherContact {
@@ -89,10 +90,10 @@ class _DemoAddWisherContactPickerSheet extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.screenPaddingStandard,
+        AppScreenLayout.screenPaddingStandard,
         0,
-        AppSpacing.screenPaddingStandard,
-        AppSpacing.screenPaddingStandard,
+        AppScreenLayout.screenPaddingStandard,
+        AppScreenLayout.screenPaddingStandard,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -112,13 +113,13 @@ class _DemoAddWisherContactPickerSheet extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.wisherSpacing),
+          const SizedBox(height: WisherSizing.itemSpacing),
           Flexible(
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: contacts.length,
               separatorBuilder: (_, _) =>
-                  const SizedBox(height: AppSpacing.wisherSpacing),
+                  const SizedBox(height: WisherSizing.itemSpacing),
               itemBuilder: (context, index) {
                 final contact = contacts[index];
                 final selection = contact.selection;

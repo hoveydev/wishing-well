@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_alert/app_alert.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class AppAlertDialog extends StatefulWidget {
   const AppAlertDialog({super.key});
@@ -45,17 +46,17 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
       backgroundColor: Colors.orange.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_lastResult.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(bottom: AppSpacerSize.large),
               child: Card(
                 color: Colors.green.withValues(alpha: 0.08),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppSpacerSize.medium),
                   child: Text(
                     'Last result: $_lastResult',
                     style: const TextStyle(fontWeight: FontWeight.w600),
@@ -154,9 +155,9 @@ class _AppAlertDialogState extends State<AppAlertDialog> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 

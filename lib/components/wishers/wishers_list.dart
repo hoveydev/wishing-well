@@ -9,7 +9,8 @@ import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 
 class WishersList extends StatefulWidget {
   const WishersList({
@@ -42,7 +43,7 @@ class _WishersListState extends State<WishersList> {
   Widget _buildItem(BuildContext context, int index) {
     if (index == 0) {
       return AddWisherItem(
-        const EdgeInsets.only(right: AppSpacing.wisherSpacing),
+        const EdgeInsets.only(right: WisherSizing.itemSpacing),
         widget.onAddWisherTap,
       );
     }
@@ -51,7 +52,7 @@ class _WishersListState extends State<WishersList> {
     final wisher = widget.wishers[wisherIndex];
     final padding = wisherIndex == widget.wishers.length - 1
         ? EdgeInsets.zero
-        : const EdgeInsets.only(right: AppSpacing.wisherSpacing);
+        : const EdgeInsets.only(right: WisherSizing.itemSpacing);
     return WisherItem(wisher, padding, onTap: () => widget.onWisherTap(wisher));
   }
 
@@ -65,12 +66,12 @@ class _WishersListState extends State<WishersList> {
         final errorTitle = l10n.wishersErrorTitle;
         final errorMessage = l10n.wishersErrorMessage;
         final retryText = l10n.tryAgain;
-        final wisherHeight = AppSpacing.wisherListItemHeightFor(context);
+        final wisherHeight = WisherSizing.listItemHeightFor(context);
         final showErrorCard = widget.hasError && !widget.isLoading;
         final widenedListWidth = constraints.maxWidth.isFinite
-            ? constraints.maxWidth + (AppSpacing.screenPaddingStandard * 2)
+            ? constraints.maxWidth + (AppScreenLayout.screenPaddingStandard * 2)
             : MediaQuery.sizeOf(context).width +
-                  (AppSpacing.screenPaddingStandard * 2);
+                  (AppScreenLayout.screenPaddingStandard * 2);
         final itemHeight = showErrorCard
             ? _wisherRowHeightFor(
                 context: context,
@@ -107,15 +108,15 @@ class _WishersListState extends State<WishersList> {
                   ),
                 ],
               ),
-              const AppSpacer.medium(),
+              const AppSpacer.large(),
               SizedBox(
                 height: itemHeight,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
                     Positioned(
-                      left: -AppSpacing.screenPaddingStandard,
-                      right: -AppSpacing.screenPaddingStandard,
+                      left: -AppScreenLayout.screenPaddingStandard,
+                      right: -AppScreenLayout.screenPaddingStandard,
                       child: SizedBox(
                         height: itemHeight,
                         child: widget.isLoading
@@ -130,7 +131,8 @@ class _WishersListState extends State<WishersList> {
                             : ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.screenPaddingStandard,
+                                  horizontal:
+                                      AppScreenLayout.screenPaddingStandard,
                                 ),
                                 itemCount: widget.wishers.length + 1,
                                 itemBuilder: _buildItem,

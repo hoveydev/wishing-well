@@ -147,6 +147,26 @@ Future<bool> _runScreenViewModelAnalysis() async {
   return true;
 }
 
+Future<bool> _runConstantsLint() async {
+  print('🎨 Checking for hardcoded design constants...');
+  final lintResult = await Process.run(
+    './scripts/lint_constants.sh',
+    [],
+    runInShell: true,
+  );
+
+  if (lintResult.exitCode != 0) {
+    print('❌ Design constants linting failed:');
+    print(lintResult.stdout);
+    print(lintResult.stderr);
+    print('\n💡 To fix these issues, see: docs/DESIGN_CONSTANTS.md\n');
+    return false;
+  }
+
+  print('✅ Design constants linting passed\n');
+  return true;
+}
+
 Future<bool> _preCommit() async {
   print('🔍 Running pre-commit checks...\n');
 
@@ -189,6 +209,12 @@ Future<bool> _preCommit() async {
 
   final screenViewModelAnalysisSuccess = await _runScreenViewModelAnalysis();
   if (!screenViewModelAnalysisSuccess) {
+    return false;
+  }
+
+  // Run design constants linting check
+  final constantsLintSuccess = await _runConstantsLint();
+  if (!constantsLintSuccess) {
     return false;
   }
 

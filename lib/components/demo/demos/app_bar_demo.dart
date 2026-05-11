@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class AppBarDemo extends StatelessWidget {
   const AppBarDemo({super.key});
@@ -12,7 +13,7 @@ class AppBarDemo extends StatelessWidget {
       backgroundColor: Colors.brown.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,29 +23,29 @@ class AppBarDemo extends StatelessWidget {
               'Main App Bar',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAppBarPreview(
               'Main - Shows logo and title',
               Colors.blue,
               AppMenuBarType.main,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Close App Bar',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAppBarPreview(
               'Close - Shows close button',
               Colors.red,
               AppMenuBarType.close,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Dismiss App Bar',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildAppBarPreview(
               'Dismiss - Shows dismiss button',
               Colors.orange,
@@ -71,10 +72,10 @@ class AppBarDemo extends StatelessWidget {
               'Tap the buttons below to see full app bars:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   children: [
                     _buildInteractiveButton('Main App Bar', Colors.blue, () {
@@ -87,7 +88,7 @@ class AppBarDemo extends StatelessWidget {
                         ),
                       );
                     }),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacerSize.medium),
                     _buildInteractiveButton('Close App Bar', Colors.red, () {
                       Navigator.push(
                         context,
@@ -98,7 +99,7 @@ class AppBarDemo extends StatelessWidget {
                         ),
                       );
                     }),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacerSize.medium),
                     _buildInteractiveButton(
                       'Dismiss App Bar',
                       Colors.orange,
@@ -138,16 +139,16 @@ Widget _buildSection(String title, List<Widget> children) => Column(
       title,
       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
-    const SizedBox(height: 12),
+    const SizedBox(height: AppSpacerSize.medium),
     ...children,
-    const SizedBox(height: 24),
+    const SizedBox(height: AppSpacerSize.xxlarge),
   ],
 );
 
 Widget _buildAppBarPreview(String label, Color color, AppMenuBarType type) =>
     Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(AppSpacerSize.medium),
         child: Row(
           children: [
             Container(
@@ -159,7 +160,7 @@ Widget _buildAppBarPreview(String label, Color color, AppMenuBarType type) =>
               ),
               child: Icon(_getIconForType(type), color: color),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacerSize.medium),
             Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
           ],
         ),
@@ -190,14 +191,17 @@ Widget _buildInteractiveButton(String label, Color color, VoidCallback onTap) =>
     );
 
 Widget _buildUseCaseCard(String useCase, String type) => Card(
-  margin: const EdgeInsets.only(bottom: 8),
+  margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
   child: Padding(
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(AppSpacerSize.medium),
     child: Row(
       children: [
         Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacerSize.medium,
+            vertical: AppSpacerSize.xsmall,
+          ),
           decoration: BoxDecoration(
             color: Colors.grey.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(4),
@@ -229,7 +233,7 @@ class _FullAppBarScreen extends StatelessWidget {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacerSize.large),
           const Text('Tap the action button to go back'),
         ],
       ),
@@ -257,7 +261,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

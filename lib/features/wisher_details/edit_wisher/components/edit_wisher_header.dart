@@ -4,7 +4,7 @@ import 'package:wishing_well/components/image_picker_circle/image_picker_circle.
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_picker.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/components/edit_wisher_inputs.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
@@ -44,7 +44,7 @@ class _EditWisherHeaderState extends State<EditWisherHeader> {
         ),
         const AppSpacer.small(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacerSize.medium),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacerSize.large),
           child: Text(
             AppLocalizations.of(context)!.editWisherScreenHeader,
             style: Theme.of(context).textTheme.headlineLarge,
@@ -54,7 +54,7 @@ class _EditWisherHeaderState extends State<EditWisherHeader> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacerSize.medium),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacerSize.large),
           child: Text(
             AppLocalizations.of(context)!.editWisherScreenSubtext,
             style: Theme.of(context).textTheme.bodyMedium,
@@ -63,7 +63,7 @@ class _EditWisherHeaderState extends State<EditWisherHeader> {
             )!.editWisherScreenSubtext,
           ),
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         EditWisherInputs(viewModel: widget.viewModel),
       ],
     ),

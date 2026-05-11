@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 const double _defaultAppErrorCardButtonSize = 36;
 const double _defaultAppErrorCardHorizontalPadding =
-    AppSpacing.screenPaddingStandard;
+    AppScreenLayout.screenPaddingStandard;
 const double _defaultAppErrorCardInnerPadding = 8;
 const double _defaultAppErrorCardColumnGap = 8;
 const double _defaultAppErrorCardRowGap = 2;

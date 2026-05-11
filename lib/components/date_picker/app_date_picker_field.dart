@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_overlay.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
@@ -45,7 +45,7 @@ class AppDatePickerField extends StatelessWidget {
         onTap: () => _pickDate(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacerSize.medium,
+            horizontal: AppSpacerSize.large,
             vertical: AppSpacerSize.xsmall,
           ),
           child: Row(
@@ -55,7 +55,7 @@ class AppDatePickerField extends StatelessWidget {
                 size: const AppIconSize().large,
                 color: colorScheme.primary,
               ),
-              const SizedBox(width: AppSpacerSize.medium),
+              const SizedBox(width: AppSpacerSize.large),
               Expanded(
                 child: Text(
                   hasValue ? DateFormat.yMMMMd().format(value!) : placeholder,

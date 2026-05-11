@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 const double _dialogBorderRadius = AppBorderRadius.large;
-const double _dialogPadding = AppSpacerSize.large;
+const double _dialogPadding = AppSpacerSize.xxlarge;
 const double _buttonSpacing = AppSpacerSize.small;
 const double _messageTopSpacing = AppSpacerSize.small;
-const double _actionsTopSpacing = AppSpacerSize.xlarge;
+const double _actionsTopSpacing = AppSpacerSize.huge;
 
 /// A flexible app-modal alert dialog supporting both single-action (1-button)
 /// and confirmation (2-button) modes.

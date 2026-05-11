@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class InputDemo extends StatefulWidget {
   const InputDemo({super.key});
@@ -37,7 +38,7 @@ class _InputDemoState extends State<InputDemo> {
       backgroundColor: Colors.purple.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +49,7 @@ class _InputDemoState extends State<InputDemo> {
               type: AppInputType.text,
               onChanged: (value) => setState(() => _textValue = value),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               'Value: $_textValue',
               style: const TextStyle(fontStyle: FontStyle.italic),
@@ -62,7 +63,7 @@ class _InputDemoState extends State<InputDemo> {
               type: AppInputType.email,
               onChanged: (value) => setState(() => _emailValue = value),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               'Value: $_emailValue',
               style: const TextStyle(fontStyle: FontStyle.italic),
@@ -76,7 +77,7 @@ class _InputDemoState extends State<InputDemo> {
               type: AppInputType.password,
               onChanged: (value) => setState(() => _passwordValue = value),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               'Value: ${_passwordValue.isNotEmpty ? '••••••••' : ''}',
               style: const TextStyle(fontStyle: FontStyle.italic),
@@ -90,7 +91,7 @@ class _InputDemoState extends State<InputDemo> {
               type: AppInputType.phone,
               onChanged: (value) => setState(() => _phoneValue = value),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               'Value: $_phoneValue',
               style: const TextStyle(fontStyle: FontStyle.italic),
@@ -125,28 +126,28 @@ class _InputDemoState extends State<InputDemo> {
               'Try filling out the form below:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             AppInput(
               placeholder: 'Full Name',
               type: AppInputType.text,
               onChanged: (value) =>
                   AppLogger.debug('Name: $value', context: 'InputDemo'),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             AppInput(
               placeholder: 'Email Address',
               type: AppInputType.email,
               onChanged: (value) =>
                   AppLogger.safe('Email: $value', context: 'InputDemo'),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             AppInput(
               placeholder: 'Password',
               type: AppInputType.password,
               onChanged: (value) =>
                   AppLogger.safe('Password: $value', context: 'InputDemo'),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             AppInput(
               placeholder: 'Phone Number',
               type: AppInputType.phone,
@@ -166,9 +167,9 @@ class _InputDemoState extends State<InputDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 }
@@ -180,7 +181,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

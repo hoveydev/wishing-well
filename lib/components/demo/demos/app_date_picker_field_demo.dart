@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wishing_well/components/date_picker/app_date_picker_field.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class AppDatePickerFieldDemo extends StatefulWidget {
   const AppDatePickerFieldDemo({super.key});
@@ -20,7 +21,7 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
       backgroundColor: Colors.blue.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +31,7 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
               value: _birthday,
               onChanged: (date) => setState(() => _birthday = date),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               _birthday != null
                   ? 'Selected: ${DateFormat.yMMMMd().format(_birthday!)}'
@@ -46,7 +47,7 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
               lastDate: DateTime(DateTime.now().year + 5),
               onChanged: (date) => setState(() => _eventDate = date),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               _eventDate != null
                   ? 'Selected: ${DateFormat.yMMMMd().format(_eventDate!)}'
@@ -88,9 +89,9 @@ class _AppDatePickerFieldDemoState extends State<AppDatePickerFieldDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 }
@@ -102,7 +103,7 @@ class _FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

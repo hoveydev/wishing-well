@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/sheet/app_selection_sheet.dart';
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 void main() {
   group('AppSheetHeader', () {
@@ -31,7 +32,8 @@ void main() {
           matching: find.byWidgetPredicate(
             (widget) =>
                 widget is Container &&
-                widget.margin == const EdgeInsets.only(top: 12),
+                widget.margin ==
+                    const EdgeInsets.only(top: AppSpacerSize.medium),
           ),
         );
         expect(handleBarFinder, findsOneWidget);
@@ -51,7 +53,10 @@ void main() {
           matching: find.byType(Container),
         );
         final container = tester.widget<Container>(containerFinder.first);
-        expect(container.margin, const EdgeInsets.only(top: 12));
+        expect(
+          container.margin,
+          const EdgeInsets.only(top: AppSpacerSize.medium),
+        );
       });
 
       testWidgets('uses titleMedium text style', (WidgetTester tester) async {

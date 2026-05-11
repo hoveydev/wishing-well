@@ -4,7 +4,7 @@ import 'package:wishing_well/components/image_picker_circle/image_picker_circle.
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_picker.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/components/add_wisher_details_inputs.dart';
 import 'package:wishing_well/features/add_wisher/add_wisher_details/add_wisher_details_view_model.dart';
@@ -47,7 +47,7 @@ class _AddWisherDetailsHeaderState extends State<AddWisherDetailsHeader> {
             const AppSpacer.small(),
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacerSize.medium,
+                horizontal: AppSpacerSize.large,
               ),
               child: Text(
                 AppLocalizations.of(context)!.manualAddWisherScreenHeader,
@@ -59,7 +59,7 @@ class _AddWisherDetailsHeaderState extends State<AddWisherDetailsHeader> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacerSize.medium,
+                horizontal: AppSpacerSize.large,
               ),
               child: Text(
                 AppLocalizations.of(context)!.manualAddWisherScreenSubtext,

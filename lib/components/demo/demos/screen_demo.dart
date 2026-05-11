@@ -4,6 +4,7 @@ import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class ScreenDemo extends StatelessWidget {
   const ScreenDemo({super.key});
@@ -15,7 +16,7 @@ class ScreenDemo extends StatelessWidget {
       backgroundColor: Colors.cyan.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,10 +35,10 @@ class ScreenDemo extends StatelessWidget {
               'A simple screen with content:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(AppSpacerSize.small),
                 child: SizedBox(
                   height: 150,
                   child: Screen(
@@ -49,7 +50,7 @@ class ScreenDemo extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: AppSpacerSize.small),
                       Text(
                         'This is a basic screen component with '
                         'default padding and layout.',
@@ -67,7 +68,7 @@ class ScreenDemo extends StatelessWidget {
               'Click button to see full screen:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             AppButton.label(
               label: 'Open Screen with App Bar',
               onPressed: () {
@@ -108,14 +109,14 @@ class ScreenDemo extends StatelessWidget {
               'Screen with reduced padding:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(AppSpacerSize.small),
                 child: SizedBox(
                   height: 120,
                   child: Screen(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(AppSpacerSize.small),
                     children: [
                       Text(
                         'Reduced Padding',
@@ -124,7 +125,7 @@ class ScreenDemo extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: AppSpacerSize.small),
                       Text('This screen has reduced padding.'),
                     ],
                   ),
@@ -153,9 +154,9 @@ class ScreenDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
@@ -165,9 +166,9 @@ class ScreenDemo extends StatelessWidget {
     CrossAxisAlignment crossAxis,
     Color color,
   ) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(AppSpacerSize.small),
       child: SizedBox(
         height: 120,
         child: Screen(
@@ -175,7 +176,7 @@ class ScreenDemo extends StatelessWidget {
           crossAxisAlignment: crossAxis,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(AppSpacerSize.medium),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
@@ -197,13 +198,13 @@ class ScreenDemo extends StatelessWidget {
   );
 
   Widget _buildUseCaseCard(String useCase) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Row(
         children: [
           const Icon(Icons.check_circle, color: Colors.green, size: 20),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
         ],
       ),
@@ -223,20 +224,20 @@ class _FullAppBarScreen extends StatelessWidget {
         'Full Screen with App Bar',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
-      SizedBox(height: 16),
+      SizedBox(height: AppSpacerSize.large),
       Text(
         'This is a full-screen example with an app bar. The Screen component '
         'automatically handles the app bar integration.',
         style: TextStyle(fontSize: 16),
       ),
-      SizedBox(height: 24),
+      SizedBox(height: AppSpacerSize.xxlarge),
       Divider(),
-      SizedBox(height: 24),
+      SizedBox(height: AppSpacerSize.xxlarge),
       Text(
         'Additional Content',
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      SizedBox(height: 16),
+      SizedBox(height: AppSpacerSize.large),
       Text(
         'The Screen component makes it easy to create consistent layouts '
         'across your app. It handles safe areas, scrolling, '
@@ -254,7 +255,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class CircleImagePickerDemo extends StatefulWidget {
   const CircleImagePickerDemo({super.key});
@@ -25,7 +26,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
       backgroundColor: Colors.lime.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,7 +46,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
               'Tap any avatar to simulate image selection:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -78,7 +79,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
               'Different radius values:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -95,7 +96,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
               'Show/hide the edit icon overlay:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -120,7 +121,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
               'Different label configurations:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -144,7 +145,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
               'Try it out - tap to "select" an image:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Center(
               child: CircleImagePicker(
                 onTap: () => _showPickOptions(context),
@@ -155,11 +156,11 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
                     : (_remoteUrl != null ? 'Change Photo' : 'Add Photo'),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             // Status
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacerSize.medium),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -171,7 +172,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
                         color: Colors.grey[700],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     _buildStateRow('Local File', _selectedFile?.path ?? 'None'),
                     _buildStateRow('Remote URL', _remoteUrl ?? 'None'),
                     _buildStateRow(
@@ -182,7 +183,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             // Actions
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +195,7 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
                   icon: const Icon(Icons.clear),
                   label: const Text('Clear URL'),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacerSize.medium),
                 OutlinedButton.icon(
                   onPressed: _selectedFile != null
                       ? () => setState(() => _selectedFile = null)
@@ -226,22 +227,22 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildSizeDemo(String label, double radius) => Column(
     children: [
       CircleImagePicker(onTap: () {}, imageUrl: _demoRemoteUrl, radius: radius),
-      const SizedBox(height: 8),
+      const SizedBox(height: AppSpacerSize.small),
       Text('$label ($radius)'),
     ],
   );
 
   Widget _buildStateRow(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
+    padding: const EdgeInsets.symmetric(vertical: AppSpacerSize.xsmall),
     child: Row(
       children: [
         SizedBox(
@@ -263,13 +264,13 @@ class _CircleImagePickerDemoState extends State<CircleImagePickerDemo> {
   );
 
   Widget _buildUseCaseCard(String useCase) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Row(
         children: [
           const Icon(Icons.image, color: Colors.blue, size: 20),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
         ],
       ),
@@ -357,7 +358,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

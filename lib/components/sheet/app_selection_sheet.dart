@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// Shared infrastructure for selection-style modal bottom sheets.
@@ -28,7 +28,7 @@ class AppSheetHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 12),
+          margin: const EdgeInsets.only(top: AppSpacerSize.medium),
           width: 40,
           height: AppSpacerSize.xsmall,
           decoration: BoxDecoration(

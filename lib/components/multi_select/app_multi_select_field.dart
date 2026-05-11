@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/multi_select/multi_select_sheet.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
@@ -69,7 +69,7 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
           onTap: _openSheet,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacerSize.medium,
+              horizontal: AppSpacerSize.large,
               vertical: _triggerVerticalPadding,
             ),
             child: Row(
@@ -79,7 +79,7 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
                   size: _triggerIconSize,
                   color: colorScheme.primary,
                 ),
-                const SizedBox(width: AppSpacerSize.medium),
+                const SizedBox(width: AppSpacerSize.large),
                 Expanded(
                   child: Text(
                     hasSelection
@@ -102,8 +102,8 @@ class _AppMultiSelectFieldState extends State<AppMultiSelectField> {
         if (hasSelection)
           Padding(
             padding: const EdgeInsets.only(
-              left: AppSpacerSize.medium,
-              right: AppSpacerSize.medium,
+              left: AppSpacerSize.large,
+              right: AppSpacerSize.large,
               bottom: AppSpacerSize.small,
             ),
             child: Wrap(

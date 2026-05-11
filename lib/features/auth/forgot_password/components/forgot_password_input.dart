@@ -4,7 +4,7 @@ import 'package:wishing_well/components/inline_alert/app_inline_alert_spacing.da
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
 import 'package:wishing_well/utils/auth_error.dart';

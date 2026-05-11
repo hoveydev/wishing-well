@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/app_error_card/app_error_card.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class AppErrorCardDemo extends StatelessWidget {
   const AppErrorCardDemo({super.key});
@@ -11,7 +12,7 @@ class AppErrorCardDemo extends StatelessWidget {
       backgroundColor: Colors.red.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,7 +42,7 @@ class AppErrorCardDemo extends StatelessWidget {
                   'Check your internet connection.',
               icon: Icons.error,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             _buildErrorCard(
               'Slow Connection',
               'Your connection is slow. Some features may take '
@@ -70,9 +71,9 @@ class AppErrorCardDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
@@ -84,7 +85,7 @@ class AppErrorCardDemo extends StatelessWidget {
   }) => Card(
     margin: EdgeInsets.zero,
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: AppErrorCard(
         onRetry: showRetry ? () {} : null,
         title: title,
@@ -96,7 +97,7 @@ class AppErrorCardDemo extends StatelessWidget {
   );
 
   Widget _buildFeatureBullet(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

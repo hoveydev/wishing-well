@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 
 class Screen extends StatelessWidget {
   const Screen({
@@ -28,7 +28,7 @@ class Screen extends StatelessWidget {
             child: Padding(
               padding:
                   padding ??
-                  const EdgeInsets.all(AppSpacing.screenPaddingStandard),
+                  const EdgeInsets.all(AppScreenLayout.screenPaddingStandard),
               child: Semantics(
                 container: true,
                 child: Column(

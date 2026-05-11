@@ -40,13 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const LoginHeader(),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         LoginInputs(
           viewModel: widget.viewModel,
           emailFocusNode: _emailFocusNode,
           passwordFocusNode: _passwordFocusNode,
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         LoginButtons(viewModel: widget.viewModel),
       ],
     ),

@@ -3,7 +3,7 @@ import 'package:wishing_well/components/app_bar/app_menu_bar.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/screen/screen.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/features/wisher_details/components/wisher_details_delete_button.dart';
 import 'package:wishing_well/features/wisher_details/components/wisher_details_profile.dart';
 import 'package:wishing_well/features/wisher_details/wisher_details_view_model.dart';

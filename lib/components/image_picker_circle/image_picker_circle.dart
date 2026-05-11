@@ -6,6 +6,7 @@ import 'package:wishing_well/components/dotted_border_config.dart';
 import 'package:wishing_well/components/profile_image/profile_image.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
+import 'package:wishing_well/theme/app_icon_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// A generic circular image picker component.
@@ -82,7 +83,7 @@ class CircleImagePicker extends StatelessWidget {
         backgroundColor: colorScheme.background,
         child: Icon(
           Icons.camera_alt_outlined,
-          size: 24,
+          size: const AppIconSize().large,
           color: colorScheme.primary,
         ),
       ),

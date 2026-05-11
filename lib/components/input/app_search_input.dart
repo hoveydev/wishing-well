@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
+import 'package:wishing_well/theme/app_border_weight.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// A styled search text input that mirrors [AppInput]'s focus-aware animated
@@ -71,7 +72,7 @@ class _AppSearchInputState extends State<AppSearchInput> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-          border: Border.all(color: borderColor, width: 1.5),
+          border: Border.all(color: borderColor, width: AppBorderWeight.medium),
         ),
         child: TextField(
           controller: widget.controller,
@@ -85,7 +86,9 @@ class _AppSearchInputState extends State<AppSearchInput> {
             // Inset by the border width so the inner radius matches
             // the outer animated border.
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppBorderRadius.medium - 1.5),
+              borderRadius: BorderRadius.circular(
+                AppBorderRadius.medium - AppBorderWeight.medium,
+              ),
               borderSide: BorderSide.none,
             ),
           ),

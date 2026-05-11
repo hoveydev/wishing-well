@@ -9,7 +9,8 @@ import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.da
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/features/all_wishers/all_wishers_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 
 // Height of the search bar input within the blurred header.
 const double _kSearchBarHeight = 48.0;
@@ -130,9 +131,10 @@ class _AllWishersScreenState extends State<AllWishersScreen> {
     final style = textTheme.headlineMedium ?? const TextStyle(fontSize: 28);
     final scaledFontSize = textScaler.scale(style.fontSize ?? 28);
     final lineHeight = scaledFontSize * (style.height ?? 1.2);
-    // wisherSpacing * 2 = top + bottom padding around the header content;
-    // wisherSpacing * 0.5 = gap between title and search bar.
-    return lineHeight + (AppSpacing.wisherSpacing * 2.5) + _kSearchBarHeight;
+    // WisherSizing.itemSpacing * 2 = top + bottom padding around the header
+    // content; WisherSizing.itemSpacing * 0.5 = gap between title and
+    // search bar.
+    return lineHeight + (WisherSizing.itemSpacing * 2.5) + _kSearchBarHeight;
   }
 }
 
@@ -162,17 +164,17 @@ class _BlurredHeader extends StatelessWidget {
           context,
         ).scaffoldBackgroundColor.withValues(alpha: 0.75),
         padding: const EdgeInsets.fromLTRB(
-          AppSpacing.screenPaddingStandard,
-          AppSpacing.wisherSpacing,
-          AppSpacing.screenPaddingStandard,
-          AppSpacing.wisherSpacing,
+          AppScreenLayout.screenPaddingStandard,
+          WisherSizing.itemSpacing,
+          AppScreenLayout.screenPaddingStandard,
+          WisherSizing.itemSpacing,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(title, style: textTheme.headlineMedium),
-            const SizedBox(height: AppSpacing.wisherSpacing / 2),
+            const SizedBox(height: WisherSizing.itemSpacing / 2),
             SizedBox(
               height: _kSearchBarHeight,
               child: AppSearchInput(
@@ -203,8 +205,8 @@ class _WisherListTile extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenPaddingStandard,
-          vertical: AppSpacing.wisherSpacing / 2,
+          horizontal: AppScreenLayout.screenPaddingStandard,
+          vertical: WisherSizing.itemSpacing / 2,
         ),
         child: Row(
           children: [
@@ -213,7 +215,7 @@ class _WisherListTile extends StatelessWidget {
               firstName: wisher.firstName,
               lastName: wisher.lastName,
             ),
-            const SizedBox(width: AppSpacing.wisherSpacing),
+            const SizedBox(width: WisherSizing.itemSpacing),
             Expanded(
               child: Text(
                 wisher.name,

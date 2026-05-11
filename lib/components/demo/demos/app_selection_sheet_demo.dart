@@ -3,6 +3,7 @@ import 'package:wishing_well/components/demo/demos/input_demo.dart';
 import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
 import 'package:wishing_well/components/multi_select/multi_select_sheet.dart';
 import 'package:wishing_well/components/sheet/app_selection_sheet.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 const _sampleItems = [
   AppMultiSelectItem(value: 'books', label: 'Books'),
@@ -29,7 +30,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
       backgroundColor: Colors.teal.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,7 +40,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
               'sheet:',
               style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             const Card(child: AppSheetHeader(title: 'Example Sheet Title')),
           ]),
           _buildSection('AppSelectionSheet.show()', [
@@ -53,7 +54,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
             const FeatureBulletPoint(
               text: 'Used by ImageSourceMenu and MultiSelectSheet',
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -62,7 +63,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
               ),
             ),
             if (_lastDismissed != null) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacerSize.small),
               Text(
                 'Last dismissed: $_lastDismissed',
                 style: const TextStyle(fontStyle: FontStyle.italic),
@@ -81,7 +82,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
             const FeatureBulletPoint(
               text: 'Done button returns the confirmed selection',
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -90,7 +91,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
               ),
             ),
             if (_selectedCategories.isNotEmpty) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacerSize.small),
               Text(
                 'Selected: ${_selectedCategories.join(', ')}',
                 style: const TextStyle(fontStyle: FontStyle.italic),
@@ -111,7 +112,7 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
           children: [
             const AppSheetHeader(title: 'Sample Sheet'),
             const Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(AppSpacerSize.large),
               child: Text(
                 'This sheet uses AppSheetHeader for its header and '
                 'AppSelectionSheet.show() for consistent modal styling.',
@@ -119,7 +120,12 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacerSize.large,
+                0,
+                AppSpacerSize.large,
+                AppSpacerSize.large,
+              ),
               child: SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
@@ -156,9 +162,9 @@ class _AppSelectionSheetDemoState extends State<AppSelectionSheetDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 }

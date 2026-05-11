@@ -20,7 +20,7 @@ class AddWisherLandingHeader extends StatelessWidget {
           style: textTheme.headlineMedium,
           semanticsLabel: l10n.addWisherScreenHeader,
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         const AddWisherLandingDescription(),
       ],
     );

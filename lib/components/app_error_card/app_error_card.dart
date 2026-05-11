@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_screen_layout.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 const double _defaultAppErrorCardButtonSize = 36;
+const double _defaultAppErrorCardIconSize = 18;
 const double _defaultAppErrorCardHorizontalPadding =
     AppScreenLayout.screenPaddingStandard;
-const double _defaultAppErrorCardInnerPadding = 8;
-const double _defaultAppErrorCardColumnGap = 8;
-const double _defaultAppErrorCardRowGap = 2;
+const double _defaultAppErrorCardInnerPadding = AppSpacerSize.small;
+const double _defaultAppErrorCardColumnGap = AppSpacerSize.small;
+const double _defaultAppErrorCardRowGap = AppSpacerSize.xsmall;
 
 class AppErrorCard extends StatelessWidget {
   const AppErrorCard({
@@ -16,7 +19,7 @@ class AppErrorCard extends StatelessWidget {
     required this.message,
     required this.retryText,
     this.icon = Icons.refresh,
-    this.iconSize = 18,
+    this.iconSize = _defaultAppErrorCardIconSize,
     this.buttonSize = _defaultAppErrorCardButtonSize,
     this.titleFontSize,
     this.messageFontSize,
@@ -86,7 +89,7 @@ class AppErrorCard extends StatelessWidget {
         padding: EdgeInsets.all(innerPadding),
         decoration: BoxDecoration(
           color: colorScheme.surfaceGray,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppBorderRadius.medium),
           border: Border.all(color: colorScheme.error!.withValues(alpha: 0.3)),
         ),
         child: Row(

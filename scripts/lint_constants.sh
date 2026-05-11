@@ -64,6 +64,16 @@ check_hardcoded_spacing "$LIB_DIR" "SizedBox\(height: [0-9]" \
   "Hardcoded SizedBox height values" \
   "Use AppSpacerSize constants: SizedBox(height: AppSpacerSize.medium)"
 
+# Date picker overlays should also avoid hardcoded width/height values
+# outside of AppSpacerSize or semantic constants.
+check_hardcoded_spacing "$LIB_DIR/components/date_picker" "width: [0-9]\+" \
+  "Hardcoded date picker width values" \
+  "Use AppSpacerSize or component semantic constants for width"
+
+check_hardcoded_spacing "$LIB_DIR/components/date_picker" "height: [0-9]\+" \
+  "Hardcoded date picker height values" \
+  "Use AppSpacerSize or component semantic constants for height"
+
 # Check for hardcoded border radius
 echo "Checking border radius values..."
 check_hardcoded_spacing "$LIB_DIR" "borderRadius: BorderRadius\.circular\([0-9]" \

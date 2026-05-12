@@ -26,7 +26,7 @@ check_hardcoded_spacing() {
   local matches
   
   matches=$(grep -Ern "$pattern" "$files" --include="*.dart" 2>/dev/null \
-    | grep -Ev "/test/|^test/|\\.dart\\.g|/demo/" || true)
+    | grep -Ev "/test/|\\.dart\\.g|/demo/" || true)
 
   if [ -n "$extra_exclude" ]; then
     matches=$(echo "$matches" | grep -Ev "$extra_exclude" || true)
@@ -83,7 +83,7 @@ echo "Checking border radius values..."
 # - 2, 4: subtle rounding used for handles/compact pills
 # - 999: fully rounded pill/capsule chips
 check_hardcoded_spacing "$LIB_DIR" \
-  "borderRadius:[[:space:]]*BorderRadius\\.circular\\([[:space:]]*[0-9]+(\\.[0-9]+)?[[:space:]]*\\)" \
+  "borderRadius[[:space:]]*:[[:space:]]*BorderRadius\\.circular\\([[:space:]]*[0-9]+(\\.[0-9]+)?[[:space:]]*\\)" \
   "Hardcoded border radius values" \
   "Use AppBorderRadius constants: BorderRadius.circular(AppBorderRadius.small)" \
   "BorderRadius\\.circular\\((2|4|999)\\)"

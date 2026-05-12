@@ -15,7 +15,8 @@ This guide provides a comprehensive reference for all design constants used thro
 
 ## Spacing Constants
 
-**File:** `lib/theme/app_spacer_size.dart` & `lib/theme/app_spacing.dart`
+**Files:** `lib/theme/app_spacer_size.dart`, `lib/theme/app_screen_layout.dart`,
+`lib/theme/app_bar_sizing.dart`, `lib/components/wishers/wisher_sizing.dart`
 
 ### AppSpacerSize (Common Spacing)
 
@@ -30,6 +31,7 @@ Use `AppSpacerSize` for general spacing, padding, margins, and SizedBox dimensio
 | `xlarge` | 20.0 | Generous spacing between elements |
 | `xxlarge` | 24.0 | Large spacing, major section breaks |
 | `xxxlarge` | 32.0 | Extra-large spacing between major sections |
+| `huge` | 48.0 | Maximum spacing for hero/major sections |
 
 #### Examples
 
@@ -57,35 +59,35 @@ padding: EdgeInsets.all(16);  // Use AppSpacerSize.large
 SizedBox(width: 8);           // Use AppSpacerSize.small
 ```
 
-### AppSpacing (Special/Semantic Spacing)
+### Semantic Spacing/Sizing Constants
 
-Use `AppSpacing` for specific, semantically-named spacing values.
+Use semantic classes when the value has domain meaning.
 
 | Constant | Value | Use Case |
 |----------|-------|----------|
-| `appBarHeight` | 48.0 | Standard app bar height |
-| `screenPaddingStandard` | 24.0 | Standard horizontal padding for screens |
-| `wisherSpacing` | 16.0 | Spacing between wisher list items |
-| `wisherAvatarDiameter` | 60.0 | Wisher avatar circle diameter |
-| `wisherListItemHeight` | 80.0 | Wisher list item fixed height |
-| `wisherLabelTopSpacing` | 4.0 | Top spacing for wisher label |
+| `AppBarSizing.height` | 48.0 | Standard app bar height |
+| `AppScreenLayout.screenPaddingStandard` | 24.0 | Standard horizontal screen padding |
+| `WisherSizing.itemSpacing` | 16.0 | Spacing between wisher list items |
+| `WisherSizing.avatarDiameter` | 60.0 | Wisher avatar circle diameter |
+| `WisherSizing.listItemHeight` | 80.0 | Wisher list item minimum height |
+| `WisherSizing.labelTopSpacing` | 4.0 | Top spacing for wisher label |
 
 #### Examples
 
 ```dart
-// ✅ CORRECT - App bar padding
-SizedBox(height: AppSpacing.appBarHeight);
+// ✅ CORRECT - App bar sizing
+SizedBox(height: AppBarSizing.height);
 
 // ✅ CORRECT - Screen padding
 padding: EdgeInsets.symmetric(
-  horizontal: AppSpacing.screenPaddingStandard,
+  horizontal: AppScreenLayout.screenPaddingStandard,
 ),
 
 // ✅ CORRECT - Avatar sizing
-CircleAvatar(radius: AppSpacing.wisherAvatarDiameter / 2);
+CircleAvatar(radius: WisherSizing.avatarDiameter / 2);
 
 // ❌ WRONG - Duplicate constants
-CircleAvatar(radius: 30);  // Should use AppSpacing.wisherAvatarDiameter
+CircleAvatar(radius: 30);  // Should use WisherSizing.avatarDiameter
 ```
 
 ---
@@ -135,6 +137,7 @@ Use `AppBorderWeight` for all stroke/border widths.
 |----------|-------|----------|
 | `light` | 0.5 | Fine, subtle borders (optional decoration) |
 | `regular` | 1.0 | Standard borders (input fields, cards) |
+| `medium` | 1.5 | Medium emphasis borders (inputs/buttons) |
 | `bold` | 2.0 | Prominent borders (emphasis, focus states) |
 
 #### Examples
@@ -332,11 +335,12 @@ children: [
 
 ### 3. Use Semantic Names When Available
 
-If a value has a semantic meaning (like `wisherAvatarDiameter`), use the semantic constant:
+If a value has domain meaning (like avatar diameter), use the semantic
+constant:
 
 ```dart
 // ✅ GOOD - Semantic name
-CircleAvatar(radius: AppSpacing.wisherAvatarDiameter / 2);
+CircleAvatar(radius: WisherSizing.avatarDiameter / 2);
 
 // ❌ BAD - Generic spacing constant
 CircleAvatar(radius: AppSpacerSize.xxxlarge / 2);
@@ -347,7 +351,7 @@ CircleAvatar(radius: AppSpacerSize.xxxlarge / 2);
 ```dart
 // ✅ GOOD - Compose from constants
 padding: EdgeInsets.symmetric(
-  horizontal: AppSpacing.screenPaddingStandard,
+  horizontal: AppScreenLayout.screenPaddingStandard,
   vertical: AppSpacerSize.large,
 );
 
@@ -463,13 +467,13 @@ Container(
 ```dart
 // DON'T DO THIS - Confusing mix
 padding: EdgeInsets.symmetric(
-  horizontal: AppSpacing.screenPaddingStandard,  // Semantic
+  horizontal: AppScreenLayout.screenPaddingStandard,  // Semantic
   vertical: 16,                                   // Hardcoded
 ),
 
 // USE INSTEAD - Consistent approach
 padding: EdgeInsets.symmetric(
-  horizontal: AppSpacing.screenPaddingStandard,
+  horizontal: AppScreenLayout.screenPaddingStandard,
   vertical: AppSpacerSize.large,  // Both semantic
 ),
 ```
@@ -503,7 +507,7 @@ return Padding(
 
 When creating or updating components, verify:
 
-- [ ] All spacing uses `AppSpacerSize` or semantic `AppSpacing` constants
+- [ ] All spacing uses `AppSpacerSize` or semantic sizing constants
 - [ ] All border radii use `AppBorderRadius` constants
 - [ ] All border widths use `AppBorderWeight` constants
 - [ ] All icon sizes use `AppIconSize` constants
@@ -517,7 +521,10 @@ When creating or updating components, verify:
 
 ## Related Files
 
-- **Spacing:** `lib/theme/app_spacer_size.dart`, `lib/theme/app_spacing.dart`
+- **Spacing:** `lib/theme/app_spacer_size.dart`,
+  `lib/theme/app_screen_layout.dart`,
+  `lib/theme/app_bar_sizing.dart`,
+  `lib/components/wishers/wisher_sizing.dart`
 - **Borders:** `lib/theme/app_border_radius.dart`, `lib/theme/app_border_weight.dart`
 - **Icons:** `lib/theme/app_icon_size.dart`
 - **Colors:** `lib/theme/app_colors.dart`, `lib/theme/extensions/color_scheme_extension.dart`

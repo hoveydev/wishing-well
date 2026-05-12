@@ -131,7 +131,7 @@ For routes with parameters, use the `buildPath()` helper: `Routes.wisherDetails.
 
 **CRITICAL:** All pixel values for spacing, sizing, colors, and borders MUST use global constants. Hardcoding values defeats the design system and requires PR comments. See `docs/DESIGN_CONSTANTS.md` for comprehensive guide.
 
-### Spacing (AppSpacerSize & AppSpacing)
+### Spacing (AppSpacerSize + semantic sizing)
 
 ```dart
 // ✅ CORRECT - Use AppSpacerSize for common spacing
@@ -139,14 +139,16 @@ padding: EdgeInsets.all(AppSpacerSize.large);
 SizedBox(width: AppSpacerSize.small);
 SizedBox(height: AppSpacerSize.xxlarge);
 
-// ✅ CORRECT - Use AppSpacing for semantic values
-padding: EdgeInsets.symmetric(horizontal: AppSpacing.screenPaddingStandard);
-SizedBox(height: AppSpacing.appBarHeight);
+// ✅ CORRECT - Use semantic sizing constants
+padding: EdgeInsets.symmetric(
+  horizontal: AppScreenLayout.screenPaddingStandard,
+);
+SizedBox(height: AppBarSizing.height);
 ```
 
 **Available sizes:**
-- `AppSpacerSize`: xsmall (4), small (8), medium (12), large (16), xlarge (20), xxlarge (24), xxxlarge (32)
-- `AppSpacing`: screenPaddingStandard (24), appBarHeight (48), wisherSpacing (16), wisherAvatarDiameter (60)
+- `AppSpacerSize`: xsmall (4), small (8), medium (12), large (16), xlarge (20), xxlarge (24), xxxlarge (32), huge (48)
+- Semantic classes: `AppScreenLayout.screenPaddingStandard` (24), `AppBarSizing.height` (48), `WisherSizing.itemSpacing` (16), `WisherSizing.avatarDiameter` (60)
 
 ### Border Radius (AppBorderRadius)
 
@@ -275,10 +277,10 @@ The goal of this phase is **zero comments from the PR reviewer**. Check every it
 - No unguarded `!` null assertions — use proper null-safe handling
 
 **Code Style & Quality**
-- **Design Constants**: All spacing uses `AppSpacerSize` or semantic `AppSpacing`; all borders use `AppBorderRadius`/`AppBorderWeight`; all icon sizes use `AppIconSize`; all colors use `AppColorScheme`
+- **Design Constants**: All spacing uses `AppSpacerSize` or semantic sizing classes (`AppScreenLayout`, `AppBarSizing`, `WisherSizing`); all borders use `AppBorderRadius`/`AppBorderWeight`; all icon sizes use `AppIconSize`; all colors use `AppColorScheme`
 - No hardcoded colors — use `AppColorScheme` extension
 - No hardcoded text styles — use `Theme.of(context).textTheme`
-- No hardcoded spacing or sizes — use `AppSpacing`, `AppSpacerSize`, `AppBorderRadius`, `AppBorderWeight`, `AppIconSize`
+- No hardcoded spacing or sizes — use `AppSpacerSize`, `AppScreenLayout`, `AppBarSizing`, `WisherSizing`, `AppBorderRadius`, `AppBorderWeight`, `AppIconSize`
 - All imports use `package:` (no relative imports)
 - Lines ≤ 80 characters
 - `const` constructors used wherever possible

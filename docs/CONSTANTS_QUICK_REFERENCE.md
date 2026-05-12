@@ -10,10 +10,10 @@ SizedBox(width: AppSpacerSize.small),        // 8
 SizedBox(height: AppSpacerSize.medium),      // 12
 SizedBox(height: AppSpacerSize.large),       // 16
 
-// EdgeInsets - use AppSpacerSize or AppSpacing
+// EdgeInsets - use AppSpacerSize or semantic sizing constants
 padding: EdgeInsets.all(AppSpacerSize.large),
 padding: EdgeInsets.symmetric(
-  horizontal: AppSpacing.screenPaddingStandard,  // 24
+  horizontal: AppScreenLayout.screenPaddingStandard,  // 24
   vertical: AppSpacerSize.large,
 ),
 ```
@@ -80,10 +80,10 @@ TextStyle(fontSize: 14);          // Use textTheme.bodyMedium
 ## Quick Decision Tree
 
 **"I need to add spacing"**
-→ Use `AppSpacerSize` (xsmall, small, medium, large, xlarge, xxlarge, xxxlarge)
+→ Use `AppSpacerSize` (xsmall, small, medium, large, xlarge, xxlarge, xxxlarge, huge)
 
 **"I need a special spacing value"**
-→ Use `AppSpacing` (screenPaddingStandard, appBarHeight, wisherSpacing, wisherAvatarDiameter)
+→ Use semantic constants (`AppScreenLayout`, `AppBarSizing`, `WisherSizing`)
 
 **"I need to make corners rounded"**
 → Use `AppBorderRadius` (small, medium, large)
@@ -103,7 +103,9 @@ TextStyle(fontSize: 14);          // Use textTheme.bodyMedium
 ## Files to Import
 ```dart
 import 'package:wishing_well/theme/app_spacer_size.dart';   // Spacing
-import 'package:wishing_well/theme/app_spacing.dart';       // Semantic spacing
+import 'package:wishing_well/theme/app_screen_layout.dart'; // Screen layout
+import 'package:wishing_well/theme/app_bar_sizing.dart';    // App bar sizing
+import 'package:wishing_well/components/wishers/wisher_sizing.dart'; // Wisher sizing
 import 'package:wishing_well/theme/app_border_radius.dart'; // Border radius
 import 'package:wishing_well/theme/app_border_weight.dart'; // Border width
 import 'package:wishing_well/theme/app_icon_size.dart';     // Icon sizes

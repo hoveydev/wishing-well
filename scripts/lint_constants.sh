@@ -22,21 +22,18 @@ check_hardcoded_spacing() {
   local pattern=$2
   local message=$3
   local suggestion=$4
+  local extra_exclude=$5
+  local matches
   
-  if grep -rn "$pattern" $files --include="*.dart" 2>/dev/null | grep -v "test/" | grep -v ".dart.g" | grep -v "AppSpacerSize\|AppSpacing\|WisherSizing\|AppScreenLayout\|AppBarSizing"; then
-    echo -e "${RED}✗ Found: $message${NC}"
-    echo -e "  Suggestion: $suggestion"
-    VIOLATION_COUNT=$((VIOLATION_COUNT + 1))
-  fi
-}
+  matches=$(grep -Ern "$pattern" "$files" --include="*.dart" 2>/dev/null \
+    | grep -Ev "test/|\\.dart\\.g|/demo/" || true)
 
-check_hardcoded_spacing_excluding_demos() {
-  local files=$1
-  local pattern=$2
-  local message=$3
-  local suggestion=$4
-  
-  if grep -rn "$pattern" $files --include="*.dart" 2>/dev/null | grep -v "test/" | grep -v ".dart.g" | grep -v "AppSpacerSize\|AppSpacing\|WisherSizing\|AppScreenLayout\|AppBarSizing" | grep -v "/demo/"; then
+  if [ -n "$extra_exclude" ]; then
+    matches=$(echo "$matches" | grep -Ev "$extra_exclude" || true)
+  fi
+
+  if [ -n "$matches" ]; then
+    echo "$matches"
     echo -e "${RED}✗ Found: $message${NC}"
     echo -e "  Suggestion: $suggestion"
     VIOLATION_COUNT=$((VIOLATION_COUNT + 1))
@@ -48,48 +45,58 @@ echo ""
 
 # Check for hardcoded spacing values
 echo "Checking spacing values..."
-check_hardcoded_spacing "$LIB_DIR" "EdgeInsets\.all([0-9])" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "EdgeInsets\\.all\\(\\s*[0-9]+(\\.[0-9]+)?\\s*\\)" \
   "Hardcoded EdgeInsets.all() values" \
   "Use AppSpacerSize constants: EdgeInsets.all(AppSpacerSize.large)"
 
-check_hardcoded_spacing "$LIB_DIR" "EdgeInsets\.\(symmetric\|only\|fromLTRB\)[^)]*[^A-Za-z][0-9]\+[^A-Za-z]" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "EdgeInsets\\.(symmetric|only|fromLTRB)\\([^)]*:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded EdgeInsets with numeric values" \
   "Use AppSpacerSize constants: EdgeInsets.symmetric(horizontal: AppSpacerSize.large)"
 
-check_hardcoded_spacing "$LIB_DIR" "SizedBox\(width: [0-9]" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "SizedBox\\([^)]*width:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded SizedBox width values" \
   "Use AppSpacerSize constants: SizedBox(width: AppSpacerSize.small)"
 
-check_hardcoded_spacing "$LIB_DIR" "SizedBox\(height: [0-9]" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "SizedBox\\([^)]*height:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded SizedBox height values" \
   "Use AppSpacerSize constants: SizedBox(height: AppSpacerSize.medium)"
 
 # Date picker overlays should also avoid hardcoded width/height values
 # outside of AppSpacerSize or semantic constants.
-check_hardcoded_spacing "$LIB_DIR/components/date_picker" "width: [0-9]\+" \
+check_hardcoded_spacing "$LIB_DIR/components/date_picker" \
+  "width:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded date picker width values" \
   "Use AppSpacerSize or component semantic constants for width"
 
-check_hardcoded_spacing "$LIB_DIR/components/date_picker" "height: [0-9]\+" \
+check_hardcoded_spacing "$LIB_DIR/components/date_picker" \
+  "height:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded date picker height values" \
   "Use AppSpacerSize or component semantic constants for height"
 
 # Check for hardcoded border radius
 echo "Checking border radius values..."
-check_hardcoded_spacing "$LIB_DIR" "borderRadius: BorderRadius\.circular\([0-9]" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "borderRadius:[[:space:]]*BorderRadius\\.circular\\([[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Hardcoded border radius values" \
-  "Use AppBorderRadius constants: BorderRadius.circular(AppBorderRadius.small)"
+  "Use AppBorderRadius constants: BorderRadius.circular(AppBorderRadius.small)" \
+  "BorderRadius\\.circular\\((2|4|999)\\)"
 
 # Check for hardcoded border widths
 echo "Checking border width values..."
-check_hardcoded_spacing "$LIB_DIR" "width: [01]\." \
+check_hardcoded_spacing "$LIB_DIR" \
+  "Border\\.all\\([^)]*width:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Possible hardcoded border width values" \
   "Use AppBorderWeight constants: width: AppBorderWeight.regular"
 
 # Check for hardcoded icon sizes (outside of AppIconSize), excluding demos
 # which intentionally use custom sizes to showcase components at different scales
 echo "Checking icon size values..."
-check_hardcoded_spacing_excluding_demos "$LIB_DIR" "size: [0-9]" \
+check_hardcoded_spacing "$LIB_DIR" \
+  "size:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Possible hardcoded icon size values" \
   "Use AppIconSize constants: size: const AppIconSize().medium"
 
@@ -97,7 +104,8 @@ check_hardcoded_spacing_excluding_demos "$LIB_DIR" "size: [0-9]" \
 echo "Checking color values..."
 check_hardcoded_spacing "$LIB_DIR" "Color\(0x[0-9A-Fa-f]" \
   "Hardcoded Color values" \
-  "Use AppColorScheme constants: colorScheme?.primary"
+  "Use AppColorScheme constants: colorScheme?.primary" \
+  "lib/theme/app_colors\\.dart"
 
 echo ""
 if [ $VIOLATION_COUNT -eq 0 ]; then

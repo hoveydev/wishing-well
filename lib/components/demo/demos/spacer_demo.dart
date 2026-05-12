@@ -21,16 +21,12 @@ class SpacerDemo extends StatelessWidget {
             _buildSpacerCard('XSmall (4px)', AppSpacerSize.xsmall, Colors.blue),
             _buildSpacerCard('Small (8px)', AppSpacerSize.small, Colors.green),
             _buildSpacerCard(
-              'Medium (16px)',
-              AppSpacerSize.large,
+              'Medium (12px)',
+              AppSpacerSize.medium,
               Colors.orange,
             ),
-            _buildSpacerCard('Large (24px)', AppSpacerSize.xxlarge, Colors.red),
-            _buildSpacerCard(
-              'XLarge (48px)',
-              AppSpacerSize.huge,
-              Colors.purple,
-            ),
+            _buildSpacerCard('Large (16px)', AppSpacerSize.large, Colors.red),
+            _buildSpacerCard('Huge (48px)', AppSpacerSize.huge, Colors.purple),
           ]),
 
           // Features Section

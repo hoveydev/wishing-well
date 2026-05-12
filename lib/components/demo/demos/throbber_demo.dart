@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/components/throbber/app_throbber_size.dart';
 import 'package:wishing_well/components/throbber/skeleton_loader.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class ThrobberDemo extends StatelessWidget {
   const ThrobberDemo({super.key});
@@ -13,7 +14,7 @@ class ThrobberDemo extends StatelessWidget {
       backgroundColor: Colors.indigo.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -63,7 +64,7 @@ class ThrobberDemo extends StatelessWidget {
           _buildSection('Skeleton Loader', [
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -74,7 +75,7 @@ class ThrobberDemo extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: AppSpacerSize.medium),
                     Row(
                       children: [
                         SkeletonLoader(
@@ -82,13 +83,13 @@ class ThrobberDemo extends StatelessWidget {
                           width: 60,
                           height: 60,
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: AppSpacerSize.large),
                         SkeletonLoader(
                           shape: SkeletonShape.circle,
                           width: 40,
                           height: 40,
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: AppSpacerSize.large),
                         SkeletonLoader(
                           shape: SkeletonShape.circle,
                           width: 24,
@@ -100,10 +101,10 @@ class ThrobberDemo extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -114,7 +115,7 @@ class ThrobberDemo extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: AppSpacerSize.medium),
                     Row(
                       children: [
                         SkeletonLoader(
@@ -125,7 +126,7 @@ class ThrobberDemo extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: AppSpacerSize.medium),
                     Row(
                       children: [
                         SkeletonLoader(
@@ -136,7 +137,7 @@ class ThrobberDemo extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: AppSpacerSize.medium),
                     Row(
                       children: [
                         SkeletonLoader(
@@ -151,7 +152,7 @@ class ThrobberDemo extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             const FeatureBulletPoint(
               text: 'Shimmer animation with customizable duration',
             ),
@@ -167,42 +168,42 @@ class ThrobberDemo extends StatelessWidget {
           _buildSection('Visual Size Comparison', [
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         AppThrobber.xsmall(),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('XS'),
                       ],
                     ),
                     Column(
                       children: [
                         AppThrobber.small(),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('S'),
                       ],
                     ),
                     Column(
                       children: [
                         AppThrobber.medium(),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('M'),
                       ],
                     ),
                     Column(
                       children: [
                         AppThrobber.large(),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('L'),
                       ],
                     ),
                     Column(
                       children: [
                         AppThrobber.xlarge(),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('XL'),
                       ],
                     ),
@@ -240,14 +241,14 @@ class ThrobberDemo extends StatelessWidget {
           _buildSection('Animated Demo', [
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   children: [
                     Text(
                       'All throbbers animating simultaneously:',
                       style: TextStyle(fontSize: 16),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: AppSpacerSize.large),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -257,7 +258,7 @@ class ThrobberDemo extends StatelessWidget {
                         AppThrobber.large(),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: AppSpacerSize.large),
                     Center(child: AppThrobber.xlarge()),
                   ],
                 ),
@@ -269,11 +270,11 @@ class ThrobberDemo extends StatelessWidget {
           _buildSection('Button Integration', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Row(
                   children: [
                     const AppThrobber.small(),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSpacerSize.medium),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,16 +310,16 @@ class ThrobberDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildThrobberCard(String label, double size, Color color) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.medium),
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Row(
         children: [
           Container(
@@ -330,7 +331,7 @@ class ThrobberDemo extends StatelessWidget {
             ),
             child: const Center(child: AppThrobber.medium()),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,7 +343,7 @@ class ThrobberDemo extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacerSize.xsmall),
                 Text(
                   '${size.toInt()} pixels diameter',
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -357,19 +358,19 @@ class ThrobberDemo extends StatelessWidget {
 
   Widget _buildUseCaseCard(String useCase, String code, Widget throbber) =>
       Card(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppSpacerSize.medium),
           child: Row(
             children: [
               throbber,
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacerSize.medium),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(useCase, style: const TextStyle(fontSize: 16)),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacerSize.xsmall),
                     Text(
                       code,
                       style: const TextStyle(
@@ -394,7 +395,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

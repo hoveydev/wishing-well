@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class LogoDemo extends StatelessWidget {
   const LogoDemo({super.key});
@@ -11,7 +12,7 @@ class LogoDemo extends StatelessWidget {
       backgroundColor: Colors.pink.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,33 +39,37 @@ class LogoDemo extends StatelessWidget {
           _buildSection('Visual Size Comparison', [
             const Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppSpacerSize.large),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         AppLogo(size: 20),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('20px'),
                       ],
                     ),
                     Column(
                       children: [
                         AppLogo(size: 40),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('40px'),
                       ],
                     ),
                     Column(
                       children: [
                         AppLogo(size: 60),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         Text('60px'),
                       ],
                     ),
                     Column(
-                      children: [AppLogo(), SizedBox(height: 8), Text('80px')],
+                      children: [
+                        AppLogo(),
+                        SizedBox(height: AppSpacerSize.small),
+                        Text('80px'),
+                      ],
                     ),
                   ],
                 ),
@@ -85,7 +90,7 @@ class LogoDemo extends StatelessWidget {
           _buildSection('Interactive Demo', [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   children: [
                     const Text(
@@ -95,11 +100,11 @@ class LogoDemo extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     const Center(child: AppLogo()),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     const Divider(),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     const Text(
                       'Logo with background:',
                       style: TextStyle(
@@ -107,9 +112,9 @@ class LogoDemo extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacerSize.large),
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(AppSpacerSize.xxlarge),
                       decoration: BoxDecoration(
                         color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -133,16 +138,16 @@ class LogoDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildLogoCard(String label, double size, Color color) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.medium),
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Row(
         children: [
           Container(
@@ -154,7 +159,7 @@ class LogoDemo extends StatelessWidget {
             ),
             child: AppLogo(size: size),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +171,7 @@ class LogoDemo extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacerSize.xsmall),
                 Text(
                   '${size.toInt()} pixels',
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -180,19 +185,19 @@ class LogoDemo extends StatelessWidget {
   );
 
   Widget _buildUseCaseCard(String useCase, String code, double size) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Row(
         children: [
           AppLogo(size: size),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(useCase, style: const TextStyle(fontSize: 16)),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacerSize.xsmall),
                 Text(
                   code,
                   style: const TextStyle(
@@ -217,7 +222,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

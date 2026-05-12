@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -66,6 +66,42 @@ void main() {
 
         final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
         expect(sizedBox.height, AppSpacerSize.xlarge);
+      });
+
+      testWidgets('renders SizedBox with xxlarge size', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppSpacer.xxlarge()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+        expect(sizedBox.height, AppSpacerSize.xxlarge);
+      });
+
+      testWidgets('renders SizedBox with xxxlarge size', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppSpacer.xxxlarge()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+        expect(sizedBox.height, AppSpacerSize.xxxlarge);
+      });
+
+      testWidgets('renders SizedBox with huge size', (
+        WidgetTester tester,
+      ) async {
+        await tester.pumpWidget(
+          createComponentTestWidget(const AppSpacer.huge()),
+        );
+        await TestHelpers.pumpAndSettle(tester);
+
+        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+        expect(sizedBox.height, AppSpacerSize.huge);
       });
     });
   });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/demo/component_registrations.dart';
 import 'package:wishing_well/components/demo/component_registry.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class DemoHome extends StatefulWidget {
   const DemoHome({super.key});
@@ -37,14 +38,14 @@ class _DemoHomeState extends State<DemoHome> {
       backgroundColor: Colors.red.withValues(alpha: 0.1),
       actions: [
         Icon(Icons.developer_mode, color: Colors.red[700]),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacerSize.small),
       ],
     ),
     body: ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       children: [
         _buildHeader(),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacerSize.xxlarge),
         ..._demos.map((demo) => _buildDemoTile(context, demo)),
       ],
     ),
@@ -61,15 +62,18 @@ class _DemoHomeState extends State<DemoHome> {
         ),
         textAlign: TextAlign.center,
       ),
-      const SizedBox(height: 8),
+      const SizedBox(height: AppSpacerSize.small),
       const Text(
         'This app is for component testing and development only.',
         style: TextStyle(fontSize: 16, color: Colors.grey),
         textAlign: TextAlign.center,
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacerSize.large,
+          vertical: AppSpacerSize.small,
+        ),
         decoration: BoxDecoration(
           color: Colors.blue.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
@@ -79,7 +83,7 @@ class _DemoHomeState extends State<DemoHome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.check_circle, color: Colors.blue[700], size: 20),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacerSize.small),
             Text(
               'All ${_demos.length} components have demos registered',
               style: TextStyle(color: Colors.blue[700], fontSize: 14),
@@ -91,7 +95,7 @@ class _DemoHomeState extends State<DemoHome> {
   );
 
   Widget _buildDemoTile(BuildContext context, DemoMetadata demo) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: ListTile(
       leading: Icon(demo.icon, size: 32),
       title: Text(

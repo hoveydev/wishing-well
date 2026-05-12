@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/reset_password/components/reset_password_inputs.dart';
 import 'package:wishing_well/features/auth/reset_password/reset_password_view_model.dart';
@@ -30,7 +30,7 @@ class ResetPasswordHeader extends StatelessWidget {
           textAlign: TextAlign.center,
           semanticsLabel: l10n.resetPasswordScreenSubtext,
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         ResetPasswordInputs(viewModel: viewModel),
       ],
     );

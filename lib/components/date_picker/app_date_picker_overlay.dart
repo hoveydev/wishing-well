@@ -6,6 +6,7 @@ import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
 import 'package:wishing_well/theme/app_border_weight.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
@@ -95,6 +96,8 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
   static const int _calendarRowCount = 6;
   static const double _selectorContentHeight = 280.0;
   static const double _yearItemExtent = 48.0;
+  static const double _actionButtonExtent =
+      AppSpacerSize.huge + AppSpacerSize.small;
   static const double _yearSelectorVerticalPadding =
       (_selectorContentHeight - _yearItemExtent) / 2;
 
@@ -231,23 +234,28 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacerSize.large,
+          0,
+          AppSpacerSize.large,
+          AppSpacerSize.large,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildHandle(colorScheme),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildTitle(context, l10n),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             _buildMonthHeader(context),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             if (_view == _DatePickerView.calendar) ...[
               _buildDayOfWeekRow(context),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacerSize.xsmall),
               _buildCalendarGrid(context),
             ] else
               _buildSelector(context),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             _buildActions(context, l10n),
           ],
         ),
@@ -256,9 +264,9 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
   }
 
   Widget _buildHandle(AppColorScheme colorScheme) => Container(
-    margin: const EdgeInsets.only(top: 12),
-    width: 40,
-    height: 4,
+    margin: const EdgeInsets.only(top: AppSpacerSize.medium),
+    width: _dayCellSize,
+    height: AppSpacerSize.xsmall,
     decoration: BoxDecoration(
       color: colorScheme.borderGray,
       borderRadius: BorderRadius.circular(2),
@@ -297,7 +305,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
               ),
             ),
           ),
-          const SizedBox(width: 56),
+          const SizedBox(width: _actionButtonExtent),
         ],
       );
     }
@@ -362,7 +370,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
     mainAxisSize: MainAxisSize.min,
     children: [
       _buildSelectorTabs(context),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       if (_selectorTab == _DatePickerSelectorTab.year)
         _buildYearSelector(context)
       else
@@ -389,7 +397,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
             color: isYearSelected ? selectedColor : unselectedColor,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacerSize.medium),
         Expanded(
           child: AppButton.label(
             label: l10n.datePickerMonthTab,
@@ -435,7 +443,9 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
               selected: isSelected,
               label: '$year',
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppSpacerSize.xsmall,
+                ),
                 child: GestureDetector(
                   onTap: () => setState(() {
                     _selectedYear = year;
@@ -445,7 +455,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       width: double.infinity,
-                      height: 40,
+                      height: _dayCellSize,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: isSelected
@@ -670,7 +680,7 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
     children: [
       Expanded(
         child: SizedBox(
-          height: 56,
+          height: _actionButtonExtent,
           child: AppButton.label(
             label: l10n.cancel,
             type: AppButtonType.secondary,
@@ -678,10 +688,10 @@ class _AppDatePickerOverlayState extends State<AppDatePickerOverlay> {
           ),
         ),
       ),
-      const SizedBox(width: 12),
+      const SizedBox(width: AppSpacerSize.medium),
       Expanded(
         child: SizedBox(
-          height: 56,
+          height: _actionButtonExtent,
           child: AppButton.label(
             label: l10n.datePickerConfirm,
             type: AppButtonType.primary,

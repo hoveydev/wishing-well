@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/utils/app_logger.dart';
 
 class TouchFeedbackDemo extends StatelessWidget {
@@ -33,7 +34,7 @@ class TouchFeedbackDemo extends StatelessWidget {
               'Tap the boxes below to see feedback:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Row(
               children: [
                 Expanded(
@@ -43,7 +44,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                     () => _showSnackBar(context, 'Default tapped!'),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacerSize.medium),
                 Expanded(
                   child: _buildFeedbackBox(
                     'Custom',
@@ -74,7 +75,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                     () => _showSnackBar(context, 'Circle tapped!'),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacerSize.medium),
                 Expanded(
                   child: _buildShapeFeedback(
                     'Rectangle',
@@ -122,7 +123,7 @@ class TouchFeedbackDemo extends StatelessWidget {
               'Different press/release speeds:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Row(
               children: [
                 Expanded(
@@ -133,7 +134,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                     const Duration(milliseconds: 50),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacerSize.xsmall),
                 Expanded(
                   child: _buildDurationCard(
                     'Normal',
@@ -142,7 +143,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                     const Duration(milliseconds: 100),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacerSize.xsmall),
                 Expanded(
                   child: _buildDurationCard(
                     'Slow',
@@ -175,9 +176,9 @@ class TouchFeedbackDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
@@ -205,9 +206,9 @@ class TouchFeedbackDemo extends StatelessWidget {
 
   Widget _buildOpacityCard(String label, Color color, double pressedOpacity) =>
       Card(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppSpacerSize.medium),
           child: Row(
             children: [
               TouchFeedbackOpacity(
@@ -225,7 +226,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacerSize.medium),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +238,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacerSize.xsmall),
                     Text(
                       'Opacity: ${(pressedOpacity * 100).toInt()}%',
                       style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -270,7 +271,7 @@ class TouchFeedbackDemo extends StatelessWidget {
                 : null,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacerSize.small),
         Text(label),
       ],
     ),
@@ -318,13 +319,13 @@ class TouchFeedbackDemo extends StatelessWidget {
   );
 
   Widget _buildUseCaseCard(String useCase) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Row(
         children: [
           const Icon(Icons.touch_app, color: Colors.blue, size: 20),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
         ],
       ),
@@ -345,7 +346,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

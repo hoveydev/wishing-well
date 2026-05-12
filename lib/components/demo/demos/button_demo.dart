@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
 class ButtonDemo extends StatefulWidget {
@@ -24,14 +25,14 @@ class _ButtonDemoState extends State<ButtonDemo> {
         backgroundColor: Colors.blue.withValues(alpha: 0.1),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacerSize.large),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Controls
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -42,7 +43,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacerSize.medium),
                     Row(
                       children: [
                         Checkbox(
@@ -51,7 +52,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                               setState(() => _isLoading = value ?? false),
                         ),
                         const Text('Loading State'),
-                        const SizedBox(width: 20),
+                        const SizedBox(width: AppSpacerSize.xlarge),
                         Checkbox(
                           value: _isDisabled,
                           onChanged: (value) =>
@@ -65,7 +66,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacerSize.xxlarge),
 
             // Primary Buttons
             _buildSection('Primary Buttons', [
@@ -78,7 +79,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       type: AppButtonType.primary,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: _isLoading ? 'Loading...' : 'With Loading',
@@ -89,7 +90,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               AppButton.label(
                 label: 'Disabled',
                 onPressed: () {},
@@ -108,7 +109,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       type: AppButtonType.secondary,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: _isLoading ? 'Loading...' : 'With Loading',
@@ -119,7 +120,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               AppButton.label(
                 label: 'Disabled',
                 onPressed: () {},
@@ -138,7 +139,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       type: AppButtonType.tertiary,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: _isLoading ? 'Loading...' : 'With Loading',
@@ -149,7 +150,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               AppButton.label(
                 label: 'Disabled',
                 onPressed: () {},
@@ -169,7 +170,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       type: AppButtonType.primary,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.icon(
                       icon: Icons.favorite,
@@ -179,7 +180,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               Row(
                 children: [
                   Expanded(
@@ -190,7 +191,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       type: AppButtonType.tertiary,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.icon(
                       icon: Icons.delete,
@@ -209,14 +210,14 @@ class _ButtonDemoState extends State<ButtonDemo> {
                 'buttons to create custom colored variants:',
                 style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacerSize.large),
 
               // Tertiary with semantic colors
               const Text(
                 'Tertiary with semantic colors:',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacerSize.small),
               Row(
                 children: [
                   Expanded(
@@ -227,7 +228,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       color: colorScheme?.success,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: 'Error',
@@ -238,7 +239,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               Row(
                 children: [
                   Expanded(
@@ -249,7 +250,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       color: colorScheme?.warning,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: 'Primary',
@@ -261,14 +262,14 @@ class _ButtonDemoState extends State<ButtonDemo> {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacerSize.xlarge),
 
               // Secondary with custom colors
               const Text(
                 'Secondary with custom colors:',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacerSize.small),
               Row(
                 children: [
                   Expanded(
@@ -279,7 +280,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       color: Colors.red,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: 'Custom Blue',
@@ -290,7 +291,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacerSize.medium),
               Row(
                 children: [
                   Expanded(
@@ -301,7 +302,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
                       color: Colors.purple,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacerSize.medium),
                   Expanded(
                     child: AppButton.label(
                       label: 'Teal',
@@ -326,9 +327,9 @@ class _ButtonDemoState extends State<ButtonDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 

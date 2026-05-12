@@ -127,6 +127,96 @@ For routes with parameters, use the `buildPath()` helper: `Routes.wisherDetails.
 - `AppIconSize` class for icon sizes (xsmall, small, medium, large, xlarge, xxlarge)
 - Avoid `Container`, use `SizedBox` for whitespace
 
+## Design Constants Reference
+
+**CRITICAL:** All pixel values for spacing, sizing, colors, and borders MUST use global constants. Hardcoding values defeats the design system and requires PR comments. See `docs/DESIGN_CONSTANTS.md` for comprehensive guide.
+
+### Spacing (AppSpacerSize + semantic sizing)
+
+```dart
+// ✅ CORRECT - Use AppSpacerSize for common spacing
+padding: EdgeInsets.all(AppSpacerSize.large);
+SizedBox(width: AppSpacerSize.small);
+SizedBox(height: AppSpacerSize.xxlarge);
+
+// ✅ CORRECT - Use semantic sizing constants
+padding: EdgeInsets.symmetric(
+  horizontal: AppScreenLayout.screenPaddingStandard,
+);
+SizedBox(height: AppBarSizing.height);
+```
+
+**Available sizes:**
+- `AppSpacerSize`: xsmall (4), small (8), medium (12), large (16), xlarge (20), xxlarge (24), xxxlarge (32), huge (48)
+- Semantic classes: `AppScreenLayout.screenPaddingStandard` (24), `AppBarSizing.height` (48), `WisherSizing.itemSpacing` (16), `WisherSizing.avatarDiameter` (60)
+
+### Border Radius (AppBorderRadius)
+
+```dart
+// ✅ CORRECT
+borderRadius: BorderRadius.circular(AppBorderRadius.small);     // 8
+borderRadius: BorderRadius.circular(AppBorderRadius.medium);    // 14
+borderRadius: BorderRadius.circular(AppBorderRadius.large);     // 24
+```
+
+### Border Weight (AppBorderWeight)
+
+```dart
+// ✅ CORRECT
+border: Border.all(width: AppBorderWeight.regular);  // 1.0
+border: Border.all(width: AppBorderWeight.bold);     // 2.0
+```
+
+### Icon Sizes (AppIconSize)
+
+```dart
+// ✅ CORRECT
+Icon(Icons.star, size: const AppIconSize().small);      // 14
+Icon(Icons.star, size: const AppIconSize().medium);     // 18
+Icon(Icons.star, size: const AppIconSize().large);      // 24
+Icon(Icons.check_circle, size: const AppIconSize().overlayIcon);  // 120
+```
+
+### Colors (AppColorScheme)
+
+```dart
+// ✅ CORRECT - Always use extension
+final colorScheme = Theme.of(context).extension<AppColorScheme>();
+Container(color: colorScheme?.primary);
+Container(color: colorScheme?.error);
+Container(color: colorScheme?.background);
+```
+
+**Available colors:** primary, onPrimary, background, surfaceGray, borderGray, success, warning, error (+ dark variants)
+
+### Text Styles (Theme.textTheme)
+
+```dart
+// ✅ CORRECT
+final textTheme = Theme.of(context).textTheme;
+Text('Title', style: textTheme.titleLarge);
+Text('Body', style: textTheme.bodyMedium);
+```
+
+### Anti-Patterns to Avoid
+
+```dart
+// ❌ WRONG - Hardcoded numbers
+padding: EdgeInsets.all(16);                    // Use AppSpacerSize.large
+SizedBox(width: 8);                             // Use AppSpacerSize.small
+borderRadius: BorderRadius.circular(8);         // Use AppBorderRadius.small
+Icon(Icons.star, size: 24);                     // Use const AppIconSize().large
+
+// ❌ WRONG - Hardcoded colors
+Container(color: Color(0xFF3A8FB7));           // Use colorScheme.primary
+Text('Error', style: TextStyle(color: Colors.red));  // Use colorScheme.error
+
+// ❌ WRONG - Creating new constants
+static const double myPadding = 15;             // Use existing AppSpacerSize
+```
+
+**See `docs/DESIGN_CONSTANTS.md` for comprehensive reference, examples, and best practices.**
+
 ## Testing
 
 - Tests in `test/unit_tests/` and `test/ui_tests/`
@@ -187,14 +277,16 @@ The goal of this phase is **zero comments from the PR reviewer**. Check every it
 - No unguarded `!` null assertions — use proper null-safe handling
 
 **Code Style & Quality**
+- **Design Constants**: All spacing uses `AppSpacerSize` or semantic sizing classes (`AppScreenLayout`, `AppBarSizing`, `WisherSizing`); all borders use `AppBorderRadius`/`AppBorderWeight`; all icon sizes use `AppIconSize`; all colors use `AppColorScheme`
 - No hardcoded colors — use `AppColorScheme` extension
 - No hardcoded text styles — use `Theme.of(context).textTheme`
-- No hardcoded spacing or sizes — use `AppSpacing` and `AppIconSize`
+- No hardcoded spacing or sizes — use `AppSpacerSize`, `AppScreenLayout`, `AppBarSizing`, `WisherSizing`, `AppBorderRadius`, `AppBorderWeight`, `AppIconSize`
 - All imports use `package:` (no relative imports)
 - Lines ≤ 80 characters
 - `const` constructors used wherever possible
 - `SizedBox` used for whitespace (not `Container`)
 - No debug code, commented-out code, or stray TODO comments left behind
+- See `docs/DESIGN_CONSTANTS.md` for comprehensive constants reference
 
 **Accessibility**
 - `TextOverflow.ellipsis` on all potentially long text in constrained layouts

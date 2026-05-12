@@ -6,7 +6,7 @@ import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart'
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/data/models/wisher_field_options.dart';
 import 'package:wishing_well/features/wisher_details/edit_wisher/edit_wisher_view_model.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';

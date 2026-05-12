@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/theme/app_border_radius.dart';
+import 'package:wishing_well/theme/app_border_weight.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 /// A customizable text input component with focus animation.
@@ -101,7 +102,7 @@ class _AppInputState extends State<AppInput> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppBorderRadius.medium),
-          border: Border.all(color: borderColor, width: 1.5),
+          border: Border.all(color: borderColor, width: AppBorderWeight.medium),
         ),
         child: TextField(
           obscureText: widget.type == AppInputType.password,
@@ -110,7 +111,9 @@ class _AppInputState extends State<AppInput> {
             prefixIconColor: colorScheme.primary,
             hint: Text(style: textStyle.bodyMedium, widget.placeholder),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppBorderRadius.medium - 1.5),
+              borderRadius: BorderRadius.circular(
+                AppBorderRadius.medium - AppBorderWeight.medium,
+              ),
               borderSide: BorderSide.none,
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/forgot_password/components/forgot_password_input.dart';
 import 'package:wishing_well/features/auth/forgot_password/forgot_password_view_model.dart';
@@ -30,7 +30,7 @@ class ForgotPasswordHeader extends StatelessWidget {
           textAlign: TextAlign.center,
           semanticsLabel: l10n.forgotPasswordScreenSubtext,
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         ForgotPasswordInput(viewModel: viewModel),
       ],
     );

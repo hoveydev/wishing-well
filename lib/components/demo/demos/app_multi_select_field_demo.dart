@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/demo/demos/input_demo.dart';
 import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 const _holidayItems = [
   AppMultiSelectItem(value: 'christmas', label: 'Christmas'),
@@ -49,7 +50,7 @@ class _AppMultiSelectFieldDemoState extends State<AppMultiSelectFieldDemo> {
       backgroundColor: Colors.green.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -61,7 +62,7 @@ class _AppMultiSelectFieldDemoState extends State<AppMultiSelectFieldDemo> {
               selectedValues: _occasions,
               onChanged: (values) => setState(() => _occasions = values),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               _occasions.isEmpty
                   ? 'None selected'
@@ -77,7 +78,7 @@ class _AppMultiSelectFieldDemoState extends State<AppMultiSelectFieldDemo> {
               selectedValues: _interests,
               onChanged: (values) => setState(() => _interests = values),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Text(
               _interests.isEmpty
                   ? 'None selected'
@@ -135,9 +136,9 @@ class _AppMultiSelectFieldDemoState extends State<AppMultiSelectFieldDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 }

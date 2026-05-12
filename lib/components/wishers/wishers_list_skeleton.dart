@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/throbber/skeleton_loader.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 
 class WishersListSkeleton extends StatelessWidget {
   const WishersListSkeleton({super.key});
@@ -10,13 +11,13 @@ class WishersListSkeleton extends StatelessWidget {
   Widget build(BuildContext context) => ListView.builder(
     scrollDirection: Axis.horizontal,
     padding: const EdgeInsets.symmetric(
-      horizontal: AppSpacing.screenPaddingStandard,
+      horizontal: AppScreenLayout.screenPaddingStandard,
     ),
     itemCount: 5,
     itemBuilder: (context, index) => _WisherSkeletonItem(
       padding: index == 4
           ? EdgeInsets.zero
-          : const EdgeInsets.only(right: AppSpacing.wisherSpacing),
+          : const EdgeInsets.only(right: WisherSizing.itemSpacing),
     ),
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/wishers/wishers_list.dart';
 import 'package:wishing_well/data/models/wisher.dart';
 import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class WishersDemo extends StatelessWidget {
   const WishersDemo({super.key});
@@ -49,14 +50,14 @@ class WishersDemo extends StatelessWidget {
       backgroundColor: Colors.green.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Wishers List Section
           _buildSection('Wishers List', [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacerSize.large),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -93,7 +94,7 @@ class WishersDemo extends StatelessWidget {
               'Add Wisher Item:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             Container(
               height: 100,
               decoration: BoxDecoration(
@@ -106,12 +107,12 @@ class WishersDemo extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Wisher Item:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildWisherItemExample(_demoWishers.first),
           ]),
 
@@ -121,9 +122,9 @@ class WishersDemo extends StatelessWidget {
               'Tap on any wisher or the Add button to see interactions:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacerSize.large),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -148,14 +149,14 @@ class WishersDemo extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildWisherItemExample(Wisher wisher) => Container(
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(AppSpacerSize.medium),
     decoration: BoxDecoration(
       color: Colors.grey.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(8),
@@ -170,7 +171,7 @@ class WishersDemo extends StatelessWidget {
             style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacerSize.medium),
         Text(wisher.firstName, style: const TextStyle(fontSize: 16)),
       ],
     ),
@@ -192,7 +193,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

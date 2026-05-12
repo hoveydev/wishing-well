@@ -5,7 +5,8 @@ import 'package:wishing_well/components/wishers/add_wisher_item.dart';
 import 'package:wishing_well/components/wishers/wisher_item.dart';
 import 'package:wishing_well/components/wishers/wishers_list_skeleton.dart';
 import 'package:wishing_well/data/models/wisher.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
@@ -417,7 +418,7 @@ void main() {
         expect(
           listView.padding,
           const EdgeInsets.symmetric(
-            horizontal: AppSpacing.screenPaddingStandard,
+            horizontal: AppScreenLayout.screenPaddingStandard,
           ),
         );
       });
@@ -439,8 +440,8 @@ void main() {
           ),
         );
         final positionedWidget = positionedWidgets.first;
-        expect(positionedWidget.left, -AppSpacing.screenPaddingStandard);
-        expect(positionedWidget.right, -AppSpacing.screenPaddingStandard);
+        expect(positionedWidget.left, -AppScreenLayout.screenPaddingStandard);
+        expect(positionedWidget.right, -AppScreenLayout.screenPaddingStandard);
       });
 
       testWidgets('last item has no right padding', (
@@ -544,7 +545,7 @@ void main() {
         await TestHelpers.pumpAndSettle(tester);
 
         final wishersListContext = tester.element(find.byType(WishersList));
-        final expectedHeight = AppSpacing.wisherListItemHeightFor(
+        final expectedHeight = WisherSizing.listItemHeightFor(
           wishersListContext,
         );
 
@@ -595,7 +596,7 @@ void main() {
         await tester.pump();
 
         final wishersListContext = tester.element(find.byType(WishersList));
-        final expectedHeight = AppSpacing.wisherListItemHeightFor(
+        final expectedHeight = WisherSizing.listItemHeightFor(
           wishersListContext,
         );
         final rowHeightSizedBoxFinder = find.descendant(

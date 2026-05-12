@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 enum _AppButtonContentType { icon, label, labelWithIcon }
 
@@ -86,8 +87,8 @@ class AppButtonContent extends StatelessWidget {
 
     if (isLoading) {
       return const SizedBox(
-        width: 20,
-        height: 20,
+        width: AppSpacerSize.xlarge,
+        height: AppSpacerSize.xlarge,
         child: CircularProgressIndicator(strokeWidth: 2),
       );
     } else {
@@ -116,7 +117,7 @@ class AppButtonContent extends StatelessWidget {
       case _AppButtonContentType.labelWithIcon:
         return [
           Icon(icon!, size: const AppIconSize().large),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacerSize.small),
           Flexible(child: Text(label!, style: textStyle)),
         ];
     }

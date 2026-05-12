@@ -3,10 +3,10 @@ import 'package:wishing_well/components/app_bar/app_menu_bar_type.dart';
 import 'package:wishing_well/components/button/app_button.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/logo/app_logo.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/theme/app_bar_sizing.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 
 class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,7 +21,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? additionalActions;
 
   @override
-  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight);
+  Size get preferredSize => const Size.fromHeight(AppBarSizing.height);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class AppMenuBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       leading: _menuBarLeading(action, textTheme, l10n),
       titleSpacing: type == AppMenuBarType.main
-          ? AppSpacing.appBarTitleSpacing
+          ? AppBarSizing.titleSpacing
           : null,
       centerTitle: false,
       title: _menuBarTitle(l10n, textTheme),

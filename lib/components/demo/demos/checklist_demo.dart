@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/checklist/checklist_item.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class ChecklistDemo extends StatefulWidget {
   const ChecklistDemo({super.key});
@@ -22,7 +23,7 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
       backgroundColor: Colors.teal.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,27 +33,27 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
               'Satisfied items:',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const ChecklistItem(
               label: 'At least 12 characters',
               isSatisfied: true,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const ChecklistItem(
               label: 'One uppercase letter',
               isSatisfied: true,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text(
               'Unsatisfied items:',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const ChecklistItem(
               label: 'One lowercase letter',
               isSatisfied: false,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             const ChecklistItem(label: 'One number', isSatisfied: false),
           ]),
 
@@ -62,10 +63,10 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
               'Toggle the requirements below to see different states:',
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacerSize.large),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,24 +77,24 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacerSize.medium),
                     ChecklistItem(
                       label: 'At least 12 characters',
                       isSatisfied: _minLength,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ChecklistItem(
                       label: 'One uppercase letter',
                       isSatisfied: _uppercase,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ChecklistItem(
                       label: 'One lowercase letter',
                       isSatisfied: _lowercase,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ChecklistItem(label: 'One number', isSatisfied: _number),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     ChecklistItem(
                       label: 'One special character',
                       isSatisfied: _specialChar,
@@ -102,9 +103,9 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             const Text('Toggle switches to change states:'),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacerSize.small),
             _buildToggle(
               'Min Length (12+)',
               _minLength,
@@ -156,7 +157,7 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(AppSpacerSize.medium),
                     decoration: BoxDecoration(
                       color: Colors.grey.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -167,16 +168,16 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
                           'Unsatisfied',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         ChecklistItem(label: 'Not yet met', isSatisfied: false),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacerSize.medium),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(AppSpacerSize.medium),
                     decoration: BoxDecoration(
                       color: Colors.green.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -187,7 +188,7 @@ class _ChecklistDemoState extends State<ChecklistDemo> {
                           'Satisfied',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: AppSpacerSize.small),
                         ChecklistItem(
                           label: 'Requirement met',
                           isSatisfied: true,
@@ -212,9 +213,9 @@ Widget _buildSection(String title, List<Widget> children) => Column(
       title,
       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
-    const SizedBox(height: 12),
+    const SizedBox(height: AppSpacerSize.medium),
     ...children,
-    const SizedBox(height: 24),
+    const SizedBox(height: AppSpacerSize.xxlarge),
   ],
 );
 
@@ -232,7 +233,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

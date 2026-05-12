@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishing_well/components/inline_alert/app_inline_alert_type.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/theme/app_theme.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 
@@ -20,7 +21,7 @@ class AppInlineAlert extends StatelessWidget {
         children: [
           // Icon based on type
           Icon(_getIcon(), color: _getColor(colorScheme)),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacerSize.small),
           // Message text
           Expanded(
             child: Text(

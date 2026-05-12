@@ -7,7 +7,8 @@ import 'package:wishing_well/components/spacer/app_spacer.dart';
 import 'package:wishing_well/components/throbber/app_throbber.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_icon_size.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
+import 'package:wishing_well/theme/app_screen_layout.dart';
 import 'package:wishing_well/theme/extensions/color_scheme_extension.dart';
 import 'package:wishing_well/utils/status_overlay_controller.dart';
 
@@ -230,7 +231,7 @@ class _OverlayContent extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.screenPaddingStandard),
+        padding: const EdgeInsets.all(AppScreenLayout.screenPaddingStandard),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -248,7 +249,7 @@ class _OverlayContent extends StatelessWidget {
                 size: const AppIconSize().overlayIcon,
                 color: iconColor,
               ),
-            const AppSpacer.large(),
+            const AppSpacer.xxlarge(),
             controller.isSuccess && name != null
                 ? _buildPersonalizedMessage(
                     message: message,
@@ -256,7 +257,7 @@ class _OverlayContent extends StatelessWidget {
                     textStyle: textStyle,
                   )
                 : Text(message, textAlign: TextAlign.center, style: textStyle),
-            const AppSpacer.medium(),
+            const AppSpacer.large(),
             if (controller.isWarning)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -267,7 +268,7 @@ class _OverlayContent extends StatelessWidget {
                     type: AppButtonType.primary,
                     backgroundColor: colorScheme?.primary,
                   ),
-                  const SizedBox(height: AppSpacing.wisherSpacing),
+                  const SizedBox(height: WisherSizing.itemSpacing),
                   AppButton.label(
                     label: controller.secondaryActionLabel ?? l10n.ok,
                     onPressed: controller.secondaryActionAndClear,

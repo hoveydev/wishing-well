@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wishing_well/theme/app_spacing.dart';
+import 'package:wishing_well/components/wishers/wisher_sizing.dart';
 
 import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 void main() {
-  group('AppSpacing', () {
-    testWidgets('wisherListItemHeightFor grows with text scale', (
+  group('WisherSizing', () {
+    testWidgets('listItemHeightFor grows with text scale', (
       WidgetTester tester,
     ) async {
       double? measuredHeight;
@@ -17,7 +17,7 @@ void main() {
             data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
             child: Builder(
               builder: (context) {
-                measuredHeight = AppSpacing.wisherListItemHeightFor(context);
+                measuredHeight = WisherSizing.listItemHeightFor(context);
                 return const SizedBox.shrink();
               },
             ),
@@ -26,7 +26,7 @@ void main() {
       );
 
       expect(measuredHeight, isNotNull);
-      expect(measuredHeight!, greaterThan(AppSpacing.wisherListItemHeight));
+      expect(measuredHeight!, greaterThan(WisherSizing.listItemHeight));
     });
   });
 }

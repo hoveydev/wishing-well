@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/input/app_input.dart';
 import 'package:wishing_well/components/input/app_input_type.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/features/auth/create_account/components/create_account_password_checklist.dart';
 import 'package:wishing_well/features/auth/create_account/create_account_view_model.dart';
@@ -63,7 +63,7 @@ class _CreateAccountInputsState extends State<CreateAccountInputs> {
           focusNode: emailFocusNode,
           onChanged: (String email) => widget.viewModel.updateEmailField(email),
         ),
-        const AppSpacer.large(),
+        const AppSpacer.xxlarge(),
         AppInput(
           placeholder: l10n.authPassword,
           type: AppInputType.password,

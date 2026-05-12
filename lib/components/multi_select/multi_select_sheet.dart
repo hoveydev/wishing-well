@@ -5,7 +5,7 @@ import 'package:wishing_well/components/checklist/checklist_icon.dart';
 import 'package:wishing_well/components/multi_select/app_multi_select_field.dart';
 import 'package:wishing_well/components/sheet/app_selection_sheet.dart';
 import 'package:wishing_well/components/spacer/app_spacer.dart';
-import 'package:wishing_well/components/spacer/app_spacer_size.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 import 'package:wishing_well/components/touch_feedback/touch_feedback_opacity.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
 import 'package:wishing_well/theme/app_theme.dart';
@@ -91,8 +91,8 @@ class _MultiSelectSheetState extends State<MultiSelectSheet> {
                   child: Container(
                     color: Colors.transparent,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacerSize.medium,
-                      vertical: AppSpacerSize.medium,
+                      horizontal: AppSpacerSize.large,
+                      vertical: AppSpacerSize.large,
                     ),
                     child: _SelectionRow(
                       label: item.label,
@@ -107,7 +107,7 @@ class _MultiSelectSheetState extends State<MultiSelectSheet> {
             top: false,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacerSize.medium,
+                horizontal: AppSpacerSize.large,
                 vertical: AppSpacerSize.small,
               ),
               child: AppButton.label(

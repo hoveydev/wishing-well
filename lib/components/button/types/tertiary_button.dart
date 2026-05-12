@@ -3,6 +3,7 @@ import 'package:wishing_well/components/button/app_button_size.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/button/button_feedback_style.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 enum _TertiaryButtonContentType { icon, label, labelWithIcon }
 
@@ -90,8 +91,11 @@ class TertiaryButton extends StatelessWidget {
       style: ButtonFeedbackStyle.tertiary(
         context: context,
         padding: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
-            ? const EdgeInsets.all(0)
-            : const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            ? EdgeInsets.zero
+            : const EdgeInsets.symmetric(
+                vertical: AppSpacerSize.large,
+                horizontal: AppSpacerSize.xxlarge,
+              ),
         shape: _tertiaryButtonContentType == _TertiaryButtonContentType.icon
             ? const CircleBorder()
             : null,

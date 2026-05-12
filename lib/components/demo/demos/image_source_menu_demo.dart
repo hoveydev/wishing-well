@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/image_picker_circle/image_picker_circle.dart';
 import 'package:wishing_well/components/image_source_menu/image_source_menu.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 class ImageSourceMenuDemo extends StatefulWidget {
   const ImageSourceMenuDemo({super.key});
@@ -20,7 +21,7 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
       backgroundColor: Colors.lime.withValues(alpha: 0.1),
     ),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacerSize.large),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,18 +47,18 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
               'Tap the image picker to open the menu:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             Center(
               child: CircleImagePicker(
                 onTap: () => _showImageSourceMenu(context),
                 label: 'Tap to Select',
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacerSize.large),
             // Selected option display
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacerSize.medium),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -69,13 +70,13 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
                         color: Colors.grey[700],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacerSize.small),
                     _buildStateRow('Option', _selectedOption ?? 'None'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacerSize.medium),
             // Clear selection button
             if (_selectedOption != null)
               Center(
@@ -108,14 +109,14 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
         title,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: AppSpacerSize.medium),
       ...children,
-      const SizedBox(height: 24),
+      const SizedBox(height: AppSpacerSize.xxlarge),
     ],
   );
 
   Widget _buildStateRow(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
+    padding: const EdgeInsets.symmetric(vertical: AppSpacerSize.xsmall),
     child: Row(
       children: [
         SizedBox(
@@ -139,7 +140,7 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
   Widget _buildUsageCode() => Card(
     margin: EdgeInsets.zero,
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -151,7 +152,7 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacerSize.small),
           Text(
             '''ImageSourceMenu.show(
   context: context,
@@ -178,13 +179,13 @@ class _ImageSourceMenuDemoState extends State<ImageSourceMenuDemo> {
   );
 
   Widget _buildUseCaseCard(String useCase) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: AppSpacerSize.small),
     child: Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacerSize.medium),
       child: Row(
         children: [
           const Icon(Icons.image, color: Colors.blue, size: 20),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacerSize.medium),
           Expanded(child: Text(useCase, style: const TextStyle(fontSize: 16))),
         ],
       ),
@@ -221,7 +222,7 @@ class FeatureBulletPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 4),
+    padding: const EdgeInsets.only(bottom: AppSpacerSize.xsmall),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

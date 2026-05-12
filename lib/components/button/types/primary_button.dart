@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishing_well/components/button/app_button_content.dart';
 import 'package:wishing_well/components/button/app_button_type.dart';
 import 'package:wishing_well/components/button/button_feedback_style.dart';
+import 'package:wishing_well/theme/app_spacer_size.dart';
 
 enum _PrimaryButtonContentType { icon, label, labelWithIcon }
 
@@ -104,7 +105,10 @@ class PrimaryButton extends StatelessWidget {
     final buttonWidget = TextButton(
       style: ButtonFeedbackStyle.primary(
         context: context,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacerSize.large,
+          horizontal: AppSpacerSize.xxlarge,
+        ),
         minimumSize: WidgetStateProperty.all(Size(double.infinity, minHeight)),
         color: backgroundColor,
       ),

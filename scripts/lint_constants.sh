@@ -26,7 +26,7 @@ check_hardcoded_spacing() {
   local matches
   
   matches=$(grep -Ern "$pattern" "$files" --include="*.dart" 2>/dev/null \
-    | grep -Ev "(^|/)test/|\\.dart\\.g|/demo/" || true)
+    | grep -Ev "^[^:]*test/|\\.dart\\.g|/demo/" || true)
 
   if [ -n "$extra_exclude" ]; then
     matches=$(echo "$matches" | grep -Ev "$extra_exclude" || true)
@@ -83,7 +83,7 @@ echo "Checking border radius values..."
 # - 2, 4: subtle rounding used for handles/compact pills
 # - 999: fully rounded pill/capsule chips
 check_hardcoded_spacing "$LIB_DIR" \
-  "borderRadius:[[:space:]]*BorderRadius\\.circular\\([[:space:]]*[0-9]+(\\.[0-9]+)?" \
+  "borderRadius:[[:space:]]*BorderRadius\\.circular\\([[:space:]]*[0-9]+(\\.[0-9]+)?\\)" \
   "Hardcoded border radius values" \
   "Use AppBorderRadius constants: BorderRadius.circular(AppBorderRadius.small)" \
   "BorderRadius\\.circular\\((2|4|999)\\)"
@@ -91,7 +91,7 @@ check_hardcoded_spacing "$LIB_DIR" \
 # Check for hardcoded border widths
 echo "Checking border width values..."
 check_hardcoded_spacing "$LIB_DIR" \
-  "Border\\.all\\([^)]*width:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
+  "Border\\.all\\([^)]*width:[[:space:]]*[0-9]+(\\.[0-9]+)?\\)" \
   "Possible hardcoded border width values" \
   "Use AppBorderWeight constants: width: AppBorderWeight.regular"
 
@@ -99,7 +99,7 @@ check_hardcoded_spacing "$LIB_DIR" \
 # which intentionally use custom sizes to showcase components at different scales
 echo "Checking icon size values..."
 check_hardcoded_spacing "$LIB_DIR" \
-  "size:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
+  "Icon\\([^)]*size:[[:space:]]*[0-9]+(\\.[0-9]+)?" \
   "Possible hardcoded icon size values" \
   "Use AppIconSize constants: size: const AppIconSize().medium"
 

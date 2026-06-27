@@ -32,8 +32,8 @@ void main() {
       );
     });
 
-    test('should handle ShowDeepLinkError event - invalid', () {
-      final event = ShowDeepLinkError(DeepLinkErrorType.invalid);
+    test('should handle ShowDeepLinkError event - generic', () {
+      final event = ShowDeepLinkError(DeepLinkErrorType.generic);
       expect(coordinator.overlay.isIdle, true);
       coordinator.handle(event);
       expect(coordinator.overlay.isError, true);
@@ -43,13 +43,12 @@ void main() {
       expect(coordinator.overlay.isLoading, false);
       expect(
         coordinator.overlay.message,
-        'This link has expired or is no longer valid. Please return to the '
-        'login screen and resubmit for a new link.',
+        'An error occurred while processing the link. Please try again later.',
       );
     });
 
-    test('should handle ShowDeepLinkError event - password reset', () {
-      final event = ShowDeepLinkError(DeepLinkErrorType.passwordReset);
+    test('should handle ShowDeepLinkError event - access denied', () {
+      final event = ShowDeepLinkError(DeepLinkErrorType.accessDenied);
       expect(coordinator.overlay.isIdle, true);
       coordinator.handle(event);
       expect(coordinator.overlay.isError, true);
@@ -59,8 +58,8 @@ void main() {
       expect(coordinator.overlay.isLoading, false);
       expect(
         coordinator.overlay.message,
-        'This link has expired or is no longer valid. Please return to the '
-        'login screen and resubmit for a new link.',
+        'This link has expired or is no longer valid. '
+        'Please resubmit for a new link.',
       );
     });
 
@@ -75,8 +74,7 @@ void main() {
       expect(coordinator.overlay.isLoading, false);
       expect(
         coordinator.overlay.message,
-        'This link has expired or is no longer valid. Please return to the '
-        'login screen and resubmit for a new link.',
+        'This link is not recognized. Please check the link and try again.',
       );
     });
 

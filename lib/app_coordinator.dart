@@ -33,15 +33,14 @@ class AppCoordinator {
 
   String _messageForError(DeepLinkErrorType type) {
     switch (type) {
-      // eventually change the text for these
-      case DeepLinkErrorType.invalid:
-        return l10n.deepLinkError;
+      case DeepLinkErrorType.generic:
+        return l10n.deepLinkErrorGeneric;
 
-      case DeepLinkErrorType.passwordReset:
-        return l10n.deepLinkError;
+      case DeepLinkErrorType.accessDenied:
+        return l10n.deepLinkErrorAccessDenied;
 
       case DeepLinkErrorType.unknown:
-        return l10n.deepLinkError;
+        return l10n.deepLinkErrorUnknown;
     }
   }
 }

@@ -456,8 +456,16 @@
     "@appBarBack": {
         "description": "Accessibility label for back navigation button in app bar"
     },
-    "deepLinkError": "This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.",
-    "@deepLinkError": {
+    "deepLinkErrorGeneric": "An error occurred while processing the link. Please try again later.",
+    "@deepLinkErrorGeneric": {
+        "description": "Error message shown when a deep link error type is unrecognized or generic"
+    },
+    "deepLinkErrorUnknown": "This link is not recognized. Please check the link and try again.",
+    "@deepLinkErrorUnknown": {
+        "description": "Error message shown when a deep link is not recognized"
+    },
+    "deepLinkErrorAccessDenied": "This link has expired or is no longer valid. Please resubmit for a new link.",
+    "@deepLinkErrorAccessDenied": {
         "description": "Error message shown when a deep link (password reset or account confirmation) has expired or is invalid"
     },
     "datePickerTitle": "Select a Date",
@@ -521,49 +529,85 @@
         "description": "Placeholder shown when no gift interests are selected"
     },
     "occasionChristmas": "Christmas",
-    "@occasionChristmas": { "description": "Gift occasion: Christmas" },
+    "@occasionChristmas": {
+        "description": "Gift occasion: Christmas"
+    },
     "occasionHanukkah": "Hanukkah",
-    "@occasionHanukkah": { "description": "Gift occasion: Hanukkah" },
+    "@occasionHanukkah": {
+        "description": "Gift occasion: Hanukkah"
+    },
     "occasionKwanzaa": "Kwanzaa",
-    "@occasionKwanzaa": { "description": "Gift occasion: Kwanzaa" },
+    "@occasionKwanzaa": {
+        "description": "Gift occasion: Kwanzaa"
+    },
     "occasionDiwali": "Diwali",
-    "@occasionDiwali": { "description": "Gift occasion: Diwali" },
+    "@occasionDiwali": {
+        "description": "Gift occasion: Diwali"
+    },
     "occasionEid": "Eid",
-    "@occasionEid": { "description": "Gift occasion: Eid" },
+    "@occasionEid": {
+        "description": "Gift occasion: Eid"
+    },
     "occasionValentinesDay": "Valentine's Day",
     "@occasionValentinesDay": {
         "description": "Gift occasion: Valentine's Day"
     },
     "occasionMothersDay": "Mother's Day",
-    "@occasionMothersDay": { "description": "Gift occasion: Mother's Day" },
+    "@occasionMothersDay": {
+        "description": "Gift occasion: Mother's Day"
+    },
     "occasionFathersDay": "Father's Day",
-    "@occasionFathersDay": { "description": "Gift occasion: Father's Day" },
+    "@occasionFathersDay": {
+        "description": "Gift occasion: Father's Day"
+    },
     "occasionEaster": "Easter",
-    "@occasionEaster": { "description": "Gift occasion: Easter" },
+    "@occasionEaster": {
+        "description": "Gift occasion: Easter"
+    },
     "occasionNewYears": "New Year's",
-    "@occasionNewYears": { "description": "Gift occasion: New Year's" },
+    "@occasionNewYears": {
+        "description": "Gift occasion: New Year's"
+    },
     "interestBooks": "Books",
-    "@interestBooks": { "description": "Gift interest: Books" },
+    "@interestBooks": {
+        "description": "Gift interest: Books"
+    },
     "interestElectronics": "Electronics",
-    "@interestElectronics": { "description": "Gift interest: Electronics" },
+    "@interestElectronics": {
+        "description": "Gift interest: Electronics"
+    },
     "interestClothing": "Clothing",
-    "@interestClothing": { "description": "Gift interest: Clothing" },
+    "@interestClothing": {
+        "description": "Gift interest: Clothing"
+    },
     "interestJewelry": "Jewelry",
-    "@interestJewelry": { "description": "Gift interest: Jewelry" },
+    "@interestJewelry": {
+        "description": "Gift interest: Jewelry"
+    },
     "interestArt": "Art",
-    "@interestArt": { "description": "Gift interest: Art" },
+    "@interestArt": {
+        "description": "Gift interest: Art"
+    },
     "interestHomeAndGarden": "Home & Garden",
     "@interestHomeAndGarden": {
         "description": "Gift interest: Home & Garden"
     },
     "interestSports": "Sports",
-    "@interestSports": { "description": "Gift interest: Sports" },
+    "@interestSports": {
+        "description": "Gift interest: Sports"
+    },
     "interestBeauty": "Beauty",
-    "@interestBeauty": { "description": "Gift interest: Beauty" },
+    "@interestBeauty": {
+        "description": "Gift interest: Beauty"
+    },
     "interestFoodAndDrink": "Food & Drink",
-    "@interestFoodAndDrink": { "description": "Gift interest: Food & Drink" },
+    "@interestFoodAndDrink": {
+        "description": "Gift interest: Food & Drink"
+    },
     "interestTravel": "Travel",
-    "@interestTravel": { "description": "Gift interest: Travel" },
+    "@interestTravel": {
+        "description": "Gift interest: Travel"
+    },
     "interestGamesAndToys": "Games & Toys",
     "@interestGamesAndToys": {
         "description": "Gift interest: Games & Toys"

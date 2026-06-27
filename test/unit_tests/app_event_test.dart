@@ -5,7 +5,7 @@ import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 void main() {
   group('AppEvent', () {
     test('should create an instance of ShowDeepLinkError', () {
-      final error = ShowDeepLinkError(DeepLinkErrorType.invalid);
+      final error = ShowDeepLinkError(DeepLinkErrorType.generic);
       expect(error, isA<ShowDeepLinkError>());
     });
   });

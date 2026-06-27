@@ -120,7 +120,7 @@ class AuthRepositoryImpl extends AuthRepository {
         email: email,
         password: password,
         emailRedirectTo:
-            'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=account_confirm',
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
       );
       AppLogger.info('Account creation successful', context: 'AuthRepository');
       return const Result.ok(null);
@@ -146,7 +146,10 @@ class AuthRepositoryImpl extends AuthRepository {
     );
 
     try {
-      await _dataSource.resetPasswordForEmail(email);
+      await _dataSource.resetPasswordForEmail(
+        email,
+        redirectTo: 'https://wishing-well-ayb.pages.dev/auth/password-reset',
+      );
       AppLogger.info('Password reset request sent', context: 'AuthRepository');
       return const Result.ok(null);
     } on Exception catch (err, stackTrace) {

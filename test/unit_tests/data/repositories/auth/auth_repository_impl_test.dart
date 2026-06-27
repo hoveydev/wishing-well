@@ -21,9 +21,21 @@ void main() {
       repository.dispose();
     });
 
-    group(TestGroups.initialState, () {
+    group('initial', () {
       test('is a ChangeNotifier', () {
         expect(repository, isA<ChangeNotifier>());
+      });
+
+      test('authStateChanges stream error returns null', () async {
+        final mockDataSource = MockAuthDataSource(
+          mockAuthStateChanges: Stream<AuthState>.error(
+            Exception('Stream error'),
+          ),
+        );
+        final repository = AuthRepositoryImpl(dataSource: mockDataSource);
+        await Future<void>.delayed(Duration.zero); // Allow the stream to emit
+
+        expect(repository.isAuthenticated, isFalse);
       });
 
       test('isAuthenticated returns false when no session exists', () async {

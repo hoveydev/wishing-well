@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 /// Abstract data source for authentication operations.
 ///
 /// This interface abstracts the Supabase Auth API, allowing for
@@ -8,6 +10,9 @@ abstract class AuthDataSource {
 
   /// Returns the current session's access token if authenticated, or null.
   String? get currentAccessToken;
+
+  /// Returns a stream of authentication state changes.
+  Stream<AuthState> get authStateChanges;
 
   /// Signs in a user with email and password.
   ///

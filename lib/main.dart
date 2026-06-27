@@ -5,18 +5,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wishing_well/utils/app_config.dart';
+import 'package:wishing_well/app_coordinator.dart';
+import 'package:wishing_well/app_event.dart';
 import 'package:wishing_well/config/dependencies.dart';
 import 'package:wishing_well/data/data_sources/auth/auth_data_source_supabase.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
-import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/l10n/app_localizations.dart';
-import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
-import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/routing/router.dart';
 import 'package:wishing_well/components/status_overlay/status_overlay.dart';
 import 'package:wishing_well/theme/app_theme.dart';
+import 'package:wishing_well/utils/app_config.dart';
 import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
+import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
+import 'package:wishing_well/utils/status_overlay_controller.dart';
 import 'package:wishing_well/features/add_wisher/demo/add_wisher_demo.dart'
     as add_wisher_demo;
 import 'package:wishing_well/features/wisher_details/demo/wisher_details_demo.dart'
@@ -100,35 +102,12 @@ Future<void> _runProduction() async {
   );
 
   final goRouter = router(authRepository: authRepository);
-  final deepLinkSource = DeepLinkSource.platform();
-
-  // Supabase processes the password reset deep link internally and emits
-  // a passwordRecovery event once the recovery session is established.
-  // We navigate to the reset-password screen in response to that event
-  // rather than parsing the URI directly, which avoids a race condition
-  // where GoRouter processes the initial deep link URL and redirects to
-  // /login after our URI-based navigation has already fired.
-  final passwordRecoveryStream = Supabase.instance.client.auth.onAuthStateChange
-      .where((state) => state.event == AuthChangeEvent.passwordRecovery)
-      .map((state) => state.session?.user.email);
-
-  // Detect account confirmation via the deep link source and emit when we
-  // get a signup confirmation link. The handler itself will emit to this
-  // controller when it detects a valid account-confirm URI (both initial
-  // and ongoing streams).
-  final accountConfirmationController = StreamController<void>.broadcast();
-
-  final deepLinkHandler = DeepLinkHandler(
-    (name, queryParameters) => goRouter.goNamed(
-      name,
-      queryParameters: queryParameters ?? const <String, dynamic>{},
-    ),
-    source: deepLinkSource,
-    passwordRecovery: passwordRecoveryStream,
-    accountConfirmationController: accountConfirmationController,
-  );
 
   final statusOverlayController = StatusOverlayController();
+
+  final deepLinkHandler = DeepLinkHandlerImpl(
+    source: DeepLinkSource.platform(),
+  );
 
   runApp(
     MultiProvider(
@@ -142,7 +121,7 @@ Future<void> _runProduction() async {
   );
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({
     required this.router,
     required this.deepLinkHandler,
@@ -152,94 +131,12 @@ class MainApp extends StatefulWidget {
   final DeepLinkHandler deepLinkHandler;
 
   @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  StreamSubscription? _authStreamSub;
-  StreamSubscription? _accountConfirmationSub;
-
-  @override
-  void initState() {
-    super.initState();
-    // Catch exceptions from Supabase's auth processing of deep links.
-    // When an expired/invalid deep link is clicked, Supabase throws an
-    // AuthException before we can process the URI, so we subscribe here to
-    // suppress those expected errors. Unexpected errors are logged at warning
-    // level so they are not silently swallowed.
-    _authStreamSub = Supabase.instance.client.auth.onAuthStateChange.listen(
-      (_) {
-        // Auth state changes are handled by the passwordRecoveryStream above.
-      },
-      onError: (Object error, StackTrace stackTrace) {
-        if (error is AuthException) return;
-        AppLogger.error(
-          'Unexpected auth stream error',
-          context: '_MainAppState.initState',
-          error: error,
-          stackTrace: stackTrace,
-        );
-      },
-    );
-    // Delay until after first frame to safely access context and
-    // StatusOverlayController for error handling
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-      final overlayController = context.read<StatusOverlayController>();
-      // Use the navigator's context (inside MaterialApp.router's Localizations
-      // tree) rather than _MainAppState's context (which is above
-      // MaterialApp.router and therefore has no Localizations ancestor).
-      widget.deepLinkHandler.setErrorHandler((errorType) {
-        final navContext =
-            widget.router.routerDelegate.navigatorKey.currentContext;
-        if (navContext == null || !navContext.mounted) return;
-        final l10n = AppLocalizations.of(navContext);
-        if (l10n == null) return;
-        // All deep link error types currently show the same message.
-        // The typed errorType is passed through for future per-type messages.
-        overlayController.showError(l10n.deepLinkError);
-      });
-      // Subscribe to account confirmation events and show success overlay.
-      // Using StatusOverlayController directly avoids a race with GoRouter:
-      // by the time the deep link is processed Supabase may have already
-      // signed the user in (triggering a redirect to /home), which would
-      // discard any query-param navigation to /login. The StatusOverlay wraps
-      // the entire app and persists across route changes.
-      _accountConfirmationSub = widget
-          .deepLinkHandler
-          .accountConfirmationController
-          ?.stream
-          .listen((_) {
-            final navContext =
-                widget.router.routerDelegate.navigatorKey.currentContext;
-            if (navContext == null || !navContext.mounted) return;
-            final l10n = AppLocalizations.of(navContext);
-            if (l10n == null) return;
-            AppLogger.debug(
-              'Account confirmation event received, showing success overlay',
-              context: '_MainAppState.initState',
-            );
-            overlayController.showSuccess(
-              l10n.accountConfirmationMessage,
-              onOk: () {},
-            );
-          });
-      widget.deepLinkHandler.init();
-    });
-  }
-
-  @override
-  void dispose() {
-    _authStreamSub?.cancel();
-    _accountConfirmationSub?.cancel();
-    widget.deepLinkHandler.dispose();
-    widget.deepLinkHandler.accountConfirmationController?.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => MaterialApp.router(
-    builder: (_, child) => StatusOverlay(child: child!),
+    builder: (context, child) => AppBootstrap(
+      deepLinkHandler: deepLinkHandler,
+      router: router,
+      child: StatusOverlay(child: child!),
+    ),
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
     localizationsDelegates: const [
@@ -249,6 +146,78 @@ class _MainAppState extends State<MainApp> {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    routerConfig: widget.router,
+    routerConfig: router,
   );
+}
+
+class AppBootstrap extends StatefulWidget {
+  const AppBootstrap({
+    required this.deepLinkHandler,
+    required this.router,
+    required this.child,
+    super.key,
+  });
+
+  final DeepLinkHandler deepLinkHandler;
+  final GoRouter router;
+  final Widget child;
+
+  @override
+  State<AppBootstrap> createState() => _AppBootstrapState();
+}
+
+class _AppBootstrapState extends State<AppBootstrap> {
+  late final AppCoordinator _coordinator;
+  StreamSubscription<AppEvent>? _subscription;
+  bool get _isInitialized => _subscription != null;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_isInitialized) {
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      AppLogger.error(
+        'AppLocalizations not found in context',
+        context: '_AppBootstrapState.didChangeDependencies',
+      );
+      return;
+    }
+
+    _coordinator = AppCoordinator(
+      router: widget.router,
+      overlay: context.read<StatusOverlayController>(),
+      l10n: l10n,
+    );
+
+    _subscription ??= widget.deepLinkHandler.events.listen(_coordinator.handle);
+
+    widget.deepLinkHandler.init().catchError((error, stackTrace) {
+      AppLogger.error(
+        'Error initializing deep link handler',
+        context: '_AppBootstrapState.initState',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    widget.deepLinkHandler.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

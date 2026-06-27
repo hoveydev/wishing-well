@@ -18,26 +18,15 @@ class AppCoordinator {
 
   // Handles app events, such as deep link navigation and error handling.
   void handle(AppEvent event) {
+    AppLogger.info('Handling app event: $event', context: 'AppCoordinator');
     switch (event) {
       case ShowAccountConfirmation():
-        AppLogger.info(
-          'Showing account confirmation overlay',
-          context: 'AppCoordinator',
-        );
         overlay.showSuccess(l10n.accountConfirmationMessage);
 
       case ShowDeepLinkError(type: final type):
-        AppLogger.info(
-          'Showing deep link error overlay',
-          context: 'AppCoordinator',
-        );
         overlay.showError(_messageForError(type));
 
       case NavigateToResetPassword():
-        AppLogger.info(
-          'Navigating to reset password screen',
-          context: 'AppCoordinator',
-        );
         router.pushNamed(Routes.resetPassword.name);
     }
   }

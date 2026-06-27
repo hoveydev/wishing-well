@@ -700,11 +700,23 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get appBarBack;
 
+  /// Error message shown when a deep link error type is unrecognized or generic
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while processing the link. Please try again later.'**
+  String get deepLinkErrorGeneric;
+
+  /// Error message shown when a deep link is not recognized
+  ///
+  /// In en, this message translates to:
+  /// **'This link is not recognized. Please check the link and try again.'**
+  String get deepLinkErrorUnknown;
+
   /// Error message shown when a deep link (password reset or account confirmation) has expired or is invalid
   ///
   /// In en, this message translates to:
-  /// **'This link has expired or is no longer valid. Please return to the login screen and resubmit for a new link.'**
-  String get deepLinkError;
+  /// **'This link has expired or is no longer valid. Please resubmit for a new link.'**
+  String get deepLinkErrorAccessDenied;
 
   /// Title shown at the top of the custom date picker overlay
   ///

@@ -9,20 +9,30 @@ typedef NavigateFn =
 typedef ErrorFn = void Function(DeepLinkErrorType type);
 
 enum DeepLinkType {
+  /// No link detected.
+  none(null),
+
   /// The link is not recognized as a valid deep link.
-  unknown(''),
+  unknown(null),
 
   /// The link is a password-reset link.
   passwordReset('auth/password-reset'),
 
   /// The link is an account confirmation link.
-  accountConfirm('auth/account-confirm');
+  accountConfirm('auth/account-confirm'),
+
+  /// The link contains an error.
+  error(null);
 
   const DeepLinkType(this.name);
-  final String name;
+  final String? name;
 
   static DeepLinkType fromUrl(Uri? uri) {
-    if (uri == null || uri.pathSegments.isEmpty) return DeepLinkType.unknown;
+    if (uri == null || uri.pathSegments.isEmpty) return DeepLinkType.none;
+
+    if (uri.queryParameters.containsKey('error')) {
+      return DeepLinkType.error;
+    }
 
     final lookupPath = uri.pathSegments.join('/');
 
@@ -34,14 +44,26 @@ enum DeepLinkType {
 }
 
 enum DeepLinkErrorType {
-  /// The link was a password-reset link that has expired or is invalid.
-  passwordReset,
+  /// Deep link is unknown or unrecognized.
+  unknown(null),
 
-  /// The link contained an error but could not be classified.
-  unknown,
+  /// Unrecognized error type.
+  generic('generic'),
 
-  /// The link was invalid or could not be processed.
-  invalid,
+  /// The user does not have permission to access the link
+  /// or the link is expired.
+  accessDenied('access_denied');
+
+  // each has 'error' 'error_code' and 'error_description' query parameters
+
+  const DeepLinkErrorType(this.type);
+  final String? type;
+
+  static DeepLinkErrorType fromErrorType(String? errorType) =>
+      DeepLinkErrorType.values.firstWhere(
+        (error) => error.type == errorType,
+        orElse: () => DeepLinkErrorType.generic,
+      );
 }
 
 abstract class DeepLinkHandler {
@@ -74,9 +96,24 @@ class DeepLinkHandlerImpl implements DeepLinkHandler {
         _controller.add(NavigateToResetPassword());
         break;
 
-      default:
-        _controller.add(ShowDeepLinkError(DeepLinkErrorType.invalid));
+      case DeepLinkType.error:
+        _handleErrorLink(uri!);
+        break;
+
+      case DeepLinkType.unknown:
+        _controller.add(ShowDeepLinkError(DeepLinkErrorType.unknown));
+        break;
+
+      case DeepLinkType.none:
+        return;
     }
+  }
+
+  void _handleErrorLink(Uri uri) {
+    final errorType = uri.queryParameters['error'];
+    _controller.add(
+      ShowDeepLinkError(DeepLinkErrorType.fromErrorType(errorType)),
+    );
   }
 
   @override

@@ -8,6 +8,31 @@ typedef NavigateFn =
 
 typedef ErrorFn = void Function(DeepLinkErrorType type);
 
+enum DeepLinkType {
+  /// The link is not recognized as a valid deep link.
+  unknown(''),
+
+  /// The link is a password-reset link.
+  passwordReset('auth/password-reset'),
+
+  /// The link is an account confirmation link.
+  accountConfirm('auth/account-confirm');
+
+  const DeepLinkType(this.name);
+  final String name;
+
+  static DeepLinkType fromUrl(Uri? uri) {
+    if (uri == null || uri.pathSegments.isEmpty) return DeepLinkType.unknown;
+
+    final lookupPath = uri.pathSegments.join('/');
+
+    return DeepLinkType.values.firstWhere(
+      (route) => route.name == lookupPath,
+      orElse: () => DeepLinkType.unknown,
+    );
+  }
+}
+
 enum DeepLinkErrorType {
   /// The link was a password-reset link that has expired or is invalid.
   passwordReset,
@@ -33,30 +58,24 @@ class DeepLinkHandlerImpl implements DeepLinkHandler {
 
   StreamSubscription? _subscription;
 
-  Future<void> _handleUri(Uri uri) async {
-    final type = uri.queryParameters['type'];
+  Future<void> _handleUri(Uri? uri) async {
+    final type = DeepLinkType.fromUrl(uri);
     AppLogger.debug(
       'Deep link detected: type=$type, uri=$uri',
       context: 'DeepLinkHandler',
     );
 
     switch (type) {
-      case 'account_confirm':
+      case DeepLinkType.accountConfirm:
         _controller.add(ShowAccountConfirmation());
         break;
 
-      // I don't think this will work because the password reset link is handled
-      // by the Supabase SDK, but leaving it here for now in case we
-      // need to handle it ourselves in the future.
-      case 'password_reset':
+      case DeepLinkType.passwordReset:
         _controller.add(NavigateToResetPassword());
         break;
 
-      // default:
-      //   _controller.add(ShowDeepLinkError(DeepLinkErrorType.invalid));
-
       default:
-        return;
+        _controller.add(ShowDeepLinkError(DeepLinkErrorType.invalid));
     }
   }
 
@@ -67,14 +86,10 @@ class DeepLinkHandlerImpl implements DeepLinkHandler {
   Future<void> init() async {
     final initialUri = await _source.initial();
 
-    if (initialUri != null) {
-      await _handleUri(initialUri);
-    }
+    await _handleUri(initialUri);
 
     _subscription = _source.stream().listen((uri) async {
-      if (uri != null) {
-        await _handleUri(uri);
-      }
+      await _handleUri(uri);
     });
   }
 

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_handler.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
-import 'package:wishing_well/test_helpers/helpers/test_helpers.dart';
 
 void main() {
   late StreamController<Uri?> stream;
@@ -32,7 +31,7 @@ void main() {
   }
 
   group('DeepLinkHandler', () {
-    group(TestGroups.initialState, () {
+    group('initial', () {
       test('does not navigate for password-reset initial URI', () async {
         final handler = createHandler(
           initialUri: Uri.parse(
@@ -46,9 +45,22 @@ void main() {
 
         expect(navigatedTo, isNull);
       });
+
+      test('does not navigate for account-confirm initial URI', () async {
+        final handler = createHandler(
+          initialUri: Uri.parse(
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm',
+          ),
+        );
+
+        await handler.init();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(navigatedTo, isNull);
+      });
     });
 
-    group(TestGroups.errorHandling, () {
+    group('errorHandling', () {
       // test('calls onError for password-reset error URI', () async {
       //   final handler = createHandler(
       //     initialUri: Uri.parse(
@@ -109,7 +121,7 @@ void main() {
       // });
     });
 
-    group(TestGroups.behavior, () {
+    group('behavior', () {
       test('does not navigate for password-reset URI via stream', () async {
         final handler = createHandler();
         await handler.init();
@@ -122,8 +134,20 @@ void main() {
         expect(navigatedTo, isNull);
       });
 
+      test('does not navigate for account-confirm URI via stream', () async {
+        final handler = createHandler();
+        await handler.init();
+
+        stream.add(
+          Uri.parse('https://wishing-well-ayb.pages.dev/auth/account-confirm'),
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        expect(navigatedTo, isNull);
+      });
+
       // test('navigates to reset-password on password recovery event',
-      //() async {
+      // () async {
       //   final recoveryController = StreamController<String?>();
       //   final handler = createHandler(
       //     passwordRecovery: recoveryController.stream,
@@ -187,6 +211,20 @@ void main() {
       //   expect(navigatedTo, isNull);
       //   await recoveryController.close();
       // });
+
+      test('returns a broadcast stream for events', () async {
+        final handler = createHandler();
+        await handler.init();
+
+        final subscription1 = handler.events.listen((event) {});
+        final subscription2 = handler.events.listen((event) {});
+
+        expect(subscription1, isNotNull);
+        expect(subscription2, isNotNull);
+
+        await subscription1.cancel();
+        await subscription2.cancel();
+      });
     });
   });
 }

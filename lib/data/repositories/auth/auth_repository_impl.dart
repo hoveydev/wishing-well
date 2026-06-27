@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/data_sources/auth/auth_data_source.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository.dart';
 import 'package:wishing_well/utils/app_logger.dart';
@@ -10,12 +13,27 @@ import 'package:wishing_well/utils/result.dart';
 /// The actual Supabase calls are delegated to the [AuthDataSource].
 class AuthRepositoryImpl extends AuthRepository {
   AuthRepositoryImpl({required AuthDataSource dataSource})
-    : _dataSource = dataSource;
+    : _dataSource = dataSource {
+    _authSubscription = _dataSource.authStateChanges.listen(
+      _handleAuthStateChange,
+      onError: (error, stackTrace) {
+        AppLogger.error(
+          'Auth state stream error',
+          context: 'AuthRepository',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      },
+    );
+  }
 
   final AuthDataSource _dataSource;
+  StreamSubscription<AuthState>? _authSubscription;
+
+  bool _isAuthenticated = false;
 
   @override
-  bool get isAuthenticated => _dataSource.currentAccessToken != null;
+  bool get isAuthenticated => _isAuthenticated;
 
   @override
   String? get userFirstName => _dataSource.userFirstName;
@@ -37,7 +55,7 @@ class AuthRepositoryImpl extends AuthRepository {
       );
 
       final aud = response['aud'] as String?;
-      final isAuthenticated = aud == 'authenticated';
+      _isAuthenticated = aud == 'authenticated';
       final accessToken = response['access_token'] as String?;
 
       if (isAuthenticated && accessToken != null) {
@@ -71,6 +89,7 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       await _dataSource.signOut();
       AppLogger.info('Logout successful', context: 'AuthRepository');
+      _isAuthenticated = false;
       return const Result.ok(null);
     } on Exception catch (err, stackTrace) {
       AppLogger.error(
@@ -97,7 +116,12 @@ class AuthRepositoryImpl extends AuthRepository {
     );
 
     try {
-      await _dataSource.signUp(email: email, password: password);
+      await _dataSource.signUp(
+        email: email,
+        password: password,
+        emailRedirectTo:
+            'https://wishing-well-ayb.pages.dev/auth/account-confirm?type=account_confirm',
+      );
       AppLogger.info('Account creation successful', context: 'AuthRepository');
       return const Result.ok(null);
     } on Exception catch (err, stackTrace) {
@@ -205,5 +229,21 @@ class AuthRepositoryImpl extends AuthRepository {
         context: context,
       );
     }
+  }
+
+  void _handleAuthStateChange(AuthState state) {
+    AppLogger.debug(
+      'Supabase auth event: ${state.event}',
+      context: 'AuthRepository',
+    );
+
+    _isAuthenticated = state.session != null;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
   }
 }

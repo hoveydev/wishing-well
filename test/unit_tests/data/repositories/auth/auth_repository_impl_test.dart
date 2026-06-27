@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/repositories/auth/auth_repository_impl.dart';
 import 'package:wishing_well/utils/result.dart';
 
@@ -25,13 +26,34 @@ void main() {
         expect(repository, isA<ChangeNotifier>());
       });
 
-      test('isAuthenticated returns false when no access token', () {
-        mockDataSource.mockAccessToken = null;
+      test('isAuthenticated returns false when no session exists', () async {
+        final mockDataSource = MockAuthDataSource();
+        final repository = AuthRepositoryImpl(dataSource: mockDataSource);
+        await Future<void>.delayed(Duration.zero);
         expect(repository.isAuthenticated, isFalse);
       });
 
-      test('isAuthenticated returns true when access token exists', () {
-        mockDataSource.mockAccessToken = 'test-token';
+      test('isAuthenticated returns true when session exists', () async {
+        final mockDataSource = MockAuthDataSource(
+          mockAuthStateChanges: Stream<AuthState>.value(
+            AuthState(
+              AuthChangeEvent.signedIn,
+              Session(
+                tokenType: 'test',
+                accessToken: 'test-access',
+                user: const User(
+                  id: 'user-123',
+                  appMetadata: {},
+                  userMetadata: {},
+                  aud: 'authenticated',
+                  createdAt: '123',
+                ),
+              ),
+            ),
+          ),
+        );
+        final repository = AuthRepositoryImpl(dataSource: mockDataSource);
+        await Future<void>.delayed(Duration.zero); // Allow the stream to emit
         expect(repository.isAuthenticated, isTrue);
       });
 
@@ -381,16 +403,13 @@ void main() {
         mockDataSource.mockAccessToken = null;
         expect(repository.isAuthenticated, isFalse);
 
-        mockDataSource.signInWithPasswordResult = {
-          'user_id': 'test-user-id',
-          'aud': 'authenticated',
-          'email': 'test@example.com',
-          'access_token': 'test-access-token',
-          'refresh_token': 'test-refresh-token',
-        };
         mockDataSource.mockAccessToken = 'test-token';
 
-        await repository.login(email: 'test@example.com', password: 'password');
+        final loginResult = await repository.login(
+          email: 'test@example.com',
+          password: 'password',
+        );
+        expect(loginResult, isA<Ok>());
         expect(repository.isAuthenticated, isTrue);
 
         mockDataSource.mockAccessToken = null;

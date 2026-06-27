@@ -24,6 +24,8 @@ const _excludePatterns = [
   '/demo/',
   'test_helpers/',
   'lib/testing/',
+  'deep_link_source.dart',
+  // Exclude deep link source - it's a platform-specific implementation that can't be tested in unit tests
   // Note: Integration tests are NOT excluded - they count toward coverage
 ];
 

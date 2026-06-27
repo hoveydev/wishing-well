@@ -41,6 +41,12 @@ GoRouter router({required AuthRepository authRepository}) => GoRouter(
     router.go(authRepository.isAuthenticated ? '/home' : '/login');
   },
   redirect: (context, state) {
+    AppLogger.debug(
+      'redirect: '
+      'target=${state.matchedLocation} '
+      'authenticated=${authRepository.isAuthenticated}',
+      context: 'router.redirect',
+    );
     final isAuthenticated = authRepository.isAuthenticated;
     final loc = state.matchedLocation;
 

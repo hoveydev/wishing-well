@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishing_well/data/data_sources/auth/auth_data_source.dart';
 
 /// Mock implementation of [AuthDataSource] for testing.
@@ -9,6 +10,7 @@ class MockAuthDataSource implements AuthDataSource {
   MockAuthDataSource({
     this.mockUserId,
     this.mockAccessToken,
+    this.mockAuthStateChanges,
     this.mockUserFirstName,
     this.signInWithPasswordResult,
     this.signInWithPasswordError,
@@ -26,6 +28,9 @@ class MockAuthDataSource implements AuthDataSource {
 
   /// The access token to return for [currentAccessToken].
   String? mockAccessToken;
+
+  /// The stream of auth state changes to return for [authStateChanges].
+  Stream<AuthState>? mockAuthStateChanges;
 
   /// The first name to return for [userFirstName].
   String? mockUserFirstName;
@@ -86,6 +91,10 @@ class MockAuthDataSource implements AuthDataSource {
 
   @override
   String? get currentAccessToken => mockAccessToken;
+
+  @override
+  Stream<AuthState> get authStateChanges =>
+      mockAuthStateChanges ?? const Stream<AuthState>.empty();
 
   @override
   String? get userFirstName => mockUserFirstName;

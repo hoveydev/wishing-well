@@ -15,6 +15,9 @@ class AuthDataSourceSupabase implements AuthDataSource {
   final SupabaseClient _supabase;
 
   @override
+  Stream<AuthState> get authStateChanges => _supabase.auth.onAuthStateChange;
+
+  @override
   String? get currentUserId => _supabase.auth.currentUser?.id;
 
   @override

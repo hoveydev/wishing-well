@@ -1,141 +1,86 @@
 import 'dart:async';
-import 'package:wishing_well/routing/routes.dart';
-import 'package:wishing_well/utils/app_logger.dart';
+import 'package:wishing_well/app_event.dart';
 import 'package:wishing_well/utils/deep_links/deep_link_source.dart';
+import 'package:wishing_well/utils/app_logger.dart';
 
 typedef NavigateFn =
     void Function(String routeName, Map<String, dynamic>? queryParameters);
 
 typedef ErrorFn = void Function(DeepLinkErrorType type);
 
-/// Typed error category emitted by [DeepLinkHandler] when a deep link fails.
-///
-/// The UI layer is responsible for mapping these values to user-visible,
-/// localized strings.
 enum DeepLinkErrorType {
   /// The link was a password-reset link that has expired or is invalid.
   passwordReset,
 
-  /// The link was an account-confirmation link that has expired or is invalid.
-  accountConfirm,
-
   /// The link contained an error but could not be classified.
   unknown,
+
+  /// The link was invalid or could not be processed.
+  invalid,
 }
 
-class DeepLinkHandler {
-  DeepLinkHandler(
-    this.navigate, {
-    required this.source,
-    this.passwordRecovery,
-    this.accountConfirmationController,
-    this.onError,
-  });
-  final NavigateFn navigate;
-  final DeepLinkSource source;
-  ErrorFn? onError;
+abstract class DeepLinkHandler {
+  Stream<AppEvent> get events;
+  Future<void> init();
+  Future<void> dispose();
+}
 
-  /// Emits the user's email when a password recovery auth event is received.
-  ///
-  /// Password reset navigation is handled via Supabase's auth state change
-  /// rather than URI parsing to avoid a race condition where GoRouter
-  /// processes the initial deep link URL and redirects back to login after
-  /// our URI-based navigation fires.
-  final Stream<String?>? passwordRecovery;
+class DeepLinkHandlerImpl implements DeepLinkHandler {
+  DeepLinkHandlerImpl({required DeepLinkSource source}) : _source = source;
+  final DeepLinkSource _source;
+  final StreamController<AppEvent> _controller =
+      StreamController<AppEvent>.broadcast();
 
-  /// Controller for account confirmation events. Allows the handler to emit
-  /// when account confirmation URIs are detected (both initial and ongoing).
-  final StreamController<void>? accountConfirmationController;
+  StreamSubscription? _subscription;
 
-  StreamSubscription? _sub;
-  StreamSubscription? _recoverySub;
+  Future<void> _handleUri(Uri uri) async {
+    final type = uri.queryParameters['type'];
+    AppLogger.debug(
+      'Deep link detected: type=$type, uri=$uri',
+      context: 'DeepLinkHandler',
+    );
 
-  /// Sets the error handler callback for deep link errors.
-  ///
-  /// This must be called before [init()] to ensure errors are properly handled
-  /// when deep links are processed.
-  void setErrorHandler(ErrorFn handler) {
-    onError = handler;
-  }
-
-  void init() {
-    _handleInitialUri();
-    _sub = source.stream().listen((uri) {
-      if (uri != null) _navigateFromUri(uri);
-    });
-    _recoverySub = passwordRecovery?.listen((email) {
-      navigate(Routes.resetPassword.name, {'email': email});
-    });
-  }
-
-  Future<void> _handleInitialUri() async {
-    try {
-      final uri = await source.initial();
-      final sanitizedUri = uri == null
-          ? null
-          : Uri(scheme: uri.scheme, host: uri.host, path: uri.path);
-      AppLogger.debug(
-        'Initial URI: $sanitizedUri',
-        context: 'DeepLinkHandler._handleInitialUri',
-      );
-      if (uri != null) {
-        _navigateFromUri(uri);
-      }
-    } catch (e, stackTrace) {
-      AppLogger.error(
-        'Error handling initial URI',
-        context: 'DeepLinkHandler._handleInitialUri',
-        error: e,
-        stackTrace: stackTrace,
-      );
-    }
-  }
-
-  void _navigateFromUri(Uri uri) {
-    // First, check for error query params (these can come on any path)
-    if (uri.queryParameters.containsKey('error')) {
-      // Extract the path segment to determine error type (if it's an auth path)
-      final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
-      _navigateToDeepLinkError(subPath, uri.queryParameters);
-      return;
-    }
-
-    if (uri.pathSegments.isEmpty) return;
-    if (uri.pathSegments.first != 'auth') return;
-
-    final subPath = uri.pathSegments.length > 1 ? uri.pathSegments[1] : null;
-
-    // Non-error account-confirm URLs are handled via the controller.
-    // Links with error query params are handled above.
-    switch (subPath) {
-      case 'account-confirm':
-        AppLogger.debug(
-          'Account confirm URI detected, type=${uri.queryParameters['type']}',
-          context: 'DeepLinkHandler._navigateFromUri',
-        );
-        if (accountConfirmationController != null &&
-            !accountConfirmationController!.isClosed) {
-          accountConfirmationController!.add(null);
-        }
+    switch (type) {
+      case 'account_confirm':
+        _controller.add(ShowAccountConfirmation());
         break;
+
+      // I don't think this will work because the password reset link is handled
+      // by the Supabase SDK, but leaving it here for now in case we
+      // need to handle it ourselves in the future.
+      case 'password_reset':
+        _controller.add(NavigateToResetPassword());
+        break;
+
+      // default:
+      //   _controller.add(ShowDeepLinkError(DeepLinkErrorType.invalid));
+
+      default:
+        return;
     }
   }
 
-  /// Derives a typed [DeepLinkErrorType] from [subPath] and invokes [onError].
-  void _navigateToDeepLinkError(
-    String? subPath,
-    Map<String, String> queryParameters,
-  ) {
-    final errorType = switch (subPath) {
-      'password-reset' => DeepLinkErrorType.passwordReset,
-      'account-confirm' => DeepLinkErrorType.accountConfirm,
-      _ => DeepLinkErrorType.unknown,
-    };
-    onError?.call(errorType);
+  @override
+  Stream<AppEvent> get events => _controller.stream;
+
+  @override
+  Future<void> init() async {
+    final initialUri = await _source.initial();
+
+    if (initialUri != null) {
+      await _handleUri(initialUri);
+    }
+
+    _subscription = _source.stream().listen((uri) async {
+      if (uri != null) {
+        await _handleUri(uri);
+      }
+    });
   }
 
-  void dispose() {
-    _sub?.cancel();
-    _recoverySub?.cancel();
+  @override
+  Future<void> dispose() async {
+    await _subscription?.cancel();
+    await _controller.close();
   }
 }
